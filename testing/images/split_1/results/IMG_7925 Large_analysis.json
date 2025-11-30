@@ -1,0 +1,86 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_1/IMG_7925 Large.jpeg",
+  "image_name": "IMG_7925 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Travel",
+    "subcategories": [
+      "Architecture",
+      "Sightseeing"
+    ],
+    "headline": "Seoul Sky Bridge at Lotte World Tower observation deck 555m high",
+    "summary": "Seoul Sky Bridge at Lotte World Tower in Songpa-gu offers panoramic city views from 555 meters high. The glass-floored observation deck provides aerial perspectives of Seoul's skyline.",
+    "media_metadata": {
+      "original_poster": null,
+      "tagged_accounts": [],
+      "location_tags": [
+        "LOTTE WORLD TOWER • Songpa-gu"
+      ],
+      "audio_source": null,
+      "hashtags": [
+        "#Seoul",
+        "#VisitSeoul",
+        "#LotteWorldTower",
+        "#Seoultravel",
+        "#seoulsky",
+        "#skybridge",
+        "#southkorea"
+      ]
+    },
+    "image_details": {
+      "extracted_text": [
+        "LOTTE WORLD TOWER • Songpa-gu",
+        "See more posts",
+        "Seoul Sky Bridge",
+        "555m",
+        "#Seoul #VisitSeoul #LotteWorldTower #Seoultravel #seoulsky #skybridge #southkorea",
+        "8,707",
+        "219",
+        "2,277",
+        "2,392",
+        "less"
+      ],
+      "objects": [
+        "glass observation deck",
+        "metal railings",
+        "city skyline",
+        "high-rise buildings",
+        "glass floor panels",
+        "structural beams"
+      ],
+      "themes": [
+        "urban tourism",
+        "architectural marvel",
+        "city views",
+        "extreme heights"
+      ],
+      "emotions": [
+        "awe",
+        "excitement",
+        "vertigo"
+      ],
+      "vibes": [
+        "modern",
+        "impressive",
+        "breathtaking",
+        "urban"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Glass-floored observation deck at extreme height",
+      "visual_hierarchy": [
+        "Glass observation deck structure",
+        "City skyline view",
+        "Seoul Sky Bridge text",
+        "Location tag",
+        "Hashtags"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Architecture\", \"Sightseeing\"],\n  \"headline\": \"Seoul Sky Bridge at Lotte World Tower observation deck 555m high\",\n  \"summary\": \"Seoul Sky Bridge at Lotte World Tower in Songpa-gu offers panoramic city views from 555 meters high. The glass-floored observation deck provides aerial perspectives of Seoul's skyline.\",\n  \"media_metadata\": {\n    \"original_poster\": null,\n    \"tagged_accounts\": [],\n    \"location_tags\": [\"LOTTE WORLD TOWER • Songpa-gu\"],\n    \"audio_source\": null,\n    \"hashtags\": [\"#Seoul\", \"#VisitSeoul\", \"#LotteWorldTower\", \"#Seoultravel\", \"#seoulsky\", \"#skybridge\", \"#southkorea\"]\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"LOTTE WORLD TOWER • Songpa-gu\", \"See more posts\", \"Seoul Sky Bridge\", \"555m\", \"#Seoul #VisitSeoul #LotteWorldTower #Seoultravel #seoulsky #skybridge #southkorea\", \"8,707\", \"219\", \"2,277\", \"2,392\", \"less\"],\n    \"objects\": [\"glass observation deck\", \"metal railings\", \"city skyline\", \"high-rise buildings\", \"glass floor panels\", \"structural beams\"],\n    \"themes\": [\"urban tourism\", \"architectural marvel\", \"city views\", \"extreme heights\"],\n    \"emotions\": [\"awe\", \"excitement\", \"vertigo\"],\n    \"vibes\": [\"modern\", \"impressive\", \"breathtaking\", \"urban\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Glass-floored observation deck at extreme height\",\n    \"visual_hierarchy\": [\"Glass observation deck structure\", \"City skyline view\", \"Seoul Sky Bridge text\", \"Location tag\", \"Hashtags\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 474
+  }
+}

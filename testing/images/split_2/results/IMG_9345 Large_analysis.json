@@ -1,0 +1,70 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_2/IMG_9345 Large.jpeg",
+  "image_name": "IMG_9345 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Technology",
+    "subcategories": [
+      "Cloud Computing",
+      "AWS"
+    ],
+    "headline": "AWS CCAPI MCP Server: Natural Language Infrastructure Management Tool",
+    "summary": "AWS announced the Cloud Control API (CCAPI) MCP Server, a new tool designed to simplify infrastructure management by enabling developers and AI-powered agents to manage AWS resources using natural language commands.",
+    "media_metadata": {
+      "original_poster": "Steef-Jan Wiggers",
+      "tagged_accounts": [],
+      "location_tags": [],
+      "audio_source": null,
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "AWS CCAPI MCP Server: Natural Language Infra",
+        "Cloud Control API",
+        "InfoQ Dev Summit Munich",
+        "Learn how senior devs at Mercedes-Benz, DKB & Zalando are solving critical dev challenges",
+        "Limited early bird tickets until Sep 9",
+        "Log in to listen to this article",
+        "CLOUD"
+      ],
+      "objects": [
+        "InfoQ logo",
+        "article interface",
+        "follow button",
+        "like button",
+        "bookmark icon"
+      ],
+      "themes": [
+        "AWS services",
+        "infrastructure management",
+        "developer tools",
+        "cloud computing"
+      ],
+      "emotions": [
+        "informative",
+        "technical"
+      ],
+      "vibes": [
+        "professional",
+        "educational",
+        "tech-focused"
+      ],
+      "likely_source": "other",
+      "key_interest": "Natural language infrastructure management capability",
+      "visual_hierarchy": [
+        "AWS CCAPI MCP Server: Natural Language Infra",
+        "Cloud Control API",
+        "InfoQ Dev Summit Munich promotion",
+        "Author name and follow button",
+        "Article metadata"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Technology\",\n  \"subcategories\": [\"Cloud Computing\", \"AWS\"],\n  \"headline\": \"AWS CCAPI MCP Server: Natural Language Infrastructure Management Tool\",\n  \"summary\": \"AWS announced the Cloud Control API (CCAPI) MCP Server, a new tool designed to simplify infrastructure management by enabling developers and AI-powered agents to manage AWS resources using natural language commands.\",\n  \"media_metadata\": {\n    \"original_poster\": \"Steef-Jan Wiggers\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [],\n    \"audio_source\": null,\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\n      \"AWS CCAPI MCP Server: Natural Language Infra\",\n      \"Cloud Control API\",\n      \"InfoQ Dev Summit Munich\",\n      \"Learn how senior devs at Mercedes-Benz, DKB & Zalando are solving critical dev challenges\",\n      \"Limited early bird tickets until Sep 9\",\n      \"Log in to listen to this article\",\n      \"CLOUD\"\n    ],\n    \"objects\": [\"InfoQ logo\", \"article interface\", \"follow button\", \"like button\", \"bookmark icon\"],\n    \"themes\": [\"AWS services\", \"infrastructure management\", \"developer tools\", \"cloud computing\"],\n    \"emotions\": [\"informative\", \"technical\"],\n    \"vibes\": [\"professional\", \"educational\", \"tech-focused\"],\n    \"likely_source\": \"other\",\n    \"key_interest\": \"Natural language infrastructure management capability\",\n    \"visual_hierarchy\": [\n      \"AWS CCAPI MCP Server: Natural Language Infra\",\n      \"Cloud Control API\",\n      \"InfoQ Dev Summit Munich promotion\",\n      \"Author name and follow button\",\n      \"Article metadata\"\n    ]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 432
+  }
+}

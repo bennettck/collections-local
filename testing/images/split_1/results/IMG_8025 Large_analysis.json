@@ -1,0 +1,76 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_1/IMG_8025 Large.jpeg",
+  "image_name": "IMG_8025 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Travel",
+    "subcategories": [
+      "Shopping",
+      "Seoul"
+    ],
+    "headline": "Picdot store in Seoul's Hongdae district - large pleasant store with sensual interior space",
+    "summary": "Picdot ranked #2 shopping destination in Seoul, located on Hongdae Street in Mapo-gu district. Store features large and pleasant size with sensual interior space. Warning about potentially finding Hongdae boys in these stores.",
+    "media_metadata": {
+      "original_poster": "plumviolet",
+      "tagged_accounts": [
+        "@TOMORROW X TOG"
+      ],
+      "location_tags": [
+        "Hongdae Street • Mapo-gu"
+      ],
+      "audio_source": "Love Language - @TOMORROW X TOG",
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "2. Picdot",
+        "large and pleasant store size with sensual interior space",
+        "Hongdae Street • Mapo-gu",
+        "Discover more",
+        "be careful you might find hongdae boys in one of these stores",
+        "store num... more",
+        "Love Language - @TOMORROW X TOG"
+      ],
+      "objects": [
+        "Picdot store sign",
+        "modern interior architecture",
+        "white ceiling beams",
+        "store entrance",
+        "mobile interface"
+      ],
+      "themes": [
+        "Seoul shopping guide",
+        "Hongdae district",
+        "store recommendations",
+        "travel tips"
+      ],
+      "emotions": [
+        "informative",
+        "cautionary",
+        "helpful"
+      ],
+      "vibes": [
+        "modern",
+        "trendy",
+        "urban",
+        "sleek"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Picdot store recommendation in Seoul's Hongdae area",
+      "visual_hierarchy": [
+        "2. Picdot heading",
+        "store description overlay",
+        "Hongdae Street location",
+        "store interior architecture",
+        "warning text about hongdae boys"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Shopping\", \"Seoul\"],\n  \"headline\": \"Picdot store in Seoul's Hongdae district - large pleasant store with sensual interior space\",\n  \"summary\": \"Picdot ranked #2 shopping destination in Seoul, located on Hongdae Street in Mapo-gu district. Store features large and pleasant size with sensual interior space. Warning about potentially finding Hongdae boys in these stores.\",\n  \"media_metadata\": {\n    \"original_poster\": \"plumviolet\",\n    \"tagged_accounts\": [\"@TOMORROW X TOG\"],\n    \"location_tags\": [\"Hongdae Street • Mapo-gu\"],\n    \"audio_source\": \"Love Language - @TOMORROW X TOG\",\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"2. Picdot\", \"large and pleasant store size with sensual interior space\", \"Hongdae Street • Mapo-gu\", \"Discover more\", \"be careful you might find hongdae boys in one of these stores\", \"store num... more\", \"Love Language - @TOMORROW X TOG\"],\n    \"objects\": [\"Picdot store sign\", \"modern interior architecture\", \"white ceiling beams\", \"store entrance\", \"mobile interface\"],\n    \"themes\": [\"Seoul shopping guide\", \"Hongdae district\", \"store recommendations\", \"travel tips\"],\n    \"emotions\": [\"informative\", \"cautionary\", \"helpful\"],\n    \"vibes\": [\"modern\", \"trendy\", \"urban\", \"sleek\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Picdot store recommendation in Seoul's Hongdae area\",\n    \"visual_hierarchy\": [\"2. Picdot heading\", \"store description overlay\", \"Hongdae Street location\", \"store interior architecture\", \"warning text about hongdae boys\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 468
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_1/IMG_8024 Large.jpeg",
+  "image_name": "IMG_8024 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Beauty",
+    "subcategories": [
+      "Fragrance",
+      "Custom Perfume"
+    ],
+    "headline": "RETTRE HONGDAE - Custom perfume creation studio in Mapo-gu, Seoul",
+    "summary": "RETTRE HONGDAE offers custom perfume creation services to \"make your memories fragrance\" and create your own unique scent. Located on 2nd floor, 22-8 Sinchon-ro 4-gil, Mapo-gu, Seoul.",
+    "media_metadata": {
+      "original_poster": "@Rettre_hongdae",
+      "tagged_accounts": [],
+      "location_tags": [
+        "2nd floor, 22-8 Sinchon-ro 4-gill, Mapo-gu, Seoul"
+      ],
+      "audio_source": "odoriko - Vaundy",
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "RETTRE",
+        "rettre hongdae",
+        "RETTRE HONGDAE",
+        "Please keep the memories of the scent in Rettre",
+        "We will create memories of the past and images of the future with fragrance",
+        "Create your own perfume, the only one in the world",
+        "Make your memories fragrance with Rettre",
+        "You can make the memories of the past and the images of the future into scents"
+      ],
+      "objects": [
+        "wooden shelves",
+        "perfume bottles",
+        "glass vials",
+        "fragrance collection",
+        "organized display"
+      ],
+      "themes": [
+        "custom perfume making",
+        "memory preservation",
+        "fragrance creation",
+        "personalized scents"
+      ],
+      "emotions": [
+        "nostalgic",
+        "creative",
+        "personal",
+        "intimate"
+      ],
+      "vibes": [
+        "artisanal",
+        "boutique",
+        "sophisticated",
+        "memorable"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Custom perfume creation service that transforms memories into personalized fragrances",
+      "visual_hierarchy": [
+        "RETTRE brand name in large white letters",
+        "Wooden shelves filled with perfume bottles",
+        "Business address and location details",
+        "Marketing text about memory-based fragrances",
+        "Social media interface elements"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Beauty\",\n  \"subcategories\": [\"Fragrance\", \"Custom Perfume\"],\n  \"headline\": \"RETTRE HONGDAE - Custom perfume creation studio in Mapo-gu, Seoul\",\n  \"summary\": \"RETTRE HONGDAE offers custom perfume creation services to \\\"make your memories fragrance\\\" and create your own unique scent. Located on 2nd floor, 22-8 Sinchon-ro 4-gil, Mapo-gu, Seoul.\",\n  \"media_metadata\": {\n    \"original_poster\": \"@Rettre_hongdae\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [\"2nd floor, 22-8 Sinchon-ro 4-gill, Mapo-gu, Seoul\"],\n    \"audio_source\": \"odoriko - Vaundy\",\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\n      \"RETTRE\",\n      \"rettre hongdae\",\n      \"RETTRE HONGDAE\",\n      \"Please keep the memories of the scent in Rettre\",\n      \"We will create memories of the past and images of the future with fragrance\",\n      \"Create your own perfume, the only one in the world\",\n      \"Make your memories fragrance with Rettre\",\n      \"You can make the memories of the past and the images of the future into scents\"\n    ],\n    \"objects\": [\"wooden shelves\", \"perfume bottles\", \"glass vials\", \"fragrance collection\", \"organized display\"],\n    \"themes\": [\"custom perfume making\", \"memory preservation\", \"fragrance creation\", \"personalized scents\"],\n    \"emotions\": [\"nostalgic\", \"creative\", \"personal\", \"intimate\"],\n    \"vibes\": [\"artisanal\", \"boutique\", \"sophisticated\", \"memorable\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Custom perfume creation service that transforms memories into personalized fragrances\",\n    \"visual_hierarchy\": [\n      \"RETTRE brand name in large white letters\",\n      \"Wooden shelves filled with perfume bottles\",\n      \"Business address and location details\",\n      \"Marketing text about memory-based fragrances\",\n      \"Social media interface elements\"\n    ]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 562
+  }
+}

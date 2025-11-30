@@ -1,0 +1,72 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_3/IMG_9448 Large.jpeg",
+  "image_name": "IMG_9448 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Beauty",
+    "subcategories": [
+      "Cosmetic Surgery",
+      "Medical Tourism"
+    ],
+    "headline": "LV Plastic Gangnam clinic visit with pricing information and treatment details",
+    "summary": "Rong Jake visits LV Plastic Gangnam clinic and shares pricing information for rejuran treatment. The content appears to be responding to FIONA Z about before and after results with additional treatment details.",
+    "media_metadata": {
+      "original_poster": "Rong Jake",
+      "tagged_accounts": [
+        "FIONA Z"
+      ],
+      "location_tags": [
+        "LV PLASTIC GANGNAM"
+      ],
+      "audio_source": null,
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "LV PLASTIC GANGNAM",
+        "here's where we went and here's the price list",
+        "Rong Jake",
+        "Replying to FIONA Z some before and afters sprinkled in there but i... more",
+        "Search • rejuran treatment"
+      ],
+      "objects": [
+        "two men",
+        "clinic interior",
+        "modern medical facility",
+        "phone interface"
+      ],
+      "themes": [
+        "cosmetic procedures",
+        "medical tourism",
+        "clinic review",
+        "treatment pricing"
+      ],
+      "emotions": [
+        "informative",
+        "casual",
+        "helpful"
+      ],
+      "vibes": [
+        "medical consultation",
+        "social media review",
+        "personal recommendation"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Clinic pricing and treatment information for rejuran procedures",
+      "visual_hierarchy": [
+        "LV PLASTIC GANGNAM clinic name",
+        "Two men in clinic setting",
+        "Treatment pricing promise",
+        "Rejuran treatment search term",
+        "Reply context to FIONA Z"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Beauty\",\n  \"subcategories\": [\"Cosmetic Surgery\", \"Medical Tourism\"],\n  \"headline\": \"LV Plastic Gangnam clinic visit with pricing information and treatment details\",\n  \"summary\": \"Rong Jake visits LV Plastic Gangnam clinic and shares pricing information for rejuran treatment. The content appears to be responding to FIONA Z about before and after results with additional treatment details.\",\n  \"media_metadata\": {\n    \"original_poster\": \"Rong Jake\",\n    \"tagged_accounts\": [\"FIONA Z\"],\n    \"location_tags\": [\"LV PLASTIC GANGNAM\"],\n    \"audio_source\": null,\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\n      \"LV PLASTIC GANGNAM\",\n      \"here's where we went and here's the price list\",\n      \"Rong Jake\",\n      \"Replying to FIONA Z some before and afters sprinkled in there but i... more\",\n      \"Search • rejuran treatment\"\n    ],\n    \"objects\": [\"two men\", \"clinic interior\", \"modern medical facility\", \"phone interface\"],\n    \"themes\": [\"cosmetic procedures\", \"medical tourism\", \"clinic review\", \"treatment pricing\"],\n    \"emotions\": [\"informative\", \"casual\", \"helpful\"],\n    \"vibes\": [\"medical consultation\", \"social media review\", \"personal recommendation\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Clinic pricing and treatment information for rejuran procedures\",\n    \"visual_hierarchy\": [\n      \"LV PLASTIC GANGNAM clinic name\",\n      \"Two men in clinic setting\",\n      \"Treatment pricing promise\",\n      \"Rejuran treatment search term\",\n      \"Reply context to FIONA Z\"\n    ]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 442
+  }
+}

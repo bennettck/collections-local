@@ -1,0 +1,83 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_3/IMG_9423 Large.jpeg",
+  "image_name": "IMG_9423 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Travel",
+    "subcategories": [
+      "Seoul",
+      "Transportation"
+    ],
+    "headline": "Seoul subway journey to Seongsu station with floral fashion recommendation and K-pop music",
+    "summary": "TikTok user promotes Seoul visit with floral outfit advice while traveling to Seongsu station on Line 211. Features G-Dragon's \"TAKE ME\" as background music and includes Korean diffuser hashtags.",
+    "media_metadata": {
+      "original_poster": "jo in seoul",
+      "tagged_accounts": [
+        "@hetras.official",
+        "@hetras"
+      ],
+      "location_tags": [
+        "Seongsu"
+      ],
+      "audio_source": "TAKE ME - @G-DRAGON",
+      "hashtags": [
+        "#joinseoul",
+        "#diffuser",
+        "#seongsu",
+        "#koreandiffuser",
+        "#Gdragon"
+      ]
+    },
+    "image_details": {
+      "extracted_text": [
+        "jo in seoul 의!",
+        "don't forget to wear floral 🌷",
+        "211 성수 Seongsu",
+        "introduce you to Hetras",
+        "TAKE ME - @G-DRAGON",
+        "Search · Seongsu"
+      ],
+      "objects": [
+        "subway train interior",
+        "person in black clothing",
+        "subway station signage",
+        "Korean text displays",
+        "TikTok interface"
+      ],
+      "themes": [
+        "Seoul tourism",
+        "fashion advice",
+        "public transportation",
+        "K-pop culture",
+        "Korean lifestyle"
+      ],
+      "emotions": [
+        "excitement",
+        "welcoming",
+        "trendy"
+      ],
+      "vibes": [
+        "urban",
+        "modern",
+        "cultural",
+        "trendy"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Seoul travel content with specific station destination and fashion advice",
+      "visual_hierarchy": [
+        "jo in seoul 의! (large overlay text)",
+        "don't forget to wear floral 🌷 (prominent caption)",
+        "성수 Seongsu station sign",
+        "subway interior",
+        "hashtag collection"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Seoul\", \"Transportation\"],\n  \"headline\": \"Seoul subway journey to Seongsu station with floral fashion recommendation and K-pop music\",\n  \"summary\": \"TikTok user promotes Seoul visit with floral outfit advice while traveling to Seongsu station on Line 211. Features G-Dragon's \\\"TAKE ME\\\" as background music and includes Korean diffuser hashtags.\",\n  \"media_metadata\": {\n    \"original_poster\": \"jo in seoul\",\n    \"tagged_accounts\": [\"@hetras.official\", \"@hetras\"],\n    \"location_tags\": [\"Seongsu\"],\n    \"audio_source\": \"TAKE ME - @G-DRAGON\",\n    \"hashtags\": [\"#joinseoul\", \"#diffuser\", \"#seongsu\", \"#koreandiffuser\", \"#Gdragon\"]\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"jo in seoul 의!\", \"don't forget to wear floral 🌷\", \"211 성수 Seongsu\", \"introduce you to Hetras\", \"TAKE ME - @G-DRAGON\", \"Search · Seongsu\"],\n    \"objects\": [\"subway train interior\", \"person in black clothing\", \"subway station signage\", \"Korean text displays\", \"TikTok interface\"],\n    \"themes\": [\"Seoul tourism\", \"fashion advice\", \"public transportation\", \"K-pop culture\", \"Korean lifestyle\"],\n    \"emotions\": [\"excitement\", \"welcoming\", \"trendy\"],\n    \"vibes\": [\"urban\", \"modern\", \"cultural\", \"trendy\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Seoul travel content with specific station destination and fashion advice\",\n    \"visual_hierarchy\": [\"jo in seoul 의! (large overlay text)\", \"don't forget to wear floral 🌷 (prominent caption)\", \"성수 Seongsu station sign\", \"subway interior\", \"hashtag collection\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 477
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_2/IMG_9285 Large.jpeg",
+  "image_name": "IMG_9285 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Travel",
+    "subcategories": [
+      "Seoul",
+      "Accommodation"
+    ],
+    "headline": "Seoul travel map showing Dongdaemun area with accommodation recommendations and cultural landmarks",
+    "summary": "Map of Seoul's Dongdaemun district highlighting key locations including Dongdaemun Design Plaza, History & Culture Park, DOOTA MALL, and various shopping areas. Features travel recommendation for Seoul accommodations with Apple Music integration showing Gameboy track by @KATSEYE.",
+    "media_metadata": {
+      "original_poster": "TravelChingu",
+      "tagged_accounts": [
+        "@KATSEYE"
+      ],
+      "location_tags": [
+        "Seoul",
+        "Dongdaemun",
+        "Dongdaemun Design Plaza",
+        "Dongdaemun History & Culture Park",
+        "DOOTA MALL",
+        "Cheonggyecheon Stream",
+        "KFCC"
+      ],
+      "audio_source": "Apple Music - Gameboy by @KATSEYE",
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "WITH APM",
+        "TravelChingu",
+        "SEOUL BEST PLACE TO STAY! Want to know? Watch to find out where an... more",
+        "Apple Music Gameboy - @KATSEYE",
+        "Seoul",
+        "Dongdaemun",
+        "DOOTA MALL",
+        "Dongdaemun Design Plaza",
+        "Dongdaemun History & Culture Park",
+        "Cheonggyecheon Stream"
+      ],
+      "objects": [
+        "map interface",
+        "location pins",
+        "subway lines",
+        "shopping centers",
+        "parks",
+        "streets",
+        "navigation interface"
+      ],
+      "themes": [
+        "Seoul tourism",
+        "accommodation advice",
+        "Dongdaemun district",
+        "shopping destinations",
+        "cultural sites"
+      ],
+      "emotions": [
+        "excitement",
+        "helpfulness",
+        "discovery"
+      ],
+      "vibes": [
+        "informative",
+        "travel-focused",
+        "urban exploration"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Seoul accommodation recommendations in Dongdaemun area",
+      "visual_hierarchy": [
+        "WITH APM text overlay",
+        "Seoul map with Dongdaemun area",
+        "TravelChingu branding",
+        "Apple Music player",
+        "Location pins and landmarks"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Seoul\", \"Accommodation\"],\n  \"headline\": \"Seoul travel map showing Dongdaemun area with accommodation recommendations and cultural landmarks\",\n  \"summary\": \"Map of Seoul's Dongdaemun district highlighting key locations including Dongdaemun Design Plaza, History & Culture Park, DOOTA MALL, and various shopping areas. Features travel recommendation for Seoul accommodations with Apple Music integration showing Gameboy track by @KATSEYE.\",\n  \"media_metadata\": {\n    \"original_poster\": \"TravelChingu\",\n    \"tagged_accounts\": [\"@KATSEYE\"],\n    \"location_tags\": [\"Seoul\", \"Dongdaemun\", \"Dongdaemun Design Plaza\", \"Dongdaemun History & Culture Park\", \"DOOTA MALL\", \"Cheonggyecheon Stream\", \"KFCC\"],\n    \"audio_source\": \"Apple Music - Gameboy by @KATSEYE\",\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"WITH APM\", \"TravelChingu\", \"SEOUL BEST PLACE TO STAY! Want to know? Watch to find out where an... more\", \"Apple Music Gameboy - @KATSEYE\", \"Seoul\", \"Dongdaemun\", \"DOOTA MALL\", \"Dongdaemun Design Plaza\", \"Dongdaemun History & Culture Park\", \"Cheonggyecheon Stream\"],\n    \"objects\": [\"map interface\", \"location pins\", \"subway lines\", \"shopping centers\", \"parks\", \"streets\", \"navigation interface\"],\n    \"themes\": [\"Seoul tourism\", \"accommodation advice\", \"Dongdaemun district\", \"shopping destinations\", \"cultural sites\"],\n    \"emotions\": [\"excitement\", \"helpfulness\", \"discovery\"],\n    \"vibes\": [\"informative\", \"travel-focused\", \"urban exploration\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Seoul accommodation recommendations in Dongdaemun area\",\n    \"visual_hierarchy\": [\"WITH APM text overlay\", \"Seoul map with Dongdaemun area\", \"TravelChingu branding\", \"Apple Music player\", \"Location pins and landmarks\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 542
+  }
+}

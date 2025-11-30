@@ -1,0 +1,69 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_2/IMG_9229 Large.jpeg",
+  "image_name": "IMG_9229 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Beauty",
+    "subcategories": [
+      "Korean Skincare",
+      "Eye Care"
+    ],
+    "headline": "Dr.Melaxin eye cream for dark under-eye bags and scars available in Korean stores",
+    "summary": "Dr.Melaxin EYEPHALT eyebag cream treats dark under-eye bags and is effective for scars. Korean skincare products can be found at local stores for those planning Korea trips.",
+    "media_metadata": {
+      "original_poster": "loren",
+      "tagged_accounts": [],
+      "location_tags": [],
+      "audio_source": null,
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "they also have an eye cream for dark under eye bags",
+        "Dr.Melaxin EYEPHALT EYEBAG CREAM",
+        "EFFECTIVE FOR SCAR",
+        "SAVE FOR KOREA TRIP!!! If you ever wondered where Koreans are buyi... more",
+        "Korean Skincare",
+        "Korean Skin Care Products"
+      ],
+      "objects": [
+        "Dr.Melaxin eye cream box",
+        "Korean skincare products",
+        "store shelves",
+        "product packaging"
+      ],
+      "themes": [
+        "Korean beauty",
+        "skincare solutions",
+        "travel shopping",
+        "eye care"
+      ],
+      "emotions": [
+        "helpful",
+        "informative",
+        "excited"
+      ],
+      "vibes": [
+        "educational",
+        "discovery",
+        "shopping guide"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Dr.Melaxin eye cream for dark under-eye bags",
+      "visual_hierarchy": [
+        "Dr.Melaxin EYEPHALT product box",
+        "Eye cream for dark under eye bags text",
+        "Effective for scar label",
+        "Korean skincare search bar",
+        "Store shelves with products"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Beauty\",\n  \"subcategories\": [\"Korean Skincare\", \"Eye Care\"],\n  \"headline\": \"Dr.Melaxin eye cream for dark under-eye bags and scars available in Korean stores\",\n  \"summary\": \"Dr.Melaxin EYEPHALT eyebag cream treats dark under-eye bags and is effective for scars. Korean skincare products can be found at local stores for those planning Korea trips.\",\n  \"media_metadata\": {\n    \"original_poster\": \"loren\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [],\n    \"audio_source\": null,\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"they also have an eye cream for dark under eye bags\", \"Dr.Melaxin EYEPHALT EYEBAG CREAM\", \"EFFECTIVE FOR SCAR\", \"SAVE FOR KOREA TRIP!!! If you ever wondered where Koreans are buyi... more\", \"Korean Skincare\", \"Korean Skin Care Products\"],\n    \"objects\": [\"Dr.Melaxin eye cream box\", \"Korean skincare products\", \"store shelves\", \"product packaging\"],\n    \"themes\": [\"Korean beauty\", \"skincare solutions\", \"travel shopping\", \"eye care\"],\n    \"emotions\": [\"helpful\", \"informative\", \"excited\"],\n    \"vibes\": [\"educational\", \"discovery\", \"shopping guide\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Dr.Melaxin eye cream for dark under-eye bags\",\n    \"visual_hierarchy\": [\"Dr.Melaxin EYEPHALT product box\", \"Eye cream for dark under eye bags text\", \"Effective for scar label\", \"Korean skincare search bar\", \"Store shelves with products\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 434
+  }
+}

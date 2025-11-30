@@ -1,0 +1,68 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_3/IMG_9444 Large.jpeg",
+  "image_name": "IMG_9444 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Mindset",
+    "subcategories": [
+      "Self-Development",
+      "Identity-Building"
+    ],
+    "headline": "Step 3 of manifesting: Act as if - How would new you respond now?",
+    "summary": "Step 3: Act as if. How would new you respond now? AhmadTalks explains how to begin building a new identity through manifesting techniques and positive affirmations.",
+    "media_metadata": {
+      "original_poster": "AhmadTalks",
+      "tagged_accounts": [],
+      "location_tags": [],
+      "audio_source": null,
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "Step 3: Act as if.",
+        "How would new you respond now?",
+        "if every",
+        "I continuously get asked how to begin building a new identity. Here it is.... more",
+        "Search • Positive Affirmations"
+      ],
+      "objects": [
+        "man in car",
+        "steering wheel",
+        "gray shirt",
+        "chain necklace"
+      ],
+      "themes": [
+        "personal transformation",
+        "manifesting",
+        "identity change",
+        "self-improvement"
+      ],
+      "emotions": [
+        "motivational",
+        "instructional",
+        "confident"
+      ],
+      "vibes": [
+        "educational",
+        "empowering",
+        "direct"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Manifesting step 3 technique about acting as your future self",
+      "visual_hierarchy": [
+        "Step 3: Act as if",
+        "How would new you respond now?",
+        "Man speaking in car",
+        "Username AhmadTalks",
+        "Caption about building new identity"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Mindset\",\n  \"subcategories\": [\"Self-Development\", \"Identity-Building\"],\n  \"headline\": \"Step 3 of manifesting: Act as if - How would new you respond now?\",\n  \"summary\": \"Step 3: Act as if. How would new you respond now? AhmadTalks explains how to begin building a new identity through manifesting techniques and positive affirmations.\",\n  \"media_metadata\": {\n    \"original_poster\": \"AhmadTalks\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [],\n    \"audio_source\": null,\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\n      \"Step 3: Act as if.\",\n      \"How would new you respond now?\",\n      \"if every\",\n      \"I continuously get asked how to begin building a new identity. Here it is.... more\",\n      \"Search • Positive Affirmations\"\n    ],\n    \"objects\": [\"man in car\", \"steering wheel\", \"gray shirt\", \"chain necklace\"],\n    \"themes\": [\"personal transformation\", \"manifesting\", \"identity change\", \"self-improvement\"],\n    \"emotions\": [\"motivational\", \"instructional\", \"confident\"],\n    \"vibes\": [\"educational\", \"empowering\", \"direct\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Manifesting step 3 technique about acting as your future self\",\n    \"visual_hierarchy\": [\n      \"Step 3: Act as if\",\n      \"How would new you respond now?\",\n      \"Man speaking in car\",\n      \"Username AhmadTalks\",\n      \"Caption about building new identity\"\n    ]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 426
+  }
+}

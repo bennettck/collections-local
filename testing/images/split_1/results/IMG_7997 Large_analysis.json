@@ -1,0 +1,76 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_1/IMG_7997 Large.jpeg",
+  "image_name": "IMG_7997 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Travel",
+    "subcategories": [
+      "Tokyo attractions",
+      "shrine destinations"
+    ],
+    "headline": "Tokyo travel recommendations featuring Mabashi Inari Shrine, Tonogayato Garden, and Edo-Tokyo Open Air Museum",
+    "summary": "Mabashi Inari Shrine stands out as one of Tokyo's weirdest shrines with an entrance built into a residential building. Tonogayato Garden offers wide open spaces with seasonal flowers for just 150 Yen entrance fee. Edo-Tokyo Open Air Architectural Museum features unique architectural buildings from across Japan.",
+    "media_metadata": {
+      "original_poster": "thattravelguy",
+      "tagged_accounts": [],
+      "location_tags": [
+        "Tokyo - 749.0K people posted about this place"
+      ],
+      "audio_source": null,
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "popularity",
+        "shrine",
+        "Tokyo",
+        "thattravelguy",
+        "3-10",
+        "Mabashi Inari Shrine: One of Tokyo's weirdest shrines",
+        "Tonogayato Garden: Part of a group of Tokyo's public gardens with an entrance fee of just 150 Yen",
+        "Edo-Tokyo Open Air Architectural Museum: This massive outdoor museum features unique architectural buildings",
+        "Add comment..."
+      ],
+      "objects": [
+        "search bar",
+        "location pin",
+        "user profile",
+        "comment section",
+        "emoji reactions",
+        "engagement numbers"
+      ],
+      "themes": [
+        "Tokyo tourism",
+        "cultural attractions",
+        "budget travel",
+        "unique destinations"
+      ],
+      "emotions": [
+        "curiosity",
+        "wanderlust",
+        "discovery"
+      ],
+      "vibes": [
+        "informative",
+        "exploratory",
+        "cultural"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Mabashi Inari Shrine as Tokyo's weirdest shrine built into residential building",
+      "visual_hierarchy": [
+        "popularity (large yellow text)",
+        "Tokyo location tag",
+        "shrine search term",
+        "travel recommendations text",
+        "user profile"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Tokyo attractions\", \"shrine destinations\"],\n  \"headline\": \"Tokyo travel recommendations featuring Mabashi Inari Shrine, Tonogayato Garden, and Edo-Tokyo Open Air Museum\",\n  \"summary\": \"Mabashi Inari Shrine stands out as one of Tokyo's weirdest shrines with an entrance built into a residential building. Tonogayato Garden offers wide open spaces with seasonal flowers for just 150 Yen entrance fee. Edo-Tokyo Open Air Architectural Museum features unique architectural buildings from across Japan.\",\n  \"media_metadata\": {\n    \"original_poster\": \"thattravelguy\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [\"Tokyo - 749.0K people posted about this place\"],\n    \"audio_source\": null,\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"popularity\", \"shrine\", \"Tokyo\", \"thattravelguy\", \"3-10\", \"Mabashi Inari Shrine: One of Tokyo's weirdest shrines\", \"Tonogayato Garden: Part of a group of Tokyo's public gardens with an entrance fee of just 150 Yen\", \"Edo-Tokyo Open Air Architectural Museum: This massive outdoor museum features unique architectural buildings\", \"Add comment...\"],\n    \"objects\": [\"search bar\", \"location pin\", \"user profile\", \"comment section\", \"emoji reactions\", \"engagement numbers\"],\n    \"themes\": [\"Tokyo tourism\", \"cultural attractions\", \"budget travel\", \"unique destinations\"],\n    \"emotions\": [\"curiosity\", \"wanderlust\", \"discovery\"],\n    \"vibes\": [\"informative\", \"exploratory\", \"cultural\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Mabashi Inari Shrine as Tokyo's weirdest shrine built into residential building\",\n    \"visual_hierarchy\": [\"popularity (large yellow text)\", \"Tokyo location tag\", \"shrine search term\", \"travel recommendations text\", \"user profile\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 491
+  }
+}

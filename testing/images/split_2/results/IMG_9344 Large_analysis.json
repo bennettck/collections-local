@@ -1,0 +1,67 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_2/IMG_9344 Large.jpeg",
+  "image_name": "IMG_9344 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Beauty",
+    "subcategories": [
+      "Skincare",
+      "Sunscreen"
+    ],
+    "headline": "Global sunscreen recommendations by region with mattifying options for shine control",
+    "summary": "Dr. Julian Sass provides region-specific sunscreen recommendations: East Asia features Beauty of Joseon and Isntree products, Australia highlights Cancer Council and Mecca options, Europe includes Eucerin and La Roche-Posay formulas, and USA mentions Naturium UV Reflect with mattifying alternatives for reducing shine.",
+    "media_metadata": {
+      "original_poster": "Dr. Julian Sass",
+      "tagged_accounts": [],
+      "location_tags": [],
+      "audio_source": null,
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "East Asia: Beauty of Joseon Relief Sun Aqua Fresh, Biore UV Aqua Rich Aqua Protect Lotion, Isntree Onion Fresh Fluid Sun Cream, Kose Suncut UV Perfect Gel, Skin Aqua UV Super Moisture Essence Gold",
+        "Australia: Cancer Council Fluid Matte Invisible, Mecca Cosmetica To Save Face",
+        "Europe: Eucerin HydroProtect Dry Touch Gel Cream Oil Control Sun Allergy Protect, Garnier Ultra Light Sensitive, La Roche-Posay Anthelios Oil Control Gel Cream, Nivea Dark Spot Control Shine Control",
+        "USA: Naturium UV Reflect some mattifying sunscreens",
+        "Can you use mattifying powder to decrease the shine from sunscreen"
+      ],
+      "objects": [
+        "person wearing glasses",
+        "skincare products on shelves",
+        "mobile interface"
+      ],
+      "themes": [
+        "skincare advice",
+        "regional product availability",
+        "sun protection",
+        "cosmetic recommendations"
+      ],
+      "emotions": [
+        "informative",
+        "helpful",
+        "educational"
+      ],
+      "vibes": [
+        "professional",
+        "knowledgeable",
+        "practical"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Comprehensive list of region-specific sunscreen product recommendations",
+      "visual_hierarchy": [
+        "Regional sunscreen product lists",
+        "Dr. Julian Sass attribution",
+        "Mattifying sunscreen emphasis",
+        "Person in glasses",
+        "Question about mattifying powder"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Beauty\",\n  \"subcategories\": [\"Skincare\", \"Sunscreen\"],\n  \"headline\": \"Global sunscreen recommendations by region with mattifying options for shine control\",\n  \"summary\": \"Dr. Julian Sass provides region-specific sunscreen recommendations: East Asia features Beauty of Joseon and Isntree products, Australia highlights Cancer Council and Mecca options, Europe includes Eucerin and La Roche-Posay formulas, and USA mentions Naturium UV Reflect with mattifying alternatives for reducing shine.\",\n  \"media_metadata\": {\n    \"original_poster\": \"Dr. Julian Sass\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [],\n    \"audio_source\": null,\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\n      \"East Asia: Beauty of Joseon Relief Sun Aqua Fresh, Biore UV Aqua Rich Aqua Protect Lotion, Isntree Onion Fresh Fluid Sun Cream, Kose Suncut UV Perfect Gel, Skin Aqua UV Super Moisture Essence Gold\",\n      \"Australia: Cancer Council Fluid Matte Invisible, Mecca Cosmetica To Save Face\",\n      \"Europe: Eucerin HydroProtect Dry Touch Gel Cream Oil Control Sun Allergy Protect, Garnier Ultra Light Sensitive, La Roche-Posay Anthelios Oil Control Gel Cream, Nivea Dark Spot Control Shine Control\",\n      \"USA: Naturium UV Reflect some mattifying sunscreens\",\n      \"Can you use mattifying powder to decrease the shine from sunscreen\"\n    ],\n    \"objects\": [\"person wearing glasses\", \"skincare products on shelves\", \"mobile interface\"],\n    \"themes\": [\"skincare advice\", \"regional product availability\", \"sun protection\", \"cosmetic recommendations\"],\n    \"emotions\": [\"informative\", \"helpful\", \"educational\"],\n    \"vibes\": [\"professional\", \"knowledgeable\", \"practical\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Comprehensive list of region-specific sunscreen product recommendations\",\n    \"visual_hierarchy\": [\n      \"Regional sunscreen product lists\",\n      \"Dr. Julian Sass attribution\",\n      \"Mattifying sunscreen emphasis\",\n      \"Person in glasses\",\n      \"Question about mattifying powder\"\n    ]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 583
+  }
+}

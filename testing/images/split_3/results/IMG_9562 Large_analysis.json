@@ -1,0 +1,74 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_3/IMG_9562 Large.jpeg",
+  "image_name": "IMG_9562 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Technology",
+    "subcategories": [
+      "App Development",
+      "No-Code Tools"
+    ],
+    "headline": "Opal no-code app builder offers visual workflow editor and pre-built templates for free",
+    "summary": "Opal provides a visual workflow editor, access to pre-built templates, ability to remix community apps, app sharing via links, and access to GPT and Gemini models. Jono Catliff offers to DM links to get started with Google resources.",
+    "media_metadata": {
+      "original_poster": "Jono Catliff",
+      "tagged_accounts": [],
+      "location_tags": [],
+      "audio_source": null,
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "Opal",
+        "0$",
+        "The past two years have felt like",
+        "Visual workflow editor",
+        "Access to a handful of pre-built templates",
+        "Ability to remix community apps",
+        "Share apps with a link",
+        "Access to GPT and Gemini models",
+        "for free",
+        "Comment OPAL and I'll DM you the links to get started. So Google jus... more"
+      ],
+      "objects": [
+        "app interface",
+        "feature checklist",
+        "profile avatar",
+        "navigation bar",
+        "search bar"
+      ],
+      "themes": [
+        "no-code development",
+        "free tools",
+        "app building",
+        "AI integration"
+      ],
+      "emotions": [
+        "helpful",
+        "promotional",
+        "informative"
+      ],
+      "vibes": [
+        "professional",
+        "tech-focused",
+        "educational"
+      ],
+      "likely_source": "other",
+      "key_interest": "Free no-code app development platform with AI model access",
+      "visual_hierarchy": [
+        "Opal (app name)",
+        "0$ (pricing)",
+        "for free (highlighted text)",
+        "Visual workflow editor",
+        "Feature checklist items"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Technology\",\n  \"subcategories\": [\"App Development\", \"No-Code Tools\"],\n  \"headline\": \"Opal no-code app builder offers visual workflow editor and pre-built templates for free\",\n  \"summary\": \"Opal provides a visual workflow editor, access to pre-built templates, ability to remix community apps, app sharing via links, and access to GPT and Gemini models. Jono Catliff offers to DM links to get started with Google resources.\",\n  \"media_metadata\": {\n    \"original_poster\": \"Jono Catliff\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [],\n    \"audio_source\": null,\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"Opal\", \"0$\", \"The past two years have felt like\", \"Visual workflow editor\", \"Access to a handful of pre-built templates\", \"Ability to remix community apps\", \"Share apps with a link\", \"Access to GPT and Gemini models\", \"for free\", \"Comment OPAL and I'll DM you the links to get started. So Google jus... more\"],\n    \"objects\": [\"app interface\", \"feature checklist\", \"profile avatar\", \"navigation bar\", \"search bar\"],\n    \"themes\": [\"no-code development\", \"free tools\", \"app building\", \"AI integration\"],\n    \"emotions\": [\"helpful\", \"promotional\", \"informative\"],\n    \"vibes\": [\"professional\", \"tech-focused\", \"educational\"],\n    \"likely_source\": \"other\",\n    \"key_interest\": \"Free no-code app development platform with AI model access\",\n    \"visual_hierarchy\": [\"Opal (app name)\", \"0$ (pricing)\", \"for free (highlighted text)\", \"Visual workflow editor\", \"Feature checklist items\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 440
+  }
+}

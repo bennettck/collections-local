@@ -1,0 +1,75 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_2/IMG_9248 Large.jpeg",
+  "image_name": "IMG_9248 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Travel",
+    "subcategories": [
+      "Shopping",
+      "Seoul"
+    ],
+    "headline": "Shopping day guide for Seongsu district in Seoul with store recommendations and travel tips",
+    "summary": "Seongsu district in Seoul offers extensive shopping opportunities requiring a full day to explore. Pro tip includes bringing passport for foreigners and wearing comfortable shoes for the extensive walking required.",
+    "media_metadata": {
+      "original_poster": "hidayah",
+      "tagged_accounts": [],
+      "location_tags": [
+        "Seongsu, Seoul, Korea",
+        "Seongdong-gu"
+      ],
+      "audio_source": "Pretty Little Baby - @Connie Francis",
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "NYUNYU LAB+",
+        "nyunyu lab",
+        "Shopping day @ Seongsu",
+        "Some shopping spots I went at Seongsu. There's SO many stores here so please spend a whole day to cover as much as you can",
+        "Pro tip: don't forget your passport if foreigner and wear co...more",
+        "Search • secondaire seongsu"
+      ],
+      "objects": [
+        "concrete building",
+        "entrance doorway",
+        "people walking",
+        "stairs",
+        "railings",
+        "storefront"
+      ],
+      "themes": [
+        "shopping district",
+        "Korean retail",
+        "travel recommendations",
+        "urban exploration"
+      ],
+      "emotions": [
+        "excitement",
+        "discovery",
+        "helpful"
+      ],
+      "vibes": [
+        "trendy",
+        "urban",
+        "modern",
+        "bustling"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Comprehensive shopping guide for Seongsu district with practical travel advice",
+      "visual_hierarchy": [
+        "Shopping day @ Seongsu title",
+        "NYUNYU LAB+ storefront",
+        "People entering store",
+        "Travel tip text",
+        "Location tag"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Shopping\", \"Seoul\"],\n  \"headline\": \"Shopping day guide for Seongsu district in Seoul with store recommendations and travel tips\",\n  \"summary\": \"Seongsu district in Seoul offers extensive shopping opportunities requiring a full day to explore. Pro tip includes bringing passport for foreigners and wearing comfortable shoes for the extensive walking required.\",\n  \"media_metadata\": {\n    \"original_poster\": \"hidayah\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [\"Seongsu, Seoul, Korea\", \"Seongdong-gu\"],\n    \"audio_source\": \"Pretty Little Baby - @Connie Francis\",\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"NYUNYU LAB+\", \"nyunyu lab\", \"Shopping day @ Seongsu\", \"Some shopping spots I went at Seongsu. There's SO many stores here so please spend a whole day to cover as much as you can\", \"Pro tip: don't forget your passport if foreigner and wear co...more\", \"Search • secondaire seongsu\"],\n    \"objects\": [\"concrete building\", \"entrance doorway\", \"people walking\", \"stairs\", \"railings\", \"storefront\"],\n    \"themes\": [\"shopping district\", \"Korean retail\", \"travel recommendations\", \"urban exploration\"],\n    \"emotions\": [\"excitement\", \"discovery\", \"helpful\"],\n    \"vibes\": [\"trendy\", \"urban\", \"modern\", \"bustling\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Comprehensive shopping guide for Seongsu district with practical travel advice\",\n    \"visual_hierarchy\": [\"Shopping day @ Seongsu title\", \"NYUNYU LAB+ storefront\", \"People entering store\", \"Travel tip text\", \"Location tag\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 444
+  }
+}

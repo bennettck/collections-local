@@ -1,0 +1,73 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_1/IMG_7941 Large.jpeg",
+  "image_name": "IMG_7941 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Travel",
+    "subcategories": [
+      "Workshops",
+      "Cultural-Experiences"
+    ],
+    "headline": "Manga drawing workshop in Tokyo's Nakano area with professional Japanese artist using authentic tools",
+    "summary": "Learn to draw manga with a professional artist in Tokyo's Nakano area. Workshop includes real manga tools and participants take home their finished artwork. Suitable for beginners or experienced artists.",
+    "media_metadata": {
+      "original_poster": "itsjustinjapan",
+      "tagged_accounts": [
+        "@Laufey"
+      ],
+      "location_tags": [],
+      "audio_source": "Tough Luck - @Laufey",
+      "hashtags": [
+        "#japantravel"
+      ]
+    },
+    "image_details": {
+      "extracted_text": [
+        "Manga School Nakano",
+        "MANGA LESSON WITH A PROFESSIONAL JAPANESE MANGA ARTIST",
+        "Learn to draw manga with a pro artist in Tokyo's Nakano area. Use real manga tools and take home your finished artwork - perfect for beginners or experienced artists.",
+        "Custom workshops for your trip! Guide in bio",
+        "¥9,000-",
+        "Book ahead Nakano"
+      ],
+      "objects": [
+        "person drawing manga",
+        "manga artwork pages",
+        "drawing tools",
+        "desk workspace"
+      ],
+      "themes": [
+        "Japanese culture",
+        "art education",
+        "manga creation",
+        "travel experiences"
+      ],
+      "emotions": [
+        "creative",
+        "educational",
+        "authentic"
+      ],
+      "vibes": [
+        "artistic",
+        "cultural-immersion",
+        "hands-on-learning"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Professional manga drawing workshop experience in Tokyo",
+      "visual_hierarchy": [
+        "Manga School Nakano title",
+        "person actively drawing manga",
+        "manga lesson description",
+        "finished manga artwork",
+        "pricing information"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Workshops\", \"Cultural-Experiences\"],\n  \"headline\": \"Manga drawing workshop in Tokyo's Nakano area with professional Japanese artist using authentic tools\",\n  \"summary\": \"Learn to draw manga with a professional artist in Tokyo's Nakano area. Workshop includes real manga tools and participants take home their finished artwork. Suitable for beginners or experienced artists.\",\n  \"media_metadata\": {\n    \"original_poster\": \"itsjustinjapan\",\n    \"tagged_accounts\": [\"@Laufey\"],\n    \"location_tags\": [],\n    \"audio_source\": \"Tough Luck - @Laufey\",\n    \"hashtags\": [\"#japantravel\"]\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"Manga School Nakano\", \"MANGA LESSON WITH A PROFESSIONAL JAPANESE MANGA ARTIST\", \"Learn to draw manga with a pro artist in Tokyo's Nakano area. Use real manga tools and take home your finished artwork - perfect for beginners or experienced artists.\", \"Custom workshops for your trip! Guide in bio\", \"¥9,000-\", \"Book ahead Nakano\"],\n    \"objects\": [\"person drawing manga\", \"manga artwork pages\", \"drawing tools\", \"desk workspace\"],\n    \"themes\": [\"Japanese culture\", \"art education\", \"manga creation\", \"travel experiences\"],\n    \"emotions\": [\"creative\", \"educational\", \"authentic\"],\n    \"vibes\": [\"artistic\", \"cultural-immersion\", \"hands-on-learning\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Professional manga drawing workshop experience in Tokyo\",\n    \"visual_hierarchy\": [\"Manga School Nakano title\", \"person actively drawing manga\", \"manga lesson description\", \"finished manga artwork\", \"pricing information\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 434
+  }
+}

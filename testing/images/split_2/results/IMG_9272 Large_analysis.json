@@ -1,0 +1,75 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_2/IMG_9272 Large.jpeg",
+  "image_name": "IMG_9272 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Beauty",
+    "subcategories": [
+      "Medical Aesthetics",
+      "Cosmetic Surgery"
+    ],
+    "headline": "Amy Chang visits Doctor Petit clinic in Korea, shocked by treatment prices despite impressive facility",
+    "summary": "Amy Chang visited Doctor Petit aesthetic clinic in Korea and was surprised by the high prices despite being impressed by the facility. The clinic displays artistic human figure sculptures in their waiting area.",
+    "media_metadata": {
+      "original_poster": "Amy Chang",
+      "tagged_accounts": [],
+      "location_tags": [],
+      "audio_source": null,
+      "hashtags": [
+        "korea",
+        "aesthetictreatments",
+        "clinicsinkorea",
+        "rejuran",
+        "picolaser"
+      ]
+    },
+    "image_details": {
+      "extracted_text": [
+        "DOCTOR Petit",
+        "I came to this factory clinic",
+        "But the prices had my jaw on the ground...",
+        "#korea #aesthetictreatments #clinicsinkorea #rejuran #picolaser"
+      ],
+      "objects": [
+        "clinic sign",
+        "decorative human sculptures",
+        "black pedestals",
+        "waiting area",
+        "tiled floor"
+      ],
+      "themes": [
+        "medical tourism",
+        "Korean beauty industry",
+        "aesthetic treatments",
+        "clinic experience"
+      ],
+      "emotions": [
+        "surprise",
+        "shock",
+        "disappointment"
+      ],
+      "vibes": [
+        "modern",
+        "clinical",
+        "artistic",
+        "upscale"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "High treatment prices at Korean aesthetic clinic",
+      "visual_hierarchy": [
+        "Doctor Petit clinic sign",
+        "Decorative human figure sculptures",
+        "Price reaction text overlay",
+        "Modern clinic interior",
+        "Amy Chang's profile"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Beauty\",\n  \"subcategories\": [\"Medical Aesthetics\", \"Cosmetic Surgery\"],\n  \"headline\": \"Amy Chang visits Doctor Petit clinic in Korea, shocked by treatment prices despite impressive facility\",\n  \"summary\": \"Amy Chang visited Doctor Petit aesthetic clinic in Korea and was surprised by the high prices despite being impressed by the facility. The clinic displays artistic human figure sculptures in their waiting area.\",\n  \"media_metadata\": {\n    \"original_poster\": \"Amy Chang\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [],\n    \"audio_source\": null,\n    \"hashtags\": [\"korea\", \"aesthetictreatments\", \"clinicsinkorea\", \"rejuran\", \"picolaser\"]\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"DOCTOR Petit\", \"I came to this factory clinic\", \"But the prices had my jaw on the ground...\", \"#korea #aesthetictreatments #clinicsinkorea #rejuran #picolaser\"],\n    \"objects\": [\"clinic sign\", \"decorative human sculptures\", \"black pedestals\", \"waiting area\", \"tiled floor\"],\n    \"themes\": [\"medical tourism\", \"Korean beauty industry\", \"aesthetic treatments\", \"clinic experience\"],\n    \"emotions\": [\"surprise\", \"shock\", \"disappointment\"],\n    \"vibes\": [\"modern\", \"clinical\", \"artistic\", \"upscale\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"High treatment prices at Korean aesthetic clinic\",\n    \"visual_hierarchy\": [\"Doctor Petit clinic sign\", \"Decorative human figure sculptures\", \"Price reaction text overlay\", \"Modern clinic interior\", \"Amy Chang's profile\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 405
+  }
+}

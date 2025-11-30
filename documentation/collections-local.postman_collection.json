@@ -1,0 +1,214 @@
+{
+  "info": {
+    "_postman_id": "collections-local-api",
+    "name": "Collections Local API",
+    "description": "API collection for the Collections App Local - a minimal local version that analyzes and categorizes screenshot images using AI.\n\n## Overview\n\nThis API allows you to:\n- Upload and manage image items\n- Trigger AI-powered analysis on images\n- Retrieve categorization, summaries, and extracted text\n- Access full LLM analysis response via raw_response field\n\n## Authentication\n\nNo authentication required for local development.\n\n## Base URL\n\n`http://localhost:8000`",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": ["{{base_url}}"],
+              "path": ["health"]
+            },
+            "description": "## Health Check\n\nVerify that the API server is running and healthy.\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"status\": \"healthy\",\n  \"timestamp\": \"2025-11-30T12:00:00.000000\"\n}\n```\n\n### Response Fields\n\n| Field | Type | Description |\n|-------|------|-------------|\n| `status` | string | Health status, always \"healthy\" if responding |\n| `timestamp` | string | ISO 8601 timestamp of the response |"
+          },
+          "response": []
+        }
+      ],
+      "description": "Health check endpoints for monitoring API availability."
+    },
+    {
+      "name": "Items",
+      "item": [
+        {
+          "name": "Upload Item",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set('item_id', jsonData.id);",
+                  "    console.log('Saved item_id:', jsonData.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": "",
+                  "description": "Image file to upload (PNG, JPEG, WebP, or GIF)"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/items",
+              "host": ["{{base_url}}"],
+              "path": ["items"]
+            },
+            "description": "## Upload Item\n\nUpload an image file to create a new item in the collection.\n\n### Request\n\n**Content-Type:** `multipart/form-data`\n\n| Field | Type | Required | Description |\n|-------|------|----------|-------------|\n| `file` | file | Yes | Image file (PNG, JPEG, WebP, or GIF) |\n\n### Supported File Types\n\n- `image/png`\n- `image/jpeg`\n- `image/webp`\n- `image/gif`\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"id\": \"uuid-string\",\n  \"filename\": \"uuid-string.png\",\n  \"original_filename\": \"screenshot.png\",\n  \"file_size\": 12345,\n  \"mime_type\": \"image/png\",\n  \"created_at\": \"2025-11-30T12:00:00.000000\",\n  \"updated_at\": \"2025-11-30T12:00:00.000000\",\n  \"latest_analysis\": null\n}\n```\n\n### Response Fields\n\n| Field | Type | Description |\n|-------|------|-------------|\n| `id` | string | Unique identifier (UUID) for the item |\n| `filename` | string | Stored filename (UUID-based) |\n| `original_filename` | string | Original uploaded filename |\n| `file_size` | integer | File size in bytes |\n| `mime_type` | string | MIME type of the file |\n| `created_at` | string | ISO 8601 creation timestamp |\n| `updated_at` | string | ISO 8601 last update timestamp |\n| `latest_analysis` | object/null | Latest analysis result (null if not analyzed) |\n\n### Error Responses\n\n**Status Code:** `400 Bad Request`\n\n```json\n{\n  \"detail\": \"Invalid file type. Allowed types: image/png, image/jpeg, image/webp, image/gif\"\n}\n```"
+          },
+          "response": []
+        },
+        {
+          "name": "List Items",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/items?limit=50&offset=0",
+              "host": ["{{base_url}}"],
+              "path": ["items"],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "Travel",
+                  "description": "Filter by category (dynamic, determined by LLM analysis)",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "50",
+                  "description": "Maximum number of items to return (max 100)"
+                },
+                {
+                  "key": "offset",
+                  "value": "0",
+                  "description": "Number of items to skip for pagination"
+                }
+              ]
+            },
+            "description": "## List Items\n\nRetrieve a paginated list of all items in the collection.\n\n### Query Parameters\n\n| Parameter | Type | Default | Description |\n|-----------|------|---------|-------------|\n| `category` | string | - | Filter by analysis category |\n| `limit` | integer | 50 | Maximum items to return (max 100) |\n| `offset` | integer | 0 | Items to skip for pagination |\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"items\": [\n    {\n      \"id\": \"uuid-string\",\n      \"filename\": \"uuid-string.png\",\n      \"original_filename\": \"screenshot.png\",\n      \"file_size\": 12345,\n      \"mime_type\": \"image/png\",\n      \"created_at\": \"2025-11-30T12:00:00.000000\",\n      \"updated_at\": \"2025-11-30T12:00:00.000000\",\n      \"latest_analysis\": {\n        \"id\": \"analysis-uuid\",\n        \"item_id\": \"uuid-string\",\n        \"version\": 1,\n        \"category\": \"Travel\",\n        \"summary\": \"A TikTok screenshot about Togoshi Ginza...\",\n        \"raw_response\": { ... },\n        \"model_used\": \"claude-sonnet-4-20250514\",\n        \"trace_id\": null,\n        \"created_at\": \"2025-11-30T12:05:00.000000\"\n      }\n    }\n  ],\n  \"total\": 1\n}\n```\n\n### Response Fields\n\n| Field | Type | Description |\n|-------|------|-------------|\n| `items` | array | List of item objects |\n| `total` | integer | Total count of items matching the filter |"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Item",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/items/{{item_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["items", "{{item_id}}"]
+            },
+            "description": "## Get Item\n\nRetrieve a single item by its ID, including the latest analysis with full raw_response if available.\n\n### Path Parameters\n\n| Parameter | Type | Description |\n|-----------|------|-------------|\n| `item_id` | string | UUID of the item |\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"id\": \"uuid-string\",\n  \"filename\": \"uuid-string.png\",\n  \"original_filename\": \"screenshot.png\",\n  \"file_size\": 12345,\n  \"mime_type\": \"image/png\",\n  \"created_at\": \"2025-11-30T12:00:00.000000\",\n  \"updated_at\": \"2025-11-30T12:00:00.000000\",\n  \"latest_analysis\": {\n    \"id\": \"analysis-uuid\",\n    \"item_id\": \"uuid-string\",\n    \"version\": 1,\n    \"category\": \"Travel\",\n    \"summary\": \"A TikTok screenshot about Togoshi Ginza...\",\n    \"raw_response\": {\n      \"category\": \"Travel\",\n      \"subcategories\": [\"Japan\", \"Shopping\", \"Local Culture\"],\n      \"headline\": \"Togoshi Ginza: Tokyo's authentic 1.3km local shopping street\",\n      \"summary\": \"A TikTok screenshot about Togoshi Ginza...\",\n      \"media_metadata\": {\n        \"original_poster\": \"recommend_ndre\",\n        \"tagged_accounts\": [],\n        \"location_tags\": [\"Tokyo\"],\n        \"audio_source\": \"Apple Music - bloodline - Ariana Grande\",\n        \"hashtags\": [\"#japan\"]\n      },\n      \"image_details\": {\n        \"extracted_text\": [\"TOGOSHI GINZA\", \"With over 400 shops...\"],\n        \"objects\": [\"Japanese street scene\", \"Traditional shop signs\"],\n        \"themes\": [\"Authentic local experiences\", \"Japanese culture\"],\n        \"emotions\": [\"Curiosity\", \"Cultural appreciation\"],\n        \"vibes\": [\"Authentic\", \"Local\", \"Cultural immersion\"],\n        \"likely_source\": \"TikTok\",\n        \"key_interest\": \"Hidden local shopping district\",\n        \"visual_hierarchy\": [\"TOGOSHI GINZA title text\", \"Descriptive paragraph\"]\n      }\n    },\n    \"model_used\": \"claude-sonnet-4-20250514\",\n    \"trace_id\": null,\n    \"created_at\": \"2025-11-30T12:05:00.000000\"\n  }\n}\n```\n\n### Error Responses\n\n**Status Code:** `404 Not Found`\n\n```json\n{\n  \"detail\": \"Item not found\"\n}\n```"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Item",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/items/{{item_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["items", "{{item_id}}"]
+            },
+            "description": "## Delete Item\n\nDelete an item and all associated data including:\n- The stored image file\n- All analysis records\n\n### Path Parameters\n\n| Parameter | Type | Description |\n|-----------|------|-------------|\n| `item_id` | string | UUID of the item to delete |\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"status\": \"deleted\",\n  \"id\": \"uuid-string\"\n}\n```\n\n### Error Responses\n\n**Status Code:** `404 Not Found`\n\n```json\n{\n  \"detail\": \"Item not found\"\n}\n```"
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for managing collection items (images)."
+    },
+    {
+      "name": "Analysis",
+      "item": [
+        {
+          "name": "Analyze Item",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set('analysis_id', jsonData.id);",
+                  "    console.log('Saved analysis_id:', jsonData.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"force_reanalyze\": false,\n  \"model\": \"claude-sonnet-4-20250514\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/items/{{item_id}}/analyze",
+              "host": ["{{base_url}}"],
+              "path": ["items", "{{item_id}}", "analyze"]
+            },
+            "description": "## Analyze Item\n\nTrigger AI analysis on an uploaded image. The analysis uses Claude's vision capabilities to:\n- Categorize the image\n- Generate a summary and headline\n- Extract text content\n- Identify media metadata (poster, hashtags, etc.)\n- Analyze image details (objects, themes, emotions, vibes)\n\n### Path Parameters\n\n| Parameter | Type | Description |\n|-----------|------|-------------|\n| `item_id` | string | UUID of the item to analyze |\n\n### Request Body\n\n```json\n{\n  \"force_reanalyze\": false,\n  \"model\": \"claude-sonnet-4-20250514\"\n}\n```\n\n| Field | Type | Default | Description |\n|-------|------|---------|-------------|\n| `force_reanalyze` | boolean | false | If true, creates new analysis even if one exists |\n| `model` | string | claude-sonnet-4-20250514 | Anthropic model to use |\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"id\": \"analysis-uuid\",\n  \"item_id\": \"uuid-string\",\n  \"version\": 1,\n  \"category\": \"Travel\",\n  \"summary\": \"A TikTok screenshot about Togoshi Ginza, a 1.3km local shopping street in Tokyo...\",\n  \"raw_response\": {\n    \"category\": \"Travel\",\n    \"subcategories\": [\"Japan\", \"Shopping\", \"Local Culture\"],\n    \"headline\": \"Togoshi Ginza: Tokyo's authentic 1.3km local shopping street\",\n    \"summary\": \"A TikTok screenshot about Togoshi Ginza...\",\n    \"media_metadata\": {\n      \"original_poster\": \"recommend_ndre\",\n      \"tagged_accounts\": [],\n      \"location_tags\": [\"Tokyo\"],\n      \"audio_source\": \"Apple Music - bloodline - Ariana Grande\",\n      \"hashtags\": [\"#japan\"]\n    },\n    \"image_details\": {\n      \"extracted_text\": [\"TOGOSHI GINZA\", \"With over 400 shops...\"],\n      \"objects\": [\"Japanese street scene\", \"Traditional shop signs\"],\n      \"themes\": [\"Authentic local experiences\", \"Japanese culture\"],\n      \"emotions\": [\"Curiosity\", \"Cultural appreciation\"],\n      \"vibes\": [\"Authentic\", \"Local\", \"Cultural immersion\"],\n      \"likely_source\": \"TikTok\",\n      \"key_interest\": \"Hidden local shopping district\",\n      \"visual_hierarchy\": [\"TOGOSHI GINZA title text\", \"Descriptive paragraph\"]\n    }\n  },\n  \"model_used\": \"claude-sonnet-4-20250514\",\n  \"trace_id\": null,\n  \"created_at\": \"2025-11-30T12:05:00.000000\"\n}\n```\n\n### Response Fields\n\n| Field | Type | Description |\n|-------|------|-------------|\n| `id` | string | Unique identifier for this analysis |\n| `item_id` | string | ID of the analyzed item |\n| `version` | integer | Analysis version number (increments with each reanalysis) |\n| `category` | string/null | Primary category (extracted from raw_response) |\n| `summary` | string/null | Summary (extracted from raw_response) |\n| `raw_response` | object | Full LLM analysis response (see raw_response Schema) |\n| `model_used` | string | AI model used for analysis |\n| `trace_id` | string/null | Langfuse trace ID for debugging |\n| `created_at` | string | ISO 8601 timestamp |\n\n### raw_response Schema\n\n| Field | Type | Description |\n|-------|------|-------------|\n| `category` | string | Primary category |\n| `subcategories` | array | 2-3 specific subcategories |\n| `headline` | string | 140 character headline |\n| `summary` | string | 2-3 sentence summary |\n| `media_metadata` | object | Social media metadata (poster, tags, location, audio, hashtags) |\n| `image_details` | object | Detailed analysis (text, objects, themes, emotions, vibes, source, etc.) |\n\n### Error Responses\n\n**Status Code:** `404 Not Found`\n\n```json\n{\n  \"detail\": \"Item not found\"\n}\n```\n\n**Status Code:** `500 Internal Server Error`\n\n```json\n{\n  \"detail\": \"Analysis failed: <error message>\"\n}\n```\n\n### Prerequisites\n\nBefore using this endpoint, ensure:\n1. Langfuse credentials are configured in `.env`\n2. A prompt named `collections/image-analysis` exists in Langfuse"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Item Analyses",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/items/{{item_id}}/analyses",
+              "host": ["{{base_url}}"],
+              "path": ["items", "{{item_id}}", "analyses"]
+            },
+            "description": "## Get Item Analyses\n\nRetrieve all analysis versions for a specific item, ordered by version (newest first).\n\nThis is useful for:\n- Viewing analysis history\n- Comparing results across different models\n- Tracking how categorization has changed\n\n### Path Parameters\n\n| Parameter | Type | Description |\n|-----------|------|-------------|\n| `item_id` | string | UUID of the item |\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n[\n  {\n    \"id\": \"analysis-uuid-2\",\n    \"item_id\": \"uuid-string\",\n    \"version\": 2,\n    \"category\": \"Travel\",\n    \"summary\": \"Updated analysis...\",\n    \"raw_response\": {\n      \"category\": \"Travel\",\n      \"subcategories\": [\"Japan\", \"Shopping\"],\n      \"headline\": \"...\",\n      \"summary\": \"Updated analysis...\",\n      \"media_metadata\": { ... },\n      \"image_details\": { ... }\n    },\n    \"model_used\": \"claude-sonnet-4-20250514\",\n    \"trace_id\": null,\n    \"created_at\": \"2025-11-30T14:00:00.000000\"\n  },\n  {\n    \"id\": \"analysis-uuid-1\",\n    \"item_id\": \"uuid-string\",\n    \"version\": 1,\n    \"category\": \"Travel\",\n    \"summary\": \"Original analysis...\",\n    \"raw_response\": {\n      \"category\": \"Travel\",\n      \"subcategories\": [\"Japan\", \"Local Culture\"],\n      \"headline\": \"...\",\n      \"summary\": \"Original analysis...\",\n      \"media_metadata\": { ... },\n      \"image_details\": { ... }\n    },\n    \"model_used\": \"claude-sonnet-4-20250514\",\n    \"trace_id\": null,\n    \"created_at\": \"2025-11-30T12:05:00.000000\"\n  }\n]\n```\n\n### Error Responses\n\n**Status Code:** `404 Not Found`\n\n```json\n{\n  \"detail\": \"Item not found\"\n}\n```"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Analysis",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/analyses/{{analysis_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["analyses", "{{analysis_id}}"]
+            },
+            "description": "## Get Analysis\n\nRetrieve a specific analysis by its ID with full raw_response.\n\n### Path Parameters\n\n| Parameter | Type | Description |\n|-----------|------|-------------|\n| `analysis_id` | string | UUID of the analysis |\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"id\": \"analysis-uuid\",\n  \"item_id\": \"uuid-string\",\n  \"version\": 1,\n  \"category\": \"Travel\",\n  \"summary\": \"A TikTok screenshot about Togoshi Ginza...\",\n  \"raw_response\": {\n    \"category\": \"Travel\",\n    \"subcategories\": [\"Japan\", \"Shopping\", \"Local Culture\"],\n    \"headline\": \"Togoshi Ginza: Tokyo's authentic 1.3km local shopping street\",\n    \"summary\": \"A TikTok screenshot about Togoshi Ginza...\",\n    \"media_metadata\": {\n      \"original_poster\": \"recommend_ndre\",\n      \"tagged_accounts\": [],\n      \"location_tags\": [\"Tokyo\"],\n      \"audio_source\": \"Apple Music - bloodline - Ariana Grande\",\n      \"hashtags\": [\"#japan\"]\n    },\n    \"image_details\": {\n      \"extracted_text\": [\"TOGOSHI GINZA\", \"With over 400 shops...\"],\n      \"objects\": [\"Japanese street scene\", \"Traditional shop signs\"],\n      \"themes\": [\"Authentic local experiences\", \"Japanese culture\"],\n      \"emotions\": [\"Curiosity\", \"Cultural appreciation\"],\n      \"vibes\": [\"Authentic\", \"Local\", \"Cultural immersion\"],\n      \"likely_source\": \"TikTok\",\n      \"key_interest\": \"Hidden local shopping district\",\n      \"visual_hierarchy\": [\"TOGOSHI GINZA title text\", \"Descriptive paragraph\"]\n    }\n  },\n  \"model_used\": \"claude-sonnet-4-20250514\",\n  \"trace_id\": null,\n  \"created_at\": \"2025-11-30T12:05:00.000000\"\n}\n```\n\n### Error Responses\n\n**Status Code:** `404 Not Found`\n\n```json\n{\n  \"detail\": \"Analysis not found\"\n}\n```"
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for AI-powered image analysis. Analysis responses include a `raw_response` field containing the full LLM analysis output."
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000"
+    }
+  ]
+}

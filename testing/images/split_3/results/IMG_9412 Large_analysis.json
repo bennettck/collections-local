@@ -1,0 +1,74 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_3/IMG_9412 Large.jpeg",
+  "image_name": "IMG_9412 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Healthcare",
+    "subcategories": [
+      "Traditional Medicine",
+      "Medical Tourism"
+    ],
+    "headline": "Korean medicine clinic experience in Seoul's Jung-gu district featuring cupping therapy",
+    "summary": "Von Voyaj visits Yonghada Korean Medicine Clinic on the 5th floor at 132 Toegye-ro in Jung-gu, Seoul for Korean medicine treatment. The experience includes cupping therapy, with the creator sharing their medical tourism journey.",
+    "media_metadata": {
+      "original_poster": "Von Voyaj",
+      "tagged_accounts": [
+        "@RuPaul"
+      ],
+      "location_tags": [
+        "Yonghada Korean Medicine Clinic, 5F, 132 Toegye-ro, Jung-gu, Seoul"
+      ],
+      "audio_source": "Cake & Candy - @RuPaul",
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "Yonghada Korean Medicine Clinic, 5F, 132 Toegye-ro, Jung-gu, Seoul",
+        "reset",
+        "Von Voyaj",
+        "Ever tried Korean medicine while in Seoul? I visited **Yonghada Korea... more",
+        "Apple Music Cake & Candy - @RuPaul",
+        "Search • cupping"
+      ],
+      "objects": [
+        "person waving",
+        "medical clinic interior",
+        "modern medical facility",
+        "cupping therapy equipment",
+        "smartphone interface"
+      ],
+      "themes": [
+        "medical tourism",
+        "Korean traditional medicine",
+        "healthcare experience",
+        "cultural exploration"
+      ],
+      "emotions": [
+        "friendly",
+        "welcoming",
+        "informative"
+      ],
+      "vibes": [
+        "educational",
+        "travel-focused",
+        "health-conscious"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Complete clinic address and location details for Korean medicine treatment",
+      "visual_hierarchy": [
+        "Clinic name and full address overlay",
+        "Person waving at camera",
+        "Modern medical facility interior",
+        "Search term 'cupping'",
+        "Social media interface elements"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Healthcare\",\n  \"subcategories\": [\"Traditional Medicine\", \"Medical Tourism\"],\n  \"headline\": \"Korean medicine clinic experience in Seoul's Jung-gu district featuring cupping therapy\",\n  \"summary\": \"Von Voyaj visits Yonghada Korean Medicine Clinic on the 5th floor at 132 Toegye-ro in Jung-gu, Seoul for Korean medicine treatment. The experience includes cupping therapy, with the creator sharing their medical tourism journey.\",\n  \"media_metadata\": {\n    \"original_poster\": \"Von Voyaj\",\n    \"tagged_accounts\": [\"@RuPaul\"],\n    \"location_tags\": [\"Yonghada Korean Medicine Clinic, 5F, 132 Toegye-ro, Jung-gu, Seoul\"],\n    \"audio_source\": \"Cake & Candy - @RuPaul\",\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"Yonghada Korean Medicine Clinic, 5F, 132 Toegye-ro, Jung-gu, Seoul\", \"reset\", \"Von Voyaj\", \"Ever tried Korean medicine while in Seoul? I visited **Yonghada Korea... more\", \"Apple Music Cake & Candy - @RuPaul\", \"Search • cupping\"],\n    \"objects\": [\"person waving\", \"medical clinic interior\", \"modern medical facility\", \"cupping therapy equipment\", \"smartphone interface\"],\n    \"themes\": [\"medical tourism\", \"Korean traditional medicine\", \"healthcare experience\", \"cultural exploration\"],\n    \"emotions\": [\"friendly\", \"welcoming\", \"informative\"],\n    \"vibes\": [\"educational\", \"travel-focused\", \"health-conscious\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Complete clinic address and location details for Korean medicine treatment\",\n    \"visual_hierarchy\": [\"Clinic name and full address overlay\", \"Person waving at camera\", \"Modern medical facility interior\", \"Search term 'cupping'\", \"Social media interface elements\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 489
+  }
+}

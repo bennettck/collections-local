@@ -1,0 +1,69 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_2/IMG_9376 Large.jpeg",
+  "image_name": "IMG_9376 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Documentary",
+    "subcategories": [
+      "Korean History",
+      "Netflix Series"
+    ],
+    "headline": "Netflix documentary 'The Echoes of Survivors: Inside Korea's Tragedies' releases August 15",
+    "summary": "Netflix documentary series 'The Echoes of Survivors: Inside Korea's Tragedies' premieres August 15. The series explores the horrific true story that supposedly inspired Squid Game, covering Korean historical tragedies and survivor accounts.",
+    "media_metadata": {
+      "original_poster": null,
+      "tagged_accounts": [],
+      "location_tags": [],
+      "audio_source": null,
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "IN THE NAME OF GOD: A HOLY BETRAYAL CHAPTER TWO",
+        "it's called The Echoes of Survivors: Inside Korean Tragedies",
+        "A NETFLIX DOCUMENTARY SERIES",
+        "The Echoes of Survivors: Inside Korea's Tragedies",
+        "ONLY ON NETFLIX | AUGUST 15",
+        "this is the horrific true story that supposedly inspired Squid Game... more"
+      ],
+      "objects": [
+        "torn poster fragments",
+        "documentary title card",
+        "Netflix branding",
+        "person speaking"
+      ],
+      "themes": [
+        "Korean history",
+        "documentary series",
+        "true crime",
+        "historical tragedies"
+      ],
+      "emotions": [
+        "serious",
+        "somber",
+        "informative"
+      ],
+      "vibes": [
+        "educational",
+        "dark",
+        "historical"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Netflix documentary about Korean tragedies that inspired Squid Game",
+      "visual_hierarchy": [
+        "Documentary title 'The Echoes of Survivors'",
+        "Netflix branding and August 15 release date",
+        "Person explaining the content",
+        "Torn poster imagery in background",
+        "Connection to Squid Game inspiration"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Documentary\",\n  \"subcategories\": [\"Korean History\", \"Netflix Series\"],\n  \"headline\": \"Netflix documentary 'The Echoes of Survivors: Inside Korea's Tragedies' releases August 15\",\n  \"summary\": \"Netflix documentary series 'The Echoes of Survivors: Inside Korea's Tragedies' premieres August 15. The series explores the horrific true story that supposedly inspired Squid Game, covering Korean historical tragedies and survivor accounts.\",\n  \"media_metadata\": {\n    \"original_poster\": null,\n    \"tagged_accounts\": [],\n    \"location_tags\": [],\n    \"audio_source\": null,\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\n      \"IN THE NAME OF GOD: A HOLY BETRAYAL CHAPTER TWO\",\n      \"it's called The Echoes of Survivors: Inside Korean Tragedies\",\n      \"A NETFLIX DOCUMENTARY SERIES\",\n      \"The Echoes of Survivors: Inside Korea's Tragedies\",\n      \"ONLY ON NETFLIX | AUGUST 15\",\n      \"this is the horrific true story that supposedly inspired Squid Game... more\"\n    ],\n    \"objects\": [\"torn poster fragments\", \"documentary title card\", \"Netflix branding\", \"person speaking\"],\n    \"themes\": [\"Korean history\", \"documentary series\", \"true crime\", \"historical tragedies\"],\n    \"emotions\": [\"serious\", \"somber\", \"informative\"],\n    \"vibes\": [\"educational\", \"dark\", \"historical\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Netflix documentary about Korean tragedies that inspired Squid Game\",\n    \"visual_hierarchy\": [\n      \"Documentary title 'The Echoes of Survivors'\",\n      \"Netflix branding and August 15 release date\",\n      \"Person explaining the content\",\n      \"Torn poster imagery in background\",\n      \"Connection to Squid Game inspiration\"\n    ]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 487
+  }
+}

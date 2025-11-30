@@ -1,0 +1,73 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_1/IMG_7901 Large.jpeg",
+  "image_name": "IMG_7901 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Beauty",
+    "subcategories": [
+      "Fragrance",
+      "Japanese-Products"
+    ],
+    "headline": "J-Scent Japanese perfume house discovery with affordable ¥4,950 bottles including Wood Flake, Hisui & Sumo Wrestler scents",
+    "summary": "J-Scent is a famous Japanese perfume house offering unique fragrances with stories behind each scent. Despite loving their most famous Roasted Green Tea fragrance, the creator chose Wood Flake, Hisui & Sumo Wrestler scents at ¥4,950 per bottle due to affordability and already owning similar scents.",
+    "media_metadata": {
+      "original_poster": "ceri is a perfume junkie",
+      "tagged_accounts": [],
+      "location_tags": [
+        "JAPAN"
+      ],
+      "audio_source": "Harpy Hare - Yaelokre",
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "J-SCENT",
+        "Finally had the chance to try this famous Japanese perfume house, J-Scent, and i must say... I'M IN LOVE WITH THE STORIES BEHIND EACH PERFUME. i even got to sniff their most famous perfume, Roasted Green Tea! it's beautiful but i passed on it since i already have something similar. PLUS, THEY'RE SO AFFORDABLE OMG LOVE, each bottle is only ¥4,950!!!",
+        "picked up Wood Flake, Hisui & Sumo Wrestler",
+        "TESTER",
+        "I'm so glad to have discovered & smelled so many AMAZING perfumes during my trip to Japan! i might've gone a lil over my initial budget for perfume... more"
+      ],
+      "objects": [
+        "perfume bottles",
+        "tester bottles",
+        "perfume display",
+        "retail store",
+        "product labels"
+      ],
+      "themes": [
+        "Japanese beauty products",
+        "fragrance discovery",
+        "travel shopping",
+        "affordable luxury"
+      ],
+      "emotions": [
+        "excitement",
+        "love",
+        "discovery",
+        "satisfaction"
+      ],
+      "vibes": [
+        "enthusiastic",
+        "informative",
+        "personal-experience",
+        "budget-conscious"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "J-Scent Japanese perfume house with unique story-based fragrances at ¥4,950 per bottle",
+      "visual_hierarchy": [
+        "J-SCENT brand name",
+        "Perfume bottles being held",
+        "Long text overlay about the experience",
+        "Tester bottles display",
+        "Store environment"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Beauty\",\n  \"subcategories\": [\"Fragrance\", \"Japanese-Products\"],\n  \"headline\": \"J-Scent Japanese perfume house discovery with affordable ¥4,950 bottles including Wood Flake, Hisui & Sumo Wrestler scents\",\n  \"summary\": \"J-Scent is a famous Japanese perfume house offering unique fragrances with stories behind each scent. Despite loving their most famous Roasted Green Tea fragrance, the creator chose Wood Flake, Hisui & Sumo Wrestler scents at ¥4,950 per bottle due to affordability and already owning similar scents.\",\n  \"media_metadata\": {\n    \"original_poster\": \"ceri is a perfume junkie\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [\"JAPAN\"],\n    \"audio_source\": \"Harpy Hare - Yaelokre\",\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\n      \"J-SCENT\",\n      \"Finally had the chance to try this famous Japanese perfume house, J-Scent, and i must say... I'M IN LOVE WITH THE STORIES BEHIND EACH PERFUME. i even got to sniff their most famous perfume, Roasted Green Tea! it's beautiful but i passed on it since i already have something similar. PLUS, THEY'RE SO AFFORDABLE OMG LOVE, each bottle is only ¥4,950!!!\",\n      \"picked up Wood Flake, Hisui & Sumo Wrestler\",\n      \"TESTER\",\n      \"I'm so glad to have discovered & smelled so many AMAZING perfumes during my trip to Japan! i might've gone a lil over my initial budget for perfume... more\"\n    ],\n    \"objects\": [\"perfume bottles\", \"tester bottles\", \"perfume display\", \"retail store\", \"product labels\"],\n    \"themes\": [\"Japanese beauty products\", \"fragrance discovery\", \"travel shopping\", \"affordable luxury\"],\n    \"emotions\": [\"excitement\", \"love\", \"discovery\", \"satisfaction\"],\n    \"vibes\": [\"enthusiastic\", \"informative\", \"personal-experience\", \"budget-conscious\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"J-Scent Japanese perfume house with unique story-based fragrances at ¥4,950 per bottle\",\n    \"visual_hierarchy\": [\n      \"J-SCENT brand name\",\n      \"Perfume bottles being held\",\n      \"Long text overlay about the experience\",\n      \"Tester bottles display\",\n      \"Store environment\"\n    ]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 646
+  }
+}

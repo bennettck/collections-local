@@ -1,0 +1,72 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_3/IMG_9566 Large.jpeg",
+  "image_name": "IMG_9566 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Beauty",
+    "subcategories": [
+      "Spa Services",
+      "Date Ideas"
+    ],
+    "headline": "Scalp Therapy Head Spa in Centennial offers couples scalp treatments with $25 off using code 'Datenightdenver'",
+    "summary": "Scalp Therapy Head Spa opened in Centennial (~20 min from Denver) offering relaxing scalp treatments for couples. Use code 'Datenightdenver' for $25 off. The experience includes beautiful scents and leaves hair noticeably healthier.",
+    "media_metadata": {
+      "original_poster": "Date Night Denver",
+      "tagged_accounts": [
+        "Scalp Therapy Headspa"
+      ],
+      "location_tags": [
+        "Denver"
+      ],
+      "audio_source": null,
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "This Brand New Spa near Denver ruined all other Date Nights for us",
+        "Scalp Therapy Headspa · Denver",
+        "Date Night Denver",
+        "Scalp Therapy Head Spa just opened up in Centennial (~20 min from Denver)",
+        "Use code Datenightdenver for $25 off",
+        "You can do this in the same room as your person"
+      ],
+      "objects": [
+        "couple photo",
+        "spa advertisement",
+        "promotional text"
+      ],
+      "themes": [
+        "couples activities",
+        "spa treatments",
+        "date night ideas",
+        "local business promotion"
+      ],
+      "emotions": [
+        "relaxation",
+        "romance",
+        "excitement"
+      ],
+      "vibes": [
+        "luxurious",
+        "intimate",
+        "promotional"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "New spa offering couples scalp treatments with discount code",
+      "visual_hierarchy": [
+        "Brand New Spa headline",
+        "Scalp Therapy Headspa business name",
+        "Date Night Denver account name",
+        "Discount code information",
+        "Location details"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Beauty\",\n  \"subcategories\": [\"Spa Services\", \"Date Ideas\"],\n  \"headline\": \"Scalp Therapy Head Spa in Centennial offers couples scalp treatments with $25 off using code 'Datenightdenver'\",\n  \"summary\": \"Scalp Therapy Head Spa opened in Centennial (~20 min from Denver) offering relaxing scalp treatments for couples. Use code 'Datenightdenver' for $25 off. The experience includes beautiful scents and leaves hair noticeably healthier.\",\n  \"media_metadata\": {\n    \"original_poster\": \"Date Night Denver\",\n    \"tagged_accounts\": [\"Scalp Therapy Headspa\"],\n    \"location_tags\": [\"Denver\"],\n    \"audio_source\": null,\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\n      \"This Brand New Spa near Denver ruined all other Date Nights for us\",\n      \"Scalp Therapy Headspa · Denver\",\n      \"Date Night Denver\",\n      \"Scalp Therapy Head Spa just opened up in Centennial (~20 min from Denver)\",\n      \"Use code Datenightdenver for $25 off\",\n      \"You can do this in the same room as your person\"\n    ],\n    \"objects\": [\"couple photo\", \"spa advertisement\", \"promotional text\"],\n    \"themes\": [\"couples activities\", \"spa treatments\", \"date night ideas\", \"local business promotion\"],\n    \"emotions\": [\"relaxation\", \"romance\", \"excitement\"],\n    \"vibes\": [\"luxurious\", \"intimate\", \"promotional\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"New spa offering couples scalp treatments with discount code\",\n    \"visual_hierarchy\": [\n      \"Brand New Spa headline\",\n      \"Scalp Therapy Headspa business name\",\n      \"Date Night Denver account name\",\n      \"Discount code information\",\n      \"Location details\"\n    ]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 492
+  }
+}

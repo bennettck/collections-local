@@ -1,0 +1,75 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_1/IMG_8019 Large.jpeg",
+  "image_name": "IMG_8019 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Food",
+    "subcategories": [
+      "Vegetarian",
+      "Restaurant Guide"
+    ],
+    "headline": "Ultimate Guide to Vegetarian Restaurants in Seoul featuring favorite plant-based spots",
+    "summary": "KrazyKlub shares their ultimate guide to vegetarian restaurants in Seoul, targeting vegetarians, flexitarians, and plant-based food lovers. The guide showcases Korean vegetarian dishes including what appears to be Korean-style cauliflower, pasta, and flatbread options.",
+    "media_metadata": {
+      "original_poster": "KrazyKlub",
+      "tagged_accounts": [
+        "@Doechii"
+      ],
+      "location_tags": [
+        "Seoul"
+      ],
+      "audio_source": "Anxiety - @Doechii",
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "Ferments",
+        "Our Favorite Vegetarian Spots in Seoul",
+        "The Ultimate Guide to Vegetarian Restaurants in Seoul!",
+        "Whether you're a vegetarian, flexitarian, or just love plant-based food, thes... more",
+        "Anxiety - @Doechii"
+      ],
+      "objects": [
+        "Korean-style cauliflower",
+        "pasta dish with tomato sauce",
+        "flatbread with vegetables",
+        "white bowls",
+        "metal tongs",
+        "marble table surface"
+      ],
+      "themes": [
+        "vegetarian dining",
+        "Seoul food scene",
+        "plant-based cuisine",
+        "Korean vegetarian food"
+      ],
+      "emotions": [
+        "appetizing",
+        "informative",
+        "welcoming"
+      ],
+      "vibes": [
+        "foodie",
+        "health-conscious",
+        "travel guide",
+        "cultural exploration"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Korean-style cauliflower dish prominently featured with 'Ferments' label",
+      "visual_hierarchy": [
+        "Korean-style cauliflower with 'Ferments' label",
+        "Guide title text",
+        "Pasta dish",
+        "Flatbread",
+        "Audio attribution"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Food\",\n  \"subcategories\": [\"Vegetarian\", \"Restaurant Guide\"],\n  \"headline\": \"Ultimate Guide to Vegetarian Restaurants in Seoul featuring favorite plant-based spots\",\n  \"summary\": \"KrazyKlub shares their ultimate guide to vegetarian restaurants in Seoul, targeting vegetarians, flexitarians, and plant-based food lovers. The guide showcases Korean vegetarian dishes including what appears to be Korean-style cauliflower, pasta, and flatbread options.\",\n  \"media_metadata\": {\n    \"original_poster\": \"KrazyKlub\",\n    \"tagged_accounts\": [\"@Doechii\"],\n    \"location_tags\": [\"Seoul\"],\n    \"audio_source\": \"Anxiety - @Doechii\",\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"Ferments\", \"Our Favorite Vegetarian Spots in Seoul\", \"The Ultimate Guide to Vegetarian Restaurants in Seoul!\", \"Whether you're a vegetarian, flexitarian, or just love plant-based food, thes... more\", \"Anxiety - @Doechii\"],\n    \"objects\": [\"Korean-style cauliflower\", \"pasta dish with tomato sauce\", \"flatbread with vegetables\", \"white bowls\", \"metal tongs\", \"marble table surface\"],\n    \"themes\": [\"vegetarian dining\", \"Seoul food scene\", \"plant-based cuisine\", \"Korean vegetarian food\"],\n    \"emotions\": [\"appetizing\", \"informative\", \"welcoming\"],\n    \"vibes\": [\"foodie\", \"health-conscious\", \"travel guide\", \"cultural exploration\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Korean-style cauliflower dish prominently featured with 'Ferments' label\",\n    \"visual_hierarchy\": [\"Korean-style cauliflower with 'Ferments' label\", \"Guide title text\", \"Pasta dish\", \"Flatbread\", \"Audio attribution\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 477
+  }
+}

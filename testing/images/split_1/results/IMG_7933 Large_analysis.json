@@ -1,0 +1,75 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_1/IMG_7933 Large.jpeg",
+  "image_name": "IMG_7933 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Programming",
+    "subcategories": [
+      "Web Development",
+      "AI Tools"
+    ],
+    "headline": "DeepSite AI coding platform showing HTML structure for web app development",
+    "summary": "DeepSite is an AI-powered coding platform by DeepSeek V3. Users can comment 'DEEPSEEK' to access the free AI coder. The interface shows HTML code structure including DOCTYPE, html, head, and title tags for 'My app'.",
+    "media_metadata": {
+      "original_poster": "enzostvs",
+      "tagged_accounts": [],
+      "location_tags": [],
+      "audio_source": null,
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "DeepSite",
+        "+ New",
+        "Imagine and Share",
+        "index.html",
+        "<!DOCTYPE html>",
+        "<html>",
+        "<head>",
+        "<title>My app</title>",
+        "website,",
+        "Nick Saraev",
+        "Comment 'DEEPSEEK' to get this Free AI Coder powered by DeepSeek V3"
+      ],
+      "objects": [
+        "code editor interface",
+        "HTML structure",
+        "profile avatar",
+        "navigation tabs",
+        "line numbers"
+      ],
+      "themes": [
+        "artificial intelligence",
+        "web development",
+        "coding education",
+        "free tools"
+      ],
+      "emotions": [
+        "innovative",
+        "accessible",
+        "technical"
+      ],
+      "vibes": [
+        "professional",
+        "educational",
+        "tech-forward"
+      ],
+      "likely_source": "other",
+      "key_interest": "Free AI coding tool accessible via comment command",
+      "visual_hierarchy": [
+        "DeepSite platform name",
+        "HTML code structure",
+        "Comment instruction for free access",
+        "Nick Saraev attribution",
+        "Navigation interface"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Programming\",\n  \"subcategories\": [\"Web Development\", \"AI Tools\"],\n  \"headline\": \"DeepSite AI coding platform showing HTML structure for web app development\",\n  \"summary\": \"DeepSite is an AI-powered coding platform by DeepSeek V3. Users can comment 'DEEPSEEK' to access the free AI coder. The interface shows HTML code structure including DOCTYPE, html, head, and title tags for 'My app'.\",\n  \"media_metadata\": {\n    \"original_poster\": \"enzostvs\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [],\n    \"audio_source\": null,\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"DeepSite\", \"+ New\", \"Imagine and Share\", \"index.html\", \"<!DOCTYPE html>\", \"<html>\", \"<head>\", \"<title>My app</title>\", \"website,\", \"Nick Saraev\", \"Comment 'DEEPSEEK' to get this Free AI Coder powered by DeepSeek V3\"],\n    \"objects\": [\"code editor interface\", \"HTML structure\", \"profile avatar\", \"navigation tabs\", \"line numbers\"],\n    \"themes\": [\"artificial intelligence\", \"web development\", \"coding education\", \"free tools\"],\n    \"emotions\": [\"innovative\", \"accessible\", \"technical\"],\n    \"vibes\": [\"professional\", \"educational\", \"tech-forward\"],\n    \"likely_source\": \"other\",\n    \"key_interest\": \"Free AI coding tool accessible via comment command\",\n    \"visual_hierarchy\": [\"DeepSite platform name\", \"HTML code structure\", \"Comment instruction for free access\", \"Nick Saraev attribution\", \"Navigation interface\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 419
+  }
+}

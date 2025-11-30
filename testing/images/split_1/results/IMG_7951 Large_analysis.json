@@ -1,0 +1,77 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_1/IMG_7951 Large.jpeg",
+  "image_name": "IMG_7951 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Travel",
+    "subcategories": [
+      "Japan",
+      "Hidden-Gems"
+    ],
+    "headline": "Little Edo Kawagoe - traditional Japanese town 40 minutes from Tokyo",
+    "summary": "Little Edo Kawagoe is located 40 minutes from Tokyo and offers a traditional Japanese experience away from overcrowded tourist areas. The historic town features traditional architecture and cultural sites.",
+    "media_metadata": {
+      "original_poster": "tomogo.official",
+      "tagged_accounts": [],
+      "location_tags": [],
+      "audio_source": null,
+      "hashtags": [
+        "japan",
+        "travel",
+        "travelhacks",
+        "overcrowding",
+        "kawagoe"
+      ]
+    },
+    "image_details": {
+      "extracted_text": [
+        "This is little Edo Kawagoe and",
+        "This is 40 minutes from Tokyo",
+        "#japan #travel #travelhacks #overcrowding #kawagoe",
+        "tomogo.official"
+      ],
+      "objects": [
+        "traditional Japanese buildings",
+        "wooden structures",
+        "stone pathway",
+        "Japanese signage",
+        "trees",
+        "visitors",
+        "person in beige shirt"
+      ],
+      "themes": [
+        "Japanese culture",
+        "travel alternatives",
+        "historical preservation",
+        "tourism"
+      ],
+      "emotions": [
+        "discovery",
+        "authenticity",
+        "peaceful"
+      ],
+      "vibes": [
+        "traditional",
+        "cultural",
+        "serene",
+        "historic"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Alternative to crowded Tokyo attractions",
+      "visual_hierarchy": [
+        "Little Edo Kawagoe location text",
+        "40 minutes from Tokyo distance",
+        "Traditional Japanese architecture",
+        "Person exploring the area",
+        "Travel hashtags"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Japan\", \"Hidden-Gems\"],\n  \"headline\": \"Little Edo Kawagoe - traditional Japanese town 40 minutes from Tokyo\",\n  \"summary\": \"Little Edo Kawagoe is located 40 minutes from Tokyo and offers a traditional Japanese experience away from overcrowded tourist areas. The historic town features traditional architecture and cultural sites.\",\n  \"media_metadata\": {\n    \"original_poster\": \"tomogo.official\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [],\n    \"audio_source\": null,\n    \"hashtags\": [\"japan\", \"travel\", \"travelhacks\", \"overcrowding\", \"kawagoe\"]\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"This is little Edo Kawagoe and\", \"This is 40 minutes from Tokyo\", \"#japan #travel #travelhacks #overcrowding #kawagoe\", \"tomogo.official\"],\n    \"objects\": [\"traditional Japanese buildings\", \"wooden structures\", \"stone pathway\", \"Japanese signage\", \"trees\", \"visitors\", \"person in beige shirt\"],\n    \"themes\": [\"Japanese culture\", \"travel alternatives\", \"historical preservation\", \"tourism\"],\n    \"emotions\": [\"discovery\", \"authenticity\", \"peaceful\"],\n    \"vibes\": [\"traditional\", \"cultural\", \"serene\", \"historic\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Alternative to crowded Tokyo attractions\",\n    \"visual_hierarchy\": [\"Little Edo Kawagoe location text\", \"40 minutes from Tokyo distance\", \"Traditional Japanese architecture\", \"Person exploring the area\", \"Travel hashtags\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 403
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_1/IMG_7970 Large.jpeg",
+  "image_name": "IMG_7970 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Travel",
+    "subcategories": [
+      "Volcanic Tourism",
+      "Japan Adventure"
+    ],
+    "headline": "Mount Io / Lake Mashu volcanic landscape in Hokkaido with sulfur deposits and warning signs",
+    "summary": "Mount Io (Lake Mashu) in Hokkaido features active volcanic terrain with yellow sulfur deposits and steam vents. A warning sign marks the dangerous volcanic area. Cheryl comments that Hokkaido has become her favorite island destination.",
+    "media_metadata": {
+      "original_poster": "Cheryl",
+      "tagged_accounts": [],
+      "location_tags": [
+        "Mount Io",
+        "Hokkaido"
+      ],
+      "audio_source": null,
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "10. Mount Io / Lake Mashu",
+        "Mount Io",
+        "Hokkaido",
+        "994 recent posts featured this place",
+        "DAMN Hokkaido you got me there. You're now officially my favourite island",
+        "Keep Out",
+        "立入禁止"
+      ],
+      "objects": [
+        "volcanic landscape",
+        "yellow sulfur deposits",
+        "steam vents",
+        "warning sign",
+        "rocky terrain",
+        "cloudy sky"
+      ],
+      "themes": [
+        "volcanic activity",
+        "geological features",
+        "travel destination",
+        "natural hazards"
+      ],
+      "emotions": [
+        "awe",
+        "excitement",
+        "appreciation"
+      ],
+      "vibes": [
+        "adventurous",
+        "dramatic",
+        "otherworldly"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Active volcanic landscape with visible sulfur deposits and steam",
+      "visual_hierarchy": [
+        "Mount Io / Lake Mashu title",
+        "volcanic terrain with yellow sulfur",
+        "warning sign",
+        "steam and clouds",
+        "location tag"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Volcanic Tourism\", \"Japan Adventure\"],\n  \"headline\": \"Mount Io / Lake Mashu volcanic landscape in Hokkaido with sulfur deposits and warning signs\",\n  \"summary\": \"Mount Io (Lake Mashu) in Hokkaido features active volcanic terrain with yellow sulfur deposits and steam vents. A warning sign marks the dangerous volcanic area. Cheryl comments that Hokkaido has become her favorite island destination.\",\n  \"media_metadata\": {\n    \"original_poster\": \"Cheryl\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [\"Mount Io\", \"Hokkaido\"],\n    \"audio_source\": null,\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"10. Mount Io / Lake Mashu\", \"Mount Io\", \"Hokkaido\", \"994 recent posts featured this place\", \"DAMN Hokkaido you got me there. You're now officially my favourite island\", \"Keep Out\", \"立入禁止\"],\n    \"objects\": [\"volcanic landscape\", \"yellow sulfur deposits\", \"steam vents\", \"warning sign\", \"rocky terrain\", \"cloudy sky\"],\n    \"themes\": [\"volcanic activity\", \"geological features\", \"travel destination\", \"natural hazards\"],\n    \"emotions\": [\"awe\", \"excitement\", \"appreciation\"],\n    \"vibes\": [\"adventurous\", \"dramatic\", \"otherworldly\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Active volcanic landscape with visible sulfur deposits and steam\",\n    \"visual_hierarchy\": [\"Mount Io / Lake Mashu title\", \"volcanic terrain with yellow sulfur\", \"warning sign\", \"steam and clouds\", \"location tag\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 429
+  }
+}

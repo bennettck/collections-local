@@ -1,0 +1,80 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_3/IMG_9414 Large.jpeg",
+  "image_name": "IMG_9414 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Fashion",
+    "subcategories": [
+      "Korean Fashion",
+      "Denim"
+    ],
+    "headline": "NOT4NERD W Eyelet Vintage Denim Pants in Deep Blue at Hannam Flagship Store",
+    "summary": "Chloe identifies her pants as NOT4NERD's W Eyelet Vintage Denim Pants in Deep Blue. The brand's flagship store is located in Hannam-dong 743-31, Seoul, specializing in Korean streetwear fashion.",
+    "media_metadata": {
+      "original_poster": "Chloe",
+      "tagged_accounts": [],
+      "location_tags": [
+        "NOT4NERD Hannam Flagship Store Hannam-dong 743-31"
+      ],
+      "audio_source": null,
+      "hashtags": [
+        "#hannamdong",
+        "#hannam",
+        "#korea",
+        "#seoul",
+        "#seoulshopping",
+        "#thingstodoinseoul",
+        "#koreanbrand",
+        "#koreanfashion",
+        "#streetwear",
+        "#seoullvlog",
+        "#3cseries"
+      ]
+    },
+    "image_details": {
+      "extracted_text": [
+        "Btw if anyone wants to know what the pants I'm wearing is, it's Not4Nerd's W Eyelet Vintage Denim Pants - Deep Blue",
+        "NOT4NERD Hannam Flagship Store Hannam-dong 743-31",
+        "Search · hannam dong seoul korea"
+      ],
+      "objects": [
+        "clothing rack",
+        "hanging garments",
+        "denim pants",
+        "various colored clothing",
+        "store interior"
+      ],
+      "themes": [
+        "Korean fashion shopping",
+        "brand identification",
+        "Seoul retail",
+        "streetwear"
+      ],
+      "emotions": [
+        "helpful",
+        "informative"
+      ],
+      "vibes": [
+        "trendy",
+        "urban",
+        "boutique shopping"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Specific denim pants identification and store location",
+      "visual_hierarchy": [
+        "Clothing rack with garments",
+        "Text overlay with pants details",
+        "Store location information",
+        "Hashtag collection",
+        "Search suggestion"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Fashion\",\n  \"subcategories\": [\"Korean Fashion\", \"Denim\"],\n  \"headline\": \"NOT4NERD W Eyelet Vintage Denim Pants in Deep Blue at Hannam Flagship Store\",\n  \"summary\": \"Chloe identifies her pants as NOT4NERD's W Eyelet Vintage Denim Pants in Deep Blue. The brand's flagship store is located in Hannam-dong 743-31, Seoul, specializing in Korean streetwear fashion.\",\n  \"media_metadata\": {\n    \"original_poster\": \"Chloe\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [\"NOT4NERD Hannam Flagship Store Hannam-dong 743-31\"],\n    \"audio_source\": null,\n    \"hashtags\": [\"#hannamdong\", \"#hannam\", \"#korea\", \"#seoul\", \"#seoulshopping\", \"#thingstodoinseoul\", \"#koreanbrand\", \"#koreanfashion\", \"#streetwear\", \"#seoullvlog\", \"#3cseries\"]\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"Btw if anyone wants to know what the pants I'm wearing is, it's Not4Nerd's W Eyelet Vintage Denim Pants - Deep Blue\", \"NOT4NERD Hannam Flagship Store Hannam-dong 743-31\", \"Search · hannam dong seoul korea\"],\n    \"objects\": [\"clothing rack\", \"hanging garments\", \"denim pants\", \"various colored clothing\", \"store interior\"],\n    \"themes\": [\"Korean fashion shopping\", \"brand identification\", \"Seoul retail\", \"streetwear\"],\n    \"emotions\": [\"helpful\", \"informative\"],\n    \"vibes\": [\"trendy\", \"urban\", \"boutique shopping\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Specific denim pants identification and store location\",\n    \"visual_hierarchy\": [\"Clothing rack with garments\", \"Text overlay with pants details\", \"Store location information\", \"Hashtag collection\", \"Search suggestion\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 508
+  }
+}

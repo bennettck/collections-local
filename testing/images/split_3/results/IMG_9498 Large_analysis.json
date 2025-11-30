@@ -1,0 +1,68 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_3/IMG_9498 Large.jpeg",
+  "image_name": "IMG_9498 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Technology",
+    "subcategories": [
+      "AI Development",
+      "Programming"
+    ],
+    "headline": "AI agent development guide featuring Agentic Design Patterns book recommendation",
+    "summary": "Antonio Gulli's \"Agentic Design Patterns: A Hands-On Guide to Building Intelligent Systems\" from Springer is presented as the ultimate guide to AI agents. The presenter suggests this could be the new definitive resource for learning about AI agent development.",
+    "media_metadata": {
+      "original_poster": "Agentic Amit",
+      "tagged_accounts": [],
+      "location_tags": [],
+      "audio_source": null,
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "Agentic Design Patterns",
+        "A Hands-On Guide to Building Intelligent Systems",
+        "Antonio Gulli",
+        "Springer",
+        "This may just end",
+        "The ULTIMATE Guide to AI Agents (It's FREE!)",
+        "This might be the new..."
+      ],
+      "objects": [
+        "book cover",
+        "glasses",
+        "person speaking",
+        "artwork on walls"
+      ],
+      "themes": [
+        "AI education",
+        "technical learning",
+        "book recommendation"
+      ],
+      "emotions": [
+        "excitement",
+        "enthusiasm"
+      ],
+      "vibes": [
+        "educational",
+        "tech-focused",
+        "promotional"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Book recommendation for AI agent development",
+      "visual_hierarchy": [
+        "Book cover overlay",
+        "Text overlay 'This may just end'",
+        "Person speaking",
+        "Caption text",
+        "Background artwork"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Technology\",\n  \"subcategories\": [\"AI Development\", \"Programming\"],\n  \"headline\": \"AI agent development guide featuring Agentic Design Patterns book recommendation\",\n  \"summary\": \"Antonio Gulli's \\\"Agentic Design Patterns: A Hands-On Guide to Building Intelligent Systems\\\" from Springer is presented as the ultimate guide to AI agents. The presenter suggests this could be the new definitive resource for learning about AI agent development.\",\n  \"media_metadata\": {\n    \"original_poster\": \"Agentic Amit\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [],\n    \"audio_source\": null,\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"Agentic Design Patterns\", \"A Hands-On Guide to Building Intelligent Systems\", \"Antonio Gulli\", \"Springer\", \"This may just end\", \"The ULTIMATE Guide to AI Agents (It's FREE!)\", \"This might be the new...\"],\n    \"objects\": [\"book cover\", \"glasses\", \"person speaking\", \"artwork on walls\"],\n    \"themes\": [\"AI education\", \"technical learning\", \"book recommendation\"],\n    \"emotions\": [\"excitement\", \"enthusiasm\"],\n    \"vibes\": [\"educational\", \"tech-focused\", \"promotional\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Book recommendation for AI agent development\",\n    \"visual_hierarchy\": [\"Book cover overlay\", \"Text overlay 'This may just end'\", \"Person speaking\", \"Caption text\", \"Background artwork\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 383
+  }
+}

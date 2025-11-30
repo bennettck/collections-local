@@ -1,0 +1,69 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_2/IMG_9190 Large.jpeg",
+  "image_name": "IMG_9190 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Food",
+    "subcategories": [
+      "Asian Cuisine",
+      "Recipe Ingredients"
+    ],
+    "headline": "Asian sauce recipe ingredients list with gochujang, maple syrup, rice vinegar, sesame oil and garlic",
+    "summary": "Recipe calls for 6 tablespoons gochujang (adjust to taste as brands vary in spiciness), 4 tablespoons maple syrup, 1 tablespoon rice vinegar, 1 tablespoon plus 1 teaspoon sesame oil, and 3 cloves minced garlic.",
+    "media_metadata": {
+      "original_poster": null,
+      "tagged_accounts": [],
+      "location_tags": [],
+      "audio_source": null,
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "Ingredients",
+        "6 tablespoons gochujang, adjust to taste. Some brands are spicier than others.",
+        "4 tablespoons maple syrup",
+        "1 tablespoon rice vinegar",
+        "1 tablespoon + 1 teaspoon sesame oil",
+        "3 cloves garlic, minced",
+        "Cook Mode Prevent your screen from going dark"
+      ],
+      "objects": [
+        "ingredient checklist",
+        "checkboxes",
+        "measurement specifications",
+        "cooking instructions"
+      ],
+      "themes": [
+        "Korean cooking",
+        "sauce preparation",
+        "ingredient measurements",
+        "recipe instructions"
+      ],
+      "emotions": [
+        "instructional",
+        "practical"
+      ],
+      "vibes": [
+        "cooking tutorial",
+        "recipe reference",
+        "kitchen prep"
+      ],
+      "likely_source": "other",
+      "key_interest": "Complete ingredient list with specific measurements for an Asian sauce recipe",
+      "visual_hierarchy": [
+        "Ingredients header",
+        "Gochujang measurement with spice note",
+        "Maple syrup measurement",
+        "Rice vinegar measurement",
+        "Sesame oil measurement"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Food\",\n  \"subcategories\": [\"Asian Cuisine\", \"Recipe Ingredients\"],\n  \"headline\": \"Asian sauce recipe ingredients list with gochujang, maple syrup, rice vinegar, sesame oil and garlic\",\n  \"summary\": \"Recipe calls for 6 tablespoons gochujang (adjust to taste as brands vary in spiciness), 4 tablespoons maple syrup, 1 tablespoon rice vinegar, 1 tablespoon plus 1 teaspoon sesame oil, and 3 cloves minced garlic.\",\n  \"media_metadata\": {\n    \"original_poster\": null,\n    \"tagged_accounts\": [],\n    \"location_tags\": [],\n    \"audio_source\": null,\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"Ingredients\", \"6 tablespoons gochujang, adjust to taste. Some brands are spicier than others.\", \"4 tablespoons maple syrup\", \"1 tablespoon rice vinegar\", \"1 tablespoon + 1 teaspoon sesame oil\", \"3 cloves garlic, minced\", \"Cook Mode Prevent your screen from going dark\"],\n    \"objects\": [\"ingredient checklist\", \"checkboxes\", \"measurement specifications\", \"cooking instructions\"],\n    \"themes\": [\"Korean cooking\", \"sauce preparation\", \"ingredient measurements\", \"recipe instructions\"],\n    \"emotions\": [\"instructional\", \"practical\"],\n    \"vibes\": [\"cooking tutorial\", \"recipe reference\", \"kitchen prep\"],\n    \"likely_source\": \"other\",\n    \"key_interest\": \"Complete ingredient list with specific measurements for an Asian sauce recipe\",\n    \"visual_hierarchy\": [\"Ingredients header\", \"Gochujang measurement with spice note\", \"Maple syrup measurement\", \"Rice vinegar measurement\", \"Sesame oil measurement\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 452
+  }
+}

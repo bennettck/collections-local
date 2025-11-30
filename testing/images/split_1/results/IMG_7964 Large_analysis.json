@@ -1,0 +1,74 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_1/IMG_7964 Large.jpeg",
+  "image_name": "IMG_7964 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Travel",
+    "subcategories": [
+      "Japan",
+      "Destinations"
+    ],
+    "headline": "Shukutsu Panorama Observation Deck recommended for best sunset views in Hokkaido",
+    "summary": "Shukutsu Panorama Observation Deck is highlighted as probably one of the best sunset views in Hokkaido. The recommendation comes from a travel post about visiting Hokkaido during summer, specifically part of a July Japan travel series.",
+    "media_metadata": {
+      "original_poster": "stanthejapanman",
+      "tagged_accounts": [],
+      "location_tags": [
+        "Hokkaido"
+      ],
+      "audio_source": null,
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "tokyo to hokkaido",
+        "Shukutsu Panorama Observation Deck",
+        "Probably one of the best sunset views in Hokkaido",
+        "Tokyo is cool, but have you been to Hokkaido?",
+        "Part 3 | Travel to Japan in July = Hokkaido during Summer",
+        "Playlist • Hokkaido"
+      ],
+      "objects": [
+        "coastal observation deck",
+        "lighthouse",
+        "red-roofed buildings",
+        "green hills",
+        "ocean",
+        "rocky coastline",
+        "harbor structures"
+      ],
+      "themes": [
+        "Japan travel",
+        "scenic viewpoints",
+        "summer destinations",
+        "coastal landscapes"
+      ],
+      "emotions": [
+        "wanderlust",
+        "appreciation",
+        "discovery"
+      ],
+      "vibes": [
+        "serene",
+        "scenic",
+        "adventurous"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Shukutsu Panorama Observation Deck location recommendation",
+      "visual_hierarchy": [
+        "Shukutsu Panorama Observation Deck title text",
+        "Best sunset views description",
+        "Coastal observation deck with lighthouse",
+        "Search bar with 'tokyo to hokkaido'",
+        "Travel post caption"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Japan\", \"Destinations\"],\n  \"headline\": \"Shukutsu Panorama Observation Deck recommended for best sunset views in Hokkaido\",\n  \"summary\": \"Shukutsu Panorama Observation Deck is highlighted as probably one of the best sunset views in Hokkaido. The recommendation comes from a travel post about visiting Hokkaido during summer, specifically part of a July Japan travel series.\",\n  \"media_metadata\": {\n    \"original_poster\": \"stanthejapanman\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [\"Hokkaido\"],\n    \"audio_source\": null,\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\n      \"tokyo to hokkaido\",\n      \"Shukutsu Panorama Observation Deck\",\n      \"Probably one of the best sunset views in Hokkaido\",\n      \"Tokyo is cool, but have you been to Hokkaido?\",\n      \"Part 3 | Travel to Japan in July = Hokkaido during Summer\",\n      \"Playlist • Hokkaido\"\n    ],\n    \"objects\": [\"coastal observation deck\", \"lighthouse\", \"red-roofed buildings\", \"green hills\", \"ocean\", \"rocky coastline\", \"harbor structures\"],\n    \"themes\": [\"Japan travel\", \"scenic viewpoints\", \"summer destinations\", \"coastal landscapes\"],\n    \"emotions\": [\"wanderlust\", \"appreciation\", \"discovery\"],\n    \"vibes\": [\"serene\", \"scenic\", \"adventurous\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Shukutsu Panorama Observation Deck location recommendation\",\n    \"visual_hierarchy\": [\n      \"Shukutsu Panorama Observation Deck title text\",\n      \"Best sunset views description\",\n      \"Coastal observation deck with lighthouse\",\n      \"Search bar with 'tokyo to hokkaido'\",\n      \"Travel post caption\"\n    ]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 496
+  }
+}

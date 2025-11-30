@@ -1,0 +1,84 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_1/IMG_7906 Large.jpeg",
+  "image_name": "IMG_7906 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Travel",
+    "subcategories": [
+      "Tokyo Guide",
+      "Neighborhood Exploration"
+    ],
+    "headline": "Nakameguro Tokyo neighborhood guide featuring Lowkey Cafe, John's Ice Cream, and Hato's Bar with transit directions",
+    "summary": "Episode 3 of '2 Hours in Tokyo' series explores Nakameguro area with friend @oxomargo, highlighting three key spots: Lowkey Cafe, John's Ice Cream, and Hato's Bar. Access via Toyoko line or Hibiya line to Nakameguro station.",
+    "media_metadata": {
+      "original_poster": "Shelby's Cafe Diary",
+      "tagged_accounts": [
+        "@oxomargo"
+      ],
+      "location_tags": [
+        "Nakameguro - 175.4M views on posts of this place"
+      ],
+      "audio_source": null,
+      "hashtags": [
+        "#tokyo",
+        "#japan",
+        "#japantravel",
+        "#tokyotravel",
+        "#Nakameguro"
+      ]
+    },
+    "image_details": {
+      "extracted_text": [
+        "Shelby's Cafe Diary",
+        "Episode 3 of the '2 Hours in Tokyo' series",
+        "Nakameguro",
+        "Places mentioned:",
+        "Lowkey Cafe",
+        "John's Ice Cream",
+        "Hato's Bar",
+        "To get there, you can take the Toyoko line or Hibiya line to Nakameguro station!"
+      ],
+      "objects": [
+        "minimalist cafe interior",
+        "concrete pillar",
+        "framed artwork",
+        "counter area",
+        "shelving",
+        "flowers in vase"
+      ],
+      "themes": [
+        "Tokyo travel guide",
+        "cafe culture",
+        "neighborhood exploration",
+        "local recommendations"
+      ],
+      "emotions": [
+        "informative",
+        "helpful",
+        "trendy"
+      ],
+      "vibes": [
+        "modern",
+        "minimalist",
+        "cozy",
+        "urban"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Three specific venue recommendations in Nakameguro with transit directions",
+      "visual_hierarchy": [
+        "Shelby's Cafe Diary title",
+        "Nakameguro location tag",
+        "Episode description text",
+        "Places mentioned list",
+        "Transit directions"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Tokyo Guide\", \"Neighborhood Exploration\"],\n  \"headline\": \"Nakameguro Tokyo neighborhood guide featuring Lowkey Cafe, John's Ice Cream, and Hato's Bar with transit directions\",\n  \"summary\": \"Episode 3 of '2 Hours in Tokyo' series explores Nakameguro area with friend @oxomargo, highlighting three key spots: Lowkey Cafe, John's Ice Cream, and Hato's Bar. Access via Toyoko line or Hibiya line to Nakameguro station.\",\n  \"media_metadata\": {\n    \"original_poster\": \"Shelby's Cafe Diary\",\n    \"tagged_accounts\": [\"@oxomargo\"],\n    \"location_tags\": [\"Nakameguro - 175.4M views on posts of this place\"],\n    \"audio_source\": null,\n    \"hashtags\": [\"#tokyo\", \"#japan\", \"#japantravel\", \"#tokyotravel\", \"#Nakameguro\"]\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"Shelby's Cafe Diary\", \"Episode 3 of the '2 Hours in Tokyo' series\", \"Nakameguro\", \"Places mentioned:\", \"Lowkey Cafe\", \"John's Ice Cream\", \"Hato's Bar\", \"To get there, you can take the Toyoko line or Hibiya line to Nakameguro station!\"],\n    \"objects\": [\"minimalist cafe interior\", \"concrete pillar\", \"framed artwork\", \"counter area\", \"shelving\", \"flowers in vase\"],\n    \"themes\": [\"Tokyo travel guide\", \"cafe culture\", \"neighborhood exploration\", \"local recommendations\"],\n    \"emotions\": [\"informative\", \"helpful\", \"trendy\"],\n    \"vibes\": [\"modern\", \"minimalist\", \"cozy\", \"urban\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Three specific venue recommendations in Nakameguro with transit directions\",\n    \"visual_hierarchy\": [\"Shelby's Cafe Diary title\", \"Nakameguro location tag\", \"Episode description text\", \"Places mentioned list\", \"Transit directions\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 530
+  }
+}

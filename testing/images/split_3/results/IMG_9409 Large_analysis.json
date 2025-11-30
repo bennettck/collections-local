@@ -1,0 +1,73 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_3/IMG_9409 Large.jpeg",
+  "image_name": "IMG_9409 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Travel",
+    "subcategories": [
+      "Seasonal Events",
+      "Nature Photography"
+    ],
+    "headline": "Pink grass fields at Haneul Park bloom mid-September to October, free admission 5:30 AM to 8:00 PM",
+    "summary": "Pink muhly grass fields at Haneul Park in Seoul create dreamy cotton-candy vibes during blooming season. Featured as top event in Seoul's September 2025 bucket list. Free admission with 14.5-hour daily access window.",
+    "media_metadata": {
+      "original_poster": "@가호",
+      "tagged_accounts": [],
+      "location_tags": [
+        "Seoul",
+        "Haneul Park"
+      ],
+      "audio_source": "Apple Music 시작 - @가호",
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "Pink grass fields (Haneul Park)",
+        "Mid-September to October",
+        "Free - 5:30 AM to 8:00 PM",
+        "Seoul's September 2025 Bucket-list : Top 5 events you can't miss!",
+        "Pink Muhly Fields Blooming at Haneul : Dreamy cotton-candy vibes! These pink muhly grasses will soon pop!"
+      ],
+      "objects": [
+        "pink muhly grass fields",
+        "walking path",
+        "observation tower",
+        "blue sky",
+        "white clouds",
+        "visitors walking"
+      ],
+      "themes": [
+        "seasonal blooming",
+        "nature tourism",
+        "Seoul attractions",
+        "photography destination"
+      ],
+      "emotions": [
+        "dreamy",
+        "peaceful",
+        "inspiring"
+      ],
+      "vibes": [
+        "cotton-candy aesthetic",
+        "serene",
+        "Instagram-worthy"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Seasonal timing and free admission details for pink grass fields",
+      "visual_hierarchy": [
+        "Pink grass fields covering hillside",
+        "Location name and timing text overlay",
+        "Free admission hours information",
+        "Walking path through fields",
+        "Observation tower structure"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Seasonal Events\", \"Nature Photography\"],\n  \"headline\": \"Pink grass fields at Haneul Park bloom mid-September to October, free admission 5:30 AM to 8:00 PM\",\n  \"summary\": \"Pink muhly grass fields at Haneul Park in Seoul create dreamy cotton-candy vibes during blooming season. Featured as top event in Seoul's September 2025 bucket list. Free admission with 14.5-hour daily access window.\",\n  \"media_metadata\": {\n    \"original_poster\": \"@가호\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [\"Seoul\", \"Haneul Park\"],\n    \"audio_source\": \"Apple Music 시작 - @가호\",\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\n      \"Pink grass fields (Haneul Park)\",\n      \"Mid-September to October\",\n      \"Free - 5:30 AM to 8:00 PM\",\n      \"Seoul's September 2025 Bucket-list : Top 5 events you can't miss!\",\n      \"Pink Muhly Fields Blooming at Haneul : Dreamy cotton-candy vibes! These pink muhly grasses will soon pop!\"\n    ],\n    \"objects\": [\"pink muhly grass fields\", \"walking path\", \"observation tower\", \"blue sky\", \"white clouds\", \"visitors walking\"],\n    \"themes\": [\"seasonal blooming\", \"nature tourism\", \"Seoul attractions\", \"photography destination\"],\n    \"emotions\": [\"dreamy\", \"peaceful\", \"inspiring\"],\n    \"vibes\": [\"cotton-candy aesthetic\", \"serene\", \"Instagram-worthy\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Seasonal timing and free admission details for pink grass fields\",\n    \"visual_hierarchy\": [\n      \"Pink grass fields covering hillside\",\n      \"Location name and timing text overlay\",\n      \"Free admission hours information\",\n      \"Walking path through fields\",\n      \"Observation tower structure\"\n    ]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 509
+  }
+}

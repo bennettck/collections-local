@@ -1,0 +1,74 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_1/IMG_7998 Large.jpeg",
+  "image_name": "IMG_7998 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Travel",
+    "subcategories": [
+      "Japan destinations",
+      "Hidden gems"
+    ],
+    "headline": "Tokyo travel recommendations featuring Edo-Tokyo Open Air Museum and Jindaiji temple area",
+    "summary": "Edo-Tokyo Open Air Museum features unique architectural buildings from across Japan, from old-school wooden houses to modern masterpieces, plus a public bath house and traditional shopping street. Jindaiji offers old-school Tokyo vibes with traditional shopping street and street food snacks.",
+    "media_metadata": {
+      "original_poster": "thattravelguy",
+      "tagged_accounts": [],
+      "location_tags": [
+        "Tokyo - 749.0K people posted about this place"
+      ],
+      "audio_source": null,
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "can discover",
+        "Tokyo",
+        "749.0K people posted about this place",
+        "thattravelguy",
+        "Edo-Tokyo Open Air Architectural Museum",
+        "Jindaiji",
+        "Add comment..."
+      ],
+      "objects": [
+        "Traditional Japanese architecture",
+        "Wooden buildings",
+        "Person in white shirt",
+        "Search interface",
+        "Comment section"
+      ],
+      "themes": [
+        "Japanese culture",
+        "Architecture",
+        "Hidden destinations",
+        "Local experiences"
+      ],
+      "emotions": [
+        "Discovery",
+        "Wonder",
+        "Cultural appreciation"
+      ],
+      "vibes": [
+        "Authentic",
+        "Traditional",
+        "Exploratory",
+        "Cultural"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Specific Tokyo destinations with detailed descriptions for travel planning",
+      "visual_hierarchy": [
+        "can discover",
+        "Tokyo location tag",
+        "Edo-Tokyo Open Air Architectural Museum description",
+        "Jindaiji description",
+        "Traditional architecture background"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Japan destinations\", \"Hidden gems\"],\n  \"headline\": \"Tokyo travel recommendations featuring Edo-Tokyo Open Air Museum and Jindaiji temple area\",\n  \"summary\": \"Edo-Tokyo Open Air Museum features unique architectural buildings from across Japan, from old-school wooden houses to modern masterpieces, plus a public bath house and traditional shopping street. Jindaiji offers old-school Tokyo vibes with traditional shopping street and street food snacks.\",\n  \"media_metadata\": {\n    \"original_poster\": \"thattravelguy\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [\"Tokyo - 749.0K people posted about this place\"],\n    \"audio_source\": null,\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"can discover\", \"Tokyo\", \"749.0K people posted about this place\", \"thattravelguy\", \"Edo-Tokyo Open Air Architectural Museum\", \"Jindaiji\", \"Add comment...\"],\n    \"objects\": [\"Traditional Japanese architecture\", \"Wooden buildings\", \"Person in white shirt\", \"Search interface\", \"Comment section\"],\n    \"themes\": [\"Japanese culture\", \"Architecture\", \"Hidden destinations\", \"Local experiences\"],\n    \"emotions\": [\"Discovery\", \"Wonder\", \"Cultural appreciation\"],\n    \"vibes\": [\"Authentic\", \"Traditional\", \"Exploratory\", \"Cultural\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Specific Tokyo destinations with detailed descriptions for travel planning\",\n    \"visual_hierarchy\": [\"can discover\", \"Tokyo location tag\", \"Edo-Tokyo Open Air Architectural Museum description\", \"Jindaiji description\", \"Traditional architecture background\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 415
+  }
+}

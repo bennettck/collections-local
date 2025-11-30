@@ -1,0 +1,71 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_1/IMG_7928 Large.jpeg",
+  "image_name": "IMG_7928 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Food",
+    "subcategories": [
+      "Ramen",
+      "Travel"
+    ],
+    "headline": "Ichiran Ramen headquarters location and details in Fukuoka, Japan",
+    "summary": "Ichiran Shisha Honcha is the Ichiran Ramen headquarters located in Fukuoka, Japan at 5 Chome-3-2 Nakasu, Hakata Ward. This original location is considered the birthplace of tonkotsu ramen, operates 24/7, and only the first two floors are dedicated to the restaurant despite common misconceptions about the entire building.",
+    "media_metadata": {
+      "original_poster": null,
+      "tagged_accounts": [],
+      "location_tags": [
+        "Fukuoka, Japan (5 Chome-3-2 Nakasu, Hakata Ward, Fukuoka, 810-0801, Japan)"
+      ],
+      "audio_source": null,
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "ichiran shisha honcha",
+        "Ichiran Ramen Headquarters:",
+        "Location: Fukuoka, Japan (5 Chome-3-2 Nakasu, Hakata Ward, Fukuoka, 810-0801, Japan)",
+        "Significance: This is the original Ichiran location and also houses the company's headquarters",
+        "Special Features: It's a popular spot for ramen lovers and is considered the birthplace of tonkotsu ramen",
+        "Operating Hours: Open 24 hours a day, seven days a week",
+        "Note: While often mistaken for the entire building, only the first two floors are dedicated to the restaurant"
+      ],
+      "objects": [
+        "Google search interface",
+        "AI Overview section",
+        "search results",
+        "location information"
+      ],
+      "themes": [
+        "Japanese cuisine",
+        "ramen culture",
+        "food tourism",
+        "restaurant information"
+      ],
+      "emotions": [
+        "informative",
+        "helpful"
+      ],
+      "vibes": [
+        "educational",
+        "travel planning",
+        "food discovery"
+      ],
+      "likely_source": "user-created",
+      "key_interest": "Complete address and operational details for Ichiran Ramen headquarters in Japan",
+      "visual_hierarchy": [
+        "Search query: ichiran shisha honcha",
+        "AI Overview header",
+        "Ichiran Ramen Headquarters section",
+        "Location and operating hours",
+        "Special features and significance"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Food\",\n  \"subcategories\": [\"Ramen\", \"Travel\"],\n  \"headline\": \"Ichiran Ramen headquarters location and details in Fukuoka, Japan\",\n  \"summary\": \"Ichiran Shisha Honcha is the Ichiran Ramen headquarters located in Fukuoka, Japan at 5 Chome-3-2 Nakasu, Hakata Ward. This original location is considered the birthplace of tonkotsu ramen, operates 24/7, and only the first two floors are dedicated to the restaurant despite common misconceptions about the entire building.\",\n  \"media_metadata\": {\n    \"original_poster\": null,\n    \"tagged_accounts\": [],\n    \"location_tags\": [\"Fukuoka, Japan (5 Chome-3-2 Nakasu, Hakata Ward, Fukuoka, 810-0801, Japan)\"],\n    \"audio_source\": null,\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\n      \"ichiran shisha honcha\",\n      \"Ichiran Ramen Headquarters:\",\n      \"Location: Fukuoka, Japan (5 Chome-3-2 Nakasu, Hakata Ward, Fukuoka, 810-0801, Japan)\",\n      \"Significance: This is the original Ichiran location and also houses the company's headquarters\",\n      \"Special Features: It's a popular spot for ramen lovers and is considered the birthplace of tonkotsu ramen\",\n      \"Operating Hours: Open 24 hours a day, seven days a week\",\n      \"Note: While often mistaken for the entire building, only the first two floors are dedicated to the restaurant\"\n    ],\n    \"objects\": [\"Google search interface\", \"AI Overview section\", \"search results\", \"location information\"],\n    \"themes\": [\"Japanese cuisine\", \"ramen culture\", \"food tourism\", \"restaurant information\"],\n    \"emotions\": [\"informative\", \"helpful\"],\n    \"vibes\": [\"educational\", \"travel planning\", \"food discovery\"],\n    \"likely_source\": \"user-created\",\n    \"key_interest\": \"Complete address and operational details for Ichiran Ramen headquarters in Japan\",\n    \"visual_hierarchy\": [\n      \"Search query: ichiran shisha honcha\",\n      \"AI Overview header\",\n      \"Ichiran Ramen Headquarters section\",\n      \"Location and operating hours\",\n      \"Special features and significance\"\n    ]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 598
+  }
+}

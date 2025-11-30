@@ -1,0 +1,71 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_2/IMG_9264 Large.jpeg",
+  "image_name": "IMG_9264 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Beauty",
+    "subcategories": [
+      "Medical Tourism",
+      "Korean Beauty Services"
+    ],
+    "headline": "Beauty concierge service in Korea for international visitors seeking cosmetic treatments",
+    "summary": "Jennifer offers beauty concierge services for visitors to Korea who want cosmetic treatments. Contact jennifer@aneueconcierge.com to book services in Seoul, Namvo area.",
+    "media_metadata": {
+      "original_poster": null,
+      "tagged_accounts": [],
+      "location_tags": [
+        "Seoul",
+        "Namvo"
+      ],
+      "audio_source": null,
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "Book a beauty concierge if you glow to korea!!!!",
+        "Email",
+        "jennifer@aneueconcierge.com",
+        "Seoul",
+        "Namvo",
+        "If you want to do beauty treatments in Korea book yourself a beauty concierge!",
+        "Search • beauty concierge korea"
+      ],
+      "objects": [
+        "woman speaking",
+        "email address overlay",
+        "location tags"
+      ],
+      "themes": [
+        "Korean beauty tourism",
+        "concierge services",
+        "cosmetic procedures"
+      ],
+      "emotions": [
+        "excitement",
+        "enthusiasm",
+        "promotional"
+      ],
+      "vibes": [
+        "informative",
+        "business promotional",
+        "travel advisory"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Contact email for Korean beauty concierge services",
+      "visual_hierarchy": [
+        "Book a beauty concierge if you glow to korea!!!!",
+        "jennifer@aneueconcierge.com",
+        "Email",
+        "Seoul location tag",
+        "Explanatory text about beauty treatments"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Beauty\",\n  \"subcategories\": [\"Medical Tourism\", \"Korean Beauty Services\"],\n  \"headline\": \"Beauty concierge service in Korea for international visitors seeking cosmetic treatments\",\n  \"summary\": \"Jennifer offers beauty concierge services for visitors to Korea who want cosmetic treatments. Contact jennifer@aneueconcierge.com to book services in Seoul, Namvo area.\",\n  \"media_metadata\": {\n    \"original_poster\": null,\n    \"tagged_accounts\": [],\n    \"location_tags\": [\"Seoul\", \"Namvo\"],\n    \"audio_source\": null,\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\n      \"Book a beauty concierge if you glow to korea!!!!\",\n      \"Email\",\n      \"jennifer@aneueconcierge.com\",\n      \"Seoul\",\n      \"Namvo\",\n      \"If you want to do beauty treatments in Korea book yourself a beauty concierge!\",\n      \"Search • beauty concierge korea\"\n    ],\n    \"objects\": [\"woman speaking\", \"email address overlay\", \"location tags\"],\n    \"themes\": [\"Korean beauty tourism\", \"concierge services\", \"cosmetic procedures\"],\n    \"emotions\": [\"excitement\", \"enthusiasm\", \"promotional\"],\n    \"vibes\": [\"informative\", \"business promotional\", \"travel advisory\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Contact email for Korean beauty concierge services\",\n    \"visual_hierarchy\": [\n      \"Book a beauty concierge if you glow to korea!!!!\",\n      \"jennifer@aneueconcierge.com\",\n      \"Email\",\n      \"Seoul location tag\",\n      \"Explanatory text about beauty treatments\"\n    ]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 431
+  }
+}

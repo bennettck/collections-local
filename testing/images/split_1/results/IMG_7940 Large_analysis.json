@@ -1,0 +1,82 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_1/IMG_7940 Large.jpeg",
+  "image_name": "IMG_7940 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Travel",
+    "subcategories": [
+      "Perfume",
+      "Shopping"
+    ],
+    "headline": "Greedy Scent perfume shop in Yeonnam, Seoul - custom fragrance experience with guided sampling",
+    "summary": "Greedy Scent in Yeonnam offers a self-paced perfume sampling experience with everything you need to know provided in a leaflet. The shop features extensive fragrance collections displayed on white stone beds with organized sampling stations.",
+    "media_metadata": {
+      "original_poster": "Holly - Life in Korea",
+      "tagged_accounts": [
+        "@JENNIE",
+        "Dua Lipa"
+      ],
+      "location_tags": [
+        "Greedy Scent, Yeonnam"
+      ],
+      "audio_source": "Handlebars - @JENNIE & Dua Lipa",
+      "hashtags": [
+        "seoultravel",
+        "seoul",
+        "seoultravel",
+        "perfume",
+        "koreatiktok",
+        "southkorea"
+      ]
+    },
+    "image_details": {
+      "extracted_text": [
+        "everything you need to know is in the leaflet so you can do it at your own pace",
+        "add this to your Seoul itinerary!",
+        "Greedy Scent, Yeonnam",
+        "Search · greedy scent korea"
+      ],
+      "objects": [
+        "perfume sampling glasses",
+        "white stones",
+        "information leaflets",
+        "glass perfume bottles",
+        "sampling station",
+        "metal display shelves"
+      ],
+      "themes": [
+        "Seoul travel recommendations",
+        "perfume shopping",
+        "self-guided experiences",
+        "Korean beauty culture"
+      ],
+      "emotions": [
+        "discovery",
+        "curiosity",
+        "recommendation"
+      ],
+      "vibes": [
+        "minimalist",
+        "organized",
+        "boutique",
+        "experiential"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Self-paced perfume sampling experience at Greedy Scent",
+      "visual_hierarchy": [
+        "White overlay text about leaflet guidance",
+        "Perfume sampling glasses on white stones",
+        "Shop name and location",
+        "Organized bottle displays",
+        "Information leaflets"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Perfume\", \"Shopping\"],\n  \"headline\": \"Greedy Scent perfume shop in Yeonnam, Seoul - custom fragrance experience with guided sampling\",\n  \"summary\": \"Greedy Scent in Yeonnam offers a self-paced perfume sampling experience with everything you need to know provided in a leaflet. The shop features extensive fragrance collections displayed on white stone beds with organized sampling stations.\",\n  \"media_metadata\": {\n    \"original_poster\": \"Holly - Life in Korea\",\n    \"tagged_accounts\": [\"@JENNIE\", \"Dua Lipa\"],\n    \"location_tags\": [\"Greedy Scent, Yeonnam\"],\n    \"audio_source\": \"Handlebars - @JENNIE & Dua Lipa\",\n    \"hashtags\": [\"seoultravel\", \"seoul\", \"seoultravel\", \"perfume\", \"koreatiktok\", \"southkorea\"]\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"everything you need to know is in the leaflet so you can do it at your own pace\", \"add this to your Seoul itinerary!\", \"Greedy Scent, Yeonnam\", \"Search · greedy scent korea\"],\n    \"objects\": [\"perfume sampling glasses\", \"white stones\", \"information leaflets\", \"glass perfume bottles\", \"sampling station\", \"metal display shelves\"],\n    \"themes\": [\"Seoul travel recommendations\", \"perfume shopping\", \"self-guided experiences\", \"Korean beauty culture\"],\n    \"emotions\": [\"discovery\", \"curiosity\", \"recommendation\"],\n    \"vibes\": [\"minimalist\", \"organized\", \"boutique\", \"experiential\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Self-paced perfume sampling experience at Greedy Scent\",\n    \"visual_hierarchy\": [\"White overlay text about leaflet guidance\", \"Perfume sampling glasses on white stones\", \"Shop name and location\", \"Organized bottle displays\", \"Information leaflets\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 497
+  }
+}

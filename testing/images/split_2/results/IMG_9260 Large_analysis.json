@@ -1,0 +1,88 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_2/IMG_9260 Large.jpeg",
+  "image_name": "IMG_9260 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Travel",
+    "subcategories": [
+      "Local Food",
+      "Hidden Gems"
+    ],
+    "headline": "Craft Cola cafe in Hyehwa, Seoul offers free taste testing and cola syrup bottles for unique Korean food experience",
+    "summary": "Craft Cola cafe in Hyehwa, Seoul features free taste testing and cola syrup bottles for sale. May Lee recommends it as the perfect souvenir you won't find in tourist shops, calling it a local hidden spot for Seoul food adventures.",
+    "media_metadata": {
+      "original_poster": "May Lee",
+      "tagged_accounts": [
+        "@_themayway_"
+      ],
+      "location_tags": [
+        "Hyehwa, Seoul"
+      ],
+      "audio_source": null,
+      "hashtags": [
+        "#seoulfoodie",
+        "#seoulhiddengems",
+        "#seoultravelguide",
+        "#hyehwa",
+        "#hyehwacafe"
+      ]
+    },
+    "image_details": {
+      "extracted_text": [
+        "Hyehwa, Seoul",
+        "May Lee",
+        "Craft Cola ade",
+        "Free taste testing",
+        "Cola syrup bottles for sale",
+        "Tag your travel buddy and don't skip this local hidden spot on your Seoul food adventure!",
+        "Follow @_themayway_ for more fun Korean food experiences!",
+        "5.5",
+        "6.5",
+        "2,008",
+        "29",
+        "2,238",
+        "1,119"
+      ],
+      "objects": [
+        "Craft cola logo with spiky-haired character",
+        "Menu board",
+        "Cafe storefront",
+        "Pink building blocks",
+        "White shopping bag"
+      ],
+      "themes": [
+        "Korean cafe culture",
+        "Local food discovery",
+        "Travel recommendations",
+        "Unique beverages"
+      ],
+      "emotions": [
+        "Excitement",
+        "Discovery",
+        "Adventure"
+      ],
+      "vibes": [
+        "Local",
+        "Authentic",
+        "Hidden gem",
+        "Foodie adventure"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Craft Cola cafe offering unique cola experience in Seoul's Hyehwa district",
+      "visual_hierarchy": [
+        "Craft Cola logo with character design",
+        "Location tag 'Hyehwa, Seoul'",
+        "Menu prices and items",
+        "May Lee's recommendation text",
+        "Follow account prompt"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Local Food\", \"Hidden Gems\"],\n  \"headline\": \"Craft Cola cafe in Hyehwa, Seoul offers free taste testing and cola syrup bottles for unique Korean food experience\",\n  \"summary\": \"Craft Cola cafe in Hyehwa, Seoul features free taste testing and cola syrup bottles for sale. May Lee recommends it as the perfect souvenir you won't find in tourist shops, calling it a local hidden spot for Seoul food adventures.\",\n  \"media_metadata\": {\n    \"original_poster\": \"May Lee\",\n    \"tagged_accounts\": [\"@_themayway_\"],\n    \"location_tags\": [\"Hyehwa, Seoul\"],\n    \"audio_source\": null,\n    \"hashtags\": [\"#seoulfoodie\", \"#seoulhiddengems\", \"#seoultravelguide\", \"#hyehwa\", \"#hyehwacafe\"]\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"Hyehwa, Seoul\", \"May Lee\", \"Craft Cola ade\", \"Free taste testing\", \"Cola syrup bottles for sale\", \"Tag your travel buddy and don't skip this local hidden spot on your Seoul food adventure!\", \"Follow @_themayway_ for more fun Korean food experiences!\", \"5.5\", \"6.5\", \"2,008\", \"29\", \"2,238\", \"1,119\"],\n    \"objects\": [\"Craft cola logo with spiky-haired character\", \"Menu board\", \"Cafe storefront\", \"Pink building blocks\", \"White shopping bag\"],\n    \"themes\": [\"Korean cafe culture\", \"Local food discovery\", \"Travel recommendations\", \"Unique beverages\"],\n    \"emotions\": [\"Excitement\", \"Discovery\", \"Adventure\"],\n    \"vibes\": [\"Local\", \"Authentic\", \"Hidden gem\", \"Foodie adventure\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Craft Cola cafe offering unique cola experience in Seoul's Hyehwa district\",\n    \"visual_hierarchy\": [\"Craft Cola logo with character design\", \"Location tag 'Hyehwa, Seoul'\", \"Menu prices and items\", \"May Lee's recommendation text\", \"Follow account prompt\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 527
+  }
+}

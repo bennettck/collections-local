@@ -1,0 +1,67 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_2/IMG_9284 Large.jpeg",
+  "image_name": "IMG_9284 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Technology",
+    "subcategories": [
+      "Programming",
+      "Cloud Computing"
+    ],
+    "headline": "Magic server installation recommendation for improved cloud code workflow",
+    "summary": "Silviu Technology recommends installing a specific server to significantly improve cloud code workflow. The recommendation appears to be part of a technology tutorial or advice series.",
+    "media_metadata": {
+      "original_poster": "Silviu Technology",
+      "tagged_accounts": [],
+      "location_tags": [],
+      "audio_source": null,
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "MAGIC",
+        "server you should install",
+        "Silviu Technology",
+        "Discover how to significantly improve your CloudCode code workflow with t... more"
+      ],
+      "objects": [
+        "person in green shirt",
+        "peace sign gesture",
+        "profile avatar",
+        "engagement buttons"
+      ],
+      "themes": [
+        "software development",
+        "cloud computing",
+        "programming tips",
+        "technology education"
+      ],
+      "emotions": [
+        "informative",
+        "helpful",
+        "casual"
+      ],
+      "vibes": [
+        "educational",
+        "tech-focused",
+        "tutorial-style"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Server installation recommendation for cloud development",
+      "visual_hierarchy": [
+        "MAGIC text overlay",
+        "person making peace sign",
+        "server you should install text",
+        "Silviu Technology attribution",
+        "description text"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Technology\",\n  \"subcategories\": [\"Programming\", \"Cloud Computing\"],\n  \"headline\": \"Magic server installation recommendation for improved cloud code workflow\",\n  \"summary\": \"Silviu Technology recommends installing a specific server to significantly improve cloud code workflow. The recommendation appears to be part of a technology tutorial or advice series.\",\n  \"media_metadata\": {\n    \"original_poster\": \"Silviu Technology\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [],\n    \"audio_source\": null,\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"MAGIC\", \"server you should install\", \"Silviu Technology\", \"Discover how to significantly improve your CloudCode code workflow with t... more\"],\n    \"objects\": [\"person in green shirt\", \"peace sign gesture\", \"profile avatar\", \"engagement buttons\"],\n    \"themes\": [\"software development\", \"cloud computing\", \"programming tips\", \"technology education\"],\n    \"emotions\": [\"informative\", \"helpful\", \"casual\"],\n    \"vibes\": [\"educational\", \"tech-focused\", \"tutorial-style\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Server installation recommendation for cloud development\",\n    \"visual_hierarchy\": [\"MAGIC text overlay\", \"person making peace sign\", \"server you should install text\", \"Silviu Technology attribution\", \"description text\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 337
+  }
+}

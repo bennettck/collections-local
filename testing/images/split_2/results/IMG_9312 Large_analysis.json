@@ -1,0 +1,80 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_2/IMG_9312 Large.jpeg",
+  "image_name": "IMG_9312 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Beauty",
+    "subcategories": [
+      "Skincare",
+      "Medical Aesthetics"
+    ],
+    "headline": "Korean skincare clinic recommendations and treatment experience at Heyday Clinic",
+    "summary": "Hannah Yoo shares 4 tips for choosing Korean skincare clinics, recommending @Heydayclinic_en for their accommodating consultation and budget-friendly approach. She received rejuran, neobeam laser, Juvelook, and Potenza treatments, noting that rejuran is particularly painful but effective.",
+    "media_metadata": {
+      "original_poster": "hannah yoo",
+      "tagged_accounts": [
+        "@Heydayclinic_en"
+      ],
+      "location_tags": [
+        "Gangnam-gu, 14.8K people posted about this place"
+      ],
+      "audio_source": null,
+      "hashtags": [
+        "#creatorsearchinsights",
+        "#koreanclinic",
+        "#juvelook",
+        "#heydayclinic"
+      ]
+    },
+    "image_details": {
+      "extracted_text": [
+        "4 tips on how to pick a Korean Skincare Clinic with my personal recommendation @Heydayclinic_en!!!",
+        "This was the first time I felt truly comfortable during the consultation",
+        "She was super accommodating and really tried to help me get the best results within my budget",
+        "Got rejuran + neobeam laser + Juvelook + Potenza",
+        "(THO I MUST SAY REJURAN HURTS CRAZY)",
+        "I will 100% come back here"
+      ],
+      "objects": [
+        "face mask",
+        "medical gauze",
+        "skincare treatment setup",
+        "gloved hands"
+      ],
+      "themes": [
+        "Korean beauty treatments",
+        "skincare clinic selection",
+        "medical aesthetics",
+        "treatment recommendations"
+      ],
+      "emotions": [
+        "satisfaction",
+        "comfort",
+        "pain acknowledgment",
+        "enthusiasm"
+      ],
+      "vibes": [
+        "informative",
+        "personal experience",
+        "medical",
+        "authentic review"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Personal recommendation for Korean skincare clinic with specific treatment details",
+      "visual_hierarchy": [
+        "Face with medical gauze/mask",
+        "Treatment recommendation text",
+        "Clinic name @Heydayclinic_en",
+        "Location tag Gangnam-gu",
+        "Hashtags"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Beauty\",\n  \"subcategories\": [\"Skincare\", \"Medical Aesthetics\"],\n  \"headline\": \"Korean skincare clinic recommendations and treatment experience at Heyday Clinic\",\n  \"summary\": \"Hannah Yoo shares 4 tips for choosing Korean skincare clinics, recommending @Heydayclinic_en for their accommodating consultation and budget-friendly approach. She received rejuran, neobeam laser, Juvelook, and Potenza treatments, noting that rejuran is particularly painful but effective.\",\n  \"media_metadata\": {\n    \"original_poster\": \"hannah yoo\",\n    \"tagged_accounts\": [\"@Heydayclinic_en\"],\n    \"location_tags\": [\"Gangnam-gu, 14.8K people posted about this place\"],\n    \"audio_source\": null,\n    \"hashtags\": [\"#creatorsearchinsights\", \"#koreanclinic\", \"#juvelook\", \"#heydayclinic\"]\n  },\n  \"image_details\": {\n    \"extracted_text\": [\n      \"4 tips on how to pick a Korean Skincare Clinic with my personal recommendation @Heydayclinic_en!!!\",\n      \"This was the first time I felt truly comfortable during the consultation\",\n      \"She was super accommodating and really tried to help me get the best results within my budget\",\n      \"Got rejuran + neobeam laser + Juvelook + Potenza\",\n      \"(THO I MUST SAY REJURAN HURTS CRAZY)\",\n      \"I will 100% come back here\"\n    ],\n    \"objects\": [\"face mask\", \"medical gauze\", \"skincare treatment setup\", \"gloved hands\"],\n    \"themes\": [\"Korean beauty treatments\", \"skincare clinic selection\", \"medical aesthetics\", \"treatment recommendations\"],\n    \"emotions\": [\"satisfaction\", \"comfort\", \"pain acknowledgment\", \"enthusiasm\"],\n    \"vibes\": [\"informative\", \"personal experience\", \"medical\", \"authentic review\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Personal recommendation for Korean skincare clinic with specific treatment details\",\n    \"visual_hierarchy\": [\"Face with medical gauze/mask\", \"Treatment recommendation text\", \"Clinic name @Heydayclinic_en\", \"Location tag Gangnam-gu\", \"Hashtags\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 572
+  }
+}

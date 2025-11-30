@@ -1,0 +1,80 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_3/IMG_9415 Large.jpeg",
+  "image_name": "IMG_9415 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Events",
+    "subcategories": [
+      "Cultural Festival",
+      "Fashion Show"
+    ],
+    "headline": "Seoul Africa Festival 2025 featuring African fashion show and food experiences, Sept 12-13 at Dongdaemun Design Plaza",
+    "summary": "Seoul Africa Festival runs September 12-13 at DDP (Dongdaemun Design Plaza) featuring African models living in Seoul for a fashion show and representative foods from across Africa. The event showcases African culture through fashion and cuisine experiences.",
+    "media_metadata": {
+      "original_poster": "SAF Crew Joyce",
+      "tagged_accounts": [],
+      "location_tags": [
+        "DDP (Dongdaemun Design Plaza)"
+      ],
+      "audio_source": null,
+      "hashtags": [
+        "Seoul African Festival",
+        "SeoulAfricaFestival",
+        "African Fashion",
+        "AfricaFashion",
+        "AfricanFood",
+        "DDP",
+        "Seoul Festival"
+      ]
+    },
+    "image_details": {
+      "extracted_text": [
+        "SEOUL AFRICA FESTIVAL 2025",
+        "Sept 12-13",
+        "Seoul Africa Festival won't want to miss this!",
+        "Meet the faces of this year's SAF Fashion Show - African models living in Seoul",
+        "What is your favorite food in your hometown? Have you ever tried these representative foods?",
+        "This year's Seoul Africa Festival is also an opportunity to experience various flavors from all over Africa!",
+        "September 12-13 | DDP (Dongdaemun Design Plaza)",
+        "Don't miss it again this year! by SAF Crew Joyce"
+      ],
+      "objects": [
+        "Korean traditional architecture",
+        "African woman with yellow flowers",
+        "Festival promotional overlay"
+      ],
+      "themes": [
+        "Cultural celebration",
+        "African diaspora in Seoul",
+        "Fashion showcase",
+        "Food festival"
+      ],
+      "emotions": [
+        "Excitement",
+        "Cultural pride",
+        "Anticipation"
+      ],
+      "vibes": [
+        "Festive",
+        "Multicultural",
+        "Celebratory"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Seoul Africa Festival 2025 dates and location details",
+      "visual_hierarchy": [
+        "SEOUL AFRICA FESTIVAL 2025 header",
+        "September 12-13 date",
+        "African woman with flowers",
+        "DDP location",
+        "Fashion show description"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Events\",\n  \"subcategories\": [\"Cultural Festival\", \"Fashion Show\"],\n  \"headline\": \"Seoul Africa Festival 2025 featuring African fashion show and food experiences, Sept 12-13 at Dongdaemun Design Plaza\",\n  \"summary\": \"Seoul Africa Festival runs September 12-13 at DDP (Dongdaemun Design Plaza) featuring African models living in Seoul for a fashion show and representative foods from across Africa. The event showcases African culture through fashion and cuisine experiences.\",\n  \"media_metadata\": {\n    \"original_poster\": \"SAF Crew Joyce\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [\"DDP (Dongdaemun Design Plaza)\"],\n    \"audio_source\": null,\n    \"hashtags\": [\"Seoul African Festival\", \"SeoulAfricaFestival\", \"African Fashion\", \"AfricaFashion\", \"AfricanFood\", \"DDP\", \"Seoul Festival\"]\n  },\n  \"image_details\": {\n    \"extracted_text\": [\n      \"SEOUL AFRICA FESTIVAL 2025\",\n      \"Sept 12-13\",\n      \"Seoul Africa Festival won't want to miss this!\",\n      \"Meet the faces of this year's SAF Fashion Show - African models living in Seoul\",\n      \"What is your favorite food in your hometown? Have you ever tried these representative foods?\",\n      \"This year's Seoul Africa Festival is also an opportunity to experience various flavors from all over Africa!\",\n      \"September 12-13 | DDP (Dongdaemun Design Plaza)\",\n      \"Don't miss it again this year! by SAF Crew Joyce\"\n    ],\n    \"objects\": [\"Korean traditional architecture\", \"African woman with yellow flowers\", \"Festival promotional overlay\"],\n    \"themes\": [\"Cultural celebration\", \"African diaspora in Seoul\", \"Fashion showcase\", \"Food festival\"],\n    \"emotions\": [\"Excitement\", \"Cultural pride\", \"Anticipation\"],\n    \"vibes\": [\"Festive\", \"Multicultural\", \"Celebratory\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Seoul Africa Festival 2025 dates and location details\",\n    \"visual_hierarchy\": [\"SEOUL AFRICA FESTIVAL 2025 header\", \"September 12-13 date\", \"African woman with flowers\", \"DDP location\", \"Fashion show description\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 567
+  }
+}

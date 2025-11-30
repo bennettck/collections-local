@@ -1,0 +1,77 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_2/IMG_9192 Large.jpeg",
+  "image_name": "IMG_9192 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Travel",
+    "subcategories": [
+      "Cafe",
+      "Restaurant"
+    ],
+    "headline": "Cafe in Mullae-dong district with cozy industrial atmosphere and exposed beam ceiling",
+    "summary": "Kaylin wishes she lived closer to this cafe in Mullae-dong, noting it's far from her location. The space features exposed wooden beams, industrial ceiling design, and casual dining atmosphere.",
+    "media_metadata": {
+      "original_poster": "Kaylin",
+      "tagged_accounts": [],
+      "location_tags": [
+        "Mullae-dong",
+        "401 people posted about this place"
+      ],
+      "audio_source": null,
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "the vibes of",
+        "Mullae-dong",
+        "401 people posted about this place",
+        "Kaylin 🤍 이인!",
+        "I had wished I lived closer to mullae but shes so far out 😭✋ PLACES ... more",
+        "See original"
+      ],
+      "objects": [
+        "wooden tables",
+        "chairs",
+        "exposed ceiling beams",
+        "industrial lighting",
+        "large windows",
+        "people dining",
+        "cafe interior"
+      ],
+      "themes": [
+        "cafe culture",
+        "industrial design",
+        "Seoul neighborhoods",
+        "dining experience"
+      ],
+      "emotions": [
+        "longing",
+        "appreciation",
+        "disappointment about distance"
+      ],
+      "vibes": [
+        "cozy",
+        "industrial",
+        "trendy",
+        "casual",
+        "warm lighting"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Cafe location in Mullae-dong district",
+      "visual_hierarchy": [
+        "exposed wooden beam ceiling",
+        "dining area with people",
+        "large windows",
+        "industrial lighting",
+        "wooden furniture"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Cafe\", \"Restaurant\"],\n  \"headline\": \"Cafe in Mullae-dong district with cozy industrial atmosphere and exposed beam ceiling\",\n  \"summary\": \"Kaylin wishes she lived closer to this cafe in Mullae-dong, noting it's far from her location. The space features exposed wooden beams, industrial ceiling design, and casual dining atmosphere.\",\n  \"media_metadata\": {\n    \"original_poster\": \"Kaylin\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [\"Mullae-dong\", \"401 people posted about this place\"],\n    \"audio_source\": null,\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"the vibes of\", \"Mullae-dong\", \"401 people posted about this place\", \"Kaylin 🤍 이인!\", \"I had wished I lived closer to mullae but shes so far out 😭✋ PLACES ... more\", \"See original\"],\n    \"objects\": [\"wooden tables\", \"chairs\", \"exposed ceiling beams\", \"industrial lighting\", \"large windows\", \"people dining\", \"cafe interior\"],\n    \"themes\": [\"cafe culture\", \"industrial design\", \"Seoul neighborhoods\", \"dining experience\"],\n    \"emotions\": [\"longing\", \"appreciation\", \"disappointment about distance\"],\n    \"vibes\": [\"cozy\", \"industrial\", \"trendy\", \"casual\", \"warm lighting\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Cafe location in Mullae-dong district\",\n    \"visual_hierarchy\": [\"exposed wooden beam ceiling\", \"dining area with people\", \"large windows\", \"industrial lighting\", \"wooden furniture\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 419
+  }
+}

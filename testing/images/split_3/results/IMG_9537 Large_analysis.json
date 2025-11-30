@@ -1,0 +1,82 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_3/IMG_9537 Large.jpeg",
+  "image_name": "IMG_9537 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Education",
+    "subcategories": [
+      "Finance",
+      "Programming"
+    ],
+    "headline": "Mariana Antaya shares GitHub repository with finance and trading lecture notebooks for learning journey",
+    "summary": "Mariana Antaya recommends a GitHub repository (https://gist.github.com/ln2502mk/50d8f7feb614c867638343105c64291) containing comprehensive lecture notebooks covering hedge funds, sector exposures, VaR, CVaR, pairs trading, autocorrelation, AR models, ARCH, GARCH, GJM, Kalman filters, and futures trading.",
+    "media_metadata": {
+      "original_poster": "Mariana Antaya",
+      "tagged_accounts": [],
+      "location_tags": [],
+      "audio_source": null,
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "first one is this Github",
+        "Mariana Antaya",
+        "Hopefully these resources are helpful along your learning journey to buil... more",
+        "https://gist.github.com/ln2502mk/50d8f7feb614c867638343105c64291",
+        "Lecture Notebooks",
+        "Lecture 41: Why You Should Hedge Beta and Sector Exposures",
+        "Lecture 42: VaR and CVaR",
+        "Lecture 43: Integration, Cointegration, and Stationarity",
+        "Lecture 44: Introduction to Pairs Trading",
+        "Lecture 45: Example: Basic Pairs Trading Algorithm",
+        "Lecture 46: Example: Pairs Trading Algorithm",
+        "Lecture 47: Autocorrelation and AR Models",
+        "Lecture 48: ARCH, GARCH, and GJM",
+        "Lecture 49: Kalman Filters",
+        "Lecture 50: Example: Kalman Filter Pairs",
+        "Lecture 51: Introduction to Futures",
+        "Lecture 52: Futures Trading Considerations"
+      ],
+      "objects": [
+        "woman with long reddish hair",
+        "black top",
+        "GitHub URL",
+        "lecture list",
+        "notebook interface"
+      ],
+      "themes": [
+        "quantitative finance",
+        "algorithmic trading",
+        "educational resources",
+        "programming",
+        "financial modeling"
+      ],
+      "emotions": [
+        "helpful",
+        "educational",
+        "informative"
+      ],
+      "vibes": [
+        "academic",
+        "professional",
+        "resourceful"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "GitHub repository URL with comprehensive finance and trading lecture notebooks",
+      "visual_hierarchy": [
+        "GitHub URL link",
+        "Lecture notebooks list",
+        "Mariana Antaya speaking",
+        "Caption text about resources",
+        "TikTok interface elements"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Education\",\n  \"subcategories\": [\"Finance\", \"Programming\"],\n  \"headline\": \"Mariana Antaya shares GitHub repository with finance and trading lecture notebooks for learning journey\",\n  \"summary\": \"Mariana Antaya recommends a GitHub repository (https://gist.github.com/ln2502mk/50d8f7feb614c867638343105c64291) containing comprehensive lecture notebooks covering hedge funds, sector exposures, VaR, CVaR, pairs trading, autocorrelation, AR models, ARCH, GARCH, GJM, Kalman filters, and futures trading.\",\n  \"media_metadata\": {\n    \"original_poster\": \"Mariana Antaya\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [],\n    \"audio_source\": null,\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\n      \"first one is this Github\",\n      \"Mariana Antaya\",\n      \"Hopefully these resources are helpful along your learning journey to buil... more\",\n      \"https://gist.github.com/ln2502mk/50d8f7feb614c867638343105c64291\",\n      \"Lecture Notebooks\",\n      \"Lecture 41: Why You Should Hedge Beta and Sector Exposures\",\n      \"Lecture 42: VaR and CVaR\",\n      \"Lecture 43: Integration, Cointegration, and Stationarity\",\n      \"Lecture 44: Introduction to Pairs Trading\",\n      \"Lecture 45: Example: Basic Pairs Trading Algorithm\",\n      \"Lecture 46: Example: Pairs Trading Algorithm\",\n      \"Lecture 47: Autocorrelation and AR Models\",\n      \"Lecture 48: ARCH, GARCH, and GJM\",\n      \"Lecture 49: Kalman Filters\",\n      \"Lecture 50: Example: Kalman Filter Pairs\",\n      \"Lecture 51: Introduction to Futures\",\n      \"Lecture 52: Futures Trading Considerations\"\n    ],\n    \"objects\": [\"woman with long reddish hair\", \"black top\", \"GitHub URL\", \"lecture list\", \"notebook interface\"],\n    \"themes\": [\"quantitative finance\", \"algorithmic trading\", \"educational resources\", \"programming\", \"financial modeling\"],\n    \"emotions\": [\"helpful\", \"educational\", \"informative\"],\n    \"vibes\": [\"academic\", \"professional\", \"resourceful\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"GitHub repository URL with comprehensive finance and trading lecture notebooks\",\n    \"visual_hierarchy\": [\n      \"GitHub URL link\",\n      \"Lecture notebooks list\",\n      \"Mariana Antaya speaking\",\n      \"Caption text about resources\",\n      \"TikTok interface elements\"\n    ]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 687
+  }
+}

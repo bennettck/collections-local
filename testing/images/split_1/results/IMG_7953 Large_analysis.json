@@ -1,0 +1,69 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_1/IMG_7953 Large.jpeg",
+  "image_name": "IMG_7953 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Technology",
+    "subcategories": [
+      "AI Tools",
+      "Productivity"
+    ],
+    "headline": "AI agent browser called Fellow provides virtual workspace for browsing and organizing information hands-free",
+    "summary": "Fellow is an AI agent browser that creates a virtual workspace for users. The tool enables hands-free browsing, thinking, and information organization with features like acting on private sites, generating reports, and executing tasks in an AI-disrupted workflow.",
+    "media_metadata": {
+      "original_poster": "Sabrina Ramonov",
+      "tagged_accounts": [],
+      "location_tags": [],
+      "audio_source": null,
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "YOUR AGENT GETS ITS OWN VIRTUAL WORKSPACE",
+        "Deep Action, enabling think, browse and organise information hands-free",
+        "Terrible name I can't type it's called Fellow... agentic browser. I haven't...",
+        "Act on private sites",
+        "Virtual workspace for Agent",
+        "Generate the report you need",
+        "Get Early Access"
+      ],
+      "objects": [
+        "woman pointing at screen",
+        "browser interface mockup",
+        "AI agent features",
+        "website screenshots"
+      ],
+      "themes": [
+        "artificial intelligence",
+        "productivity tools",
+        "browser automation",
+        "virtual assistants"
+      ],
+      "emotions": [
+        "excitement",
+        "recommendation"
+      ],
+      "vibes": [
+        "tech review",
+        "product discovery",
+        "early adopter"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Fellow AI agent browser recommendation",
+      "visual_hierarchy": [
+        "YOUR AGENT GETS ITS OWN VIRTUAL WORKSPACE",
+        "Woman pointing gesture",
+        "Browser interface preview",
+        "Product feature descriptions",
+        "Get Early Access button"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Technology\",\n  \"subcategories\": [\"AI Tools\", \"Productivity\"],\n  \"headline\": \"AI agent browser called Fellow provides virtual workspace for browsing and organizing information hands-free\",\n  \"summary\": \"Fellow is an AI agent browser that creates a virtual workspace for users. The tool enables hands-free browsing, thinking, and information organization with features like acting on private sites, generating reports, and executing tasks in an AI-disrupted workflow.\",\n  \"media_metadata\": {\n    \"original_poster\": \"Sabrina Ramonov\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [],\n    \"audio_source\": null,\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\n      \"YOUR AGENT GETS ITS OWN VIRTUAL WORKSPACE\",\n      \"Deep Action, enabling think, browse and organise information hands-free\",\n      \"Terrible name I can't type it's called Fellow... agentic browser. I haven't...\",\n      \"Act on private sites\",\n      \"Virtual workspace for Agent\",\n      \"Generate the report you need\",\n      \"Get Early Access\"\n    ],\n    \"objects\": [\"woman pointing at screen\", \"browser interface mockup\", \"AI agent features\", \"website screenshots\"],\n    \"themes\": [\"artificial intelligence\", \"productivity tools\", \"browser automation\", \"virtual assistants\"],\n    \"emotions\": [\"excitement\", \"recommendation\"],\n    \"vibes\": [\"tech review\", \"product discovery\", \"early adopter\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Fellow AI agent browser recommendation\",\n    \"visual_hierarchy\": [\n      \"YOUR AGENT GETS ITS OWN VIRTUAL WORKSPACE\",\n      \"Woman pointing gesture\",\n      \"Browser interface preview\",\n      \"Product feature descriptions\",\n      \"Get Early Access button\"\n    ]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 451
+  }
+}

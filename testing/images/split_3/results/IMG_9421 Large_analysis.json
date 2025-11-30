@@ -1,0 +1,80 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_3/IMG_9421 Large.jpeg",
+  "image_name": "IMG_9421 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Travel",
+    "subcategories": [
+      "Food Festival",
+      "Seoul Events"
+    ],
+    "headline": "Knock Knock K-Food Festival at Gwanghwamun Square, weekends 4-9PM",
+    "summary": "Knock Knock K-Food Festival takes place at Gwanghwamun Square on weekends from 4-9PM. Seoul has 461.0K people posting about this location. Someone is asking who will visit South Korea this September.",
+    "media_metadata": {
+      "original_poster": null,
+      "tagged_accounts": [
+        "@SaySHINee19",
+        "@HUNTR/X",
+        "@EJAt"
+      ],
+      "location_tags": [
+        "Seoul - 461.0K people posted about this place"
+      ],
+      "audio_source": "Golden - @HUNTR/X & EJAt",
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "K-FOOD FESTIVAL",
+        "KNOCK KNOCK K-FOOD FESTIVAL",
+        "AT GWANGHWAMUN SQUARE",
+        "WEEKENDS, 4-9PM",
+        "Seoul",
+        "461.0K people posted about this place",
+        "Next Stop: Korea",
+        "Who will visit South Korea this September?",
+        "seoul pop ups september 2025"
+      ],
+      "objects": [
+        "crowded food festival",
+        "colorful vendor stalls",
+        "evening lighting",
+        "urban square",
+        "festival signage"
+      ],
+      "themes": [
+        "Korean food culture",
+        "travel planning",
+        "festival events",
+        "Seoul tourism"
+      ],
+      "emotions": [
+        "excitement",
+        "anticipation",
+        "cultural curiosity"
+      ],
+      "vibes": [
+        "festive",
+        "bustling",
+        "cultural",
+        "inviting"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "K-Food Festival event details and location",
+      "visual_hierarchy": [
+        "K-FOOD FESTIVAL text overlay",
+        "crowded festival scene",
+        "event details banner",
+        "Seoul location tag",
+        "search suggestion"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Food Festival\", \"Seoul Events\"],\n  \"headline\": \"Knock Knock K-Food Festival at Gwanghwamun Square, weekends 4-9PM\",\n  \"summary\": \"Knock Knock K-Food Festival takes place at Gwanghwamun Square on weekends from 4-9PM. Seoul has 461.0K people posting about this location. Someone is asking who will visit South Korea this September.\",\n  \"media_metadata\": {\n    \"original_poster\": null,\n    \"tagged_accounts\": [\"@SaySHINee19\", \"@HUNTR/X\", \"@EJAt\"],\n    \"location_tags\": [\"Seoul - 461.0K people posted about this place\"],\n    \"audio_source\": \"Golden - @HUNTR/X & EJAt\",\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"K-FOOD FESTIVAL\", \"KNOCK KNOCK K-FOOD FESTIVAL\", \"AT GWANGHWAMUN SQUARE\", \"WEEKENDS, 4-9PM\", \"Seoul\", \"461.0K people posted about this place\", \"Next Stop: Korea\", \"Who will visit South Korea this September?\", \"seoul pop ups september 2025\"],\n    \"objects\": [\"crowded food festival\", \"colorful vendor stalls\", \"evening lighting\", \"urban square\", \"festival signage\"],\n    \"themes\": [\"Korean food culture\", \"travel planning\", \"festival events\", \"Seoul tourism\"],\n    \"emotions\": [\"excitement\", \"anticipation\", \"cultural curiosity\"],\n    \"vibes\": [\"festive\", \"bustling\", \"cultural\", \"inviting\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"K-Food Festival event details and location\",\n    \"visual_hierarchy\": [\"K-FOOD FESTIVAL text overlay\", \"crowded festival scene\", \"event details banner\", \"Seoul location tag\", \"search suggestion\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 481
+  }
+}

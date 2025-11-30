@@ -1,0 +1,74 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_3/IMG_9564 Large.jpeg",
+  "image_name": "IMG_9564 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Travel",
+    "subcategories": [
+      "hiking",
+      "seoul"
+    ],
+    "headline": "Golden skyline hike in Seoul - cinematic hiking trail with city views",
+    "summary": "Golden skyline hike in Seoul offers cinematic views from a hiking trail. Located at Inwangsan, this trail provides panoramic city views with modern skyline backdrop.",
+    "media_metadata": {
+      "original_poster": "byanastasiya",
+      "tagged_accounts": [],
+      "location_tags": [
+        "golden skyline hike, seoul"
+      ],
+      "audio_source": "Your Existence (Inst.)",
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "golden skyline hike, seoul",
+        "who knew a hiking trail could look this cinematic",
+        "if you're in seoul th...more",
+        "Your Existence (Inst.)",
+        "Add to Apple Music",
+        "Search • inwangsan hiking"
+      ],
+      "objects": [
+        "stone hiking trail",
+        "seoul city skyline",
+        "mountains",
+        "modern buildings",
+        "hikers on trail",
+        "trees and vegetation"
+      ],
+      "themes": [
+        "urban hiking",
+        "seoul tourism",
+        "scenic viewpoints",
+        "city exploration"
+      ],
+      "emotions": [
+        "awe",
+        "discovery",
+        "adventure"
+      ],
+      "vibes": [
+        "cinematic",
+        "scenic",
+        "adventurous",
+        "urban nature"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Inwangsan hiking trail search term for Seoul travel planning",
+      "visual_hierarchy": [
+        "golden skyline hike, seoul location tag",
+        "stone hiking trail with city backdrop",
+        "cinematic hiking trail caption",
+        "inwangsan hiking search term",
+        "seoul city skyline view"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Travel\",\n  \"subcategories\": [\"hiking\", \"seoul\"],\n  \"headline\": \"Golden skyline hike in Seoul - cinematic hiking trail with city views\",\n  \"summary\": \"Golden skyline hike in Seoul offers cinematic views from a hiking trail. Located at Inwangsan, this trail provides panoramic city views with modern skyline backdrop.\",\n  \"media_metadata\": {\n    \"original_poster\": \"byanastasiya\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [\"golden skyline hike, seoul\"],\n    \"audio_source\": \"Your Existence (Inst.)\",\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\n      \"golden skyline hike, seoul\",\n      \"who knew a hiking trail could look this cinematic\",\n      \"if you're in seoul th...more\",\n      \"Your Existence (Inst.)\",\n      \"Add to Apple Music\",\n      \"Search • inwangsan hiking\"\n    ],\n    \"objects\": [\n      \"stone hiking trail\",\n      \"seoul city skyline\",\n      \"mountains\",\n      \"modern buildings\",\n      \"hikers on trail\",\n      \"trees and vegetation\"\n    ],\n    \"themes\": [\n      \"urban hiking\",\n      \"seoul tourism\",\n      \"scenic viewpoints\",\n      \"city exploration\"\n    ],\n    \"emotions\": [\n      \"awe\",\n      \"discovery\",\n      \"adventure\"\n    ],\n    \"vibes\": [\n      \"cinematic\",\n      \"scenic\",\n      \"adventurous\",\n      \"urban nature\"\n    ],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Inwangsan hiking trail search term for Seoul travel planning\",\n    \"visual_hierarchy\": [\n      \"golden skyline hike, seoul location tag\",\n      \"stone hiking trail with city backdrop\",\n      \"cinematic hiking trail caption\",\n      \"inwangsan hiking search term\",\n      \"seoul city skyline view\"\n    ]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 495
+  }
+}

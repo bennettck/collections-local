@@ -1,0 +1,73 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_2/IMG_9253 Large.jpeg",
+  "image_name": "IMG_9253 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Travel",
+    "subcategories": [
+      "Cafes",
+      "Korea"
+    ],
+    "headline": "Onion Anguk - Traditional Korean cafe in Bukchon Hanok Village with exposed wooden beams and floor seating",
+    "summary": "Onion Anguk (Cafe Onion Anguk) in Bukchon Hanok Village, Jongno-gu is described as Bukchon's most relaxing cafe. The traditional Korean architecture features exposed wooden ceiling beams and low tables with floor cushion seating.",
+    "media_metadata": {
+      "original_poster": "BaeTrip Korea",
+      "tagged_accounts": [],
+      "location_tags": [
+        "Bukchon Hanok Village • Jongno-gu"
+      ],
+      "audio_source": null,
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "and follow for",
+        "BaeTrip Korea",
+        "Onion Anguk (Cafe Onion Anguk)",
+        "Bukchon's Most Relaxing Cafe!... more",
+        "Bukchon Hanok Village • Jongno-gu"
+      ],
+      "objects": [
+        "wooden ceiling beams",
+        "low wooden tables",
+        "floor cushions",
+        "customers sitting",
+        "traditional Korean interior",
+        "glass windows"
+      ],
+      "themes": [
+        "Korean traditional architecture",
+        "cafe culture",
+        "travel destination",
+        "cultural experience"
+      ],
+      "emotions": [
+        "relaxing",
+        "peaceful",
+        "cultural appreciation"
+      ],
+      "vibes": [
+        "traditional",
+        "cozy",
+        "authentic",
+        "serene"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Traditional Korean cafe with authentic hanok architecture and floor seating",
+      "visual_hierarchy": [
+        "Cafe name and location",
+        "Traditional wooden ceiling structure",
+        "Customers at low tables",
+        "Call-to-action text",
+        "Account attribution"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Cafes\", \"Korea\"],\n  \"headline\": \"Onion Anguk - Traditional Korean cafe in Bukchon Hanok Village with exposed wooden beams and floor seating\",\n  \"summary\": \"Onion Anguk (Cafe Onion Anguk) in Bukchon Hanok Village, Jongno-gu is described as Bukchon's most relaxing cafe. The traditional Korean architecture features exposed wooden ceiling beams and low tables with floor cushion seating.\",\n  \"media_metadata\": {\n    \"original_poster\": \"BaeTrip Korea\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [\"Bukchon Hanok Village • Jongno-gu\"],\n    \"audio_source\": null,\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"and follow for\", \"BaeTrip Korea\", \"Onion Anguk (Cafe Onion Anguk)\", \"Bukchon's Most Relaxing Cafe!... more\", \"Bukchon Hanok Village • Jongno-gu\"],\n    \"objects\": [\"wooden ceiling beams\", \"low wooden tables\", \"floor cushions\", \"customers sitting\", \"traditional Korean interior\", \"glass windows\"],\n    \"themes\": [\"Korean traditional architecture\", \"cafe culture\", \"travel destination\", \"cultural experience\"],\n    \"emotions\": [\"relaxing\", \"peaceful\", \"cultural appreciation\"],\n    \"vibes\": [\"traditional\", \"cozy\", \"authentic\", \"serene\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Traditional Korean cafe with authentic hanok architecture and floor seating\",\n    \"visual_hierarchy\": [\"Cafe name and location\", \"Traditional wooden ceiling structure\", \"Customers at low tables\", \"Call-to-action text\", \"Account attribution\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 461
+  }
+}

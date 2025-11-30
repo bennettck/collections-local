@@ -1,0 +1,82 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_1/IMG_7923 Large.jpeg",
+  "image_name": "IMG_7923 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Travel",
+    "subcategories": [
+      "Japan",
+      "Itinerary"
+    ],
+    "headline": "3-day Fukuoka travel itinerary featuring Daimyo vintage shops, Ippudo ramen, luxury shopping, and art museum visits",
+    "summary": "Day 2 Fukuoka itinerary includes exploring Daimyo area vintage shops and cafes, eating ramen at the original Ippudo branch, shopping second-hand luxury at Takayama, buying omakase at Sushi Tadao, visiting Fukuoka Art Museum, and ending at yatai stalls.",
+    "media_metadata": {
+      "original_poster": "kathrinacorgan",
+      "tagged_accounts": [
+        "@Tomoko Aran"
+      ],
+      "location_tags": [
+        "Fukuoka, 61.8K people posted about this place"
+      ],
+      "audio_source": "Midnight Pretenders - @Tomoko Aran",
+      "hashtags": [
+        "#fukuoka",
+        "#traveltiktok",
+        "#japan"
+      ]
+    },
+    "image_details": {
+      "extracted_text": [
+        "Day 2",
+        "Explore Daimyo area (vintage shops, cute cafes, eat ramen at the original branch of Ippudo)",
+        "Shop second hand luxury at Takayama",
+        "Buy omakase at Sushi Tadao",
+        "Fukuoka Art Museum",
+        "Cap off the night at yatai stalls (again)",
+        "Fukuoka in 3 Days",
+        "We actually stayed here for 5 days, but I didn't include day 1 and day 5 since we mostly just ate and drank lol"
+      ],
+      "objects": [
+        "yellow polka dot pumpkin sculpture",
+        "ramen bowl",
+        "luxury handbags",
+        "woman in black dress",
+        "people posing"
+      ],
+      "themes": [
+        "Japan travel",
+        "food tourism",
+        "art museums",
+        "vintage shopping",
+        "luxury goods"
+      ],
+      "emotions": [
+        "excitement",
+        "wanderlust",
+        "cultural appreciation"
+      ],
+      "vibes": [
+        "artistic",
+        "foodie",
+        "cultural exploration",
+        "luxury travel"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Detailed Fukuoka travel itinerary with specific restaurant and shopping recommendations",
+      "visual_hierarchy": [
+        "Yellow polka dot pumpkin sculpture",
+        "Day 2 itinerary text overlay",
+        "Ramen bowl close-up",
+        "Luxury handbags display",
+        "Woman in black dress"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Japan\", \"Itinerary\"],\n  \"headline\": \"3-day Fukuoka travel itinerary featuring Daimyo vintage shops, Ippudo ramen, luxury shopping, and art museum visits\",\n  \"summary\": \"Day 2 Fukuoka itinerary includes exploring Daimyo area vintage shops and cafes, eating ramen at the original Ippudo branch, shopping second-hand luxury at Takayama, buying omakase at Sushi Tadao, visiting Fukuoka Art Museum, and ending at yatai stalls.\",\n  \"media_metadata\": {\n    \"original_poster\": \"kathrinacorgan\",\n    \"tagged_accounts\": [\"@Tomoko Aran\"],\n    \"location_tags\": [\"Fukuoka, 61.8K people posted about this place\"],\n    \"audio_source\": \"Midnight Pretenders - @Tomoko Aran\",\n    \"hashtags\": [\"#fukuoka\", \"#traveltiktok\", \"#japan\"]\n  },\n  \"image_details\": {\n    \"extracted_text\": [\n      \"Day 2\",\n      \"Explore Daimyo area (vintage shops, cute cafes, eat ramen at the original branch of Ippudo)\",\n      \"Shop second hand luxury at Takayama\",\n      \"Buy omakase at Sushi Tadao\",\n      \"Fukuoka Art Museum\",\n      \"Cap off the night at yatai stalls (again)\",\n      \"Fukuoka in 3 Days\",\n      \"We actually stayed here for 5 days, but I didn't include day 1 and day 5 since we mostly just ate and drank lol\"\n    ],\n    \"objects\": [\"yellow polka dot pumpkin sculpture\", \"ramen bowl\", \"luxury handbags\", \"woman in black dress\", \"people posing\"],\n    \"themes\": [\"Japan travel\", \"food tourism\", \"art museums\", \"vintage shopping\", \"luxury goods\"],\n    \"emotions\": [\"excitement\", \"wanderlust\", \"cultural appreciation\"],\n    \"vibes\": [\"artistic\", \"foodie\", \"cultural exploration\", \"luxury travel\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Detailed Fukuoka travel itinerary with specific restaurant and shopping recommendations\",\n    \"visual_hierarchy\": [\"Yellow polka dot pumpkin sculpture\", \"Day 2 itinerary text overlay\", \"Ramen bowl close-up\", \"Luxury handbags display\", \"Woman in black dress\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 619
+  }
+}

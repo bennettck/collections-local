@@ -1,0 +1,74 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_1/IMG_7967 Large.jpeg",
+  "image_name": "IMG_7967 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Travel",
+    "subcategories": [
+      "Japan",
+      "Scenic Views"
+    ],
+    "headline": "Cape Notoro-misaki sunset view in Hokkaido, Japan ranked #8 in Abashiri travel destinations",
+    "summary": "Cape Notoro-misaki in Hokkaido offers stunning sunset views and has been featured in 994 recent posts. Cheryl describes Hokkaido as officially becoming her favorite island destination.",
+    "media_metadata": {
+      "original_poster": "Cheryl",
+      "tagged_accounts": [],
+      "location_tags": [
+        "Cape Notoro-misaki",
+        "Hokkaido"
+      ],
+      "audio_source": null,
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "8. Abashiri 🌅",
+        "Cape Notoro-misaki",
+        "Hokkaido",
+        "994 recent posts featured this place",
+        "Cheryl",
+        "DAMN Hokkaido you got me there. You're now officially my favourite island o... more"
+      ],
+      "objects": [
+        "sunset sky",
+        "ocean horizon",
+        "coastal landscape",
+        "grassland",
+        "cliffs"
+      ],
+      "themes": [
+        "Japanese tourism",
+        "scenic destinations",
+        "sunset photography",
+        "travel recommendations"
+      ],
+      "emotions": [
+        "awe",
+        "appreciation",
+        "wanderlust"
+      ],
+      "vibes": [
+        "peaceful",
+        "majestic",
+        "golden hour",
+        "remote"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Cape Notoro-misaki location and sunset timing",
+      "visual_hierarchy": [
+        "8. Abashiri 🌅",
+        "Cape Notoro-misaki",
+        "golden sunset sky",
+        "ocean view",
+        "Cheryl's testimonial"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Japan\", \"Scenic Views\"],\n  \"headline\": \"Cape Notoro-misaki sunset view in Hokkaido, Japan ranked #8 in Abashiri travel destinations\",\n  \"summary\": \"Cape Notoro-misaki in Hokkaido offers stunning sunset views and has been featured in 994 recent posts. Cheryl describes Hokkaido as officially becoming her favorite island destination.\",\n  \"media_metadata\": {\n    \"original_poster\": \"Cheryl\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [\"Cape Notoro-misaki\", \"Hokkaido\"],\n    \"audio_source\": null,\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"8. Abashiri 🌅\", \"Cape Notoro-misaki\", \"Hokkaido\", \"994 recent posts featured this place\", \"Cheryl\", \"DAMN Hokkaido you got me there. You're now officially my favourite island o... more\"],\n    \"objects\": [\"sunset sky\", \"ocean horizon\", \"coastal landscape\", \"grassland\", \"cliffs\"],\n    \"themes\": [\"Japanese tourism\", \"scenic destinations\", \"sunset photography\", \"travel recommendations\"],\n    \"emotions\": [\"awe\", \"appreciation\", \"wanderlust\"],\n    \"vibes\": [\"peaceful\", \"majestic\", \"golden hour\", \"remote\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Cape Notoro-misaki location and sunset timing\",\n    \"visual_hierarchy\": [\"8. Abashiri 🌅\", \"Cape Notoro-misaki\", \"golden sunset sky\", \"ocean view\", \"Cheryl's testimonial\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 430
+  }
+}

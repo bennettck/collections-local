@@ -1,0 +1,66 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_3/IMG_9441 Large.jpeg",
+  "image_name": "IMG_9441 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Beauty",
+    "subcategories": [
+      "Fragrance",
+      "Shopping"
+    ],
+    "headline": "Matthew Chang perfumes recommendation with Korean text about highly recommended fragrances",
+    "summary": "Matthew Chang perfumes are highly recommended according to Korean text overlay. Shopping bag from matthew chang perfumes brand shown as recommendation for taking sad friends shopping in Insa-dong area.",
+    "media_metadata": {
+      "original_poster": "Kirstin Leigh",
+      "tagged_accounts": [
+        "@Mykoreandic"
+      ],
+      "location_tags": [],
+      "audio_source": "White Garden - @Mykoreandic",
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "highly recommend Matthew Chang perfumes",
+        "매튜 창 향수 적극 추천",
+        "matthew chang perfumes",
+        "THIS IS YOUR SIGN TO TAKE YOUR SAD FRIEND OUT SHOPPING IN INSA"
+      ],
+      "objects": [
+        "navy blue shopping bag",
+        "perfume store interior",
+        "hands holding bag"
+      ],
+      "themes": [
+        "fragrance recommendation",
+        "Korean beauty",
+        "shopping therapy"
+      ],
+      "emotions": [
+        "excitement",
+        "recommendation"
+      ],
+      "vibes": [
+        "luxury shopping",
+        "Korean beauty culture",
+        "friendship"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Matthew Chang perfumes brand recommendation",
+      "visual_hierarchy": [
+        "highly recommend Matthew Chang perfumes text overlay",
+        "navy blue shopping bag with brand logo",
+        "Korean text translation",
+        "shopping recommendation caption",
+        "perfume store background"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Beauty\",\n  \"subcategories\": [\"Fragrance\", \"Shopping\"],\n  \"headline\": \"Matthew Chang perfumes recommendation with Korean text about highly recommended fragrances\",\n  \"summary\": \"Matthew Chang perfumes are highly recommended according to Korean text overlay. Shopping bag from matthew chang perfumes brand shown as recommendation for taking sad friends shopping in Insa-dong area.\",\n  \"media_metadata\": {\n    \"original_poster\": \"Kirstin Leigh\",\n    \"tagged_accounts\": [\"@Mykoreandic\"],\n    \"location_tags\": [],\n    \"audio_source\": \"White Garden - @Mykoreandic\",\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\n      \"highly recommend Matthew Chang perfumes\",\n      \"매튜 창 향수 적극 추천\",\n      \"matthew chang perfumes\",\n      \"THIS IS YOUR SIGN TO TAKE YOUR SAD FRIEND OUT SHOPPING IN INSA\"\n    ],\n    \"objects\": [\"navy blue shopping bag\", \"perfume store interior\", \"hands holding bag\"],\n    \"themes\": [\"fragrance recommendation\", \"Korean beauty\", \"shopping therapy\"],\n    \"emotions\": [\"excitement\", \"recommendation\"],\n    \"vibes\": [\"luxury shopping\", \"Korean beauty culture\", \"friendship\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Matthew Chang perfumes brand recommendation\",\n    \"visual_hierarchy\": [\n      \"highly recommend Matthew Chang perfumes text overlay\",\n      \"navy blue shopping bag with brand logo\",\n      \"Korean text translation\",\n      \"shopping recommendation caption\",\n      \"perfume store background\"\n    ]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 408
+  }
+}

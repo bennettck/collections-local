@@ -1,0 +1,67 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_3/IMG_9475 Large.jpeg",
+  "image_name": "IMG_9475 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "News",
+    "subcategories": [
+      "International Relations",
+      "Corporate Diplomacy"
+    ],
+    "headline": "Korea sending diplomats to negotiate release of Hyundai-LG employees detained on business trip",
+    "summary": "Korea is dispatching diplomats to negotiate the release of Hyundai-LG employees who were detained during a business trip last month. Anna Kook reports on the diplomatic response to the corporate incident.",
+    "media_metadata": {
+      "original_poster": "Anna Kook",
+      "tagged_accounts": [],
+      "location_tags": [],
+      "audio_source": null,
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "on a business trip literally just last month",
+        "Korea is sending diplomats to negotiate the release of Hyundai-LG employ... more",
+        "Anna Kook",
+        "Search • south korea response to hyundai"
+      ],
+      "objects": [
+        "Korean comic/webtoon panels",
+        "woman speaking to camera",
+        "smartphone",
+        "search suggestion"
+      ],
+      "themes": [
+        "diplomatic crisis",
+        "corporate detention",
+        "international business",
+        "government response"
+      ],
+      "emotions": [
+        "concern",
+        "urgency",
+        "informative"
+      ],
+      "vibes": [
+        "breaking news",
+        "serious",
+        "explanatory"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Diplomatic intervention for detained corporate employees",
+      "visual_hierarchy": [
+        "Korea sending diplomats headline",
+        "Anna Kook reporter name",
+        "Business trip detention context",
+        "Korean comic illustration",
+        "Search suggestion bar"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"News\",\n  \"subcategories\": [\"International Relations\", \"Corporate Diplomacy\"],\n  \"headline\": \"Korea sending diplomats to negotiate release of Hyundai-LG employees detained on business trip\",\n  \"summary\": \"Korea is dispatching diplomats to negotiate the release of Hyundai-LG employees who were detained during a business trip last month. Anna Kook reports on the diplomatic response to the corporate incident.\",\n  \"media_metadata\": {\n    \"original_poster\": \"Anna Kook\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [],\n    \"audio_source\": null,\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\n      \"on a business trip literally just last month\",\n      \"Korea is sending diplomats to negotiate the release of Hyundai-LG employ... more\",\n      \"Anna Kook\",\n      \"Search • south korea response to hyundai\"\n    ],\n    \"objects\": [\"Korean comic/webtoon panels\", \"woman speaking to camera\", \"smartphone\", \"search suggestion\"],\n    \"themes\": [\"diplomatic crisis\", \"corporate detention\", \"international business\", \"government response\"],\n    \"emotions\": [\"concern\", \"urgency\", \"informative\"],\n    \"vibes\": [\"breaking news\", \"serious\", \"explanatory\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Diplomatic intervention for detained corporate employees\",\n    \"visual_hierarchy\": [\n      \"Korea sending diplomats headline\",\n      \"Anna Kook reporter name\",\n      \"Business trip detention context\",\n      \"Korean comic illustration\",\n      \"Search suggestion bar\"\n    ]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 409
+  }
+}

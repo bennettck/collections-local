@@ -1,0 +1,69 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_1/IMG_7931 Large.jpeg",
+  "image_name": "IMG_7931 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Technology",
+    "subcategories": [
+      "AI Development",
+      "Coding Tools"
+    ],
+    "headline": "Trae AI IDE offering free AI coder editor for faster development collaboration",
+    "summary": "Trae is an adaptive AI IDE that transforms development workflow by collaborating with developers to run faster. Nick Saraev promotes commenting 'CODING' to get free access to the AI coder editor. Claude 3.7 Sonnet is now available on the platform.",
+    "media_metadata": {
+      "original_poster": "Nick Saraev",
+      "tagged_accounts": [],
+      "location_tags": [],
+      "audio_source": null,
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "Ship Faster with Trae",
+        "Trae is an adaptive AI IDE that transforms how you work, collaborating with you to run faster",
+        "And it's a new",
+        "Claude 3.7 Sonnet is available now!",
+        "Comment 'CODING' to get this FREE AI Coder Editor. You don't have to sp... more",
+        "Nick Saraev"
+      ],
+      "objects": [
+        "person speaking into microphone",
+        "video interface",
+        "engagement buttons",
+        "profile avatar"
+      ],
+      "themes": [
+        "AI development",
+        "coding efficiency",
+        "developer tools",
+        "software collaboration"
+      ],
+      "emotions": [
+        "promotional",
+        "enthusiastic",
+        "informative"
+      ],
+      "vibes": [
+        "tech-focused",
+        "professional",
+        "educational"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Free AI coding editor promotion with comment trigger",
+      "visual_hierarchy": [
+        "Ship Faster with Trae headline",
+        "Person speaking (Nick Saraev)",
+        "Comment instruction for free access",
+        "Claude 3.7 Sonnet announcement",
+        "Engagement metrics"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Technology\",\n  \"subcategories\": [\"AI Development\", \"Coding Tools\"],\n  \"headline\": \"Trae AI IDE offering free AI coder editor for faster development collaboration\",\n  \"summary\": \"Trae is an adaptive AI IDE that transforms development workflow by collaborating with developers to run faster. Nick Saraev promotes commenting 'CODING' to get free access to the AI coder editor. Claude 3.7 Sonnet is now available on the platform.\",\n  \"media_metadata\": {\n    \"original_poster\": \"Nick Saraev\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [],\n    \"audio_source\": null,\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\n      \"Ship Faster with Trae\",\n      \"Trae is an adaptive AI IDE that transforms how you work, collaborating with you to run faster\",\n      \"And it's a new\",\n      \"Claude 3.7 Sonnet is available now!\",\n      \"Comment 'CODING' to get this FREE AI Coder Editor. You don't have to sp... more\",\n      \"Nick Saraev\"\n    ],\n    \"objects\": [\"person speaking into microphone\", \"video interface\", \"engagement buttons\", \"profile avatar\"],\n    \"themes\": [\"AI development\", \"coding efficiency\", \"developer tools\", \"software collaboration\"],\n    \"emotions\": [\"promotional\", \"enthusiastic\", \"informative\"],\n    \"vibes\": [\"tech-focused\", \"professional\", \"educational\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Free AI coding editor promotion with comment trigger\",\n    \"visual_hierarchy\": [\n      \"Ship Faster with Trae headline\",\n      \"Person speaking (Nick Saraev)\",\n      \"Comment instruction for free access\",\n      \"Claude 3.7 Sonnet announcement\",\n      \"Engagement metrics\"\n    ]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 474
+  }
+}

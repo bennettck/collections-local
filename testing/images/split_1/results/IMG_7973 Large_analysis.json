@@ -1,0 +1,72 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_1/IMG_7973 Large.jpeg",
+  "image_name": "IMG_7973 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Travel",
+    "subcategories": [
+      "Japan",
+      "Accommodation"
+    ],
+    "headline": "Ryokan stay recommendation at Nagominoyado Hanagokoro in Japan with mountain views and traditional outdoor bath",
+    "summary": "Sarah G stayed at Nagominoyado Hanagokoro ryokan in Japan, describing it as a splurge for a one-night stay but highly recommending it as a top activity. The ryokan features traditional outdoor baths with mountain forest views and lantern lighting.",
+    "media_metadata": {
+      "original_poster": "Sarah G",
+      "tagged_accounts": [],
+      "location_tags": [
+        "Nagominoyado Hanagokoro"
+      ],
+      "audio_source": null,
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "Nagominoyado Hanagokoro",
+        "Staying in a Ryokan in Japan",
+        "This was a little bit of a splurge for a one night stay, but was top of my list for things to do in Japan. I highly recommend.... more",
+        "Sarah G Photo"
+      ],
+      "objects": [
+        "outdoor bath tub",
+        "black stones",
+        "lantern",
+        "wooden deck",
+        "mountain forest",
+        "railing"
+      ],
+      "themes": [
+        "Japanese hospitality",
+        "traditional accommodation",
+        "luxury travel",
+        "nature immersion"
+      ],
+      "emotions": [
+        "relaxation",
+        "serenity",
+        "appreciation"
+      ],
+      "vibes": [
+        "peaceful",
+        "luxurious",
+        "authentic",
+        "scenic"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Ryokan accommodation recommendation with specific location name",
+      "visual_hierarchy": [
+        "Nagominoyado Hanagokoro location text",
+        "Traditional outdoor bath with mountain view",
+        "Recommendation text about ryokan stay",
+        "Atmospheric lantern lighting",
+        "Forest mountain backdrop"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Japan\", \"Accommodation\"],\n  \"headline\": \"Ryokan stay recommendation at Nagominoyado Hanagokoro in Japan with mountain views and traditional outdoor bath\",\n  \"summary\": \"Sarah G stayed at Nagominoyado Hanagokoro ryokan in Japan, describing it as a splurge for a one-night stay but highly recommending it as a top activity. The ryokan features traditional outdoor baths with mountain forest views and lantern lighting.\",\n  \"media_metadata\": {\n    \"original_poster\": \"Sarah G\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [\"Nagominoyado Hanagokoro\"],\n    \"audio_source\": null,\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\n      \"Nagominoyado Hanagokoro\",\n      \"Staying in a Ryokan in Japan\",\n      \"This was a little bit of a splurge for a one night stay, but was top of my list for things to do in Japan. I highly recommend.... more\",\n      \"Sarah G Photo\"\n    ],\n    \"objects\": [\"outdoor bath tub\", \"black stones\", \"lantern\", \"wooden deck\", \"mountain forest\", \"railing\"],\n    \"themes\": [\"Japanese hospitality\", \"traditional accommodation\", \"luxury travel\", \"nature immersion\"],\n    \"emotions\": [\"relaxation\", \"serenity\", \"appreciation\"],\n    \"vibes\": [\"peaceful\", \"luxurious\", \"authentic\", \"scenic\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Ryokan accommodation recommendation with specific location name\",\n    \"visual_hierarchy\": [\n      \"Nagominoyado Hanagokoro location text\",\n      \"Traditional outdoor bath with mountain view\",\n      \"Recommendation text about ryokan stay\",\n      \"Atmospheric lantern lighting\",\n      \"Forest mountain backdrop\"\n    ]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 481
+  }
+}

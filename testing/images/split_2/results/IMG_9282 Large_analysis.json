@@ -1,0 +1,66 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_2/IMG_9282 Large.jpeg",
+  "image_name": "IMG_9282 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Technology",
+    "subcategories": [
+      "Software Development",
+      "Cloud Computing"
+    ],
+    "headline": "Silviu Technology promotes improving Claude code workflow with up-to-date documentation",
+    "summary": "Silviu Technology offers guidance on significantly improving Claude code workflow through proper documentation practices. The focus is on maintaining current and comprehensive documentation for better development processes.",
+    "media_metadata": {
+      "original_poster": "Silviu Technology",
+      "tagged_accounts": [],
+      "location_tags": [],
+      "audio_source": null,
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "CONTEXT 7",
+        "in up-to-date documentation",
+        "Silviu Technology",
+        "Discover how to significantly improve your Claude code workflow with t... more"
+      ],
+      "objects": [
+        "young man in green shirt",
+        "crossed arms pose",
+        "neutral background"
+      ],
+      "themes": [
+        "software development",
+        "documentation",
+        "workflow optimization",
+        "coding best practices"
+      ],
+      "emotions": [
+        "professional",
+        "confident",
+        "educational"
+      ],
+      "vibes": [
+        "tech tutorial",
+        "professional advice",
+        "developer-focused"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Documentation workflow improvement for Claude coding",
+      "visual_hierarchy": [
+        "CONTEXT 7 header",
+        "up-to-date documentation overlay",
+        "presenter in green shirt",
+        "Silviu Technology branding",
+        "descriptive text"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Technology\",\n  \"subcategories\": [\"Software Development\", \"Cloud Computing\"],\n  \"headline\": \"Silviu Technology promotes improving Claude code workflow with up-to-date documentation\",\n  \"summary\": \"Silviu Technology offers guidance on significantly improving Claude code workflow through proper documentation practices. The focus is on maintaining current and comprehensive documentation for better development processes.\",\n  \"media_metadata\": {\n    \"original_poster\": \"Silviu Technology\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [],\n    \"audio_source\": null,\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"CONTEXT 7\", \"in up-to-date documentation\", \"Silviu Technology\", \"Discover how to significantly improve your Claude code workflow with t... more\"],\n    \"objects\": [\"young man in green shirt\", \"crossed arms pose\", \"neutral background\"],\n    \"themes\": [\"software development\", \"documentation\", \"workflow optimization\", \"coding best practices\"],\n    \"emotions\": [\"professional\", \"confident\", \"educational\"],\n    \"vibes\": [\"tech tutorial\", \"professional advice\", \"developer-focused\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Documentation workflow improvement for Claude coding\",\n    \"visual_hierarchy\": [\"CONTEXT 7 header\", \"up-to-date documentation overlay\", \"presenter in green shirt\", \"Silviu Technology branding\", \"descriptive text\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 351
+  }
+}

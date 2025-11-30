@@ -1,0 +1,75 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_2/IMG_9250 Large.jpeg",
+  "image_name": "IMG_9250 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Travel",
+    "subcategories": [
+      "Food Guide",
+      "City Exploration"
+    ],
+    "headline": "Seongsu district food and shopping guide featuring Standard Bread, Lowket, Stand Oil, and Brandy Melville",
+    "summary": "Day trip guide to Seongsu, Seoul featuring Standard Bread (Seongsu branch), Lowket, Stand Oil, and Brandy Melville. User recommends saving for anyone heading to Seoul/Seongsu area.",
+    "media_metadata": {
+      "original_poster": "raeanne",
+      "tagged_accounts": [],
+      "location_tags": [
+        "Seongsu"
+      ],
+      "audio_source": null,
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "spend a day in seongsu with me",
+        "save this if ur heading to seoul/seongsu !!",
+        "places mentioned:",
+        "standard bread (seongsu branch)",
+        "lowket",
+        "stand oil",
+        "brandy melville (right opposite st... more",
+        "325pm.com/saltbread??",
+        "quite yummy,would get it again"
+      ],
+      "objects": [
+        "cafe storefront",
+        "yellow signage",
+        "outdoor seating",
+        "green food cart",
+        "urban street scene"
+      ],
+      "themes": [
+        "Seoul travel",
+        "food recommendations",
+        "district exploration",
+        "local dining"
+      ],
+      "emotions": [
+        "helpful",
+        "enthusiastic",
+        "informative"
+      ],
+      "vibes": [
+        "urban exploration",
+        "foodie adventure",
+        "travel planning"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Curated list of specific places to visit in Seongsu district",
+      "visual_hierarchy": [
+        "Yellow cafe storefront with circular logo",
+        "Green food cart with menu display",
+        "Caption text with location recommendations",
+        "Urban street setting",
+        "Outdoor seating area"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Food Guide\", \"City Exploration\"],\n  \"headline\": \"Seongsu district food and shopping guide featuring Standard Bread, Lowket, Stand Oil, and Brandy Melville\",\n  \"summary\": \"Day trip guide to Seongsu, Seoul featuring Standard Bread (Seongsu branch), Lowket, Stand Oil, and Brandy Melville. User recommends saving for anyone heading to Seoul/Seongsu area.\",\n  \"media_metadata\": {\n    \"original_poster\": \"raeanne\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [\"Seongsu\"],\n    \"audio_source\": null,\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\n      \"spend a day in seongsu with me\",\n      \"save this if ur heading to seoul/seongsu !!\",\n      \"places mentioned:\",\n      \"standard bread (seongsu branch)\",\n      \"lowket\",\n      \"stand oil\",\n      \"brandy melville (right opposite st... more\",\n      \"325pm.com/saltbread??\",\n      \"quite yummy,would get it again\"\n    ],\n    \"objects\": [\"cafe storefront\", \"yellow signage\", \"outdoor seating\", \"green food cart\", \"urban street scene\"],\n    \"themes\": [\"Seoul travel\", \"food recommendations\", \"district exploration\", \"local dining\"],\n    \"emotions\": [\"helpful\", \"enthusiastic\", \"informative\"],\n    \"vibes\": [\"urban exploration\", \"foodie adventure\", \"travel planning\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Curated list of specific places to visit in Seongsu district\",\n    \"visual_hierarchy\": [\n      \"Yellow cafe storefront with circular logo\",\n      \"Green food cart with menu display\",\n      \"Caption text with location recommendations\",\n      \"Urban street setting\",\n      \"Outdoor seating area\"\n    ]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 488
+  }
+}

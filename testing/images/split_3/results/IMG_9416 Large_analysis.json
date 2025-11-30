@@ -1,0 +1,72 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_3/IMG_9416 Large.jpeg",
+  "image_name": "IMG_9416 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Beauty",
+    "subcategories": [
+      "Skincare",
+      "Treatment"
+    ],
+    "headline": "Korean 18-step scalp treatment recommendation at Eco Jardin clinic",
+    "summary": "Natasha recommends getting an 18-step scalp treatment at @ecojardin_official before any hair procedures in Korea. She emphasizes this treatment is essential preparation for hair work in Korea.",
+    "media_metadata": {
+      "original_poster": "Natasha",
+      "tagged_accounts": [
+        "@ecojardin_official"
+      ],
+      "location_tags": [],
+      "audio_source": null,
+      "hashtags": [
+        "#18stepscalptreatment",
+        "#ecojardin",
+        "#scalptreatment",
+        "#korea",
+        "#koreanscalptreatment"
+      ]
+    },
+    "image_details": {
+      "extracted_text": [
+        "Thank you so much for having me again! @ecojardin_official if you're planning on making an appointment for anything in Korea, you must do an 18 step scalp treatment! Thank me later #18stepscalptreatment #ecojardin #scalptreatment #korea #koreanscalptreatment"
+      ],
+      "objects": [
+        "scalp massage",
+        "treatment gloves",
+        "mirror selfie",
+        "phone",
+        "practitioner in mask"
+      ],
+      "themes": [
+        "Korean beauty treatments",
+        "scalp care",
+        "beauty recommendations"
+      ],
+      "emotions": [
+        "gratitude",
+        "recommendation",
+        "satisfaction"
+      ],
+      "vibes": [
+        "professional",
+        "therapeutic",
+        "wellness-focused"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "18-step Korean scalp treatment recommendation",
+      "visual_hierarchy": [
+        "Scalp massage being performed",
+        "Caption text with treatment details",
+        "Eco Jardin clinic tag",
+        "Treatment hashtags",
+        "Professional setting"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Beauty\",\n  \"subcategories\": [\"Skincare\", \"Treatment\"],\n  \"headline\": \"Korean 18-step scalp treatment recommendation at Eco Jardin clinic\",\n  \"summary\": \"Natasha recommends getting an 18-step scalp treatment at @ecojardin_official before any hair procedures in Korea. She emphasizes this treatment is essential preparation for hair work in Korea.\",\n  \"media_metadata\": {\n    \"original_poster\": \"Natasha\",\n    \"tagged_accounts\": [\"@ecojardin_official\"],\n    \"location_tags\": [],\n    \"audio_source\": null,\n    \"hashtags\": [\"#18stepscalptreatment\", \"#ecojardin\", \"#scalptreatment\", \"#korea\", \"#koreanscalptreatment\"]\n  },\n  \"image_details\": {\n    \"extracted_text\": [\n      \"Thank you so much for having me again! @ecojardin_official if you're planning on making an appointment for anything in Korea, you must do an 18 step scalp treatment! Thank me later #18stepscalptreatment #ecojardin #scalptreatment #korea #koreanscalptreatment\"\n    ],\n    \"objects\": [\"scalp massage\", \"treatment gloves\", \"mirror selfie\", \"phone\", \"practitioner in mask\"],\n    \"themes\": [\"Korean beauty treatments\", \"scalp care\", \"beauty recommendations\"],\n    \"emotions\": [\"gratitude\", \"recommendation\", \"satisfaction\"],\n    \"vibes\": [\"professional\", \"therapeutic\", \"wellness-focused\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"18-step Korean scalp treatment recommendation\",\n    \"visual_hierarchy\": [\n      \"Scalp massage being performed\",\n      \"Caption text with treatment details\",\n      \"Eco Jardin clinic tag\",\n      \"Treatment hashtags\",\n      \"Professional setting\"\n    ]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 466
+  }
+}

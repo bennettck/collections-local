@@ -1,0 +1,82 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_1/IMG_7918 Large.jpeg",
+  "image_name": "IMG_7918 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Travel",
+    "subcategories": [
+      "Restaurant Guide",
+      "Japanese Cuisine"
+    ],
+    "headline": "Japanese restaurant and waterfall locations in Oita Prefecture with specific addresses and travel recommendations",
+    "summary": "Features multiple locations in Oita Prefecture, Japan including Harajiri Falls, Otaki Waterfall, and a thick-sliced beef tongue & lean yakiniku wine restaurant called Wiz. Includes specific addresses and mentions benefits for showing the video at participating locations.",
+    "media_metadata": {
+      "original_poster": "@str",
+      "tagged_accounts": [
+        "hostel+cafe たね"
+      ],
+      "location_tags": [
+        "Yamato",
+        "Harajiri Falls - 410 Harajiri, Ogata-cho, Bungo-Ono City, Oita Prefecture 879-6631, Japan",
+        "Somen Nagashi Ryubu Road Station",
+        "Otaki Waterfall - 2394 Yada, Ono-cho, Bungo-Ono City, Oita Prefecture 879-6423, Japan"
+      ],
+      "audio_source": "wind naruto speed up - @str",
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "厚切り牛タンと赤身焼肉のワインレストランWiz",
+        "JPN🇯🇵ガラス玉【旅行.絶景.おすすめ",
+        "Harajiri Falls",
+        "410 Harajiri, Ogata-cho, Bungo-Ono City, Oita Prefecture 879-6631, Japan",
+        "Somen Nagashi Ryubu Road Station",
+        "917-1 Harajiri, Ogata-cho, Bungo-ono City, Oita Prefecture 879-6631, Japan",
+        "If you tell them you watched the video, they will receive benefits. [Period deadline undecided]",
+        "Otaki Waterfall (Otaki Waterfall)",
+        "2394 Yada, Ono-cho, Bungo-Ono City, Oita Prefecture 879-6423, Japan",
+        "Thick-sliced beef tongue & lean yakiniku wine restaurant Wiz",
+        "1-6-28 Chuo, Hita City, Oita Prefecture 877-0015",
+        "The shop account",
+        "See 1 reviews"
+      ],
+      "objects": [
+        "ladle with sauce",
+        "cooking pot",
+        "food preparation",
+        "restaurant interior"
+      ],
+      "themes": [
+        "Japanese travel destinations",
+        "local cuisine",
+        "waterfall sightseeing",
+        "restaurant recommendations"
+      ],
+      "emotions": [
+        "informative",
+        "promotional"
+      ],
+      "vibes": [
+        "travel guide",
+        "food tourism",
+        "local discovery"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Complete travel guide with specific restaurant and waterfall locations in Oita Prefecture including exact addresses",
+      "visual_hierarchy": [
+        "Japanese restaurant text overlay",
+        "Location addresses and names",
+        "Cooking scene with ladle",
+        "Benefits mention for video viewers",
+        "Multiple prefecture locations"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Restaurant Guide\", \"Japanese Cuisine\"],\n  \"headline\": \"Japanese restaurant and waterfall locations in Oita Prefecture with specific addresses and travel recommendations\",\n  \"summary\": \"Features multiple locations in Oita Prefecture, Japan including Harajiri Falls, Otaki Waterfall, and a thick-sliced beef tongue & lean yakiniku wine restaurant called Wiz. Includes specific addresses and mentions benefits for showing the video at participating locations.\",\n  \"media_metadata\": {\n    \"original_poster\": \"@str\",\n    \"tagged_accounts\": [\"hostel+cafe たね\"],\n    \"location_tags\": [\"Yamato\", \"Harajiri Falls - 410 Harajiri, Ogata-cho, Bungo-Ono City, Oita Prefecture 879-6631, Japan\", \"Somen Nagashi Ryubu Road Station\", \"Otaki Waterfall - 2394 Yada, Ono-cho, Bungo-Ono City, Oita Prefecture 879-6423, Japan\"],\n    \"audio_source\": \"wind naruto speed up - @str\",\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"厚切り牛タンと赤身焼肉のワインレストランWiz\", \"JPN🇯🇵ガラス玉【旅行.絶景.おすすめ\", \"Harajiri Falls\", \"410 Harajiri, Ogata-cho, Bungo-Ono City, Oita Prefecture 879-6631, Japan\", \"Somen Nagashi Ryubu Road Station\", \"917-1 Harajiri, Ogata-cho, Bungo-ono City, Oita Prefecture 879-6631, Japan\", \"If you tell them you watched the video, they will receive benefits. [Period deadline undecided]\", \"Otaki Waterfall (Otaki Waterfall)\", \"2394 Yada, Ono-cho, Bungo-Ono City, Oita Prefecture 879-6423, Japan\", \"Thick-sliced beef tongue & lean yakiniku wine restaurant Wiz\", \"1-6-28 Chuo, Hita City, Oita Prefecture 877-0015\", \"The shop account\", \"See 1 reviews\"],\n    \"objects\": [\"ladle with sauce\", \"cooking pot\", \"food preparation\", \"restaurant interior\"],\n    \"themes\": [\"Japanese travel destinations\", \"local cuisine\", \"waterfall sightseeing\", \"restaurant recommendations\"],\n    \"emotions\": [\"informative\", \"promotional\"],\n    \"vibes\": [\"travel guide\", \"food tourism\", \"local discovery\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Complete travel guide with specific restaurant and waterfall locations in Oita Prefecture including exact addresses\",\n    \"visual_hierarchy\": [\"Japanese restaurant text overlay\", \"Location addresses and names\", \"Cooking scene with ladle\", \"Benefits mention for video viewers\", \"Multiple prefecture locations\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 749
+  }
+}

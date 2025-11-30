@@ -1,0 +1,78 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_1/IMG_7924 Large.jpeg",
+  "image_name": "IMG_7924 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Travel",
+    "subcategories": [
+      "Japan",
+      "Anime Tourism"
+    ],
+    "headline": "3-day Fukuoka itinerary featuring Attack on Titan Museum and anime locations",
+    "summary": "Fukuoka travel guide highlighting Attack on Titan Museum visits, Hita Dam (recommended for AOT fans), and yatai food stalls. User stayed 5 days total but focused on middle 3 days for sightseeing activities.",
+    "media_metadata": {
+      "original_poster": "kathrinacorgan",
+      "tagged_accounts": [
+        "@Tomoko Aran"
+      ],
+      "location_tags": [
+        "Fukuoka, 61.8K people posted about this place"
+      ],
+      "audio_source": "Midnight Pretenders - @Tomoko Aran",
+      "hashtags": [
+        "#fukuoka",
+        "#traveltiktok",
+        "#japan"
+      ]
+    },
+    "image_details": {
+      "extracted_text": [
+        "Day 3",
+        "Hita Dam (must-see for AOT fans)",
+        "Attack on Titan Museum",
+        "Cap off the night at yatai stalls (for the last time!)",
+        "Fukuoka in 3 Days",
+        "We actually stayed here for 5 days, but I didn't include day 1 and day 5 since we mostly just ate and drank lol, and didn't take much photos on our first and last day"
+      ],
+      "objects": [
+        "Attack on Titan anime poster",
+        "Tourist posing with umbrella",
+        "Bronze statue group",
+        "Colossal Titan figure",
+        "Museum displays"
+      ],
+      "themes": [
+        "Anime tourism",
+        "Japan travel",
+        "Attack on Titan fandom",
+        "Cultural attractions"
+      ],
+      "emotions": [
+        "Excitement",
+        "Nostalgia",
+        "Adventure"
+      ],
+      "vibes": [
+        "Otaku culture",
+        "Tourist exploration",
+        "Pop culture pilgrimage"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Attack on Titan Museum and anime-themed tourist destinations in Fukuoka",
+      "visual_hierarchy": [
+        "Day 3 text overlay",
+        "Attack on Titan Museum reference",
+        "Tourist with umbrella photo",
+        "Bronze statue group",
+        "Colossal Titan figure"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Japan\", \"Anime Tourism\"],\n  \"headline\": \"3-day Fukuoka itinerary featuring Attack on Titan Museum and anime locations\",\n  \"summary\": \"Fukuoka travel guide highlighting Attack on Titan Museum visits, Hita Dam (recommended for AOT fans), and yatai food stalls. User stayed 5 days total but focused on middle 3 days for sightseeing activities.\",\n  \"media_metadata\": {\n    \"original_poster\": \"kathrinacorgan\",\n    \"tagged_accounts\": [\"@Tomoko Aran\"],\n    \"location_tags\": [\"Fukuoka, 61.8K people posted about this place\"],\n    \"audio_source\": \"Midnight Pretenders - @Tomoko Aran\",\n    \"hashtags\": [\"#fukuoka\", \"#traveltiktok\", \"#japan\"]\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"Day 3\", \"Hita Dam (must-see for AOT fans)\", \"Attack on Titan Museum\", \"Cap off the night at yatai stalls (for the last time!)\", \"Fukuoka in 3 Days\", \"We actually stayed here for 5 days, but I didn't include day 1 and day 5 since we mostly just ate and drank lol, and didn't take much photos on our first and last day\"],\n    \"objects\": [\"Attack on Titan anime poster\", \"Tourist posing with umbrella\", \"Bronze statue group\", \"Colossal Titan figure\", \"Museum displays\"],\n    \"themes\": [\"Anime tourism\", \"Japan travel\", \"Attack on Titan fandom\", \"Cultural attractions\"],\n    \"emotions\": [\"Excitement\", \"Nostalgia\", \"Adventure\"],\n    \"vibes\": [\"Otaku culture\", \"Tourist exploration\", \"Pop culture pilgrimage\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Attack on Titan Museum and anime-themed tourist destinations in Fukuoka\",\n    \"visual_hierarchy\": [\"Day 3 text overlay\", \"Attack on Titan Museum reference\", \"Tourist with umbrella photo\", \"Bronze statue group\", \"Colossal Titan figure\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 539
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_3/IMG_9561 Large.jpeg",
+  "image_name": "IMG_9561 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "RealEstate",
+    "subcategories": [
+      "ModernArchitecture",
+      "HomeDesign"
+    ],
+    "headline": "Modern Denver house with distinctive architectural features available for purchase",
+    "summary": "A contemporary Denver home at address 6500 features striking modern architecture with clean lines, large windows, and thoughtful landscaping. The property showcases mid-century modern design elements with a prominent entrance and integrated outdoor spaces.",
+    "media_metadata": {
+      "original_poster": "jvandy",
+      "tagged_accounts": [
+        "@Alexandre D..."
+      ],
+      "location_tags": [
+        "Denver"
+      ],
+      "audio_source": "Obituary - @Alexandre D...",
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "Your chance to own one of the coolest houses in Denver just became a re... more",
+        "6500",
+        "Obituary - @Alexandre D...",
+        "jvandy"
+      ],
+      "objects": [
+        "modern house",
+        "wooden door",
+        "large window",
+        "succulent plants",
+        "landscaping",
+        "concrete walkway",
+        "person in white shirt",
+        "red cap"
+      ],
+      "themes": [
+        "modern architecture",
+        "real estate opportunity",
+        "contemporary design",
+        "Denver housing"
+      ],
+      "emotions": [
+        "excitement",
+        "opportunity",
+        "aspiration"
+      ],
+      "vibes": [
+        "sophisticated",
+        "contemporary",
+        "desirable",
+        "exclusive"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Real estate opportunity for distinctive modern Denver home",
+      "visual_hierarchy": [
+        "Modern house facade",
+        "Person approaching entrance",
+        "Address number 6500",
+        "Landscaped front yard",
+        "Large architectural window"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"RealEstate\",\n  \"subcategories\": [\"ModernArchitecture\", \"HomeDesign\"],\n  \"headline\": \"Modern Denver house with distinctive architectural features available for purchase\",\n  \"summary\": \"A contemporary Denver home at address 6500 features striking modern architecture with clean lines, large windows, and thoughtful landscaping. The property showcases mid-century modern design elements with a prominent entrance and integrated outdoor spaces.\",\n  \"media_metadata\": {\n    \"original_poster\": \"jvandy\",\n    \"tagged_accounts\": [\"@Alexandre D...\"],\n    \"location_tags\": [\"Denver\"],\n    \"audio_source\": \"Obituary - @Alexandre D...\",\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"Your chance to own one of the coolest houses in Denver just became a re... more\", \"6500\", \"Obituary - @Alexandre D...\", \"jvandy\"],\n    \"objects\": [\"modern house\", \"wooden door\", \"large window\", \"succulent plants\", \"landscaping\", \"concrete walkway\", \"person in white shirt\", \"red cap\"],\n    \"themes\": [\"modern architecture\", \"real estate opportunity\", \"contemporary design\", \"Denver housing\"],\n    \"emotions\": [\"excitement\", \"opportunity\", \"aspiration\"],\n    \"vibes\": [\"sophisticated\", \"contemporary\", \"desirable\", \"exclusive\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Real estate opportunity for distinctive modern Denver home\",\n    \"visual_hierarchy\": [\"Modern house facade\", \"Person approaching entrance\", \"Address number 6500\", \"Landscaped front yard\", \"Large architectural window\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 401
+  }
+}

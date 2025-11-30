@@ -1,0 +1,63 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_3/IMG_9511 Large.jpeg",
+  "image_name": "IMG_9511 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Technology",
+    "subcategories": [
+      "Programming",
+      "AI Tools"
+    ],
+    "headline": "Claude AI command line installation tutorial with knowledge graph memory features",
+    "summary": "Claude MCP (Model Context Protocol) installation command for adding knowledge graph functionality with memory path options. Tutorial warns against common Claude Code usage mistakes that most people don't know about.",
+    "media_metadata": {
+      "original_poster": "Silviu Technology",
+      "tagged_accounts": [],
+      "location_tags": [],
+      "audio_source": null,
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "claude mcp add knowledge-graph npx -y knowledge-graph-mcp --memory-path aim",
+        "Firstly, use this command to install the",
+        "STOP using Claude Code wrong! Most people don't know about this pers... more"
+      ],
+      "objects": [
+        "person wearing headphones",
+        "outdoor residential setting",
+        "trees",
+        "parked car"
+      ],
+      "themes": [
+        "AI programming",
+        "command line tutorials",
+        "developer education"
+      ],
+      "emotions": [
+        "instructional",
+        "authoritative"
+      ],
+      "vibes": [
+        "educational",
+        "tech-focused",
+        "professional"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Claude MCP installation command with knowledge graph functionality",
+      "visual_hierarchy": [
+        "Installation command text overlay",
+        "Person speaking to camera",
+        "Warning about Claude Code usage",
+        "Outdoor background setting"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Technology\",\n  \"subcategories\": [\"Programming\", \"AI Tools\"],\n  \"headline\": \"Claude AI command line installation tutorial with knowledge graph memory features\",\n  \"summary\": \"Claude MCP (Model Context Protocol) installation command for adding knowledge graph functionality with memory path options. Tutorial warns against common Claude Code usage mistakes that most people don't know about.\",\n  \"media_metadata\": {\n    \"original_poster\": \"Silviu Technology\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [],\n    \"audio_source\": null,\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\n      \"claude mcp add knowledge-graph npx -y knowledge-graph-mcp --memory-path aim\",\n      \"Firstly, use this command to install the\",\n      \"STOP using Claude Code wrong! Most people don't know about this pers... more\"\n    ],\n    \"objects\": [\"person wearing headphones\", \"outdoor residential setting\", \"trees\", \"parked car\"],\n    \"themes\": [\"AI programming\", \"command line tutorials\", \"developer education\"],\n    \"emotions\": [\"instructional\", \"authoritative\"],\n    \"vibes\": [\"educational\", \"tech-focused\", \"professional\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Claude MCP installation command with knowledge graph functionality\",\n    \"visual_hierarchy\": [\n      \"Installation command text overlay\",\n      \"Person speaking to camera\",\n      \"Warning about Claude Code usage\",\n      \"Outdoor background setting\"\n    ]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 380
+  }
+}

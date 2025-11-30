@@ -1,0 +1,69 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_3/IMG_9445 Large.jpeg",
+  "image_name": "IMG_9445 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Mindset",
+    "subcategories": [
+      "Personal Development",
+      "Manifestation"
+    ],
+    "headline": "Step 4 of building new identity: Mind Theater visualization technique for daily practice",
+    "summary": "Step 4: Mind Theater - Visualize the new you every day. Part of a series on building a new identity, emphasizing daily visualization as a key component of personal transformation.",
+    "media_metadata": {
+      "original_poster": "AhmadTalks",
+      "tagged_accounts": [],
+      "location_tags": [],
+      "audio_source": null,
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "Step 4: Mind Theater. Visualize the new you every day.",
+        "and that's",
+        "AhmadTalks",
+        "I continuously get asked how to begin building a new identity. Here it is....",
+        "Search • Positive Affirmations"
+      ],
+      "objects": [
+        "man in car",
+        "steering wheel",
+        "car interior",
+        "phone interface",
+        "search bar"
+      ],
+      "themes": [
+        "identity transformation",
+        "visualization techniques",
+        "personal growth",
+        "manifestation"
+      ],
+      "emotions": [
+        "motivational",
+        "instructional",
+        "confident"
+      ],
+      "vibes": [
+        "educational",
+        "self-help",
+        "empowering"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Mind Theater visualization technique as Step 4 in identity building process",
+      "visual_hierarchy": [
+        "Step 4: Mind Theater. Visualize the new you every day.",
+        "Man speaking in car",
+        "AhmadTalks username",
+        "Search bar with 'manifesting'",
+        "Caption about building new identity"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Mindset\",\n  \"subcategories\": [\"Personal Development\", \"Manifestation\"],\n  \"headline\": \"Step 4 of building new identity: Mind Theater visualization technique for daily practice\",\n  \"summary\": \"Step 4: Mind Theater - Visualize the new you every day. Part of a series on building a new identity, emphasizing daily visualization as a key component of personal transformation.\",\n  \"media_metadata\": {\n    \"original_poster\": \"AhmadTalks\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [],\n    \"audio_source\": null,\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\n      \"Step 4: Mind Theater. Visualize the new you every day.\",\n      \"and that's\",\n      \"AhmadTalks\",\n      \"I continuously get asked how to begin building a new identity. Here it is....\",\n      \"Search • Positive Affirmations\"\n    ],\n    \"objects\": [\"man in car\", \"steering wheel\", \"car interior\", \"phone interface\", \"search bar\"],\n    \"themes\": [\"identity transformation\", \"visualization techniques\", \"personal growth\", \"manifestation\"],\n    \"emotions\": [\"motivational\", \"instructional\", \"confident\"],\n    \"vibes\": [\"educational\", \"self-help\", \"empowering\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Mind Theater visualization technique as Step 4 in identity building process\",\n    \"visual_hierarchy\": [\n      \"Step 4: Mind Theater. Visualize the new you every day.\",\n      \"Man speaking in car\",\n      \"AhmadTalks username\",\n      \"Search bar with 'manifesting'\",\n      \"Caption about building new identity\"\n    ]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 439
+  }
+}

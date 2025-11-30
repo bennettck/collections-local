@@ -1,0 +1,68 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_3/IMG_9500 Large.jpeg",
+  "image_name": "IMG_9500 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Music",
+    "subcategories": [
+      "Deep House",
+      "Music Production"
+    ],
+    "headline": "Ube One experimenting with deep house stems and vocal STEM of 'We Fall Down'",
+    "summary": "Ube One is experimenting with deep house stems, specifically working with the vocal STEM of 'We Fall Down'. The content focuses on house music genre production techniques and musical experimentation.",
+    "media_metadata": {
+      "original_poster": "Ube One",
+      "tagged_accounts": [],
+      "location_tags": [],
+      "audio_source": null,
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "Ube One",
+        "Experimenting with deep house stems.",
+        "Vocal STEM of 'We Fall Down' ove... more",
+        "Search · House Music Genre"
+      ],
+      "objects": [
+        "person in white hoodie",
+        "sunglasses",
+        "beanie",
+        "music equipment",
+        "mixing console"
+      ],
+      "themes": [
+        "music production",
+        "deep house",
+        "vocal stems",
+        "experimentation"
+      ],
+      "emotions": [
+        "creative",
+        "focused",
+        "artistic"
+      ],
+      "vibes": [
+        "studio session",
+        "musical creativity",
+        "professional production"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Deep house music production and vocal stem experimentation",
+      "visual_hierarchy": [
+        "Ube One (username)",
+        "Experimenting with deep house stems",
+        "Vocal STEM of 'We Fall Down'",
+        "House Music Genre search",
+        "Person in white hoodie"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Music\",\n  \"subcategories\": [\"Deep House\", \"Music Production\"],\n  \"headline\": \"Ube One experimenting with deep house stems and vocal STEM of 'We Fall Down'\",\n  \"summary\": \"Ube One is experimenting with deep house stems, specifically working with the vocal STEM of 'We Fall Down'. The content focuses on house music genre production techniques and musical experimentation.\",\n  \"media_metadata\": {\n    \"original_poster\": \"Ube One\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [],\n    \"audio_source\": null,\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"Ube One\", \"Experimenting with deep house stems.\", \"Vocal STEM of 'We Fall Down' ove... more\", \"Search · House Music Genre\"],\n    \"objects\": [\"person in white hoodie\", \"sunglasses\", \"beanie\", \"music equipment\", \"mixing console\"],\n    \"themes\": [\"music production\", \"deep house\", \"vocal stems\", \"experimentation\"],\n    \"emotions\": [\"creative\", \"focused\", \"artistic\"],\n    \"vibes\": [\"studio session\", \"musical creativity\", \"professional production\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Deep house music production and vocal stem experimentation\",\n    \"visual_hierarchy\": [\"Ube One (username)\", \"Experimenting with deep house stems\", \"Vocal STEM of 'We Fall Down'\", \"House Music Genre search\", \"Person in white hoodie\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 384
+  }
+}

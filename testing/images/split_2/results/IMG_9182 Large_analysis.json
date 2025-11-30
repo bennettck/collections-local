@@ -1,0 +1,82 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_2/IMG_9182 Large.jpeg",
+  "image_name": "IMG_9182 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Food",
+    "subcategories": [
+      "Korean Dessert",
+      "Travel Food"
+    ],
+    "headline": "Chewy black sesame rice cakes from Myeong Rye Heon in Seoul's Myeongdong district",
+    "summary": "Chewy black sesame rice cakes from Myeong Rye Heon located at 62-19 Chungmuro 2(i)-ga Jung-gu Seoul in Myeongdong. Korean dessert featuring traditional mochi-style rice cakes.",
+    "media_metadata": {
+      "original_poster": "hereisjess",
+      "tagged_accounts": [],
+      "location_tags": [
+        "Myeong Rye Heon in Myeongdong!",
+        "62-19 Chungmuro 2(i)-ga Jung-gu Seoul"
+      ],
+      "audio_source": "DAISIES - @Justin Bieber",
+      "hashtags": [
+        "#myeongdong",
+        "#seoultravel",
+        "#koreandessert",
+        "#koreanricecake",
+        "#mochi",
+        "#tteok",
+        "#ricecake",
+        "#seoul",
+        "#fyp"
+      ]
+    },
+    "image_details": {
+      "extracted_text": [
+        "chewy black sesame rice cakes btw how my tshirt matched this video haha",
+        "Myeong Rye Heon in Myeongdong!",
+        "62-19 Chungmuro 2(i)-ga Jung-gu Seoul",
+        "New DAISIES - @Justin Bieber"
+      ],
+      "objects": [
+        "black sesame rice cakes",
+        "chopsticks",
+        "white plate",
+        "person eating",
+        "kitchen/restaurant setting"
+      ],
+      "themes": [
+        "Korean food",
+        "Seoul travel",
+        "traditional desserts",
+        "food exploration"
+      ],
+      "emotions": [
+        "enjoyment",
+        "discovery",
+        "cultural appreciation"
+      ],
+      "vibes": [
+        "authentic",
+        "casual",
+        "foodie adventure",
+        "cultural immersion"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Black sesame rice cakes and restaurant location in Seoul",
+      "visual_hierarchy": [
+        "Black rice cakes being eaten with chopsticks",
+        "Restaurant name and location text",
+        "Person's face and reaction",
+        "Plate and food presentation",
+        "Background kitchen setting"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Food\",\n  \"subcategories\": [\"Korean Dessert\", \"Travel Food\"],\n  \"headline\": \"Chewy black sesame rice cakes from Myeong Rye Heon in Seoul's Myeongdong district\",\n  \"summary\": \"Chewy black sesame rice cakes from Myeong Rye Heon located at 62-19 Chungmuro 2(i)-ga Jung-gu Seoul in Myeongdong. Korean dessert featuring traditional mochi-style rice cakes.\",\n  \"media_metadata\": {\n    \"original_poster\": \"hereisjess\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [\"Myeong Rye Heon in Myeongdong!\", \"62-19 Chungmuro 2(i)-ga Jung-gu Seoul\"],\n    \"audio_source\": \"DAISIES - @Justin Bieber\",\n    \"hashtags\": [\"#myeongdong\", \"#seoultravel\", \"#koreandessert\", \"#koreanricecake\", \"#mochi\", \"#tteok\", \"#ricecake\", \"#seoul\", \"#fyp\"]\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"chewy black sesame rice cakes btw how my tshirt matched this video haha\", \"Myeong Rye Heon in Myeongdong!\", \"62-19 Chungmuro 2(i)-ga Jung-gu Seoul\", \"New DAISIES - @Justin Bieber\"],\n    \"objects\": [\"black sesame rice cakes\", \"chopsticks\", \"white plate\", \"person eating\", \"kitchen/restaurant setting\"],\n    \"themes\": [\"Korean food\", \"Seoul travel\", \"traditional desserts\", \"food exploration\"],\n    \"emotions\": [\"enjoyment\", \"discovery\", \"cultural appreciation\"],\n    \"vibes\": [\"authentic\", \"casual\", \"foodie adventure\", \"cultural immersion\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Black sesame rice cakes and restaurant location in Seoul\",\n    \"visual_hierarchy\": [\"Black rice cakes being eaten with chopsticks\", \"Restaurant name and location text\", \"Person's face and reaction\", \"Plate and food presentation\", \"Background kitchen setting\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 561
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_1/IMG_7926 Large.jpeg",
+  "image_name": "IMG_7926 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Travel",
+    "subcategories": [
+      "Japan",
+      "Cultural"
+    ],
+    "headline": "Fukuoka's ninja performances at Takemon Bridge causing river rafting companies to shut down due to safety concerns",
+    "summary": "Yanagawa City in Fukuoka Prefecture is famous for river rafting, but ninja performances at Takemon Bridge have become problematic. Local governments asked river rafting companies to stop operations due to falling ninjas potentially damaging gas pipes, causing the number of companies offering this service to decrease.",
+    "media_metadata": {
+      "original_poster": "MAP Japan",
+      "tagged_accounts": [],
+      "location_tags": [
+        "Fukuoka",
+        "61.8K people posted about this place"
+      ],
+      "audio_source": null,
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "Any idea what he's mad about?",
+        "彼が怒るのは当然だよね、、それだけ真剣勝負なのだ。",
+        "I have a theory, but please comment with your thoughts ^_^.",
+        "Yanagawa City in Fukuoka Prefecture is famous for its river rafting, but the biggest spectacle is this ninja performance that takes place at the Takemon Bridge at the end.",
+        "As a matter of fact, local governments have asked river rafting companies to stop due to the possibility of falling ninjas and damage to gas pipes, and the number of companies offering this service has been decreasing."
+      ],
+      "objects": [
+        "traditional Japanese buildings",
+        "power lines",
+        "person in conical hat",
+        "river",
+        "bridge"
+      ],
+      "themes": [
+        "Japanese culture",
+        "tourism",
+        "safety concerns",
+        "traditional performance"
+      ],
+      "emotions": [
+        "curiosity",
+        "concern"
+      ],
+      "vibes": [
+        "informative",
+        "cultural",
+        "problematic"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Ninja performances causing river rafting shutdowns",
+      "visual_hierarchy": [
+        "Main explanatory text about ninja performances",
+        "Question about anger",
+        "Japanese text",
+        "Traditional buildings",
+        "Location tag"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Japan\", \"Cultural\"],\n  \"headline\": \"Fukuoka's ninja performances at Takemon Bridge causing river rafting companies to shut down due to safety concerns\",\n  \"summary\": \"Yanagawa City in Fukuoka Prefecture is famous for river rafting, but ninja performances at Takemon Bridge have become problematic. Local governments asked river rafting companies to stop operations due to falling ninjas potentially damaging gas pipes, causing the number of companies offering this service to decrease.\",\n  \"media_metadata\": {\n    \"original_poster\": \"MAP Japan\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [\"Fukuoka\", \"61.8K people posted about this place\"],\n    \"audio_source\": null,\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\n      \"Any idea what he's mad about?\",\n      \"彼が怒るのは当然だよね、、それだけ真剣勝負なのだ。\",\n      \"I have a theory, but please comment with your thoughts ^_^.\",\n      \"Yanagawa City in Fukuoka Prefecture is famous for its river rafting, but the biggest spectacle is this ninja performance that takes place at the Takemon Bridge at the end.\",\n      \"As a matter of fact, local governments have asked river rafting companies to stop due to the possibility of falling ninjas and damage to gas pipes, and the number of companies offering this service has been decreasing.\"\n    ],\n    \"objects\": [\"traditional Japanese buildings\", \"power lines\", \"person in conical hat\", \"river\", \"bridge\"],\n    \"themes\": [\"Japanese culture\", \"tourism\", \"safety concerns\", \"traditional performance\"],\n    \"emotions\": [\"curiosity\", \"concern\"],\n    \"vibes\": [\"informative\", \"cultural\", \"problematic\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Ninja performances causing river rafting shutdowns\",\n    \"visual_hierarchy\": [\"Main explanatory text about ninja performances\", \"Question about anger\", \"Japanese text\", \"Traditional buildings\", \"Location tag\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 518
+  }
+}

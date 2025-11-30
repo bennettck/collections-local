@@ -1,0 +1,74 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_3/IMG_9501 Large.jpeg",
+  "image_name": "IMG_9501 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Music",
+    "subcategories": [
+      "House Music",
+      "Music Production"
+    ],
+    "headline": "House music mashup featuring Joyce Hurley, Maurice Joshua, Oscar P, and Marlon George with vocal stems from 'We Fall Down'",
+    "summary": "Ube One experiments with deep house stems, creating a vocal STEM mashup of 'We Fall Down' featuring artists Joyce Hurley, Maurice Joshua, Oscar P, and Marlon George. The production showcases house music genre experimentation.",
+    "media_metadata": {
+      "original_poster": "Ube One",
+      "tagged_accounts": [],
+      "location_tags": [],
+      "audio_source": null,
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "JOYCE HURLEY",
+        "MAURICE JOSHUA",
+        "OSCAR P",
+        "MARLON GEORGE",
+        "MASHER UP",
+        "EDIT & MIX",
+        "HDE ONE",
+        "Ube One",
+        "Experimenting with deep house stems",
+        "Vocal STEM of 'We Fall Down' ove... more",
+        "Search • House Music Genre"
+      ],
+      "objects": [
+        "DJ mixing console",
+        "Audio equipment",
+        "Hands on controls",
+        "Mixing board sliders"
+      ],
+      "themes": [
+        "Music production",
+        "House music",
+        "DJ mixing",
+        "Audio engineering"
+      ],
+      "emotions": [
+        "Creative",
+        "Professional",
+        "Focused"
+      ],
+      "vibes": [
+        "Studio atmosphere",
+        "Musical experimentation",
+        "Professional production"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "House music mashup production featuring multiple established artists",
+      "visual_hierarchy": [
+        "Artist names (Joyce Hurley, Maurice Joshua, Oscar P, Marlon George)",
+        "DJ mixing console",
+        "Producer name (Ube One)",
+        "Project description text",
+        "Audio equipment controls"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Music\",\n  \"subcategories\": [\"House Music\", \"Music Production\"],\n  \"headline\": \"House music mashup featuring Joyce Hurley, Maurice Joshua, Oscar P, and Marlon George with vocal stems from 'We Fall Down'\",\n  \"summary\": \"Ube One experiments with deep house stems, creating a vocal STEM mashup of 'We Fall Down' featuring artists Joyce Hurley, Maurice Joshua, Oscar P, and Marlon George. The production showcases house music genre experimentation.\",\n  \"media_metadata\": {\n    \"original_poster\": \"Ube One\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [],\n    \"audio_source\": null,\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"JOYCE HURLEY\", \"MAURICE JOSHUA\", \"OSCAR P\", \"MARLON GEORGE\", \"MASHER UP\", \"EDIT & MIX\", \"HDE ONE\", \"Ube One\", \"Experimenting with deep house stems\", \"Vocal STEM of 'We Fall Down' ove... more\", \"Search • House Music Genre\"],\n    \"objects\": [\"DJ mixing console\", \"Audio equipment\", \"Hands on controls\", \"Mixing board sliders\"],\n    \"themes\": [\"Music production\", \"House music\", \"DJ mixing\", \"Audio engineering\"],\n    \"emotions\": [\"Creative\", \"Professional\", \"Focused\"],\n    \"vibes\": [\"Studio atmosphere\", \"Musical experimentation\", \"Professional production\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"House music mashup production featuring multiple established artists\",\n    \"visual_hierarchy\": [\"Artist names (Joyce Hurley, Maurice Joshua, Oscar P, Marlon George)\", \"DJ mixing console\", \"Producer name (Ube One)\", \"Project description text\", \"Audio equipment controls\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 452
+  }
+}

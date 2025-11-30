@@ -1,0 +1,84 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_3/IMG_9533 Large.jpeg",
+  "image_name": "IMG_9533 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Travel",
+    "subcategories": [
+      "Itinerary",
+      "South Korea"
+    ],
+    "headline": "Day 10 Gyeongju travel itinerary with bus route from Busan and major historical sites",
+    "summary": "Day 10 Gyeongju itinerary includes taking bus from Busan to Gyeongju, visiting Daereungwon Tomb Complex, Cheonmachong Tomb, Cheomseongdae Observatory, Woljeongyo Bridge, Anapji Pond at Donggung Palace, Bulguksa Temple, then returning to Busan for the night.",
+    "media_metadata": {
+      "original_poster": "trololllol",
+      "tagged_accounts": [
+        "@Txmy"
+      ],
+      "location_tags": [],
+      "audio_source": "Ethereal - @Txmy",
+      "hashtags": [
+        "#southkorea",
+        "#travel",
+        "#seoul",
+        "#bus"
+      ]
+    },
+    "image_details": {
+      "extracted_text": [
+        "Day 10 : Gyeongju",
+        "take the bus from Busan to Gyongju",
+        "Daereungwon Tomb Complex",
+        "Cheonmachong Tomb",
+        "Cheomseongdae Observatory",
+        "Woljeongyo Bridge",
+        "Anapji Pond (Donggung Palace & Wolji Pond)",
+        "Bulguksa Temple",
+        "Go back to Busan for the night",
+        "trololllol | Travel",
+        "Apple Music Ethereal - @Txmy",
+        "itaewon night seoul"
+      ],
+      "objects": [
+        "ancient Korean architecture",
+        "traditional temple building",
+        "tomb mounds",
+        "stone observatory",
+        "palace structures",
+        "pond reflection"
+      ],
+      "themes": [
+        "Korean history",
+        "cultural tourism",
+        "ancient architecture",
+        "UNESCO sites"
+      ],
+      "emotions": [
+        "educational",
+        "peaceful",
+        "cultural appreciation"
+      ],
+      "vibes": [
+        "historical exploration",
+        "structured planning",
+        "cultural immersion"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Complete day-by-day travel itinerary for Gyeongju historical sites",
+      "visual_hierarchy": [
+        "Day 10 Gyeongju checklist overlay",
+        "Traditional Korean temple architecture",
+        "Ancient tomb mounds landscape",
+        "Stone observatory structure",
+        "Palace pond reflection"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Itinerary\", \"South Korea\"],\n  \"headline\": \"Day 10 Gyeongju travel itinerary with bus route from Busan and major historical sites\",\n  \"summary\": \"Day 10 Gyeongju itinerary includes taking bus from Busan to Gyeongju, visiting Daereungwon Tomb Complex, Cheonmachong Tomb, Cheomseongdae Observatory, Woljeongyo Bridge, Anapji Pond at Donggung Palace, Bulguksa Temple, then returning to Busan for the night.\",\n  \"media_metadata\": {\n    \"original_poster\": \"trololllol\",\n    \"tagged_accounts\": [\"@Txmy\"],\n    \"location_tags\": [],\n    \"audio_source\": \"Ethereal - @Txmy\",\n    \"hashtags\": [\"#southkorea\", \"#travel\", \"#seoul\", \"#bus\"]\n  },\n  \"image_details\": {\n    \"extracted_text\": [\n      \"Day 10 : Gyeongju\",\n      \"take the bus from Busan to Gyongju\",\n      \"Daereungwon Tomb Complex\",\n      \"Cheonmachong Tomb\",\n      \"Cheomseongdae Observatory\",\n      \"Woljeongyo Bridge\",\n      \"Anapji Pond (Donggung Palace & Wolji Pond)\",\n      \"Bulguksa Temple\",\n      \"Go back to Busan for the night\",\n      \"trololllol | Travel\",\n      \"Apple Music Ethereal - @Txmy\",\n      \"itaewon night seoul\"\n    ],\n    \"objects\": [\"ancient Korean architecture\", \"traditional temple building\", \"tomb mounds\", \"stone observatory\", \"palace structures\", \"pond reflection\"],\n    \"themes\": [\"Korean history\", \"cultural tourism\", \"ancient architecture\", \"UNESCO sites\"],\n    \"emotions\": [\"educational\", \"peaceful\", \"cultural appreciation\"],\n    \"vibes\": [\"historical exploration\", \"structured planning\", \"cultural immersion\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Complete day-by-day travel itinerary for Gyeongju historical sites\",\n    \"visual_hierarchy\": [\n      \"Day 10 Gyeongju checklist overlay\",\n      \"Traditional Korean temple architecture\",\n      \"Ancient tomb mounds landscape\",\n      \"Stone observatory structure\",\n      \"Palace pond reflection\"\n    ]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 609
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_2/IMG_9211 Large.jpeg",
+  "image_name": "IMG_9211 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Beauty",
+    "subcategories": [
+      "Skincare",
+      "Medical Aesthetics"
+    ],
+    "headline": "Sara Yoon reviews Cheongdam Cheonga clinic facial treatment experience in Seoul",
+    "summary": "Sara Yoon visited Cheongdam Cheonga clinic in Seoul and had a positive consultation and treatment experience. The post recommends the clinic for Korea skincare treatments including thermage, ulthera, skinbooster, and rejuran procedures.",
+    "media_metadata": {
+      "original_poster": "Sara Yoon | Glow up Era",
+      "tagged_accounts": [],
+      "location_tags": [
+        "Seoul - 424.2K people posted about this place"
+      ],
+      "audio_source": null,
+      "hashtags": [
+        "korea",
+        "skintreatment",
+        "thermage",
+        "ulthera",
+        "skinbooster",
+        "rejuran",
+        "kbeauty",
+        "skinclinic",
+        "reccomendation"
+      ]
+    },
+    "image_details": {
+      "extracted_text": [
+        "cheonga clinic",
+        "Sara Yoon | Glow up Era",
+        "2024-10-7",
+        "I visited Cheongdam Cheonga clinic 청담 청아 and had a really great experience and consultation",
+        "Search - cheong dam clinic seoul",
+        "Seoul",
+        "424.2K people posted about this place"
+      ],
+      "objects": [
+        "facial treatment",
+        "hands performing massage",
+        "skincare procedure",
+        "clinic setting",
+        "towel headband"
+      ],
+      "themes": [
+        "Korean skincare",
+        "medical aesthetics",
+        "clinic review",
+        "beauty treatment"
+      ],
+      "emotions": [
+        "relaxation",
+        "satisfaction",
+        "recommendation"
+      ],
+      "vibes": [
+        "professional",
+        "luxurious",
+        "therapeutic",
+        "peaceful"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Cheongdam Cheonga clinic recommendation and treatment experience",
+      "visual_hierarchy": [
+        "facial treatment in progress",
+        "Sara Yoon username",
+        "clinic review text",
+        "Seoul location tag",
+        "hashtag recommendations"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Beauty\",\n  \"subcategories\": [\"Skincare\", \"Medical Aesthetics\"],\n  \"headline\": \"Sara Yoon reviews Cheongdam Cheonga clinic facial treatment experience in Seoul\",\n  \"summary\": \"Sara Yoon visited Cheongdam Cheonga clinic in Seoul and had a positive consultation and treatment experience. The post recommends the clinic for Korea skincare treatments including thermage, ulthera, skinbooster, and rejuran procedures.\",\n  \"media_metadata\": {\n    \"original_poster\": \"Sara Yoon | Glow up Era\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [\"Seoul - 424.2K people posted about this place\"],\n    \"audio_source\": null,\n    \"hashtags\": [\"korea\", \"skintreatment\", \"thermage\", \"ulthera\", \"skinbooster\", \"rejuran\", \"kbeauty\", \"skinclinic\", \"reccomendation\"]\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"cheonga clinic\", \"Sara Yoon | Glow up Era\", \"2024-10-7\", \"I visited Cheongdam Cheonga clinic 청담 청아 and had a really great experience and consultation\", \"Search - cheong dam clinic seoul\", \"Seoul\", \"424.2K people posted about this place\"],\n    \"objects\": [\"facial treatment\", \"hands performing massage\", \"skincare procedure\", \"clinic setting\", \"towel headband\"],\n    \"themes\": [\"Korean skincare\", \"medical aesthetics\", \"clinic review\", \"beauty treatment\"],\n    \"emotions\": [\"relaxation\", \"satisfaction\", \"recommendation\"],\n    \"vibes\": [\"professional\", \"luxurious\", \"therapeutic\", \"peaceful\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Cheongdam Cheonga clinic recommendation and treatment experience\",\n    \"visual_hierarchy\": [\"facial treatment in progress\", \"Sara Yoon username\", \"clinic review text\", \"Seoul location tag\", \"hashtag recommendations\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 490
+  }
+}

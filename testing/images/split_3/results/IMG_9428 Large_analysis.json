@@ -1,0 +1,69 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_3/IMG_9428 Large.jpeg",
+  "image_name": "IMG_9428 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Beauty",
+    "subcategories": [
+      "Medical Aesthetics",
+      "Skincare Treatment"
+    ],
+    "headline": "Dr. Jay Yang recommends 3 effective treatments for under-eye hollows and sunkenness",
+    "summary": "Dr. Jay Yang from Tone's Clinic addresses under-eye sunkenness and recommends three effective treatments for tired-looking under-eye hollows. The clinic specializes in rejuran treatment for cosmetic concerns.",
+    "media_metadata": {
+      "original_poster": "tones.clinic",
+      "tagged_accounts": [],
+      "location_tags": [],
+      "audio_source": null,
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "UNDER-EYE SUNKENNESS?",
+        "Tired of under-eye hollows? Dr. Jay Yang recommends these 3 effective tre... more",
+        "Search • rejuran treatment",
+        "Dr. Jay Yang M.D",
+        "TONE'S CLINIC"
+      ],
+      "objects": [
+        "stethoscope",
+        "medical scrubs",
+        "doctor",
+        "clinic setting"
+      ],
+      "themes": [
+        "medical aesthetics",
+        "cosmetic treatment",
+        "skincare",
+        "professional consultation"
+      ],
+      "emotions": [
+        "professional",
+        "trustworthy",
+        "medical authority"
+      ],
+      "vibes": [
+        "clinical",
+        "educational",
+        "informative",
+        "medical expertise"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Under-eye treatment recommendations from medical professional",
+      "visual_hierarchy": [
+        "UNDER-EYE SUNKENNESS? text overlay",
+        "Dr. Jay Yang in medical attire",
+        "Tone's Clinic branding",
+        "Treatment description text",
+        "Search bar for rejuran treatment"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Beauty\",\n  \"subcategories\": [\"Medical Aesthetics\", \"Skincare Treatment\"],\n  \"headline\": \"Dr. Jay Yang recommends 3 effective treatments for under-eye hollows and sunkenness\",\n  \"summary\": \"Dr. Jay Yang from Tone's Clinic addresses under-eye sunkenness and recommends three effective treatments for tired-looking under-eye hollows. The clinic specializes in rejuran treatment for cosmetic concerns.\",\n  \"media_metadata\": {\n    \"original_poster\": \"tones.clinic\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [],\n    \"audio_source\": null,\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"UNDER-EYE SUNKENNESS?\", \"Tired of under-eye hollows? Dr. Jay Yang recommends these 3 effective tre... more\", \"Search • rejuran treatment\", \"Dr. Jay Yang M.D\", \"TONE'S CLINIC\"],\n    \"objects\": [\"stethoscope\", \"medical scrubs\", \"doctor\", \"clinic setting\"],\n    \"themes\": [\"medical aesthetics\", \"cosmetic treatment\", \"skincare\", \"professional consultation\"],\n    \"emotions\": [\"professional\", \"trustworthy\", \"medical authority\"],\n    \"vibes\": [\"clinical\", \"educational\", \"informative\", \"medical expertise\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Under-eye treatment recommendations from medical professional\",\n    \"visual_hierarchy\": [\"UNDER-EYE SUNKENNESS? text overlay\", \"Dr. Jay Yang in medical attire\", \"Tone's Clinic branding\", \"Treatment description text\", \"Search bar for rejuran treatment\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 424
+  }
+}

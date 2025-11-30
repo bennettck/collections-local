@@ -1,0 +1,73 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_1/IMG_7950 Large.jpeg",
+  "image_name": "IMG_7950 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Travel",
+    "subcategories": [
+      "Japan",
+      "Shrines"
+    ],
+    "headline": "Kamishikimi Kumanoimasu Shrine in Fukuoka forest with hot dog station nearby",
+    "summary": "Kamishikimi Kumanoimasu Shrine located in a forest in Fukuoka, Japan. The shrine features a stone pathway through tall trees and has a hot dog station nearby. Part of a travel recommendation series for must-visit places in Kyushu, Fukuoka.",
+    "media_metadata": {
+      "original_poster": "jericaaaaaa",
+      "tagged_accounts": [],
+      "location_tags": [
+        "Fukuoka",
+        "61.9K people posted about this place"
+      ],
+      "audio_source": null,
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "kamishikimi kumanoimasu shrine",
+        "this shrine in the forest is really pretty, there's a hot dog station too so park",
+        "be sure to try it because it was the best hotdog bun ever",
+        "must go places in kyushu, fukuoka (part 2)",
+        "part 2 of places i really loved in kyushu",
+        "honestly, my top top top recommendation is lake shikada in oita,beppu - had the best memory because of the vast lake, beautiful... more"
+      ],
+      "objects": [
+        "stone pathway",
+        "tall trees",
+        "forest shrine",
+        "stone lanterns",
+        "wooden structures"
+      ],
+      "themes": [
+        "Japanese culture",
+        "travel recommendations",
+        "sacred places",
+        "nature"
+      ],
+      "emotions": [
+        "peaceful",
+        "reverent",
+        "adventurous"
+      ],
+      "vibes": [
+        "mystical",
+        "serene",
+        "cultural"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Kamishikimi Kumanoimasu Shrine location and hot dog station recommendation",
+      "visual_hierarchy": [
+        "Forest shrine pathway",
+        "Stone steps and lanterns",
+        "Tall surrounding trees",
+        "Location tag for Fukuoka",
+        "Travel recommendation text"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Japan\", \"Shrines\"],\n  \"headline\": \"Kamishikimi Kumanoimasu Shrine in Fukuoka forest with hot dog station nearby\",\n  \"summary\": \"Kamishikimi Kumanoimasu Shrine located in a forest in Fukuoka, Japan. The shrine features a stone pathway through tall trees and has a hot dog station nearby. Part of a travel recommendation series for must-visit places in Kyushu, Fukuoka.\",\n  \"media_metadata\": {\n    \"original_poster\": \"jericaaaaaa\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [\"Fukuoka\", \"61.9K people posted about this place\"],\n    \"audio_source\": null,\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\n      \"kamishikimi kumanoimasu shrine\",\n      \"this shrine in the forest is really pretty, there's a hot dog station too so park\",\n      \"be sure to try it because it was the best hotdog bun ever\",\n      \"must go places in kyushu, fukuoka (part 2)\",\n      \"part 2 of places i really loved in kyushu\",\n      \"honestly, my top top top recommendation is lake shikada in oita,beppu - had the best memory because of the vast lake, beautiful... more\"\n    ],\n    \"objects\": [\"stone pathway\", \"tall trees\", \"forest shrine\", \"stone lanterns\", \"wooden structures\"],\n    \"themes\": [\"Japanese culture\", \"travel recommendations\", \"sacred places\", \"nature\"],\n    \"emotions\": [\"peaceful\", \"reverent\", \"adventurous\"],\n    \"vibes\": [\"mystical\", \"serene\", \"cultural\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Kamishikimi Kumanoimasu Shrine location and hot dog station recommendation\",\n    \"visual_hierarchy\": [\"Forest shrine pathway\", \"Stone steps and lanterns\", \"Tall surrounding trees\", \"Location tag for Fukuoka\", \"Travel recommendation text\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 514
+  }
+}

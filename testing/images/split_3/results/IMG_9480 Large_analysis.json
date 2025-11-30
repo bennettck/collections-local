@@ -1,0 +1,74 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_3/IMG_9480 Large.jpeg",
+  "image_name": "IMG_9480 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Travel",
+    "subcategories": [
+      "Day Trips",
+      "Seoul Tourism"
+    ],
+    "headline": "Day trip to Suwon from Seoul featuring fortress walls, hanok alleys, and vibrant cafes",
+    "summary": "Take a quick train ride to Suwon to explore fortress walls, hanok alleys and vibrant cafes. Solo travelers can find 10 magical places and experiences in Seoul including hanok to waterfall cafes, day trips, and self-care stops.",
+    "media_metadata": {
+      "original_poster": "Lou Ann",
+      "tagged_accounts": [
+        "@CORTIS"
+      ],
+      "location_tags": [
+        "Seongsu-dong 1(il)-ga · Seongdong-gu",
+        "434 people added to Favourites"
+      ],
+      "audio_source": "GO! - @CORTIS",
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "Take a day trip to Suwon",
+        "Hop on a quick train ride to Suwon and explore fortress walls, hanok alleys and vibrant cafes",
+        "Solo in Seoul? Here are 10 places and experiences that prove exploring the city on your own can be just as magical",
+        "Things To Do In Seoul Korea"
+      ],
+      "objects": [
+        "traditional Korean fortress bridge",
+        "stone bridge with arches",
+        "water reflection",
+        "bare trees",
+        "person walking"
+      ],
+      "themes": [
+        "Korean heritage sites",
+        "solo travel",
+        "day trips from Seoul",
+        "traditional architecture"
+      ],
+      "emotions": [
+        "peaceful",
+        "exploratory",
+        "adventurous"
+      ],
+      "vibes": [
+        "serene",
+        "cultural",
+        "historic",
+        "inspiring"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Suwon day trip recommendation with specific activities",
+      "visual_hierarchy": [
+        "Take a day trip to Suwon headline",
+        "Traditional Korean fortress bridge",
+        "Solo travel recommendations text",
+        "Search bar for Seoul activities",
+        "Location tag for Seongsu-dong"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Day Trips\", \"Seoul Tourism\"],\n  \"headline\": \"Day trip to Suwon from Seoul featuring fortress walls, hanok alleys, and vibrant cafes\",\n  \"summary\": \"Take a quick train ride to Suwon to explore fortress walls, hanok alleys and vibrant cafes. Solo travelers can find 10 magical places and experiences in Seoul including hanok to waterfall cafes, day trips, and self-care stops.\",\n  \"media_metadata\": {\n    \"original_poster\": \"Lou Ann\",\n    \"tagged_accounts\": [\"@CORTIS\"],\n    \"location_tags\": [\"Seongsu-dong 1(il)-ga · Seongdong-gu\", \"434 people added to Favourites\"],\n    \"audio_source\": \"GO! - @CORTIS\",\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\n      \"Take a day trip to Suwon\",\n      \"Hop on a quick train ride to Suwon and explore fortress walls, hanok alleys and vibrant cafes\",\n      \"Solo in Seoul? Here are 10 places and experiences that prove exploring the city on your own can be just as magical\",\n      \"Things To Do In Seoul Korea\"\n    ],\n    \"objects\": [\"traditional Korean fortress bridge\", \"stone bridge with arches\", \"water reflection\", \"bare trees\", \"person walking\"],\n    \"themes\": [\"Korean heritage sites\", \"solo travel\", \"day trips from Seoul\", \"traditional architecture\"],\n    \"emotions\": [\"peaceful\", \"exploratory\", \"adventurous\"],\n    \"vibes\": [\"serene\", \"cultural\", \"historic\", \"inspiring\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Suwon day trip recommendation with specific activities\",\n    \"visual_hierarchy\": [\n      \"Take a day trip to Suwon headline\",\n      \"Traditional Korean fortress bridge\",\n      \"Solo travel recommendations text\",\n      \"Search bar for Seoul activities\",\n      \"Location tag for Seongsu-dong\"\n    ]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 514
+  }
+}

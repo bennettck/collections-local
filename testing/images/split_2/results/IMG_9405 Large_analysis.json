@@ -1,0 +1,70 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_2/IMG_9405 Large.jpeg",
+  "image_name": "IMG_9405 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Beauty",
+    "subcategories": [
+      "Cosmetic Procedures",
+      "Medical Aesthetics"
+    ],
+    "headline": "Ultherapy laser treatment comparison guide covering session details, depths, and clinical evidence from Korea",
+    "summary": "Ultherapy sessions last 15-45 minutes with minimal downtime, offering immediate subtle tightening and 2-3 month lifting effects. Treatment depths range from 1.5mm for fine lines to 4.5mm for maximum lifting, with Korean clinics combining multiple depths for optimal results.",
+    "media_metadata": {
+      "original_poster": null,
+      "tagged_accounts": [],
+      "location_tags": [],
+      "audio_source": null,
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "bookdoctra.com",
+        "Sessions are quick (15-45 minutes) with minimal downtime",
+        "Versatility & Customization",
+        "1.5 mm: superficial dermis for fine lines/texture",
+        "3.0 mm: deep dermis for firming and moderate lifting",
+        "4.5 mm: SMAS targeting for maximum lifting",
+        "Clinical Evidence in Korea",
+        "Korea GLOW UP Trip"
+      ],
+      "objects": [
+        "Asian woman",
+        "medical information overlay",
+        "treatment details",
+        "website URL"
+      ],
+      "themes": [
+        "Medical tourism",
+        "Korean beauty treatments",
+        "Non-invasive procedures"
+      ],
+      "emotions": [
+        "Professional",
+        "Informative",
+        "Confident"
+      ],
+      "vibes": [
+        "Educational",
+        "Medical",
+        "Korean beauty industry"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Detailed Ultherapy treatment specifications and Korean clinical evidence",
+      "visual_hierarchy": [
+        "bookdoctra.com website URL",
+        "Versatility & Customization section",
+        "Treatment depth specifications",
+        "Session duration and downtime information",
+        "Clinical Evidence in Korea heading"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Beauty\",\n  \"subcategories\": [\"Cosmetic Procedures\", \"Medical Aesthetics\"],\n  \"headline\": \"Ultherapy laser treatment comparison guide covering session details, depths, and clinical evidence from Korea\",\n  \"summary\": \"Ultherapy sessions last 15-45 minutes with minimal downtime, offering immediate subtle tightening and 2-3 month lifting effects. Treatment depths range from 1.5mm for fine lines to 4.5mm for maximum lifting, with Korean clinics combining multiple depths for optimal results.\",\n  \"media_metadata\": {\n    \"original_poster\": null,\n    \"tagged_accounts\": [],\n    \"location_tags\": [],\n    \"audio_source\": null,\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\n      \"bookdoctra.com\",\n      \"Sessions are quick (15-45 minutes) with minimal downtime\",\n      \"Versatility & Customization\",\n      \"1.5 mm: superficial dermis for fine lines/texture\",\n      \"3.0 mm: deep dermis for firming and moderate lifting\",\n      \"4.5 mm: SMAS targeting for maximum lifting\",\n      \"Clinical Evidence in Korea\",\n      \"Korea GLOW UP Trip\"\n    ],\n    \"objects\": [\"Asian woman\", \"medical information overlay\", \"treatment details\", \"website URL\"],\n    \"themes\": [\"Medical tourism\", \"Korean beauty treatments\", \"Non-invasive procedures\"],\n    \"emotions\": [\"Professional\", \"Informative\", \"Confident\"],\n    \"vibes\": [\"Educational\", \"Medical\", \"Korean beauty industry\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Detailed Ultherapy treatment specifications and Korean clinical evidence\",\n    \"visual_hierarchy\": [\n      \"bookdoctra.com website URL\",\n      \"Versatility & Customization section\",\n      \"Treatment depth specifications\",\n      \"Session duration and downtime information\",\n      \"Clinical Evidence in Korea heading\"\n    ]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 498
+  }
+}

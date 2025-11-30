@@ -1,0 +1,76 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_3/IMG_9432 Large.jpeg",
+  "image_name": "IMG_9432 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Shopping",
+    "subcategories": [
+      "Coupons",
+      "Cashback"
+    ],
+    "headline": "GetPOffer app for submitting receipts to earn cashback rewards while shopping at Costco",
+    "summary": "GetPOffer app allows users to submit receipts for cashback rewards. The interface shows \"READY TO SUBMIT YOUR RECEIPTS?\" with options to register or login. TikTok user demonstrates using the app during a Costco shopping trip.",
+    "media_metadata": {
+      "original_poster": "Torok Coupon Hunter",
+      "tagged_accounts": [
+        "user274559210"
+      ],
+      "location_tags": [],
+      "audio_source": null,
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "getpoffer.com",
+        "READY TO SUBMIT YOUR RECEIPTS?",
+        "GO",
+        "Already Registered?",
+        "Email Address",
+        "SAVE MORE",
+        "$25",
+        "$50",
+        "Torok Coupon Hunter",
+        "How to do the P&G Deal going on at Costco",
+        "best things at costco right now"
+      ],
+      "objects": [
+        "smartphone",
+        "shopping cart",
+        "Ice Mountain water bottles",
+        "Costco products",
+        "app interface"
+      ],
+      "themes": [
+        "cashback apps",
+        "receipt scanning",
+        "grocery savings",
+        "Costco shopping"
+      ],
+      "emotions": [
+        "helpful",
+        "informative"
+      ],
+      "vibes": [
+        "practical",
+        "money-saving",
+        "tutorial"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "GetPOffer cashback app interface for receipt submission",
+      "visual_hierarchy": [
+        "READY TO SUBMIT YOUR RECEIPTS? text",
+        "GetPOffer app interface",
+        "Costco shopping cart",
+        "Ice Mountain water bottles",
+        "TikTok overlay elements"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Shopping\",\n  \"subcategories\": [\"Coupons\", \"Cashback\"],\n  \"headline\": \"GetPOffer app for submitting receipts to earn cashback rewards while shopping at Costco\",\n  \"summary\": \"GetPOffer app allows users to submit receipts for cashback rewards. The interface shows \\\"READY TO SUBMIT YOUR RECEIPTS?\\\" with options to register or login. TikTok user demonstrates using the app during a Costco shopping trip.\",\n  \"media_metadata\": {\n    \"original_poster\": \"Torok Coupon Hunter\",\n    \"tagged_accounts\": [\"user274559210\"],\n    \"location_tags\": [],\n    \"audio_source\": null,\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"getpoffer.com\", \"READY TO SUBMIT YOUR RECEIPTS?\", \"GO\", \"Already Registered?\", \"Email Address\", \"SAVE MORE\", \"$25\", \"$50\", \"Torok Coupon Hunter\", \"How to do the P&G Deal going on at Costco\", \"best things at costco right now\"],\n    \"objects\": [\"smartphone\", \"shopping cart\", \"Ice Mountain water bottles\", \"Costco products\", \"app interface\"],\n    \"themes\": [\"cashback apps\", \"receipt scanning\", \"grocery savings\", \"Costco shopping\"],\n    \"emotions\": [\"helpful\", \"informative\"],\n    \"vibes\": [\"practical\", \"money-saving\", \"tutorial\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"GetPOffer cashback app interface for receipt submission\",\n    \"visual_hierarchy\": [\"READY TO SUBMIT YOUR RECEIPTS? text\", \"GetPOffer app interface\", \"Costco shopping cart\", \"Ice Mountain water bottles\", \"TikTok overlay elements\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 448
+  }
+}

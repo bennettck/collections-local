@@ -1,0 +1,75 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_3/IMG_9461 Large.jpeg",
+  "image_name": "IMG_9461 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Fashion",
+    "subcategories": [
+      "Shopping",
+      "Seoul"
+    ],
+    "headline": "Weekly KITH store visit in Seoul, trying on Seoul-branded cap and adding items to wishlist",
+    "summary": "Weekly visit to KITH store in Seoul, always leaving with new items added to wishlist. Person trying on black Seoul cap while wearing white shirt with green and blue graphic design.",
+    "media_metadata": {
+      "original_poster": "jenniferha_",
+      "tagged_accounts": [],
+      "location_tags": [],
+      "audio_source": null,
+      "hashtags": [
+        "#seoul",
+        "#seoullife",
+        "#visualdiary"
+      ]
+    },
+    "image_details": {
+      "extracted_text": [
+        "our weekly visit to KITH...",
+        "always leaving with new items added to our wishlist",
+        "week in SEOUL",
+        "SEOUL",
+        "Photo"
+      ],
+      "objects": [
+        "black Seoul cap",
+        "white graphic t-shirt",
+        "clothing racks",
+        "store interior",
+        "window view",
+        "hands adjusting cap"
+      ],
+      "themes": [
+        "shopping",
+        "Seoul lifestyle",
+        "fashion retail",
+        "weekly routine"
+      ],
+      "emotions": [
+        "aspirational",
+        "routine",
+        "desire"
+      ],
+      "vibes": [
+        "trendy",
+        "urban",
+        "lifestyle",
+        "shopping culture"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Weekly KITH shopping routine and Seoul-branded merchandise",
+      "visual_hierarchy": [
+        "Seoul cap being tried on",
+        "overlay text about weekly visits",
+        "white graphic shirt",
+        "store interior",
+        "clothing racks"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Fashion\",\n  \"subcategories\": [\"Shopping\", \"Seoul\"],\n  \"headline\": \"Weekly KITH store visit in Seoul, trying on Seoul-branded cap and adding items to wishlist\",\n  \"summary\": \"Weekly visit to KITH store in Seoul, always leaving with new items added to wishlist. Person trying on black Seoul cap while wearing white shirt with green and blue graphic design.\",\n  \"media_metadata\": {\n    \"original_poster\": \"jenniferha_\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [],\n    \"audio_source\": null,\n    \"hashtags\": [\"#seoul\", \"#seoullife\", \"#visualdiary\"]\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"our weekly visit to KITH...\", \"always leaving with new items added to our wishlist\", \"week in SEOUL\", \"SEOUL\", \"Photo\"],\n    \"objects\": [\"black Seoul cap\", \"white graphic t-shirt\", \"clothing racks\", \"store interior\", \"window view\", \"hands adjusting cap\"],\n    \"themes\": [\"shopping\", \"Seoul lifestyle\", \"fashion retail\", \"weekly routine\"],\n    \"emotions\": [\"aspirational\", \"routine\", \"desire\"],\n    \"vibes\": [\"trendy\", \"urban\", \"lifestyle\", \"shopping culture\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Weekly KITH shopping routine and Seoul-branded merchandise\",\n    \"visual_hierarchy\": [\"Seoul cap being tried on\", \"overlay text about weekly visits\", \"white graphic shirt\", \"store interior\", \"clothing racks\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 385
+  }
+}

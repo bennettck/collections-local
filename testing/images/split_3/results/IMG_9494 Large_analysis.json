@@ -1,0 +1,73 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_3/IMG_9494 Large.jpeg",
+  "image_name": "IMG_9494 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Travel",
+    "subcategories": [
+      "Seoul",
+      "Cafe"
+    ],
+    "headline": "Overdeep Yeonnam cafe location in Seoul's Mapo-gu district with rooftop seating",
+    "summary": "Overdeep Yeonnam cafe located at 149-8 Seongmisan-ro, Mapo-gu, Seoul on the 2nd-3rd floor rooftop. The blue building features various posters and signage, with Korean text indicating it's near Hongik University station.",
+    "media_metadata": {
+      "original_poster": "soiyaa",
+      "tagged_accounts": [
+        "overdeep_yeonna"
+      ],
+      "location_tags": [
+        "149-8 Seongmisan-ro, Mapo-gu, Seoul"
+      ],
+      "audio_source": "DAISIES - @Justin Bieber",
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "Lokasi: yeonnam-dong, mapo-gu seoul (349-8 seongmisan-ro)",
+        "149-8 Seongmisan-ro, Mapo-gu, Seoul",
+        "2nd-3rd floor, rooftop",
+        "Naver map search: Overdeep Yeonnam",
+        "Instagram: @/overdeep_yeonna",
+        "DAISIES - @Justin Bieber"
+      ],
+      "objects": [
+        "blue building",
+        "cafe storefront",
+        "Korean signage",
+        "posters",
+        "plants",
+        "wooden fence"
+      ],
+      "themes": [
+        "Seoul cafe culture",
+        "Korean business location",
+        "rooftop dining"
+      ],
+      "emotions": [
+        "informative",
+        "helpful"
+      ],
+      "vibes": [
+        "urban",
+        "trendy",
+        "local"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Specific cafe location and address details for visiting",
+      "visual_hierarchy": [
+        "Blue building storefront",
+        "Location text overlay",
+        "Address information",
+        "Instagram handle",
+        "Wooden fence area"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Seoul\", \"Cafe\"],\n  \"headline\": \"Overdeep Yeonnam cafe location in Seoul's Mapo-gu district with rooftop seating\",\n  \"summary\": \"Overdeep Yeonnam cafe located at 149-8 Seongmisan-ro, Mapo-gu, Seoul on the 2nd-3rd floor rooftop. The blue building features various posters and signage, with Korean text indicating it's near Hongik University station.\",\n  \"media_metadata\": {\n    \"original_poster\": \"soiyaa\",\n    \"tagged_accounts\": [\"overdeep_yeonna\"],\n    \"location_tags\": [\"149-8 Seongmisan-ro, Mapo-gu, Seoul\"],\n    \"audio_source\": \"DAISIES - @Justin Bieber\",\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\n      \"Lokasi: yeonnam-dong, mapo-gu seoul (349-8 seongmisan-ro)\",\n      \"149-8 Seongmisan-ro, Mapo-gu, Seoul\",\n      \"2nd-3rd floor, rooftop\",\n      \"Naver map search: Overdeep Yeonnam\",\n      \"Instagram: @/overdeep_yeonna\",\n      \"DAISIES - @Justin Bieber\"\n    ],\n    \"objects\": [\"blue building\", \"cafe storefront\", \"Korean signage\", \"posters\", \"plants\", \"wooden fence\"],\n    \"themes\": [\"Seoul cafe culture\", \"Korean business location\", \"rooftop dining\"],\n    \"emotions\": [\"informative\", \"helpful\"],\n    \"vibes\": [\"urban\", \"trendy\", \"local\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Specific cafe location and address details for visiting\",\n    \"visual_hierarchy\": [\"Blue building storefront\", \"Location text overlay\", \"Address information\", \"Instagram handle\", \"Wooden fence area\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 513
+  }
+}

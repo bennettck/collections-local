@@ -1,0 +1,72 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_1/IMG_7903 Large.jpeg",
+  "image_name": "IMG_7903 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Travel",
+    "subcategories": [
+      "Shopping",
+      "Tokyo"
+    ],
+    "headline": "Nakano Broadway - Tokyo's anime and manga shopping complex with food hall basement",
+    "summary": "Nakano Broadway is a huge shopping complex in Tokyo selling anime & manga goods, vintage toys, video games, and clothes. The basement contains a food hall.",
+    "media_metadata": {
+      "original_poster": "recommend_ndre",
+      "tagged_accounts": [],
+      "location_tags": [],
+      "audio_source": "bloodline - Ariana",
+      "hashtags": [
+        "#japan"
+      ]
+    },
+    "image_details": {
+      "extracted_text": [
+        "NAKANO BROADWAY",
+        "A huge shopping complex selling Anime & Manga goods, vintage toys, video games, and clothes. In the basement there is a food hall.",
+        "Sebelum ke Tokyo kalian harus tau",
+        "Tokyo tips and trick",
+        "383",
+        "54"
+      ],
+      "objects": [
+        "red storefront",
+        "shopping complex building",
+        "people walking",
+        "street scene",
+        "merchandise displays"
+      ],
+      "themes": [
+        "anime culture",
+        "shopping destination",
+        "Tokyo tourism",
+        "otaku culture"
+      ],
+      "emotions": [
+        "excitement",
+        "discovery"
+      ],
+      "vibes": [
+        "urban",
+        "bustling",
+        "cultural",
+        "tourist-friendly"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Nakano Broadway shopping complex information",
+      "visual_hierarchy": [
+        "NAKANO BROADWAY title",
+        "shopping complex description",
+        "red storefront building",
+        "street activity",
+        "social media interface"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Shopping\", \"Tokyo\"],\n  \"headline\": \"Nakano Broadway - Tokyo's anime and manga shopping complex with food hall basement\",\n  \"summary\": \"Nakano Broadway is a huge shopping complex in Tokyo selling anime & manga goods, vintage toys, video games, and clothes. The basement contains a food hall.\",\n  \"media_metadata\": {\n    \"original_poster\": \"recommend_ndre\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [],\n    \"audio_source\": \"bloodline - Ariana\",\n    \"hashtags\": [\"#japan\"]\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"NAKANO BROADWAY\", \"A huge shopping complex selling Anime & Manga goods, vintage toys, video games, and clothes. In the basement there is a food hall.\", \"Sebelum ke Tokyo kalian harus tau\", \"Tokyo tips and trick\", \"383\", \"54\"],\n    \"objects\": [\"red storefront\", \"shopping complex building\", \"people walking\", \"street scene\", \"merchandise displays\"],\n    \"themes\": [\"anime culture\", \"shopping destination\", \"Tokyo tourism\", \"otaku culture\"],\n    \"emotions\": [\"excitement\", \"discovery\"],\n    \"vibes\": [\"urban\", \"bustling\", \"cultural\", \"tourist-friendly\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Nakano Broadway shopping complex information\",\n    \"visual_hierarchy\": [\"NAKANO BROADWAY title\", \"shopping complex description\", \"red storefront building\", \"street activity\", \"social media interface\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 385
+  }
+}

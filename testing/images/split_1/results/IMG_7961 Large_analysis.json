@@ -1,0 +1,78 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_1/IMG_7961 Large.jpeg",
+  "image_name": "IMG_7961 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Travel",
+    "subcategories": [
+      "Japan",
+      "Nature Parks"
+    ],
+    "headline": "Travel recommendations for parks and natural attractions in Noboribetsu, Hokkaido, Japan",
+    "summary": "Bear Park, Marine Park, Sengen Park (Geyser), and Natural Footbath (River Oyunuma) are recommended places to visit in Noboribetsu. The location has 4.5M views on posts and features natural hot springs and geothermal attractions.",
+    "media_metadata": {
+      "original_poster": "tatasupeacha",
+      "tagged_accounts": [],
+      "location_tags": [
+        "Noboribetsu"
+      ],
+      "audio_source": null,
+      "hashtags": [
+        "#noboribetsu",
+        "#hokkaido",
+        "#ronsen",
+        "#japantravel",
+        "#รีวิวnoboribetsu"
+      ]
+    },
+    "image_details": {
+      "extracted_text": [
+        "PS. Other places to visit",
+        "Bear Park",
+        "Marine Park",
+        "Sengen Park (Geyser)",
+        "Natural Footbath (River Oyunuma)",
+        "Noboribetsu",
+        "4.5M views on posts of this place",
+        "tatasupeacha 2024-3-8"
+      ],
+      "objects": [
+        "grassland",
+        "water body",
+        "natural landscape",
+        "profile pictures"
+      ],
+      "themes": [
+        "Japanese tourism",
+        "natural attractions",
+        "hot springs",
+        "park recommendations"
+      ],
+      "emotions": [
+        "informative",
+        "helpful"
+      ],
+      "vibes": [
+        "travel guide",
+        "nature appreciation",
+        "exploration"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "List of specific park and natural attraction recommendations in Noboribetsu",
+      "visual_hierarchy": [
+        "PS. Other places to visit",
+        "Bear Park, Marine Park, Sengen Park, Natural Footbath listings",
+        "Noboribetsu location tag",
+        "Natural landscape background",
+        "Hashtags and date"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Japan\", \"Nature Parks\"],\n  \"headline\": \"Travel recommendations for parks and natural attractions in Noboribetsu, Hokkaido, Japan\",\n  \"summary\": \"Bear Park, Marine Park, Sengen Park (Geyser), and Natural Footbath (River Oyunuma) are recommended places to visit in Noboribetsu. The location has 4.5M views on posts and features natural hot springs and geothermal attractions.\",\n  \"media_metadata\": {\n    \"original_poster\": \"tatasupeacha\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [\"Noboribetsu\"],\n    \"audio_source\": null,\n    \"hashtags\": [\"#noboribetsu\", \"#hokkaido\", \"#ronsen\", \"#japantravel\", \"#รีวิวnoboribetsu\"]\n  },\n  \"image_details\": {\n    \"extracted_text\": [\n      \"PS. Other places to visit\",\n      \"Bear Park\",\n      \"Marine Park\", \n      \"Sengen Park (Geyser)\",\n      \"Natural Footbath (River Oyunuma)\",\n      \"Noboribetsu\",\n      \"4.5M views on posts of this place\",\n      \"tatasupeacha 2024-3-8\"\n    ],\n    \"objects\": [\"grassland\", \"water body\", \"natural landscape\", \"profile pictures\"],\n    \"themes\": [\"Japanese tourism\", \"natural attractions\", \"hot springs\", \"park recommendations\"],\n    \"emotions\": [\"informative\", \"helpful\"],\n    \"vibes\": [\"travel guide\", \"nature appreciation\", \"exploration\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"List of specific park and natural attraction recommendations in Noboribetsu\",\n    \"visual_hierarchy\": [\n      \"PS. Other places to visit\",\n      \"Bear Park, Marine Park, Sengen Park, Natural Footbath listings\",\n      \"Noboribetsu location tag\",\n      \"Natural landscape background\",\n      \"Hashtags and date\"\n    ]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 523
+  }
+}

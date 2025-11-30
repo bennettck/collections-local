@@ -1,0 +1,57 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_3/IMG_9411 Large.jpeg",
+  "image_name": "IMG_9411 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Technology",
+    "subcategories": [
+      "Japanese",
+      "Interface"
+    ],
+    "headline": "Japanese text interface element with partial visibility",
+    "summary": "Japanese characters \"ほ\" (ho) visible in what appears to be a dark-themed user interface or application window with rounded corners.",
+    "media_metadata": {
+      "original_poster": null,
+      "tagged_accounts": [],
+      "location_tags": [],
+      "audio_source": null,
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "ほ"
+      ],
+      "objects": [
+        "interface window",
+        "text element",
+        "dark background"
+      ],
+      "themes": [
+        "Japanese language",
+        "user interface",
+        "software"
+      ],
+      "emotions": [
+        "neutral"
+      ],
+      "vibes": [
+        "minimal",
+        "technical"
+      ],
+      "likely_source": "user-created",
+      "key_interest": "Japanese character display in interface",
+      "visual_hierarchy": [
+        "Japanese text character",
+        "dark interface background",
+        "rounded window corners"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Technology\",\n  \"subcategories\": [\"Japanese\", \"Interface\"],\n  \"headline\": \"Japanese text interface element with partial visibility\",\n  \"summary\": \"Japanese characters \\\"ほ\\\" (ho) visible in what appears to be a dark-themed user interface or application window with rounded corners.\",\n  \"media_metadata\": {\n    \"original_poster\": null,\n    \"tagged_accounts\": [],\n    \"location_tags\": [],\n    \"audio_source\": null,\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"ほ\"],\n    \"objects\": [\"interface window\", \"text element\", \"dark background\"],\n    \"themes\": [\"Japanese language\", \"user interface\", \"software\"],\n    \"emotions\": [\"neutral\"],\n    \"vibes\": [\"minimal\", \"technical\"],\n    \"likely_source\": \"user-created\",\n    \"key_interest\": \"Japanese character display in interface\",\n    \"visual_hierarchy\": [\"Japanese text character\", \"dark interface background\", \"rounded window corners\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 1153,
+    "output_tokens": 257
+  }
+}

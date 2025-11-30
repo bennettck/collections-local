@@ -1,0 +1,77 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_3/IMG_9463 Large.jpeg",
+  "image_name": "IMG_9463 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Travel",
+    "subcategories": [
+      "Solo Travel",
+      "Korea Tourism"
+    ],
+    "headline": "Jangtaesan Recreational Forest recommended for solo healing trips in Korea",
+    "summary": "Jangtaesan Recreational Forest featured as perfect spot for solo travelers wanting to heal alone in Korea. RindiTour provides recommendations for those confused about where to go for solo healing experiences.",
+    "media_metadata": {
+      "original_poster": "RindiTour",
+      "tagged_accounts": [
+        "@10CM"
+      ],
+      "location_tags": [
+        "Jangtaesan Recreational Forest"
+      ],
+      "audio_source": "To Reach You - @10CM",
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "Jangtaesan Recreational Forest",
+        "Where to go alone in Korea",
+        "Want to heal alone but confused about where to go?",
+        "Here are some spots in Korea whose vibes are perfect for those who want to be alone first",
+        "study cafe seoul gangnam"
+      ],
+      "objects": [
+        "forest entrance",
+        "stone monument",
+        "wooden buildings",
+        "lush green trees",
+        "forest pathways",
+        "Korean signage"
+      ],
+      "themes": [
+        "solo travel",
+        "healing",
+        "nature therapy",
+        "Korean destinations",
+        "forest recreation"
+      ],
+      "emotions": [
+        "peaceful",
+        "healing",
+        "contemplative",
+        "restorative"
+      ],
+      "vibes": [
+        "serene",
+        "natural",
+        "therapeutic",
+        "secluded"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Solo travel destination recommendation for healing in Korean forest",
+      "visual_hierarchy": [
+        "Jangtaesan Recreational Forest title",
+        "Forest entrance with stone monument",
+        "Where to go alone in Korea text",
+        "Healing recommendation text",
+        "Lush forest pathway"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Solo Travel\", \"Korea Tourism\"],\n  \"headline\": \"Jangtaesan Recreational Forest recommended for solo healing trips in Korea\",\n  \"summary\": \"Jangtaesan Recreational Forest featured as perfect spot for solo travelers wanting to heal alone in Korea. RindiTour provides recommendations for those confused about where to go for solo healing experiences.\",\n  \"media_metadata\": {\n    \"original_poster\": \"RindiTour\",\n    \"tagged_accounts\": [\"@10CM\"],\n    \"location_tags\": [\"Jangtaesan Recreational Forest\"],\n    \"audio_source\": \"To Reach You - @10CM\",\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\n      \"Jangtaesan Recreational Forest\",\n      \"Where to go alone in Korea\",\n      \"Want to heal alone but confused about where to go?\",\n      \"Here are some spots in Korea whose vibes are perfect for those who want to be alone first\",\n      \"study cafe seoul gangnam\"\n    ],\n    \"objects\": [\"forest entrance\", \"stone monument\", \"wooden buildings\", \"lush green trees\", \"forest pathways\", \"Korean signage\"],\n    \"themes\": [\"solo travel\", \"healing\", \"nature therapy\", \"Korean destinations\", \"forest recreation\"],\n    \"emotions\": [\"peaceful\", \"healing\", \"contemplative\", \"restorative\"],\n    \"vibes\": [\"serene\", \"natural\", \"therapeutic\", \"secluded\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Solo travel destination recommendation for healing in Korean forest\",\n    \"visual_hierarchy\": [\n      \"Jangtaesan Recreational Forest title\",\n      \"Forest entrance with stone monument\",\n      \"Where to go alone in Korea text\",\n      \"Healing recommendation text\",\n      \"Lush forest pathway\"\n    ]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 462
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_1/IMG_7962 Large.jpeg",
+  "image_name": "IMG_7962 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Travel",
+    "subcategories": [
+      "Hokkaido",
+      "Lavender Fields"
+    ],
+    "headline": "Hokkaido lavender fields travel guide from The Wandering Lens covering must-visit spots",
+    "summary": "All of Hokkaido's must-visit spots are here - One Trip Covers It All! The Wandering Lens promotes comprehensive Hokkaido travel coverage featuring stunning lavender fields with a person standing among purple blooms.",
+    "media_metadata": {
+      "original_poster": "The Wandering Lens",
+      "tagged_accounts": [],
+      "location_tags": [
+        "Japan"
+      ],
+      "audio_source": null,
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "to admire its stunning",
+        "The Wandering Lens",
+        "All of Hokkaido's must-visit spots are here",
+        "One Trip Covers It All!",
+        "Jap... more",
+        "Add comment..."
+      ],
+      "objects": [
+        "purple lavender field",
+        "person in white dress",
+        "green trees",
+        "cloudy sky",
+        "colorful flower rows"
+      ],
+      "themes": [
+        "Japan travel",
+        "Hokkaido tourism",
+        "lavender season",
+        "scenic photography"
+      ],
+      "emotions": [
+        "peaceful",
+        "inspiring",
+        "wanderlust"
+      ],
+      "vibes": [
+        "serene",
+        "picturesque",
+        "travel inspiration"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Hokkaido travel guide featuring lavender fields",
+      "visual_hierarchy": [
+        "purple lavender field",
+        "person in white dress",
+        "The Wandering Lens branding",
+        "travel description text",
+        "colorful flower rows"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Hokkaido\", \"Lavender Fields\"],\n  \"headline\": \"Hokkaido lavender fields travel guide from The Wandering Lens covering must-visit spots\",\n  \"summary\": \"All of Hokkaido's must-visit spots are here - One Trip Covers It All! The Wandering Lens promotes comprehensive Hokkaido travel coverage featuring stunning lavender fields with a person standing among purple blooms.\",\n  \"media_metadata\": {\n    \"original_poster\": \"The Wandering Lens\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [\"Japan\"],\n    \"audio_source\": null,\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"to admire its stunning\", \"The Wandering Lens\", \"All of Hokkaido's must-visit spots are here\", \"One Trip Covers It All!\", \"Jap... more\", \"Add comment...\"],\n    \"objects\": [\"purple lavender field\", \"person in white dress\", \"green trees\", \"cloudy sky\", \"colorful flower rows\"],\n    \"themes\": [\"Japan travel\", \"Hokkaido tourism\", \"lavender season\", \"scenic photography\"],\n    \"emotions\": [\"peaceful\", \"inspiring\", \"wanderlust\"],\n    \"vibes\": [\"serene\", \"picturesque\", \"travel inspiration\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Hokkaido travel guide featuring lavender fields\",\n    \"visual_hierarchy\": [\"purple lavender field\", \"person in white dress\", \"The Wandering Lens branding\", \"travel description text\", \"colorful flower rows\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 413
+  }
+}

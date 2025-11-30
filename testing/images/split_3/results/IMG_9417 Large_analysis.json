@@ -1,0 +1,71 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_3/IMG_9417 Large.jpeg",
+  "image_name": "IMG_9417 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Healthcare",
+    "subcategories": [
+      "Alternative Medicine",
+      "Cosmetic Treatment"
+    ],
+    "headline": "Korean Traditional Medicine clinic claims to fix facial asymmetry permanently from root cause vs temporary Western treatments",
+    "summary": "Ourkenza shares experience with Duna Korean Traditional Medicine clinic near Seongsu Station. Doctor promised permanent asymmetry fix addressing root causes versus dentist saying it's impossible and dermatologist recommending repeated botox/lifting treatments every 6 months.",
+    "media_metadata": {
+      "original_poster": "Ourkenza",
+      "tagged_accounts": [
+        "@duna"
+      ],
+      "location_tags": [
+        "Duna Clinic (Next to Seongsu Station)"
+      ],
+      "audio_source": null,
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "I tried fixing my asymmetry through Korean Traditional Medicine",
+        "Few years ago, my dentist told me that fixing asymmetry was impossible even if I get braces and that I had to embrace it for the rest of my life",
+        "My dermatologist told me that we can get it fixed by lifting treatments and botox, that should be done at least once every 6months",
+        "But the doctor at Duna Korean Traditional Medicine was like: 'Don't worry, I'll fix it from the root cause so not only you can enjoy a symetrical face, but also a well balanced body forever'",
+        "Search: duna clinic korea"
+      ],
+      "objects": [
+        "person looking in mirror",
+        "computer screen",
+        "desk setup",
+        "hands touching face"
+      ],
+      "themes": [
+        "facial asymmetry treatment",
+        "traditional vs modern medicine",
+        "permanent vs temporary solutions"
+      ],
+      "emotions": [
+        "hope",
+        "frustration",
+        "relief"
+      ],
+      "vibes": [
+        "testimonial",
+        "personal journey",
+        "medical advice"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Korean Traditional Medicine approach to permanent asymmetry correction",
+      "visual_hierarchy": [
+        "Main overlay text about fixing asymmetry",
+        "Person examining face in mirror reflection",
+        "Detailed testimonial text comparing treatments",
+        "Clinic name and location information",
+        "Search suggestion at bottom"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Healthcare\",\n  \"subcategories\": [\"Alternative Medicine\", \"Cosmetic Treatment\"],\n  \"headline\": \"Korean Traditional Medicine clinic claims to fix facial asymmetry permanently from root cause vs temporary Western treatments\",\n  \"summary\": \"Ourkenza shares experience with Duna Korean Traditional Medicine clinic near Seongsu Station. Doctor promised permanent asymmetry fix addressing root causes versus dentist saying it's impossible and dermatologist recommending repeated botox/lifting treatments every 6 months.\",\n  \"media_metadata\": {\n    \"original_poster\": \"Ourkenza\",\n    \"tagged_accounts\": [\"@duna\"],\n    \"location_tags\": [\"Duna Clinic (Next to Seongsu Station)\"],\n    \"audio_source\": null,\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\n      \"I tried fixing my asymmetry through Korean Traditional Medicine\",\n      \"Few years ago, my dentist told me that fixing asymmetry was impossible even if I get braces and that I had to embrace it for the rest of my life\",\n      \"My dermatologist told me that we can get it fixed by lifting treatments and botox, that should be done at least once every 6months\",\n      \"But the doctor at Duna Korean Traditional Medicine was like: 'Don't worry, I'll fix it from the root cause so not only you can enjoy a symetrical face, but also a well balanced body forever'\",\n      \"Search: duna clinic korea\"\n    ],\n    \"objects\": [\"person looking in mirror\", \"computer screen\", \"desk setup\", \"hands touching face\"],\n    \"themes\": [\"facial asymmetry treatment\", \"traditional vs modern medicine\", \"permanent vs temporary solutions\"],\n    \"emotions\": [\"hope\", \"frustration\", \"relief\"],\n    \"vibes\": [\"testimonial\", \"personal journey\", \"medical advice\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Korean Traditional Medicine approach to permanent asymmetry correction\",\n    \"visual_hierarchy\": [\n      \"Main overlay text about fixing asymmetry\",\n      \"Person examining face in mirror reflection\",\n      \"Detailed testimonial text comparing treatments\",\n      \"Clinic name and location information\",\n      \"Search suggestion at bottom\"\n    ]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 545
+  }
+}

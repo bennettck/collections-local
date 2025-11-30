@@ -1,0 +1,70 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_2/IMG_9201 Large.jpeg",
+  "image_name": "IMG_9201 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Travel",
+    "subcategories": [
+      "Beauty",
+      "Korea"
+    ],
+    "headline": "Creatrip guide for booking skincare appointments in Korea with travel tips",
+    "summary": "Creatrip provides guidance for planning skincare appointments in Korea. The post encourages viewers to share their experiences in the comments and offers travel tips for Korean beauty treatments.",
+    "media_metadata": {
+      "original_poster": "Creatrip",
+      "tagged_accounts": [],
+      "location_tags": [
+        "Korea"
+      ],
+      "audio_source": null,
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "creatrip",
+        "We want to hear your experience in the comments",
+        "Creatrip 🇰🇷 Travel Tips ✨",
+        "Planning on booking a skincare appointment in Korea? You've got... more"
+      ],
+      "objects": [
+        "woman taking mirror selfie",
+        "phone",
+        "black top",
+        "mirror",
+        "exit sign"
+      ],
+      "themes": [
+        "Korean travel",
+        "skincare tourism",
+        "beauty appointments",
+        "travel planning"
+      ],
+      "emotions": [
+        "helpful",
+        "encouraging",
+        "informative"
+      ],
+      "vibes": [
+        "travel-focused",
+        "beauty-oriented",
+        "community-driven"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Korean skincare appointment booking guidance",
+      "visual_hierarchy": [
+        "creatrip logo overlay",
+        "experience request text",
+        "mirror selfie",
+        "travel tips caption",
+        "Korean flag emoji"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Beauty\", \"Korea\"],\n  \"headline\": \"Creatrip guide for booking skincare appointments in Korea with travel tips\",\n  \"summary\": \"Creatrip provides guidance for planning skincare appointments in Korea. The post encourages viewers to share their experiences in the comments and offers travel tips for Korean beauty treatments.\",\n  \"media_metadata\": {\n    \"original_poster\": \"Creatrip\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [\"Korea\"],\n    \"audio_source\": null,\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"creatrip\", \"We want to hear your experience in the comments\", \"Creatrip 🇰🇷 Travel Tips ✨\", \"Planning on booking a skincare appointment in Korea? You've got... more\"],\n    \"objects\": [\"woman taking mirror selfie\", \"phone\", \"black top\", \"mirror\", \"exit sign\"],\n    \"themes\": [\"Korean travel\", \"skincare tourism\", \"beauty appointments\", \"travel planning\"],\n    \"emotions\": [\"helpful\", \"encouraging\", \"informative\"],\n    \"vibes\": [\"travel-focused\", \"beauty-oriented\", \"community-driven\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Korean skincare appointment booking guidance\",\n    \"visual_hierarchy\": [\"creatrip logo overlay\", \"experience request text\", \"mirror selfie\", \"travel tips caption\", \"Korean flag emoji\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 375
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_2/IMG_9205 Large.jpeg",
+  "image_name": "IMG_9205 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Beauty",
+    "subcategories": [
+      "Korean Skincare",
+      "Medical Tourism"
+    ],
+    "headline": "Guide to finding quality Korean dermatology clinics with three key tips: test them, don't trust reviews, research standards",
+    "summary": "Three essential tips for finding good Korean skin clinics: test them first, don't fully trust reviews, and research to show your standards. Creator recommends specific Korean dermatology clinics for lifting, lasers, and anti-aging treatments.",
+    "media_metadata": {
+      "original_poster": "kbeautymuse",
+      "tagged_accounts": [
+        "@더웨이피부과"
+      ],
+      "location_tags": [],
+      "audio_source": null,
+      "hashtags": [
+        "greenscreen",
+        "kbeauty",
+        "koreanskincare",
+        "koreanskinclinic",
+        "koreandermatolgy",
+        "koreanskintreatment",
+        "seoul",
+        "kbeautytips",
+        "tips",
+        "skincare",
+        "korean"
+      ]
+    },
+    "image_details": {
+      "extracted_text": [
+        "How to Find a Good Skin Clinic in Korea",
+        "skincare korea",
+        "1. Test them",
+        "2. Dont fully trust reviews",
+        "3. Research & show your standards",
+        "Green Screen",
+        "How to find a good Korean skin clinic in Korea! Not all Korean dermatology clinics are the same",
+        "I trust @더웨이피부과 | 인어젯·울쎄라·써마지·톤모드·인모드 for lifting, lasers, and antiaging treatments"
+      ],
+      "objects": [
+        "Asian woman with clear skin",
+        "Mobile interface",
+        "Search bar",
+        "Text overlay"
+      ],
+      "themes": [
+        "Korean beauty",
+        "Medical tourism",
+        "Skincare advice",
+        "Dermatology"
+      ],
+      "emotions": [
+        "Informative",
+        "Helpful",
+        "Trustworthy"
+      ],
+      "vibes": [
+        "Educational",
+        "Professional",
+        "K-beauty focused"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Three-step guide for choosing Korean dermatology clinics",
+      "visual_hierarchy": [
+        "How to Find a Good Skin Clinic in Korea",
+        "Three numbered tips",
+        "Korean clinic recommendation",
+        "Woman's face",
+        "Hashtags"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Beauty\",\n  \"subcategories\": [\"Korean Skincare\", \"Medical Tourism\"],\n  \"headline\": \"Guide to finding quality Korean dermatology clinics with three key tips: test them, don't trust reviews, research standards\",\n  \"summary\": \"Three essential tips for finding good Korean skin clinics: test them first, don't fully trust reviews, and research to show your standards. Creator recommends specific Korean dermatology clinics for lifting, lasers, and anti-aging treatments.\",\n  \"media_metadata\": {\n    \"original_poster\": \"kbeautymuse\",\n    \"tagged_accounts\": [\"@더웨이피부과\"],\n    \"location_tags\": [],\n    \"audio_source\": null,\n    \"hashtags\": [\"greenscreen\", \"kbeauty\", \"koreanskincare\", \"koreanskinclinic\", \"koreandermatolgy\", \"koreanskintreatment\", \"seoul\", \"kbeautytips\", \"tips\", \"skincare\", \"korean\"]\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"How to Find a Good Skin Clinic in Korea\", \"skincare korea\", \"1. Test them\", \"2. Dont fully trust reviews\", \"3. Research & show your standards\", \"Green Screen\", \"How to find a good Korean skin clinic in Korea! Not all Korean dermatology clinics are the same\", \"I trust @더웨이피부과 | 인어젯·울쎄라·써마지·톤모드·인모드 for lifting, lasers, and antiaging treatments\"],\n    \"objects\": [\"Asian woman with clear skin\", \"Mobile interface\", \"Search bar\", \"Text overlay\"],\n    \"themes\": [\"Korean beauty\", \"Medical tourism\", \"Skincare advice\", \"Dermatology\"],\n    \"emotions\": [\"Informative\", \"Helpful\", \"Trustworthy\"],\n    \"vibes\": [\"Educational\", \"Professional\", \"K-beauty focused\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Three-step guide for choosing Korean dermatology clinics\",\n    \"visual_hierarchy\": [\"How to Find a Good Skin Clinic in Korea\", \"Three numbered tips\", \"Korean clinic recommendation\", \"Woman's face\", \"Hashtags\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 549
+  }
+}

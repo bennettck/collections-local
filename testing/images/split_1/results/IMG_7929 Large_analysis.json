@@ -1,0 +1,71 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_1/IMG_7929 Large.jpeg",
+  "image_name": "IMG_7929 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Travel",
+    "subcategories": [
+      "Japan",
+      "Hidden Gems"
+    ],
+    "headline": "Matsuzakaya Honten in Hakone - secret location discovery",
+    "summary": "Matsuzakaya Honten is described as Hakone's best kept secret and potentially the coolest discovery. The location features a traditional stone pathway through a Japanese garden setting.",
+    "media_metadata": {
+      "original_poster": "tabl_japan_daytrips",
+      "tagged_accounts": [],
+      "location_tags": [
+        "Matsuzakaya Honten"
+      ],
+      "audio_source": null,
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "This is Matsuzakaya Honten",
+        "tabl_japan_daytrips",
+        "Is this Hakone's best kept secret? This might be the coolest thing we did... more"
+      ],
+      "objects": [
+        "stone pathway",
+        "Japanese garden",
+        "traditional landscaping",
+        "trees",
+        "plants",
+        "wooden structures"
+      ],
+      "themes": [
+        "Japanese culture",
+        "hidden destinations",
+        "garden architecture",
+        "travel discovery"
+      ],
+      "emotions": [
+        "excitement",
+        "wonder",
+        "discovery"
+      ],
+      "vibes": [
+        "serene",
+        "traditional",
+        "authentic",
+        "peaceful"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Secret location in Hakone called Matsuzakaya Honten",
+      "visual_hierarchy": [
+        "Stone pathway (central focus)",
+        "Garden landscaping",
+        "Location text overlay",
+        "Username attribution",
+        "Caption text"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Japan\", \"Hidden Gems\"],\n  \"headline\": \"Matsuzakaya Honten in Hakone - secret location discovery\",\n  \"summary\": \"Matsuzakaya Honten is described as Hakone's best kept secret and potentially the coolest discovery. The location features a traditional stone pathway through a Japanese garden setting.\",\n  \"media_metadata\": {\n    \"original_poster\": \"tabl_japan_daytrips\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [\"Matsuzakaya Honten\"],\n    \"audio_source\": null,\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"This is Matsuzakaya Honten\", \"tabl_japan_daytrips\", \"Is this Hakone's best kept secret? This might be the coolest thing we did... more\"],\n    \"objects\": [\"stone pathway\", \"Japanese garden\", \"traditional landscaping\", \"trees\", \"plants\", \"wooden structures\"],\n    \"themes\": [\"Japanese culture\", \"hidden destinations\", \"garden architecture\", \"travel discovery\"],\n    \"emotions\": [\"excitement\", \"wonder\", \"discovery\"],\n    \"vibes\": [\"serene\", \"traditional\", \"authentic\", \"peaceful\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Secret location in Hakone called Matsuzakaya Honten\",\n    \"visual_hierarchy\": [\"Stone pathway (central focus)\", \"Garden landscaping\", \"Location text overlay\", \"Username attribution\", \"Caption text\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 384
+  }
+}

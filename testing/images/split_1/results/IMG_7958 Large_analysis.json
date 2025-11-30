@@ -1,0 +1,80 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_1/IMG_7958 Large.jpeg",
+  "image_name": "IMG_7958 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Travel",
+    "subcategories": [
+      "Japan",
+      "Scenic Views"
+    ],
+    "headline": "Tateishi Park in Suwa, Japan offers stunning sunset and night views over Lake Suwa",
+    "summary": "Tateishi Park in Suwa provides impressive sunset and night views. The location has 21.7M views on posts. Japanese traveler recommends it for people who love scenic destinations, praising both the sunset and nighttime scenery.",
+    "media_metadata": {
+      "original_poster": "JPの旅人🇯🇵🚶",
+      "tagged_accounts": [],
+      "location_tags": [
+        "Tateishi Park • Suwa",
+        "21.7M views on posts of this place"
+      ],
+      "audio_source": null,
+      "hashtags": [
+        "#日本",
+        "#JAPAN",
+        "#長野",
+        "#諏訪湖",
+        "#絶景",
+        "#おすすめ",
+        "#君の名は"
+      ]
+    },
+    "image_details": {
+      "extracted_text": [
+        "When I wake up,",
+        "People who love \"Your Name\" should go here!",
+        "Everything from the sunset to the night view was really impressive",
+        "Search • 諏訪湖 君の名は"
+      ],
+      "objects": [
+        "Lake Suwa",
+        "Mountain silhouettes",
+        "City lights",
+        "Sunset sky",
+        "Observation deck"
+      ],
+      "themes": [
+        "Japanese tourism",
+        "Scenic viewpoints",
+        "Anime location",
+        "Nature photography"
+      ],
+      "emotions": [
+        "Awe",
+        "Tranquility",
+        "Wonder"
+      ],
+      "vibes": [
+        "Peaceful",
+        "Romantic",
+        "Inspirational",
+        "Cinematic"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Anime movie reference location with spectacular views",
+      "visual_hierarchy": [
+        "Sunset over Lake Suwa",
+        "Location name Tateishi Park",
+        "Japanese traveler recommendation",
+        "Your Name anime reference",
+        "Search suggestion"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Japan\", \"Scenic Views\"],\n  \"headline\": \"Tateishi Park in Suwa, Japan offers stunning sunset and night views over Lake Suwa\",\n  \"summary\": \"Tateishi Park in Suwa provides impressive sunset and night views. The location has 21.7M views on posts. Japanese traveler recommends it for people who love scenic destinations, praising both the sunset and nighttime scenery.\",\n  \"media_metadata\": {\n    \"original_poster\": \"JPの旅人🇯🇵🚶\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [\"Tateishi Park • Suwa\", \"21.7M views on posts of this place\"],\n    \"audio_source\": null,\n    \"hashtags\": [\"#日本\", \"#JAPAN\", \"#長野\", \"#諏訪湖\", \"#絶景\", \"#おすすめ\", \"#君の名は\"]\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"When I wake up,\", \"People who love \\\"Your Name\\\" should go here!\", \"Everything from the sunset to the night view was really impressive\", \"Search • 諏訪湖 君の名は\"],\n    \"objects\": [\"Lake Suwa\", \"Mountain silhouettes\", \"City lights\", \"Sunset sky\", \"Observation deck\"],\n    \"themes\": [\"Japanese tourism\", \"Scenic viewpoints\", \"Anime location\", \"Nature photography\"],\n    \"emotions\": [\"Awe\", \"Tranquility\", \"Wonder\"],\n    \"vibes\": [\"Peaceful\", \"Romantic\", \"Inspirational\", \"Cinematic\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Anime movie reference location with spectacular views\",\n    \"visual_hierarchy\": [\"Sunset over Lake Suwa\", \"Location name Tateishi Park\", \"Japanese traveler recommendation\", \"Your Name anime reference\", \"Search suggestion\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 482
+  }
+}

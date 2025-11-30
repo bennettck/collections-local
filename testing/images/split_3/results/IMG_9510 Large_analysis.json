@@ -1,0 +1,70 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_3/IMG_9510 Large.jpeg",
+  "image_name": "IMG_9510 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Technology",
+    "subcategories": [
+      "AI Development",
+      "Software Platform"
+    ],
+    "headline": "Serverless Agent Platform for deploying framework-free AI agents with one API call",
+    "summary": "Deploy framework-free AI agents with one API call. No infrastructure setup required - agents are ready to use with a computer, tools, prompts, and capabilities built-in. Platform demonstrates how to deploy your first AI agent.",
+    "media_metadata": {
+      "original_poster": "sourcetms",
+      "tagged_accounts": [],
+      "location_tags": [
+        "San Francisco Bay • San Francisco"
+      ],
+      "audio_source": null,
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "Serverless Agent Platform",
+        "Deploy framework-free AI agents with one API call. No infrastructure setup required - agents are ready to use with a computer, tools, prompts, and capabilities built-in.",
+        "ONE API, ANY AGENT",
+        "How long does it take to deploy your first AI agent? Let me show you how e... more",
+        "Deploy your first agent"
+      ],
+      "objects": [
+        "person with glasses",
+        "microphone",
+        "platform interface",
+        "API demonstration"
+      ],
+      "themes": [
+        "AI development",
+        "serverless computing",
+        "developer tools",
+        "automation"
+      ],
+      "emotions": [
+        "professional",
+        "informative",
+        "confident"
+      ],
+      "vibes": [
+        "tech tutorial",
+        "product demo",
+        "educational"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "One API call deployment for AI agents",
+      "visual_hierarchy": [
+        "Serverless Agent Platform title",
+        "ONE API, ANY AGENT button",
+        "Platform description text",
+        "Person presenting",
+        "Deploy your first agent call-to-action"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Technology\",\n  \"subcategories\": [\"AI Development\", \"Software Platform\"],\n  \"headline\": \"Serverless Agent Platform for deploying framework-free AI agents with one API call\",\n  \"summary\": \"Deploy framework-free AI agents with one API call. No infrastructure setup required - agents are ready to use with a computer, tools, prompts, and capabilities built-in. Platform demonstrates how to deploy your first AI agent.\",\n  \"media_metadata\": {\n    \"original_poster\": \"sourcetms\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [\"San Francisco Bay • San Francisco\"],\n    \"audio_source\": null,\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\n      \"Serverless Agent Platform\",\n      \"Deploy framework-free AI agents with one API call. No infrastructure setup required - agents are ready to use with a computer, tools, prompts, and capabilities built-in.\",\n      \"ONE API, ANY AGENT\",\n      \"How long does it take to deploy your first AI agent? Let me show you how e... more\",\n      \"Deploy your first agent\"\n    ],\n    \"objects\": [\"person with glasses\", \"microphone\", \"platform interface\", \"API demonstration\"],\n    \"themes\": [\"AI development\", \"serverless computing\", \"developer tools\", \"automation\"],\n    \"emotions\": [\"professional\", \"informative\", \"confident\"],\n    \"vibes\": [\"tech tutorial\", \"product demo\", \"educational\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"One API call deployment for AI agents\",\n    \"visual_hierarchy\": [\n      \"Serverless Agent Platform title\",\n      \"ONE API, ANY AGENT button\",\n      \"Platform description text\",\n      \"Person presenting\",\n      \"Deploy your first agent call-to-action\"\n    ]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 446
+  }
+}

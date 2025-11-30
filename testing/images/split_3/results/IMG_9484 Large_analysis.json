@@ -1,0 +1,79 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_3/IMG_9484 Large.jpeg",
+  "image_name": "IMG_9484 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Wellness",
+    "subcategories": [
+      "Spa",
+      "Luxury"
+    ],
+    "headline": "Riverhill Spa in Seoul promoted as the #1 best spa experience with total luxury focus",
+    "summary": "Riverhill Spa is positioned as \"The NO. 1 BEST SPA in Seoul\" emphasizing total luxury experience. Located in Seoul, Korea, it's promoted for spa, wellness, and relaxation services.",
+    "media_metadata": {
+      "original_poster": "Soobeauty",
+      "tagged_accounts": [],
+      "location_tags": [
+        "Riverhill Spa"
+      ],
+      "audio_source": null,
+      "hashtags": [
+        "#spa",
+        "#wellness",
+        "#korea",
+        "#seoul",
+        "#relaxation"
+      ]
+    },
+    "image_details": {
+      "extracted_text": [
+        "Riverhill Spa",
+        "this place is all about total luxury",
+        "Soobeauty",
+        "The NO. 1 BEST SPA in Seoul",
+        "#spa #wellness #korea #seoul #relaxation"
+      ],
+      "objects": [
+        "spa treatment room",
+        "massage table",
+        "spa products",
+        "large windows",
+        "natural lighting",
+        "person relaxing"
+      ],
+      "themes": [
+        "luxury spa experience",
+        "wellness tourism",
+        "Korean spa culture",
+        "relaxation"
+      ],
+      "emotions": [
+        "relaxation",
+        "luxury",
+        "tranquility"
+      ],
+      "vibes": [
+        "premium",
+        "serene",
+        "professional",
+        "upscale"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Riverhill Spa location and luxury positioning",
+      "visual_hierarchy": [
+        "Riverhill Spa location pin",
+        "total luxury quote",
+        "spa treatment setting",
+        "Soobeauty username",
+        "hashtag collection"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Wellness\",\n  \"subcategories\": [\"Spa\", \"Luxury\"],\n  \"headline\": \"Riverhill Spa in Seoul promoted as the #1 best spa experience with total luxury focus\",\n  \"summary\": \"Riverhill Spa is positioned as \\\"The NO. 1 BEST SPA in Seoul\\\" emphasizing total luxury experience. Located in Seoul, Korea, it's promoted for spa, wellness, and relaxation services.\",\n  \"media_metadata\": {\n    \"original_poster\": \"Soobeauty\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [\"Riverhill Spa\"],\n    \"audio_source\": null,\n    \"hashtags\": [\"#spa\", \"#wellness\", \"#korea\", \"#seoul\", \"#relaxation\"]\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"Riverhill Spa\", \"this place is all about total luxury\", \"Soobeauty\", \"The NO. 1 BEST SPA in Seoul\", \"#spa #wellness #korea #seoul #relaxation\"],\n    \"objects\": [\"spa treatment room\", \"massage table\", \"spa products\", \"large windows\", \"natural lighting\", \"person relaxing\"],\n    \"themes\": [\"luxury spa experience\", \"wellness tourism\", \"Korean spa culture\", \"relaxation\"],\n    \"emotions\": [\"relaxation\", \"luxury\", \"tranquility\"],\n    \"vibes\": [\"premium\", \"serene\", \"professional\", \"upscale\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Riverhill Spa location and luxury positioning\",\n    \"visual_hierarchy\": [\"Riverhill Spa location pin\", \"total luxury quote\", \"spa treatment setting\", \"Soobeauty username\", \"hashtag collection\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 426
+  }
+}

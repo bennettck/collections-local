@@ -1,0 +1,74 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_2/IMG_9200 Large.jpeg",
+  "image_name": "IMG_9200 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Music",
+    "subcategories": [
+      "Concert",
+      "Detroit"
+    ],
+    "headline": "Concert-goer praises group's energy and heat at Detroit venue, recommends checking them out",
+    "summary": "\"Holy shit I haven't seen a group like this in Idk how long. They brought the heat and energy. Check em out. Detroit represent!\" Concert attendee enthusiastically endorses performers @flyanaboss and @theums for their exceptional live performance energy.",
+    "media_metadata": {
+      "original_poster": "lynnzos",
+      "tagged_accounts": [
+        "@flyanaboss",
+        "@theums"
+      ],
+      "location_tags": [],
+      "audio_source": null,
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "Holy shit I haven't seen a group like this in Idk how long. They brought the heat and energy. Check em out. Detroit represent!",
+        "@flyanaboss",
+        "@theums",
+        "lynnzos",
+        "1d"
+      ],
+      "objects": [
+        "concert stage",
+        "blue lighting",
+        "crowd silhouettes",
+        "performers",
+        "lighting rig",
+        "venue interior"
+      ],
+      "themes": [
+        "live music",
+        "concert experience",
+        "Detroit music scene",
+        "artist recommendation"
+      ],
+      "emotions": [
+        "excitement",
+        "enthusiasm",
+        "amazement"
+      ],
+      "vibes": [
+        "energetic",
+        "electric",
+        "authentic",
+        "supportive"
+      ],
+      "likely_source": "Instagram",
+      "key_interest": "Enthusiastic recommendation text praising the performers' energy",
+      "visual_hierarchy": [
+        "Concert recommendation text overlay",
+        "Blue stage lighting",
+        "Performer silhouettes",
+        "Crowd heads",
+        "Tagged artist handles"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Music\",\n  \"subcategories\": [\"Concert\", \"Detroit\"],\n  \"headline\": \"Concert-goer praises group's energy and heat at Detroit venue, recommends checking them out\",\n  \"summary\": \"\\\"Holy shit I haven't seen a group like this in Idk how long. They brought the heat and energy. Check em out. Detroit represent!\\\" Concert attendee enthusiastically endorses performers @flyanaboss and @theums for their exceptional live performance energy.\",\n  \"media_metadata\": {\n    \"original_poster\": \"lynnzos\",\n    \"tagged_accounts\": [\"@flyanaboss\", \"@theums\"],\n    \"location_tags\": [],\n    \"audio_source\": null,\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"Holy shit I haven't seen a group like this in Idk how long. They brought the heat and energy. Check em out. Detroit represent!\", \"@flyanaboss\", \"@theums\", \"lynnzos\", \"1d\"],\n    \"objects\": [\"concert stage\", \"blue lighting\", \"crowd silhouettes\", \"performers\", \"lighting rig\", \"venue interior\"],\n    \"themes\": [\"live music\", \"concert experience\", \"Detroit music scene\", \"artist recommendation\"],\n    \"emotions\": [\"excitement\", \"enthusiasm\", \"amazement\"],\n    \"vibes\": [\"energetic\", \"electric\", \"authentic\", \"supportive\"],\n    \"likely_source\": \"Instagram\",\n    \"key_interest\": \"Enthusiastic recommendation text praising the performers' energy\",\n    \"visual_hierarchy\": [\"Concert recommendation text overlay\", \"Blue stage lighting\", \"Performer silhouettes\", \"Crowd heads\", \"Tagged artist handles\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 412
+  }
+}

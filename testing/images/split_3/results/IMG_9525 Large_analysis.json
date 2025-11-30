@@ -1,0 +1,78 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_3/IMG_9525 Large.jpeg",
+  "image_name": "IMG_9525 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Travel",
+    "subcategories": [
+      "Seoul",
+      "Cafes"
+    ],
+    "headline": "Cafe Pokpo in Seoul combines waterfall views with coffee in the middle of the city",
+    "summary": "Cafe Pokpo at 429 Hongeun-dong Seodaemun-gu Seoul offers waterfall views with coffee, described as one of the best places to relax and heal in the middle of a city.",
+    "media_metadata": {
+      "original_poster": "Yoojoon Kang",
+      "tagged_accounts": [],
+      "location_tags": [
+        "카페폭포 · Seodaemun-gu"
+      ],
+      "audio_source": null,
+      "hashtags": [
+        "korea",
+        "seoul",
+        "cafepokpo",
+        "koreavlog",
+        "waterfallcafe"
+      ]
+    },
+    "image_details": {
+      "extracted_text": [
+        "waterfall + cafe",
+        "probably one of the best places to relax, chill, and heal all at once. and yeah, this is in the middle of a city LOL.",
+        "cafe pokpo",
+        "429 hongeun-dong seodaemun-gu seoul",
+        "me, myself & seoul | episode 19"
+      ],
+      "objects": [
+        "waterfall",
+        "green trees",
+        "cafe seating",
+        "person with camera",
+        "wooden deck",
+        "cloudy sky"
+      ],
+      "themes": [
+        "urban nature",
+        "cafe culture",
+        "Seoul travel",
+        "relaxation"
+      ],
+      "emotions": [
+        "peaceful",
+        "surprised",
+        "relaxed"
+      ],
+      "vibes": [
+        "serene",
+        "hidden gem",
+        "urban oasis"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Urban waterfall cafe location in Seoul",
+      "visual_hierarchy": [
+        "Waterfall cascading through green forest",
+        "Cafe seating area on wooden deck",
+        "Person filming with camera",
+        "Blue cloudy sky",
+        "Dense green vegetation"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Seoul\", \"Cafes\"],\n  \"headline\": \"Cafe Pokpo in Seoul combines waterfall views with coffee in the middle of the city\",\n  \"summary\": \"Cafe Pokpo at 429 Hongeun-dong Seodaemun-gu Seoul offers waterfall views with coffee, described as one of the best places to relax and heal in the middle of a city.\",\n  \"media_metadata\": {\n    \"original_poster\": \"Yoojoon Kang\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [\"카페폭포 · Seodaemun-gu\"],\n    \"audio_source\": null,\n    \"hashtags\": [\"korea\", \"seoul\", \"cafepokpo\", \"koreavlog\", \"waterfallcafe\"]\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"waterfall + cafe\", \"probably one of the best places to relax, chill, and heal all at once. and yeah, this is in the middle of a city LOL.\", \"cafe pokpo\", \"429 hongeun-dong seodaemun-gu seoul\", \"me, myself & seoul | episode 19\"],\n    \"objects\": [\"waterfall\", \"green trees\", \"cafe seating\", \"person with camera\", \"wooden deck\", \"cloudy sky\"],\n    \"themes\": [\"urban nature\", \"cafe culture\", \"Seoul travel\", \"relaxation\"],\n    \"emotions\": [\"peaceful\", \"surprised\", \"relaxed\"],\n    \"vibes\": [\"serene\", \"hidden gem\", \"urban oasis\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Urban waterfall cafe location in Seoul\",\n    \"visual_hierarchy\": [\"Waterfall cascading through green forest\", \"Cafe seating area on wooden deck\", \"Person filming with camera\", \"Blue cloudy sky\", \"Dense green vegetation\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 469
+  }
+}

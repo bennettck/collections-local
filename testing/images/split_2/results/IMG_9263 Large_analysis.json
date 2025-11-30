@@ -1,0 +1,71 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_2/IMG_9263 Large.jpeg",
+  "image_name": "IMG_9263 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Medical",
+    "subcategories": [
+      "Stem Cell Therapy",
+      "Medical Tourism"
+    ],
+    "headline": "Stem cell treatment experience at JEUNEX clinic in Korea",
+    "summary": "Amy Chang shares her stem cell treatment experience at JEUNEX clinic, responding to Susan Yara about stem cells being found in bone marrow. The clinic appears to be located in Korea based on Korean text visible on signage.",
+    "media_metadata": {
+      "original_poster": "Amy Chang",
+      "tagged_accounts": [
+        "Susan Yara"
+      ],
+      "location_tags": [],
+      "audio_source": null,
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "stem cells can be found in bone marrow",
+        "JEUNEX",
+        "Amy Chang",
+        "Replying to Susan Yara here's my experience and all the details on g... more"
+      ],
+      "objects": [
+        "medical clinic reception desk",
+        "clinic staff",
+        "modern interior design",
+        "geometric logo",
+        "Korean text"
+      ],
+      "themes": [
+        "stem cell therapy",
+        "medical treatment",
+        "clinic visit",
+        "medical tourism"
+      ],
+      "emotions": [
+        "professional",
+        "informative",
+        "clinical"
+      ],
+      "vibes": [
+        "medical",
+        "modern",
+        "clean",
+        "professional"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Personal stem cell treatment experience at Korean medical clinic",
+      "visual_hierarchy": [
+        "stem cells can be found in bone marrow text overlay",
+        "JEUNEX clinic branding",
+        "clinic reception area",
+        "Amy Chang's response text",
+        "medical staff"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Medical\",\n  \"subcategories\": [\"Stem Cell Therapy\", \"Medical Tourism\"],\n  \"headline\": \"Stem cell treatment experience at JEUNEX clinic in Korea\",\n  \"summary\": \"Amy Chang shares her stem cell treatment experience at JEUNEX clinic, responding to Susan Yara about stem cells being found in bone marrow. The clinic appears to be located in Korea based on Korean text visible on signage.\",\n  \"media_metadata\": {\n    \"original_poster\": \"Amy Chang\",\n    \"tagged_accounts\": [\"Susan Yara\"],\n    \"location_tags\": [],\n    \"audio_source\": null,\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"stem cells can be found in bone marrow\", \"JEUNEX\", \"Amy Chang\", \"Replying to Susan Yara here's my experience and all the details on g... more\"],\n    \"objects\": [\"medical clinic reception desk\", \"clinic staff\", \"modern interior design\", \"geometric logo\", \"Korean text\"],\n    \"themes\": [\"stem cell therapy\", \"medical treatment\", \"clinic visit\", \"medical tourism\"],\n    \"emotions\": [\"professional\", \"informative\", \"clinical\"],\n    \"vibes\": [\"medical\", \"modern\", \"clean\", \"professional\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Personal stem cell treatment experience at Korean medical clinic\",\n    \"visual_hierarchy\": [\"stem cells can be found in bone marrow text overlay\", \"JEUNEX clinic branding\", \"clinic reception area\", \"Amy Chang's response text\", \"medical staff\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 390
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_1/IMG_8012 Large.jpeg",
+  "image_name": "IMG_8012 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Travel",
+    "subcategories": [
+      "Restaurant",
+      "Vegan"
+    ],
+    "headline": "Vegan Insa restaurant in Seoul recommended as must-visit vegan dining destination",
+    "summary": "Vegan Insa in Seoul is recommended as a sign to travel to Seoul and eat your vegan heart out. The restaurant appears to be a cozy, warmly-lit establishment with traditional Korean architectural elements.",
+    "media_metadata": {
+      "original_poster": "Eunice Rated V",
+      "tagged_accounts": [
+        "@NewJeans"
+      ],
+      "location_tags": [
+        "Seoul"
+      ],
+      "audio_source": "Cool With You - @NewJeans",
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "2. Vegan Insa",
+        "VEGAN INSA",
+        "Eunice Rated V",
+        "This is your sign to travel to Seoul and eat your vegan heart out",
+        "Cool With You - @NewJeans",
+        "Add comment..."
+      ],
+      "objects": [
+        "Traditional Korean building",
+        "Warm orange lighting",
+        "Restaurant storefront",
+        "Traditional roof tiles",
+        "Modern apartment building",
+        "Power lines"
+      ],
+      "themes": [
+        "Vegan dining",
+        "Seoul travel",
+        "Korean cuisine",
+        "Restaurant recommendation"
+      ],
+      "emotions": [
+        "Excitement",
+        "Wanderlust",
+        "Anticipation"
+      ],
+      "vibes": [
+        "Cozy",
+        "Inviting",
+        "Cultural",
+        "Authentic"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Vegan Insa restaurant recommendation in Seoul",
+      "visual_hierarchy": [
+        "2. Vegan Insa",
+        "VEGAN INSA storefront sign",
+        "Warm restaurant lighting",
+        "Traditional Korean architecture",
+        "Travel recommendation text"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Restaurant\", \"Vegan\"],\n  \"headline\": \"Vegan Insa restaurant in Seoul recommended as must-visit vegan dining destination\",\n  \"summary\": \"Vegan Insa in Seoul is recommended as a sign to travel to Seoul and eat your vegan heart out. The restaurant appears to be a cozy, warmly-lit establishment with traditional Korean architectural elements.\",\n  \"media_metadata\": {\n    \"original_poster\": \"Eunice Rated V\",\n    \"tagged_accounts\": [\"@NewJeans\"],\n    \"location_tags\": [\"Seoul\"],\n    \"audio_source\": \"Cool With You - @NewJeans\",\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"2. Vegan Insa\", \"VEGAN INSA\", \"Eunice Rated V\", \"This is your sign to travel to Seoul and eat your vegan heart out\", \"Cool With You - @NewJeans\", \"Add comment...\"],\n    \"objects\": [\"Traditional Korean building\", \"Warm orange lighting\", \"Restaurant storefront\", \"Traditional roof tiles\", \"Modern apartment building\", \"Power lines\"],\n    \"themes\": [\"Vegan dining\", \"Seoul travel\", \"Korean cuisine\", \"Restaurant recommendation\"],\n    \"emotions\": [\"Excitement\", \"Wanderlust\", \"Anticipation\"],\n    \"vibes\": [\"Cozy\", \"Inviting\", \"Cultural\", \"Authentic\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Vegan Insa restaurant recommendation in Seoul\",\n    \"visual_hierarchy\": [\"2. Vegan Insa\", \"VEGAN INSA storefront sign\", \"Warm restaurant lighting\", \"Traditional Korean architecture\", \"Travel recommendation text\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 436
+  }
+}

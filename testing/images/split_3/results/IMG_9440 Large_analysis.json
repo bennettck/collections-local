@@ -1,0 +1,77 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_3/IMG_9440 Large.jpeg",
+  "image_name": "IMG_9440 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Food",
+    "subcategories": [
+      "Restaurant Review",
+      "Seoul Dining"
+    ],
+    "headline": "Onion Anguk cafe review - good vibes, food and coffee but questioning if Seoul food spots are overhyped",
+    "summary": "Reviewer visited Onion Anguk twice, praising the vibes, food quality, and coffee. Part of a broader discussion rating Seoul's popular food spots and whether they're overhyped or worth it, with Isaac toast getting a 5/10 rating.",
+    "media_metadata": {
+      "original_poster": "elle",
+      "tagged_accounts": [
+        "@nokdu"
+      ],
+      "location_tags": [
+        "Seoul - 461.6K people posted about this place"
+      ],
+      "audio_source": "오늘같은 밤 - @nokdu",
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "onion anguk worth it",
+        "been to this location twice but i love the vibes and the food is good",
+        "their coffee is good too",
+        "overhyped or worth it? rating seoul's popular food spots",
+        "lmk if you agree or disagree some of the places on this list have been popular for so long and others might just be a phase after it went viral but let's see",
+        "isaac toast overhyped 5/10",
+        "Search • nuldam space cafe seoul"
+      ],
+      "objects": [
+        "coffee cup with latte art",
+        "iced coffee",
+        "grilled eggplant dish",
+        "flatbread pizza",
+        "black serving tray",
+        "smartphone",
+        "wooden table"
+      ],
+      "themes": [
+        "restaurant review",
+        "Seoul food scene",
+        "cafe culture",
+        "food rating"
+      ],
+      "emotions": [
+        "appreciation",
+        "critical evaluation",
+        "curiosity"
+      ],
+      "vibes": [
+        "cozy cafe atmosphere",
+        "food blogger aesthetic",
+        "honest review"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Honest review of Onion Anguk cafe as part of Seoul food spot ratings",
+      "visual_hierarchy": [
+        "onion anguk worth it (large overlay text)",
+        "grilled eggplant and flatbread dishes (center focus)",
+        "coffee with latte art (prominent left)",
+        "rating caption text",
+        "Seoul location tag"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Food\",\n  \"subcategories\": [\"Restaurant Review\", \"Seoul Dining\"],\n  \"headline\": \"Onion Anguk cafe review - good vibes, food and coffee but questioning if Seoul food spots are overhyped\",\n  \"summary\": \"Reviewer visited Onion Anguk twice, praising the vibes, food quality, and coffee. Part of a broader discussion rating Seoul's popular food spots and whether they're overhyped or worth it, with Isaac toast getting a 5/10 rating.\",\n  \"media_metadata\": {\n    \"original_poster\": \"elle\",\n    \"tagged_accounts\": [\"@nokdu\"],\n    \"location_tags\": [\"Seoul - 461.6K people posted about this place\"],\n    \"audio_source\": \"오늘같은 밤 - @nokdu\",\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\n      \"onion anguk worth it\",\n      \"been to this location twice but i love the vibes and the food is good\",\n      \"their coffee is good too\",\n      \"overhyped or worth it? rating seoul's popular food spots\",\n      \"lmk if you agree or disagree some of the places on this list have been popular for so long and others might just be a phase after it went viral but let's see\",\n      \"isaac toast overhyped 5/10\",\n      \"Search • nuldam space cafe seoul\"\n    ],\n    \"objects\": [\"coffee cup with latte art\", \"iced coffee\", \"grilled eggplant dish\", \"flatbread pizza\", \"black serving tray\", \"smartphone\", \"wooden table\"],\n    \"themes\": [\"restaurant review\", \"Seoul food scene\", \"cafe culture\", \"food rating\"],\n    \"emotions\": [\"appreciation\", \"critical evaluation\", \"curiosity\"],\n    \"vibes\": [\"cozy cafe atmosphere\", \"food blogger aesthetic\", \"honest review\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Honest review of Onion Anguk cafe as part of Seoul food spot ratings\",\n    \"visual_hierarchy\": [\n      \"onion anguk worth it (large overlay text)\",\n      \"grilled eggplant and flatbread dishes (center focus)\",\n      \"coffee with latte art (prominent left)\",\n      \"rating caption text\",\n      \"Seoul location tag\"\n    ]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 576
+  }
+}

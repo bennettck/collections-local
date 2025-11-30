@@ -1,0 +1,80 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_3/IMG_9422 Large.jpeg",
+  "image_name": "IMG_9422 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Shopping",
+    "subcategories": [
+      "Stickers",
+      "Local-Business"
+    ],
+    "headline": "Oka General Store in Denver selling vintage band and pop culture stickers including Metallica, AC/DC, and horror themes",
+    "summary": "Oka General Store in Denver offers vintage-style stickers featuring bands like Metallica and AC/DC, plus horror and pop culture designs. The collection includes tombstone designs and classic rock memorabilia perfect for collectors.",
+    "media_metadata": {
+      "original_poster": "sunflowers2cs",
+      "tagged_accounts": [],
+      "location_tags": [
+        "Oka General Store • Denver"
+      ],
+      "audio_source": null,
+      "hashtags": [
+        "#denverlocal",
+        "#thingstodoindenver",
+        "#fyp"
+      ]
+    },
+    "image_details": {
+      "extracted_text": [
+        "Zeds dead baby, zeds dead",
+        "LED ZEPPELIN",
+        "AC/DC",
+        "METALLICA",
+        "RIP 1986",
+        "Oka General Store",
+        "Denver",
+        "japanese notebooks a5"
+      ],
+      "objects": [
+        "vintage stickers",
+        "band merchandise",
+        "tombstone designs",
+        "horror movie references",
+        "wooden display case",
+        "rock band logos"
+      ],
+      "themes": [
+        "vintage collectibles",
+        "band merchandise",
+        "local shopping",
+        "pop culture",
+        "horror movies"
+      ],
+      "emotions": [
+        "nostalgic",
+        "edgy",
+        "cool"
+      ],
+      "vibes": [
+        "retro",
+        "alternative",
+        "collector-focused"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Vintage band and pop culture sticker collection at local Denver store",
+      "visual_hierarchy": [
+        "Zeds dead baby text overlay",
+        "LED ZEPPELIN sticker",
+        "Metallica tombstone sticker",
+        "AC/DC logo",
+        "Store location tag"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Shopping\",\n  \"subcategories\": [\"Stickers\", \"Local-Business\"],\n  \"headline\": \"Oka General Store in Denver selling vintage band and pop culture stickers including Metallica, AC/DC, and horror themes\",\n  \"summary\": \"Oka General Store in Denver offers vintage-style stickers featuring bands like Metallica and AC/DC, plus horror and pop culture designs. The collection includes tombstone designs and classic rock memorabilia perfect for collectors.\",\n  \"media_metadata\": {\n    \"original_poster\": \"sunflowers2cs\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [\"Oka General Store • Denver\"],\n    \"audio_source\": null,\n    \"hashtags\": [\"#denverlocal\", \"#thingstodoindenver\", \"#fyp\"]\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"Zeds dead baby, zeds dead\", \"LED ZEPPELIN\", \"AC/DC\", \"METALLICA\", \"RIP 1986\", \"Oka General Store\", \"Denver\", \"japanese notebooks a5\"],\n    \"objects\": [\"vintage stickers\", \"band merchandise\", \"tombstone designs\", \"horror movie references\", \"wooden display case\", \"rock band logos\"],\n    \"themes\": [\"vintage collectibles\", \"band merchandise\", \"local shopping\", \"pop culture\", \"horror movies\"],\n    \"emotions\": [\"nostalgic\", \"edgy\", \"cool\"],\n    \"vibes\": [\"retro\", \"alternative\", \"collector-focused\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Vintage band and pop culture sticker collection at local Denver store\",\n    \"visual_hierarchy\": [\"Zeds dead baby text overlay\", \"LED ZEPPELIN sticker\", \"Metallica tombstone sticker\", \"AC/DC logo\", \"Store location tag\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 448
+  }
+}

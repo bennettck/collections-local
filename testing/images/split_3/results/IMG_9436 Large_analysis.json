@@ -1,0 +1,79 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_3/IMG_9436 Large.jpeg",
+  "image_name": "IMG_9436 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Healthcare",
+    "subcategories": [
+      "AI Technology",
+      "Open Source"
+    ],
+    "headline": "Open source AI health tracking system for personal medical data management",
+    "summary": "OpenHealthForAll project creates a private local AI doctor that tracks medical data including blood test results, health checkup data, personal physical information, family history, and symptoms. The system supports multiple language models and acts as an unbiased health management tool.",
+    "media_metadata": {
+      "original_poster": "Sabrina Ramonov",
+      "tagged_accounts": [],
+      "location_tags": [],
+      "audio_source": null,
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "UNDERSTANDING OF YOUR",
+        "https://github.com/OpenHealthForAll/open-health",
+        "Data Sources You Can Add",
+        "Blood Test Results",
+        "Health Checkup Data",
+        "Personal Physical Information",
+        "Family History",
+        "Symptoms",
+        "Supported Language Models",
+        "LLaM",
+        "DeepSeek",
+        "GPT",
+        "Claude",
+        "Project Diagram",
+        "Awesome open source private local AI doctor! Keep track of your medica..."
+      ],
+      "objects": [
+        "project diagram",
+        "flowchart",
+        "GitHub interface",
+        "person speaking"
+      ],
+      "themes": [
+        "open source software",
+        "healthcare technology",
+        "AI applications",
+        "data privacy",
+        "personal health management"
+      ],
+      "emotions": [
+        "informative",
+        "enthusiastic",
+        "educational"
+      ],
+      "vibes": [
+        "tech-savvy",
+        "health-conscious",
+        "developer-focused"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "GitHub link to OpenHealthForAll project",
+      "visual_hierarchy": [
+        "GitHub URL overlay",
+        "Project title",
+        "Data sources list",
+        "Person presenting",
+        "Project diagram"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Healthcare\",\n  \"subcategories\": [\"AI Technology\", \"Open Source\"],\n  \"headline\": \"Open source AI health tracking system for personal medical data management\",\n  \"summary\": \"OpenHealthForAll project creates a private local AI doctor that tracks medical data including blood test results, health checkup data, personal physical information, family history, and symptoms. The system supports multiple language models and acts as an unbiased health management tool.\",\n  \"media_metadata\": {\n    \"original_poster\": \"Sabrina Ramonov\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [],\n    \"audio_source\": null,\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"UNDERSTANDING OF YOUR\", \"https://github.com/OpenHealthForAll/open-health\", \"Data Sources You Can Add\", \"Blood Test Results\", \"Health Checkup Data\", \"Personal Physical Information\", \"Family History\", \"Symptoms\", \"Supported Language Models\", \"LLaM\", \"DeepSeek\", \"GPT\", \"Claude\", \"Project Diagram\", \"Awesome open source private local AI doctor! Keep track of your medica...\"],\n    \"objects\": [\"project diagram\", \"flowchart\", \"GitHub interface\", \"person speaking\"],\n    \"themes\": [\"open source software\", \"healthcare technology\", \"AI applications\", \"data privacy\", \"personal health management\"],\n    \"emotions\": [\"informative\", \"enthusiastic\", \"educational\"],\n    \"vibes\": [\"tech-savvy\", \"health-conscious\", \"developer-focused\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"GitHub link to OpenHealthForAll project\",\n    \"visual_hierarchy\": [\"GitHub URL overlay\", \"Project title\", \"Data sources list\", \"Person presenting\", \"Project diagram\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 435
+  }
+}

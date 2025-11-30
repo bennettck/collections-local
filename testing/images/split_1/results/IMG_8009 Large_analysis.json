@@ -1,0 +1,74 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_1/IMG_8009 Large.jpeg",
+  "image_name": "IMG_8009 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Travel",
+    "subcategories": [
+      "Vegan Food",
+      "Tokyo Guide"
+    ],
+    "headline": "Top 3 Vegan Sweet Spots in Tokyo - Personal Picks from Japan Travel Guide",
+    "summary": "Juno's Japan Travel Guide shares top 3 favorite Tokyo cafés serving plant-based sweets, perfect even for non-vegans. Features ovgo Baker Edo St. EAST in Chuo City with 14.2K location posts.",
+    "media_metadata": {
+      "original_poster": "Juno | Japan Travel Guide",
+      "tagged_accounts": [],
+      "location_tags": [
+        "ovgo Baker Edo St. EAST • Chuo City",
+        "14.2K likes on posts of this place"
+      ],
+      "audio_source": "Pretty Little Baby - Stereo Mix - @Con...",
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "Sunday vegan(Kichijoji)",
+        "Top 3 Vegan Sweet Spots in Tokyo – My Personal Picks",
+        "Looking for the best vegan treats in Tokyo? Here are my top 3 favorite cafés that serve mouthwatering plant-based sweets — perfect even for non-vegans!",
+        "ovgo Baker Edo St. EAST • Chuo City",
+        "14.2K likes on posts of this place"
+      ],
+      "objects": [
+        "modern café interior",
+        "coffee counter",
+        "espresso machine",
+        "potted plants",
+        "wooden counter",
+        "stacked cups",
+        "industrial ceiling"
+      ],
+      "themes": [
+        "vegan dining",
+        "Tokyo food scene",
+        "café culture",
+        "plant-based lifestyle"
+      ],
+      "emotions": [
+        "inviting",
+        "modern",
+        "trendy"
+      ],
+      "vibes": [
+        "minimalist",
+        "Instagram-worthy",
+        "urban café"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Vegan café recommendations in Tokyo with specific location details",
+      "visual_hierarchy": [
+        "Top 3 Vegan Sweet Spots in Tokyo title",
+        "Modern café interior with wooden counter",
+        "ovgo Baker location tag",
+        "Sunday vegan(Kichijoji) overlay text",
+        "Plant decorations and café atmosphere"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Vegan Food\", \"Tokyo Guide\"],\n  \"headline\": \"Top 3 Vegan Sweet Spots in Tokyo - Personal Picks from Japan Travel Guide\",\n  \"summary\": \"Juno's Japan Travel Guide shares top 3 favorite Tokyo cafés serving plant-based sweets, perfect even for non-vegans. Features ovgo Baker Edo St. EAST in Chuo City with 14.2K location posts.\",\n  \"media_metadata\": {\n    \"original_poster\": \"Juno | Japan Travel Guide\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [\"ovgo Baker Edo St. EAST • Chuo City\", \"14.2K likes on posts of this place\"],\n    \"audio_source\": \"Pretty Little Baby - Stereo Mix - @Con...\",\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\n      \"Sunday vegan(Kichijoji)\",\n      \"Top 3 Vegan Sweet Spots in Tokyo – My Personal Picks\",\n      \"Looking for the best vegan treats in Tokyo? Here are my top 3 favorite cafés that serve mouthwatering plant-based sweets — perfect even for non-vegans!\",\n      \"ovgo Baker Edo St. EAST • Chuo City\",\n      \"14.2K likes on posts of this place\"\n    ],\n    \"objects\": [\"modern café interior\", \"coffee counter\", \"espresso machine\", \"potted plants\", \"wooden counter\", \"stacked cups\", \"industrial ceiling\"],\n    \"themes\": [\"vegan dining\", \"Tokyo food scene\", \"café culture\", \"plant-based lifestyle\"],\n    \"emotions\": [\"inviting\", \"modern\", \"trendy\"],\n    \"vibes\": [\"minimalist\", \"Instagram-worthy\", \"urban café\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Vegan café recommendations in Tokyo with specific location details\",\n    \"visual_hierarchy\": [\n      \"Top 3 Vegan Sweet Spots in Tokyo title\",\n      \"Modern café interior with wooden counter\",\n      \"ovgo Baker location tag\",\n      \"Sunday vegan(Kichijoji) overlay text\",\n      \"Plant decorations and café atmosphere\"\n    ]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 557
+  }
+}

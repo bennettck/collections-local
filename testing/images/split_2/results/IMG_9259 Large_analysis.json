@@ -1,0 +1,78 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_2/IMG_9259 Large.jpeg",
+  "image_name": "IMG_9259 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Travel",
+    "subcategories": [
+      "Seoul",
+      "Fashion"
+    ],
+    "headline": "Tourist feeling underdressed at trendy Seoul spot Seosulla Gil",
+    "summary": "Tourist visits newly trending spot Seosulla Gil in Seoul, Korea and feels underdressed compared to the fashionable locals. The location appears to be near traditional Korean architecture with decorative wall patterns.",
+    "media_metadata": {
+      "original_poster": "leeskin",
+      "tagged_accounts": [],
+      "location_tags": [
+        "Newly trending spot in seoul",
+        "seosulla gil 서순라길"
+      ],
+      "audio_source": null,
+      "hashtags": [
+        "korea",
+        "seoul",
+        "seosu"
+      ]
+    },
+    "image_details": {
+      "extracted_text": [
+        "I almost felt a bit underdressed",
+        "Newly trending spot in seoul",
+        "seosulla gil 서순라길",
+        "#korea #seoul #seosu... more",
+        "Search · 서순라길"
+      ],
+      "objects": [
+        "traditional Korean wall with geometric brick pattern",
+        "curved tile roof",
+        "two people walking",
+        "stone base wall",
+        "yellow road line",
+        "street pavement"
+      ],
+      "themes": [
+        "cultural tourism",
+        "fashion consciousness",
+        "Seoul exploration",
+        "traditional architecture"
+      ],
+      "emotions": [
+        "self-consciousness",
+        "cultural awareness",
+        "travel excitement"
+      ],
+      "vibes": [
+        "trendy",
+        "cultural",
+        "fashionable",
+        "tourist experience"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Tourist's reaction to feeling underdressed at trendy Seoul location",
+      "visual_hierarchy": [
+        "overlay text about feeling underdressed",
+        "traditional Korean decorative wall",
+        "two people walking",
+        "location tag for Seosulla Gil",
+        "hashtags about Korea and Seoul"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Seoul\", \"Fashion\"],\n  \"headline\": \"Tourist feeling underdressed at trendy Seoul spot Seosulla Gil\",\n  \"summary\": \"Tourist visits newly trending spot Seosulla Gil in Seoul, Korea and feels underdressed compared to the fashionable locals. The location appears to be near traditional Korean architecture with decorative wall patterns.\",\n  \"media_metadata\": {\n    \"original_poster\": \"leeskin\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [\"Newly trending spot in seoul\", \"seosulla gil 서순라길\"],\n    \"audio_source\": null,\n    \"hashtags\": [\"korea\", \"seoul\", \"seosu\"]\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"I almost felt a bit underdressed\", \"Newly trending spot in seoul\", \"seosulla gil 서순라길\", \"#korea #seoul #seosu... more\", \"Search · 서순라길\"],\n    \"objects\": [\"traditional Korean wall with geometric brick pattern\", \"curved tile roof\", \"two people walking\", \"stone base wall\", \"yellow road line\", \"street pavement\"],\n    \"themes\": [\"cultural tourism\", \"fashion consciousness\", \"Seoul exploration\", \"traditional architecture\"],\n    \"emotions\": [\"self-consciousness\", \"cultural awareness\", \"travel excitement\"],\n    \"vibes\": [\"trendy\", \"cultural\", \"fashionable\", \"tourist experience\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Tourist's reaction to feeling underdressed at trendy Seoul location\",\n    \"visual_hierarchy\": [\"overlay text about feeling underdressed\", \"traditional Korean decorative wall\", \"two people walking\", \"location tag for Seosulla Gil\", \"hashtags about Korea and Seoul\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 433
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_1/IMG_7938 Large.jpeg",
+  "image_name": "IMG_7938 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Luxury",
+    "subcategories": [
+      "Watches",
+      "Japanese Brands"
+    ],
+    "headline": "KUOE Kyoto luxury watch brand featuring Old Smith 90-002 Bronze model with VAT/customs fees included pricing",
+    "summary": "KUOE Kyoto luxury watch brand promotes their Old Smith 90-002 Bronze model. VAT and customs fees are included in product prices for most countries. The brand appears to be featured in New York with 42.6K recent posts about the location.",
+    "media_metadata": {
+      "original_poster": "RJ",
+      "tagged_accounts": [],
+      "location_tags": [
+        "New York - 42.6K recent posts featured this place"
+      ],
+      "audio_source": null,
+      "hashtags": [
+        "#watches",
+        "#newwatch"
+      ]
+    },
+    "image_details": {
+      "extracted_text": [
+        "KUOE KYOTO",
+        "Any necessary VAT and customs fees are included to each product price for most countries",
+        "OLD SMITH 90-002 / BRONZE",
+        "Kyoto*** I'M SO SORRY",
+        "SHOP NOW",
+        "3 more microbrands YOU guys wanted to see #watches #newwatch"
+      ],
+      "objects": [
+        "luxury watch",
+        "bronze timepiece",
+        "chess piece",
+        "necklace with cross pendant"
+      ],
+      "themes": [
+        "luxury goods",
+        "Japanese craftsmanship",
+        "watch collecting",
+        "microbrand watches"
+      ],
+      "emotions": [
+        "sophistication",
+        "exclusivity",
+        "craftsmanship appreciation"
+      ],
+      "vibes": [
+        "premium",
+        "artisanal",
+        "collector-focused",
+        "international luxury"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "KUOE Kyoto luxury watch brand and their bronze Old Smith model",
+      "visual_hierarchy": [
+        "KUOE KYOTO brand name",
+        "Bronze luxury watch",
+        "VAT/customs inclusion notice",
+        "Old Smith 90-002 model name",
+        "Shop Now call-to-action"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Luxury\",\n  \"subcategories\": [\"Watches\", \"Japanese Brands\"],\n  \"headline\": \"KUOE Kyoto luxury watch brand featuring Old Smith 90-002 Bronze model with VAT/customs fees included pricing\",\n  \"summary\": \"KUOE Kyoto luxury watch brand promotes their Old Smith 90-002 Bronze model. VAT and customs fees are included in product prices for most countries. The brand appears to be featured in New York with 42.6K recent posts about the location.\",\n  \"media_metadata\": {\n    \"original_poster\": \"RJ\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [\"New York - 42.6K recent posts featured this place\"],\n    \"audio_source\": null,\n    \"hashtags\": [\"#watches\", \"#newwatch\"]\n  },\n  \"image_details\": {\n    \"extracted_text\": [\n      \"KUOE KYOTO\",\n      \"Any necessary VAT and customs fees are included to each product price for most countries\",\n      \"OLD SMITH 90-002 / BRONZE\",\n      \"Kyoto*** I'M SO SORRY\",\n      \"SHOP NOW\",\n      \"3 more microbrands YOU guys wanted to see #watches #newwatch\"\n    ],\n    \"objects\": [\"luxury watch\", \"bronze timepiece\", \"chess piece\", \"necklace with cross pendant\"],\n    \"themes\": [\"luxury goods\", \"Japanese craftsmanship\", \"watch collecting\", \"microbrand watches\"],\n    \"emotions\": [\"sophistication\", \"exclusivity\", \"craftsmanship appreciation\"],\n    \"vibes\": [\"premium\", \"artisanal\", \"collector-focused\", \"international luxury\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"KUOE Kyoto luxury watch brand and their bronze Old Smith model\",\n    \"visual_hierarchy\": [\n      \"KUOE KYOTO brand name\",\n      \"Bronze luxury watch\",\n      \"VAT/customs inclusion notice\",\n      \"Old Smith 90-002 model name\",\n      \"Shop Now call-to-action\"\n    ]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 512
+  }
+}

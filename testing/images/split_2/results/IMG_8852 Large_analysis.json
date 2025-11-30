@@ -1,0 +1,85 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_2/IMG_8852 Large.jpeg",
+  "image_name": "IMG_8852 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Cinema",
+    "subcategories": [
+      "Film Reviews",
+      "Japanese Cinema"
+    ],
+    "headline": "Our Little Sister by Hirokazu Kore-eda film recommendation with festival accolades and positive review",
+    "summary": "\"Our Little Sister\" by Hirokazu Kore-eda is described as \"irresistible, an intimate, warm embrace of a film that radiates joy and harmony, deeply charming and quietly moving.\" The film received recognition at Cannes, San Sebastian, Toronto, and AFI film festivals.",
+    "media_metadata": {
+      "original_poster": "It's Just Cinema",
+      "tagged_accounts": [],
+      "location_tags": [],
+      "audio_source": null,
+      "hashtags": [
+        "#filmtok",
+        "#whattowatch",
+        "#cinema",
+        "#hirokazukoreeda",
+        "#feelgoodfilms",
+        "#moviereview",
+        "#cinematography",
+        "#asiancinema",
+        "#japanesecinema"
+      ]
+    },
+    "image_details": {
+      "extracted_text": [
+        "ourlittlesister",
+        "A film by KORE-EDA HIROKAZU",
+        "IRRESISTIBLE...AN INTIMATE, WARM EMBRACE OF A FILM THAT RADIATES JOY AND HARMONY. DEEPLY CHARMING AND QUIETLY MOVING.",
+        "CANNES",
+        "SAN SEBASTIAN",
+        "TORONTO",
+        "AFI",
+        "It's Just Cinema",
+        "Part 6 | Hirokazu Koreeda's \"Our Little Sister\" is such an incredible little film",
+        "Playlist • Feel Good Series"
+      ],
+      "objects": [
+        "movie poster",
+        "four young women in traditional clothing",
+        "film festival laurels",
+        "TikTok interface elements"
+      ],
+      "themes": [
+        "Japanese cinema",
+        "family films",
+        "film festivals",
+        "movie recommendations"
+      ],
+      "emotions": [
+        "warmth",
+        "joy",
+        "charm",
+        "intimacy"
+      ],
+      "vibes": [
+        "cozy",
+        "heartwarming",
+        "artistic",
+        "cultural"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Film recommendation for \"Our Little Sister\" by acclaimed director Hirokazu Kore-eda",
+      "visual_hierarchy": [
+        "Movie title \"ourlittlesister\"",
+        "Critical quote about the film",
+        "Festival laurels (Cannes, San Sebastian, Toronto, AFI)",
+        "Four women in traditional Japanese clothing",
+        "Director name Kore-eda Hirokazu"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Cinema\",\n  \"subcategories\": [\"Film Reviews\", \"Japanese Cinema\"],\n  \"headline\": \"Our Little Sister by Hirokazu Kore-eda film recommendation with festival accolades and positive review\",\n  \"summary\": \"\\\"Our Little Sister\\\" by Hirokazu Kore-eda is described as \\\"irresistible, an intimate, warm embrace of a film that radiates joy and harmony, deeply charming and quietly moving.\\\" The film received recognition at Cannes, San Sebastian, Toronto, and AFI film festivals.\",\n  \"media_metadata\": {\n    \"original_poster\": \"It's Just Cinema\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [],\n    \"audio_source\": null,\n    \"hashtags\": [\"#filmtok\", \"#whattowatch\", \"#cinema\", \"#hirokazukoreeda\", \"#feelgoodfilms\", \"#moviereview\", \"#cinematography\", \"#asiancinema\", \"#japanesecinema\"]\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"ourlittlesister\", \"A film by KORE-EDA HIROKAZU\", \"IRRESISTIBLE...AN INTIMATE, WARM EMBRACE OF A FILM THAT RADIATES JOY AND HARMONY. DEEPLY CHARMING AND QUIETLY MOVING.\", \"CANNES\", \"SAN SEBASTIAN\", \"TORONTO\", \"AFI\", \"It's Just Cinema\", \"Part 6 | Hirokazu Koreeda's \\\"Our Little Sister\\\" is such an incredible little film\", \"Playlist • Feel Good Series\"],\n    \"objects\": [\"movie poster\", \"four young women in traditional clothing\", \"film festival laurels\", \"TikTok interface elements\"],\n    \"themes\": [\"Japanese cinema\", \"family films\", \"film festivals\", \"movie recommendations\"],\n    \"emotions\": [\"warmth\", \"joy\", \"charm\", \"intimacy\"],\n    \"vibes\": [\"cozy\", \"heartwarming\", \"artistic\", \"cultural\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Film recommendation for \\\"Our Little Sister\\\" by acclaimed director Hirokazu Kore-eda\",\n    \"visual_hierarchy\": [\"Movie title \\\"ourlittlesister\\\"\", \"Critical quote about the film\", \"Festival laurels (Cannes, San Sebastian, Toronto, AFI)\", \"Four women in traditional Japanese clothing\", \"Director name Kore-eda Hirokazu\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 585
+  }
+}

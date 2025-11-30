@@ -1,0 +1,75 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_1/IMG_7942 Large.jpeg",
+  "image_name": "IMG_7942 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Shopping",
+    "subcategories": [
+      "Handmade",
+      "Japanese"
+    ],
+    "headline": "Custom hand-carved wooden chopsticks with personalized engraving in Japanese or English",
+    "summary": "Karaki mokkou offers custom wooden chopsticks that can be hand-carved with personalized engravings in Japanese or English. Customers can choose size, ink color and other customization options. The shop owner is described as super kind and the products are affordable.",
+    "media_metadata": {
+      "original_poster": "itsjustinjapan",
+      "tagged_accounts": [
+        "@karakimokkou_",
+        "@Laufey"
+      ],
+      "location_tags": [
+        "Kawagoe"
+      ],
+      "audio_source": "Apple Music - Tough Luck - @Laufey",
+      "hashtags": [
+        "#japantravel"
+      ]
+    },
+    "image_details": {
+      "extracted_text": [
+        "Karaki mokkou",
+        "MAKE YOUR OWN CHOPSTICKS",
+        "My personal fav. Hand carve your own set of wooden chopsticks - super cute designs and pretty affordable. Engrave your name in Japanese or English plus choose the size, ink color and more. Shop owner is super kind.",
+        "Custom workshops for your trip! Guide in bio",
+        "Walk-in available"
+      ],
+      "objects": [
+        "wooden chopsticks",
+        "carving tools",
+        "wooden blocks",
+        "crafting workspace"
+      ],
+      "themes": [
+        "Japanese craftsmanship",
+        "personalization",
+        "cultural experience",
+        "handmade goods"
+      ],
+      "emotions": [
+        "appreciation",
+        "enthusiasm"
+      ],
+      "vibes": [
+        "authentic",
+        "artisanal",
+        "cultural",
+        "personal"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Custom chopstick carving workshop with personalized engraving options",
+      "visual_hierarchy": [
+        "MAKE YOUR OWN CHOPSTICKS",
+        "Karaki mokkou",
+        "wooden chopsticks display",
+        "carving workspace",
+        "recommendation text"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Shopping\",\n  \"subcategories\": [\"Handmade\", \"Japanese\"],\n  \"headline\": \"Custom hand-carved wooden chopsticks with personalized engraving in Japanese or English\",\n  \"summary\": \"Karaki mokkou offers custom wooden chopsticks that can be hand-carved with personalized engravings in Japanese or English. Customers can choose size, ink color and other customization options. The shop owner is described as super kind and the products are affordable.\",\n  \"media_metadata\": {\n    \"original_poster\": \"itsjustinjapan\",\n    \"tagged_accounts\": [\"@karakimokkou_\", \"@Laufey\"],\n    \"location_tags\": [\"Kawagoe\"],\n    \"audio_source\": \"Apple Music - Tough Luck - @Laufey\",\n    \"hashtags\": [\"#japantravel\"]\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"Karaki mokkou\", \"MAKE YOUR OWN CHOPSTICKS\", \"My personal fav. Hand carve your own set of wooden chopsticks - super cute designs and pretty affordable. Engrave your name in Japanese or English plus choose the size, ink color and more. Shop owner is super kind.\", \"Custom workshops for your trip! Guide in bio\", \"Walk-in available\"],\n    \"objects\": [\"wooden chopsticks\", \"carving tools\", \"wooden blocks\", \"crafting workspace\"],\n    \"themes\": [\"Japanese craftsmanship\", \"personalization\", \"cultural experience\", \"handmade goods\"],\n    \"emotions\": [\"appreciation\", \"enthusiasm\"],\n    \"vibes\": [\"authentic\", \"artisanal\", \"cultural\", \"personal\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Custom chopstick carving workshop with personalized engraving options\",\n    \"visual_hierarchy\": [\"MAKE YOUR OWN CHOPSTICKS\", \"Karaki mokkou\", \"wooden chopsticks display\", \"carving workspace\", \"recommendation text\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 483
+  }
+}

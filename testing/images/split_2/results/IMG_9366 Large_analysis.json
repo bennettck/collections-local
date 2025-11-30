@@ -1,0 +1,76 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_2/IMG_9366 Large.jpeg",
+  "image_name": "IMG_9366 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "DIY",
+    "subcategories": [
+      "Home Improvement",
+      "Flooring Materials"
+    ],
+    "headline": "Rust-Oleum Decorative Color Chips in Glacier Gray Blend for floor coating projects",
+    "summary": "Rust-Oleum Decorative Color Chips in Glacier Gray Blend, 16 ounce pack for $15.48 ($0.97/ounce). Alternative colors include Gray Blend and Metallic Silver. 6-pack option available for $84.08 ($0.88/ounce). Used with concrete coatings to enhance and hide surface imperfections.",
+    "media_metadata": {
+      "original_poster": null,
+      "tagged_accounts": [],
+      "location_tags": [],
+      "audio_source": null,
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "RUST-OLEUM",
+        "DECORATIVE COLOR CHIPS",
+        "GLACIER GRAY BLEND",
+        "1 LB. (454 g)",
+        "Color: Glacier Gray Blend",
+        "Size: 16 Ounce (Pack of 1)",
+        "$15.48",
+        "($0.97 / ounce)",
+        "$84.08",
+        "($0.88 / ounce)",
+        "16 Ounce (Pack of 6)",
+        "Glacier Gray",
+        "Gray Blend",
+        "Metallic Silver"
+      ],
+      "objects": [
+        "product packaging",
+        "color chip samples",
+        "pricing options",
+        "size selections"
+      ],
+      "themes": [
+        "home improvement",
+        "floor coating",
+        "decorative materials",
+        "product comparison"
+      ],
+      "emotions": [
+        "practical",
+        "informative"
+      ],
+      "vibes": [
+        "utilitarian",
+        "professional",
+        "DIY-focused"
+      ],
+      "likely_source": "other",
+      "key_interest": "Pricing comparison between single pack ($0.97/ounce) and 6-pack ($0.88/ounce) options",
+      "visual_hierarchy": [
+        "DECORATIVE COLOR CHIPS",
+        "Glacier Gray Blend color sample",
+        "$15.48 pricing",
+        "Color selection options",
+        "Size comparison chart"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"DIY\",\n  \"subcategories\": [\"Home Improvement\", \"Flooring Materials\"],\n  \"headline\": \"Rust-Oleum Decorative Color Chips in Glacier Gray Blend for floor coating projects\",\n  \"summary\": \"Rust-Oleum Decorative Color Chips in Glacier Gray Blend, 16 ounce pack for $15.48 ($0.97/ounce). Alternative colors include Gray Blend and Metallic Silver. 6-pack option available for $84.08 ($0.88/ounce). Used with concrete coatings to enhance and hide surface imperfections.\",\n  \"media_metadata\": {\n    \"original_poster\": null,\n    \"tagged_accounts\": [],\n    \"location_tags\": [],\n    \"audio_source\": null,\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"RUST-OLEUM\", \"DECORATIVE COLOR CHIPS\", \"GLACIER GRAY BLEND\", \"1 LB. (454 g)\", \"Color: Glacier Gray Blend\", \"Size: 16 Ounce (Pack of 1)\", \"$15.48\", \"($0.97 / ounce)\", \"$84.08\", \"($0.88 / ounce)\", \"16 Ounce (Pack of 6)\", \"Glacier Gray\", \"Gray Blend\", \"Metallic Silver\"],\n    \"objects\": [\"product packaging\", \"color chip samples\", \"pricing options\", \"size selections\"],\n    \"themes\": [\"home improvement\", \"floor coating\", \"decorative materials\", \"product comparison\"],\n    \"emotions\": [\"practical\", \"informative\"],\n    \"vibes\": [\"utilitarian\", \"professional\", \"DIY-focused\"],\n    \"likely_source\": \"other\",\n    \"key_interest\": \"Pricing comparison between single pack ($0.97/ounce) and 6-pack ($0.88/ounce) options\",\n    \"visual_hierarchy\": [\"DECORATIVE COLOR CHIPS\", \"Glacier Gray Blend color sample\", \"$15.48 pricing\", \"Color selection options\", \"Size comparison chart\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 518
+  }
+}

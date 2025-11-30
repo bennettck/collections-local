@@ -1,0 +1,78 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_1/IMG_7919 Large.jpeg",
+  "image_name": "IMG_7919 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Food",
+    "subcategories": [
+      "Japanese Cuisine",
+      "Restaurant Discovery"
+    ],
+    "headline": "Japanese restaurants featuring thick-sliced beef tongue, yakiniku, and wine dining experiences in Oita Prefecture",
+    "summary": "Multiple Japanese restaurant locations in Oita Prefecture specializing in thick-sliced beef tongue and lean yakiniku. Includes hostel+cafe たね in Yamato, wine restaurant Wiz in Bungo-Ono City, and locations in Hita City with specific addresses provided.",
+    "media_metadata": {
+      "original_poster": "@九州のでつめ社長員",
+      "tagged_accounts": [
+        "@RiaKoリアコ",
+        "@str"
+      ],
+      "location_tags": [
+        "Yamato",
+        "2394 Yada, Ono-cho, Bungo-Ono City, Oita Prefecture",
+        "1-6-28 Chuo, Hita City, Oita Prefecture",
+        "392 Sasaguri, Sasaguri-cho, Kasuya-gun, Fukuoka Prefecture",
+        "Mizonokuchi Cave"
+      ],
+      "audio_source": "wind naruto speed up - @str",
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "厚切り牛タンと赤身焼肉のワインレストランWiz",
+        "hostel+cafe たね・Yamato",
+        "JPN🇯🇵ガラス玉【旅行.絶景.おすすめ】",
+        "Thick-sliced beef tongue & lean yakiniku wine restaurant Wiz",
+        "Nanzoin Nirvana Statue",
+        "Mizonokuchi Cave"
+      ],
+      "objects": [
+        "soup ladle with broth",
+        "ceramic bowls",
+        "Japanese food",
+        "restaurant interior"
+      ],
+      "themes": [
+        "Japanese dining",
+        "regional cuisine",
+        "travel recommendations",
+        "restaurant discovery"
+      ],
+      "emotions": [
+        "appetizing",
+        "inviting",
+        "cultural"
+      ],
+      "vibes": [
+        "authentic",
+        "local",
+        "culinary exploration"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Restaurant addresses and specialties for beef tongue and yakiniku dining in Oita Prefecture",
+      "visual_hierarchy": [
+        "厚切り牛タンと赤身焼肉のワインレストランWiz",
+        "soup ladle with golden broth",
+        "restaurant location details",
+        "ceramic bowls with food",
+        "additional location information"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Food\",\n  \"subcategories\": [\"Japanese Cuisine\", \"Restaurant Discovery\"],\n  \"headline\": \"Japanese restaurants featuring thick-sliced beef tongue, yakiniku, and wine dining experiences in Oita Prefecture\",\n  \"summary\": \"Multiple Japanese restaurant locations in Oita Prefecture specializing in thick-sliced beef tongue and lean yakiniku. Includes hostel+cafe たね in Yamato, wine restaurant Wiz in Bungo-Ono City, and locations in Hita City with specific addresses provided.\",\n  \"media_metadata\": {\n    \"original_poster\": \"@九州のでつめ社長員\",\n    \"tagged_accounts\": [\"@RiaKoリアコ\", \"@str\"],\n    \"location_tags\": [\"Yamato\", \"2394 Yada, Ono-cho, Bungo-Ono City, Oita Prefecture\", \"1-6-28 Chuo, Hita City, Oita Prefecture\", \"392 Sasaguri, Sasaguri-cho, Kasuya-gun, Fukuoka Prefecture\", \"Mizonokuchi Cave\"],\n    \"audio_source\": \"wind naruto speed up - @str\",\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"厚切り牛タンと赤身焼肉のワインレストランWiz\", \"hostel+cafe たね・Yamato\", \"JPN🇯🇵ガラス玉【旅行.絶景.おすすめ】\", \"Thick-sliced beef tongue & lean yakiniku wine restaurant Wiz\", \"Nanzoin Nirvana Statue\", \"Mizonokuchi Cave\"],\n    \"objects\": [\"soup ladle with broth\", \"ceramic bowls\", \"Japanese food\", \"restaurant interior\"],\n    \"themes\": [\"Japanese dining\", \"regional cuisine\", \"travel recommendations\", \"restaurant discovery\"],\n    \"emotions\": [\"appetizing\", \"inviting\", \"cultural\"],\n    \"vibes\": [\"authentic\", \"local\", \"culinary exploration\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Restaurant addresses and specialties for beef tongue and yakiniku dining in Oita Prefecture\",\n    \"visual_hierarchy\": [\"厚切り牛タンと赤身焼肉のワインレストランWiz\", \"soup ladle with golden broth\", \"restaurant location details\", \"ceramic bowls with food\", \"additional location information\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 612
+  }
+}

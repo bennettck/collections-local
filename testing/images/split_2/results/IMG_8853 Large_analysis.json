@@ -1,0 +1,70 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_2/IMG_8853 Large.jpeg",
+  "image_name": "IMG_8853 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Beauty",
+    "subcategories": [
+      "Skincare",
+      "Product-Education"
+    ],
+    "headline": "Salmon-derived PDRN skincare ingredient guide - minimum 1,000 ppm needed for visible results",
+    "summary": "Look for salmon-derived PDRN for skin regeneration and collagen repair. Avoid products with less than 1,000 ppm as they won't deliver visible results. HEVEBLUE Salmon Caring Centella Ampoule contains 10,000 ppm for actual skin benefits.",
+    "media_metadata": {
+      "original_poster": "shopdama",
+      "tagged_accounts": [],
+      "location_tags": [],
+      "audio_source": null,
+      "hashtags": [
+        "#pdrn",
+        "#koreanskincare",
+        "#kbeautyskincare"
+      ]
+    },
+    "image_details": {
+      "extracted_text": [
+        "Look for salmon-derived PDRN: it's the most effective for real skin regeneration and collagen repair",
+        "Avoid products with less than 1,000 ppm ... they likely won't deliver visible results cause there's barely any of the active ingredient",
+        "Try products like the HEVEBLUE Salmon Caring Centella Ampoule with 10,000 ppm for actual skin benefits",
+        "Don't fall for low concentration hype!! Know your ingredients, and shop smart"
+      ],
+      "objects": [
+        "person",
+        "skincare education content",
+        "text overlay"
+      ],
+      "themes": [
+        "skincare education",
+        "ingredient awareness",
+        "product recommendations",
+        "consumer protection"
+      ],
+      "emotions": [
+        "educational",
+        "cautionary",
+        "empowering"
+      ],
+      "vibes": [
+        "informative",
+        "expert-advice",
+        "consumer-focused"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "PDRN concentration requirements and specific product recommendation",
+      "visual_hierarchy": [
+        "Salmon-derived PDRN recommendation",
+        "1,000 ppm minimum threshold warning",
+        "HEVEBLUE product with 10,000 ppm",
+        "Anti-hype message",
+        "Hashtags"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Beauty\",\n  \"subcategories\": [\"Skincare\", \"Product-Education\"],\n  \"headline\": \"Salmon-derived PDRN skincare ingredient guide - minimum 1,000 ppm needed for visible results\",\n  \"summary\": \"Look for salmon-derived PDRN for skin regeneration and collagen repair. Avoid products with less than 1,000 ppm as they won't deliver visible results. HEVEBLUE Salmon Caring Centella Ampoule contains 10,000 ppm for actual skin benefits.\",\n  \"media_metadata\": {\n    \"original_poster\": \"shopdama\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [],\n    \"audio_source\": null,\n    \"hashtags\": [\"#pdrn\", \"#koreanskincare\", \"#kbeautyskincare\"]\n  },\n  \"image_details\": {\n    \"extracted_text\": [\n      \"Look for salmon-derived PDRN: it's the most effective for real skin regeneration and collagen repair\",\n      \"Avoid products with less than 1,000 ppm ... they likely won't deliver visible results cause there's barely any of the active ingredient\",\n      \"Try products like the HEVEBLUE Salmon Caring Centella Ampoule with 10,000 ppm for actual skin benefits\",\n      \"Don't fall for low concentration hype!! Know your ingredients, and shop smart\"\n    ],\n    \"objects\": [\"person\", \"skincare education content\", \"text overlay\"],\n    \"themes\": [\"skincare education\", \"ingredient awareness\", \"product recommendations\", \"consumer protection\"],\n    \"emotions\": [\"educational\", \"cautionary\", \"empowering\"],\n    \"vibes\": [\"informative\", \"expert-advice\", \"consumer-focused\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"PDRN concentration requirements and specific product recommendation\",\n    \"visual_hierarchy\": [\n      \"Salmon-derived PDRN recommendation\",\n      \"1,000 ppm minimum threshold warning\",\n      \"HEVEBLUE product with 10,000 ppm\",\n      \"Anti-hype message\",\n      \"Hashtags\"\n    ]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 537
+  }
+}

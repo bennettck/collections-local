@@ -1,0 +1,68 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_1/IMG_7945 Large.jpeg",
+  "image_name": "IMG_7945 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Travel",
+    "subcategories": [
+      "Transportation",
+      "Sightseeing"
+    ],
+    "headline": "Kyushu's Kanpachi Ichiroku sightseeing train interior showcased as exceptionally beautiful luxury rail experience",
+    "summary": "The Kanpachi Ichiroku is described as perhaps the prettiest train the poster has seen, featuring luxurious interior design with premium seating and scenic windows. The route travels through Hakata with beautiful mountain and countryside views.",
+    "media_metadata": {
+      "original_poster": "Megan",
+      "tagged_accounts": [],
+      "location_tags": [],
+      "audio_source": "Heaven Is A Place On Earth",
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "POV you're on Kyushu's newest sight seeing train the 'Kanpachi Ichiroku' perhaps the prettiest train I've laid my eyes on",
+        "So so beautiful I hope to take it one day! The route is hakata",
+        "Contains: Heaven Is A Place On Earth"
+      ],
+      "objects": [
+        "luxury train seating",
+        "scenic windows",
+        "wooden table",
+        "red cushioned seats",
+        "magazines",
+        "countryside view"
+      ],
+      "themes": [
+        "luxury travel",
+        "Japanese railways",
+        "sightseeing",
+        "scenic routes"
+      ],
+      "emotions": [
+        "admiration",
+        "wanderlust",
+        "appreciation"
+      ],
+      "vibes": [
+        "luxurious",
+        "peaceful",
+        "aspirational"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Kanpachi Ichiroku luxury sightseeing train interior and route information",
+      "visual_hierarchy": [
+        "POV text overlay about Kanpachi Ichiroku train",
+        "luxury red seating area",
+        "scenic window views",
+        "wooden table with magazines",
+        "user comment about beauty and Hakata route"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Transportation\", \"Sightseeing\"],\n  \"headline\": \"Kyushu's Kanpachi Ichiroku sightseeing train interior showcased as exceptionally beautiful luxury rail experience\",\n  \"summary\": \"The Kanpachi Ichiroku is described as perhaps the prettiest train the poster has seen, featuring luxurious interior design with premium seating and scenic windows. The route travels through Hakata with beautiful mountain and countryside views.\",\n  \"media_metadata\": {\n    \"original_poster\": \"Megan\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [],\n    \"audio_source\": \"Heaven Is A Place On Earth\",\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\n      \"POV you're on Kyushu's newest sight seeing train the 'Kanpachi Ichiroku' perhaps the prettiest train I've laid my eyes on\",\n      \"So so beautiful I hope to take it one day! The route is hakata\",\n      \"Contains: Heaven Is A Place On Earth\"\n    ],\n    \"objects\": [\"luxury train seating\", \"scenic windows\", \"wooden table\", \"red cushioned seats\", \"magazines\", \"countryside view\"],\n    \"themes\": [\"luxury travel\", \"Japanese railways\", \"sightseeing\", \"scenic routes\"],\n    \"emotions\": [\"admiration\", \"wanderlust\", \"appreciation\"],\n    \"vibes\": [\"luxurious\", \"peaceful\", \"aspirational\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Kanpachi Ichiroku luxury sightseeing train interior and route information\",\n    \"visual_hierarchy\": [\"POV text overlay about Kanpachi Ichiroku train\", \"luxury red seating area\", \"scenic window views\", \"wooden table with magazines\", \"user comment about beauty and Hakata route\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 465
+  }
+}

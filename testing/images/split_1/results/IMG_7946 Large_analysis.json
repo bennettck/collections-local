@@ -1,0 +1,77 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_1/IMG_7946 Large.jpeg",
+  "image_name": "IMG_7946 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Food",
+    "subcategories": [
+      "French Toast",
+      "Seoul Restaurant"
+    ],
+    "headline": "Crispy crème brûlée French toast in Seoul with custardy center and fluffy texture that absorbs custard",
+    "summary": "French toast with crispy crème brûlée top and fluffy texture that absorbs custard, described as a dream taste. Located in Seoul where 422.3K people have posted about this place. User's number one priority while back in Seoul was eating good food.",
+    "media_metadata": {
+      "original_poster": "jovi",
+      "tagged_accounts": [],
+      "location_tags": [
+        "Seoul - 422.3K people posted about this place"
+      ],
+      "audio_source": null,
+      "hashtags": [
+        "#seoul",
+        "#k"
+      ]
+    },
+    "image_details": {
+      "extracted_text": [
+        "standard bread",
+        "if you love a custardy french toast... wow...the toast has a crispy creme brulee top, and is so fluffy that it just absorbs the custard around it",
+        "this is a taste i'll dream about",
+        "Seoul 422.3K people posted about this place",
+        "back in #seoul and my number one priority was EATING GOOD"
+      ],
+      "objects": [
+        "French toast in pan",
+        "custard sauce",
+        "bread loaf",
+        "coffee cup",
+        "wooden serving tray",
+        "white bowl with soup"
+      ],
+      "themes": [
+        "Korean food culture",
+        "travel dining",
+        "dessert experience",
+        "food tourism"
+      ],
+      "emotions": [
+        "excitement",
+        "satisfaction",
+        "craving",
+        "nostalgia"
+      ],
+      "vibes": [
+        "cozy cafe",
+        "indulgent",
+        "foodie paradise",
+        "warm comfort"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Crème brûlée French toast recipe and Seoul restaurant location",
+      "visual_hierarchy": [
+        "French toast in custard pan",
+        "Descriptive overlay text about taste",
+        "Seoul location tag",
+        "Bread loaf",
+        "Coffee cup"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Food\",\n  \"subcategories\": [\"French Toast\", \"Seoul Restaurant\"],\n  \"headline\": \"Crispy crème brûlée French toast in Seoul with custardy center and fluffy texture that absorbs custard\",\n  \"summary\": \"French toast with crispy crème brûlée top and fluffy texture that absorbs custard, described as a dream taste. Located in Seoul where 422.3K people have posted about this place. User's number one priority while back in Seoul was eating good food.\",\n  \"media_metadata\": {\n    \"original_poster\": \"jovi\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [\"Seoul - 422.3K people posted about this place\"],\n    \"audio_source\": null,\n    \"hashtags\": [\"#seoul\", \"#k\"]\n  },\n  \"image_details\": {\n    \"extracted_text\": [\n      \"standard bread\",\n      \"if you love a custardy french toast... wow...the toast has a crispy creme brulee top, and is so fluffy that it just absorbs the custard around it\",\n      \"this is a taste i'll dream about\",\n      \"Seoul 422.3K people posted about this place\",\n      \"back in #seoul and my number one priority was EATING GOOD\"\n    ],\n    \"objects\": [\"French toast in pan\", \"custard sauce\", \"bread loaf\", \"coffee cup\", \"wooden serving tray\", \"white bowl with soup\"],\n    \"themes\": [\"Korean food culture\", \"travel dining\", \"dessert experience\", \"food tourism\"],\n    \"emotions\": [\"excitement\", \"satisfaction\", \"craving\", \"nostalgia\"],\n    \"vibes\": [\"cozy cafe\", \"indulgent\", \"foodie paradise\", \"warm comfort\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Crème brûlée French toast recipe and Seoul restaurant location\",\n    \"visual_hierarchy\": [\"French toast in custard pan\", \"Descriptive overlay text about taste\", \"Seoul location tag\", \"Bread loaf\", \"Coffee cup\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 501
+  }
+}

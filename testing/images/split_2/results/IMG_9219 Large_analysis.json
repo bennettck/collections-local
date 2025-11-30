@@ -1,0 +1,72 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_2/IMG_9219 Large.jpeg",
+  "image_name": "IMG_9219 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Beauty",
+    "subcategories": [
+      "Skincare",
+      "Medical"
+    ],
+    "headline": "Dr Lee at Cheongdam CheongA Clinic demonstrates facial massage technique in Seoul",
+    "summary": "Dr Lee at Cheongdam CheongA Clinic performs a facial treatment demonstration. The clinic is located in Seoul's Gangnam district. Sara Yoon mentions this is part of her 'Glow up Era' content series.",
+    "media_metadata": {
+      "original_poster": "Sara Yoon",
+      "tagged_accounts": [
+        "Dr Lee"
+      ],
+      "location_tags": [
+        "Seoul"
+      ],
+      "audio_source": null,
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "Dr Lee at Cheongdam CheongA Clinic",
+        "Seoul",
+        "Sara Yoon | Glow up Era ✨",
+        "I know I will regret not gatekeeping her but truthfully she's just too genuin... more"
+      ],
+      "objects": [
+        "hands performing facial massage",
+        "white headband",
+        "skincare treatment",
+        "clinic setting"
+      ],
+      "themes": [
+        "professional skincare",
+        "medical aesthetics",
+        "beauty treatment",
+        "clinic experience"
+      ],
+      "emotions": [
+        "relaxation",
+        "trust",
+        "professionalism"
+      ],
+      "vibes": [
+        "clinical",
+        "luxurious",
+        "wellness",
+        "authentic"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Professional skincare treatment at premium Seoul clinic",
+      "visual_hierarchy": [
+        "hands performing facial massage",
+        "Dr Lee clinic name",
+        "Sara Yoon username",
+        "Seoul location tag",
+        "partial testimonial text"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Beauty\",\n  \"subcategories\": [\"Skincare\", \"Medical\"],\n  \"headline\": \"Dr Lee at Cheongdam CheongA Clinic demonstrates facial massage technique in Seoul\",\n  \"summary\": \"Dr Lee at Cheongdam CheongA Clinic performs a facial treatment demonstration. The clinic is located in Seoul's Gangnam district. Sara Yoon mentions this is part of her 'Glow up Era' content series.\",\n  \"media_metadata\": {\n    \"original_poster\": \"Sara Yoon\",\n    \"tagged_accounts\": [\"Dr Lee\"],\n    \"location_tags\": [\"Seoul\"],\n    \"audio_source\": null,\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"Dr Lee at Cheongdam CheongA Clinic\", \"Seoul\", \"Sara Yoon | Glow up Era ✨\", \"I know I will regret not gatekeeping her but truthfully she's just too genuin... more\"],\n    \"objects\": [\"hands performing facial massage\", \"white headband\", \"skincare treatment\", \"clinic setting\"],\n    \"themes\": [\"professional skincare\", \"medical aesthetics\", \"beauty treatment\", \"clinic experience\"],\n    \"emotions\": [\"relaxation\", \"trust\", \"professionalism\"],\n    \"vibes\": [\"clinical\", \"luxurious\", \"wellness\", \"authentic\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Professional skincare treatment at premium Seoul clinic\",\n    \"visual_hierarchy\": [\"hands performing facial massage\", \"Dr Lee clinic name\", \"Sara Yoon username\", \"Seoul location tag\", \"partial testimonial text\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 406
+  }
+}

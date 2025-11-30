@@ -1,0 +1,76 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_3/IMG_9502 Large.jpeg",
+  "image_name": "IMG_9502 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Art",
+    "subcategories": [
+      "Museum Exhibition",
+      "Contemporary Art"
+    ],
+    "headline": "Lee Bul major survey exhibition at Leeum Museum of Art Seoul, September 2025 - January 2026",
+    "summary": "Leeum Museum of Art presents Lee Bul: From 1998 to Now, featuring 150 works tracing the Korean contemporary artist's evolving practice exploring humanity's relationship with technology, utopian dreams, and the fragile pursuit of progress and perfection.",
+    "media_metadata": {
+      "original_poster": "artsy",
+      "tagged_accounts": [],
+      "location_tags": [],
+      "audio_source": null,
+      "hashtags": [
+        "leebul",
+        "seoulkorea",
+        "immersiveart",
+        "art",
+        "seoul"
+      ]
+    },
+    "image_details": {
+      "extracted_text": [
+        "Launch into the visionary world of Lee Bul",
+        "Leeum Museum of Art presents Lee Bul: From 1998 to Now",
+        "September 4, 2025 – January 4, 2026",
+        "Search • leeum museum of art seoul 2025"
+      ],
+      "objects": [
+        "Gallery space",
+        "White sculptural installations",
+        "Visitors viewing art",
+        "Museum interior",
+        "Contemporary sculptures"
+      ],
+      "themes": [
+        "Contemporary art",
+        "Korean art",
+        "Museum exhibition",
+        "Technology and humanity",
+        "Artistic evolution"
+      ],
+      "emotions": [
+        "Contemplative",
+        "Inspiring",
+        "Sophisticated"
+      ],
+      "vibes": [
+        "Cultural",
+        "Educational",
+        "Artistic",
+        "Immersive"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Major Korean contemporary artist Lee Bul exhibition announcement",
+      "visual_hierarchy": [
+        "Launch into the visionary world of Lee Bul",
+        "Exhibition description text",
+        "Gallery space with sculptures",
+        "Exhibition dates",
+        "Search suggestion"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Art\",\n  \"subcategories\": [\"Museum Exhibition\", \"Contemporary Art\"],\n  \"headline\": \"Lee Bul major survey exhibition at Leeum Museum of Art Seoul, September 2025 - January 2026\",\n  \"summary\": \"Leeum Museum of Art presents Lee Bul: From 1998 to Now, featuring 150 works tracing the Korean contemporary artist's evolving practice exploring humanity's relationship with technology, utopian dreams, and the fragile pursuit of progress and perfection.\",\n  \"media_metadata\": {\n    \"original_poster\": \"artsy\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [],\n    \"audio_source\": null,\n    \"hashtags\": [\"leebul\", \"seoulkorea\", \"immersiveart\", \"art\", \"seoul\"]\n  },\n  \"image_details\": {\n    \"extracted_text\": [\n      \"Launch into the visionary world of Lee Bul\",\n      \"Leeum Museum of Art presents Lee Bul: From 1998 to Now\",\n      \"September 4, 2025 – January 4, 2026\",\n      \"Search • leeum museum of art seoul 2025\"\n    ],\n    \"objects\": [\"Gallery space\", \"White sculptural installations\", \"Visitors viewing art\", \"Museum interior\", \"Contemporary sculptures\"],\n    \"themes\": [\"Contemporary art\", \"Korean art\", \"Museum exhibition\", \"Technology and humanity\", \"Artistic evolution\"],\n    \"emotions\": [\"Contemplative\", \"Inspiring\", \"Sophisticated\"],\n    \"vibes\": [\"Cultural\", \"Educational\", \"Artistic\", \"Immersive\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Major Korean contemporary artist Lee Bul exhibition announcement\",\n    \"visual_hierarchy\": [\n      \"Launch into the visionary world of Lee Bul\",\n      \"Exhibition description text\",\n      \"Gallery space with sculptures\",\n      \"Exhibition dates\",\n      \"Search suggestion\"\n    ]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 483
+  }
+}

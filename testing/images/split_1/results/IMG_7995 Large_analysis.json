@@ -1,0 +1,70 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_1/IMG_7995 Large.jpeg",
+  "image_name": "IMG_7995 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Travel",
+    "subcategories": [
+      "Visa",
+      "Documentation"
+    ],
+    "headline": "Korean Electronic Travel Authorization (ETA) approval document for Bennett Christopher Keith",
+    "summary": "Electronic Travel Authorization approved for US citizen Bennett Christopher Keith (passport 548448645) to enter South Korea. ETA approval number ETA-USA-25-TE-06717720, valid until 2027/01/02.",
+    "media_metadata": {
+      "original_poster": null,
+      "tagged_accounts": [],
+      "location_tags": [],
+      "audio_source": null,
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "사전여행허가서 Approval for Electronic Travel Authorization",
+        "BENNETT CHRISTOPHER KEITH",
+        "1978-04-18",
+        "UNITED STATES",
+        "548448645",
+        "ETA-USA-25-TE-06717720",
+        "Electronic Travel Authorization Center, Republic of Korea"
+      ],
+      "objects": [
+        "passport photo",
+        "official document",
+        "government seal",
+        "approval form"
+      ],
+      "themes": [
+        "travel authorization",
+        "visa approval",
+        "government documentation",
+        "international travel"
+      ],
+      "emotions": [
+        "official",
+        "formal",
+        "bureaucratic"
+      ],
+      "vibes": [
+        "governmental",
+        "administrative",
+        "travel-ready"
+      ],
+      "likely_source": "user-created",
+      "key_interest": "ETA approval number and validity dates for Korea travel",
+      "visual_hierarchy": [
+        "Document title in Korean and English",
+        "Applicant name BENNETT CHRISTOPHER KEITH",
+        "ETA approval number ETA-USA-25-TE-06717720",
+        "Passport photo and personal details",
+        "Validity dates and official notice text"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Visa\", \"Documentation\"],\n  \"headline\": \"Korean Electronic Travel Authorization (ETA) approval document for Bennett Christopher Keith\",\n  \"summary\": \"Electronic Travel Authorization approved for US citizen Bennett Christopher Keith (passport 548448645) to enter South Korea. ETA approval number ETA-USA-25-TE-06717720, valid until 2027/01/02.\",\n  \"media_metadata\": {\n    \"original_poster\": null,\n    \"tagged_accounts\": [],\n    \"location_tags\": [],\n    \"audio_source\": null,\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\n      \"사전여행허가서 Approval for Electronic Travel Authorization\",\n      \"BENNETT CHRISTOPHER KEITH\",\n      \"1978-04-18\",\n      \"UNITED STATES\",\n      \"548448645\",\n      \"ETA-USA-25-TE-06717720\",\n      \"Electronic Travel Authorization Center, Republic of Korea\"\n    ],\n    \"objects\": [\"passport photo\", \"official document\", \"government seal\", \"approval form\"],\n    \"themes\": [\"travel authorization\", \"visa approval\", \"government documentation\", \"international travel\"],\n    \"emotions\": [\"official\", \"formal\", \"bureaucratic\"],\n    \"vibes\": [\"governmental\", \"administrative\", \"travel-ready\"],\n    \"likely_source\": \"user-created\",\n    \"key_interest\": \"ETA approval number and validity dates for Korea travel\",\n    \"visual_hierarchy\": [\n      \"Document title in Korean and English\",\n      \"Applicant name BENNETT CHRISTOPHER KEITH\", \n      \"ETA approval number ETA-USA-25-TE-06717720\",\n      \"Passport photo and personal details\",\n      \"Validity dates and official notice text\"\n    ]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 449
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_3/IMG_9563 Large.jpeg",
+  "image_name": "IMG_9563 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Travel",
+    "subcategories": [
+      "Museums",
+      "Seoul"
+    ],
+    "headline": "National Museum of Modern and Contemporary Art (MMCA Seoul) featured in Korea museum guide",
+    "summary": "Must Visit Museums in Korea guide highlights Korea's most beautiful museums with constant rotation of exhibitions. MMCA Seoul featured prominently with modern art installations including winged sculptures and contemporary gallery spaces.",
+    "media_metadata": {
+      "original_poster": "Tori",
+      "tagged_accounts": [],
+      "location_tags": [
+        "Seoul",
+        "National Museum of Modern and Contemporary Art (MMCA Seoul)"
+      ],
+      "audio_source": "Apple Music - Contains: Only - Quynh K...",
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "National Museum of Modern and Contemporary Art (MMCA Seoul)",
+        "Must Visit Museums in Korea",
+        "Korea's most beautiful museums that you'll actually enjoy visiting",
+        "these museums/galleries have a constant rotation of beautiful exhibitions",
+        "Make sure to visit some when you are in Seoul",
+        "Seoul 476.0K people posted about this place",
+        "Search • hangaram art museum"
+      ],
+      "objects": [
+        "golden winged sculpture",
+        "black wing installation",
+        "museum galleries",
+        "visitors viewing art",
+        "modern architecture"
+      ],
+      "themes": [
+        "Korean museums",
+        "contemporary art",
+        "travel recommendations",
+        "cultural attractions"
+      ],
+      "emotions": [
+        "inspiring",
+        "educational",
+        "appreciative"
+      ],
+      "vibes": [
+        "sophisticated",
+        "cultural",
+        "artistic",
+        "informative"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Museum travel guide for Seoul with specific focus on MMCA",
+      "visual_hierarchy": [
+        "National Museum of Modern and Contemporary Art title",
+        "Golden winged sculpture",
+        "Must Visit Museums in Korea text",
+        "Black wing installation",
+        "Museum gallery spaces"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Museums\", \"Seoul\"],\n  \"headline\": \"National Museum of Modern and Contemporary Art (MMCA Seoul) featured in Korea museum guide\",\n  \"summary\": \"Must Visit Museums in Korea guide highlights Korea's most beautiful museums with constant rotation of exhibitions. MMCA Seoul featured prominently with modern art installations including winged sculptures and contemporary gallery spaces.\",\n  \"media_metadata\": {\n    \"original_poster\": \"Tori\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [\"Seoul\", \"National Museum of Modern and Contemporary Art (MMCA Seoul)\"],\n    \"audio_source\": \"Apple Music - Contains: Only - Quynh K...\",\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\n      \"National Museum of Modern and Contemporary Art (MMCA Seoul)\",\n      \"Must Visit Museums in Korea\",\n      \"Korea's most beautiful museums that you'll actually enjoy visiting\",\n      \"these museums/galleries have a constant rotation of beautiful exhibitions\",\n      \"Make sure to visit some when you are in Seoul\",\n      \"Seoul 476.0K people posted about this place\",\n      \"Search • hangaram art museum\"\n    ],\n    \"objects\": [\"golden winged sculpture\", \"black wing installation\", \"museum galleries\", \"visitors viewing art\", \"modern architecture\"],\n    \"themes\": [\"Korean museums\", \"contemporary art\", \"travel recommendations\", \"cultural attractions\"],\n    \"emotions\": [\"inspiring\", \"educational\", \"appreciative\"],\n    \"vibes\": [\"sophisticated\", \"cultural\", \"artistic\", \"informative\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Museum travel guide for Seoul with specific focus on MMCA\",\n    \"visual_hierarchy\": [\n      \"National Museum of Modern and Contemporary Art title\",\n      \"Golden winged sculpture\",\n      \"Must Visit Museums in Korea text\",\n      \"Black wing installation\",\n      \"Museum gallery spaces\"\n    ]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 475
+  }
+}

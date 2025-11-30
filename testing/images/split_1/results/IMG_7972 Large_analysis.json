@@ -1,0 +1,86 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_1/IMG_7972 Large.jpeg",
+  "image_name": "IMG_7972 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Travel",
+    "subcategories": [
+      "Japan",
+      "Gardens"
+    ],
+    "headline": "Kamiyubetsu Tulip Park in Hokkaido featuring colorful tulip fields with tram and buildings",
+    "summary": "Kamiyubetsu Tulip Park in Hokkaido showcases vast fields of multicolored tulips in organized rows. The park features a small tram for visitors and modern buildings in the background. Located in Yubetsu with 84.7K likes on posts about this destination.",
+    "media_metadata": {
+      "original_poster": "日本での日々の冒険",
+      "tagged_accounts": [],
+      "location_tags": [
+        "Kamiyubetsu Tulip Park · Yubetsu",
+        "84.7K likes on posts of this place"
+      ],
+      "audio_source": null,
+      "hashtags": [
+        "見頃",
+        "上湧別チューリップ公園",
+        "北海道"
+      ]
+    },
+    "image_details": {
+      "extracted_text": [
+        "LIVE",
+        "FEM",
+        "Explore",
+        "Following",
+        "Shop",
+        "For You",
+        "Full screen",
+        "Kamiyubetsu Tulip Park · Yubetsu",
+        "84.7K likes on posts of this place",
+        "日本での日々の冒険",
+        "Kamiyubetsu tulip park Hokkaido #見頃 #上湧別チューリップ公園 #北海道",
+        "Home",
+        "Discover",
+        "Inbox",
+        "Profile"
+      ],
+      "objects": [
+        "colorful tulip fields",
+        "small tourist tram",
+        "modern buildings",
+        "cloudy sky",
+        "organized flower rows"
+      ],
+      "themes": [
+        "spring flowers",
+        "Japanese tourism",
+        "Hokkaido attractions",
+        "botanical gardens"
+      ],
+      "emotions": [
+        "peaceful",
+        "scenic",
+        "vibrant"
+      ],
+      "vibes": [
+        "tourist destination",
+        "springtime beauty",
+        "organized nature display"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Colorful tulip fields arranged in organized rows",
+      "visual_hierarchy": [
+        "multicolored tulip fields",
+        "tourist tram",
+        "modern buildings",
+        "cloudy sky",
+        "location tag"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Japan\", \"Gardens\"],\n  \"headline\": \"Kamiyubetsu Tulip Park in Hokkaido featuring colorful tulip fields with tram and buildings\",\n  \"summary\": \"Kamiyubetsu Tulip Park in Hokkaido showcases vast fields of multicolored tulips in organized rows. The park features a small tram for visitors and modern buildings in the background. Located in Yubetsu with 84.7K likes on posts about this destination.\",\n  \"media_metadata\": {\n    \"original_poster\": \"日本での日々の冒険\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [\"Kamiyubetsu Tulip Park · Yubetsu\", \"84.7K likes on posts of this place\"],\n    \"audio_source\": null,\n    \"hashtags\": [\"見頃\", \"上湧別チューリップ公園\", \"北海道\"]\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"LIVE\", \"FEM\", \"Explore\", \"Following\", \"Shop\", \"For You\", \"Full screen\", \"Kamiyubetsu Tulip Park · Yubetsu\", \"84.7K likes on posts of this place\", \"日本での日々の冒険\", \"Kamiyubetsu tulip park Hokkaido #見頃 #上湧別チューリップ公園 #北海道\", \"Home\", \"Discover\", \"Inbox\", \"Profile\"],\n    \"objects\": [\"colorful tulip fields\", \"small tourist tram\", \"modern buildings\", \"cloudy sky\", \"organized flower rows\"],\n    \"themes\": [\"spring flowers\", \"Japanese tourism\", \"Hokkaido attractions\", \"botanical gardens\"],\n    \"emotions\": [\"peaceful\", \"scenic\", \"vibrant\"],\n    \"vibes\": [\"tourist destination\", \"springtime beauty\", \"organized nature display\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Colorful tulip fields arranged in organized rows\",\n    \"visual_hierarchy\": [\"multicolored tulip fields\", \"tourist tram\", \"modern buildings\", \"cloudy sky\", \"location tag\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 540
+  }
+}

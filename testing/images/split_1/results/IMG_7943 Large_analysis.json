@@ -1,0 +1,83 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_1/IMG_7943 Large.jpeg",
+  "image_name": "IMG_7943 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Travel",
+    "subcategories": [
+      "Luxury Accommodation",
+      "Japanese Culture"
+    ],
+    "headline": "Luxury hideaway in Hakone combining Machiya culture of Kyoto with nature, featuring mountain views and open-air baths",
+    "summary": "Nazuna Hakone Miyanoshita offers a luxurious stay fusing Kyoto's Machiya culture with Hakone's nature. Rooms overlook mountains from open-air baths, with free-flow sake and snacks from 15:00-17:00, plus evening tea soba room service. The Japanese modern rooms create a healing space with Kyoto aesthetic details.",
+    "media_metadata": {
+      "original_poster": "RIE | 週末旅する会社員",
+      "tagged_accounts": [
+        "@Suguru Matsutani"
+      ],
+      "location_tags": [
+        "Nazuna Hakone Miyanoshita"
+      ],
+      "audio_source": "Takumi - @Suguru Matsutani",
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "RIE | 週末旅する会社員",
+        "2025.05.15! Nazuna Hakone Miyanoshita",
+        "We have enjoyed a luxurious hideaway stay where the Machiya culture of Kyoto and the nature of Hakone are fused",
+        "Rooms You can overlook the mountains of Hakone from the open-air bath, perfect for refreshing.The bathing time is also the best",
+        "After check-in from 15: 00 to 17: 00, free flow Hakone's unique sake and snacks are lined up in the lounge, and in the evening tea soba room service is (free)",
+        "The Japanese modern room is a healing space where the aesthetic sense of Kyoto breathes in the details and you can relax from the heart",
+        "Paid partnership",
+        "See original",
+        "Takumi - @Suguru Matsutani"
+      ],
+      "objects": [
+        "wooden architecture",
+        "bamboo blinds",
+        "traditional Japanese interior",
+        "open-air bath area",
+        "mountain views",
+        "wooden ceiling",
+        "tatami-style flooring"
+      ],
+      "themes": [
+        "luxury travel",
+        "Japanese hospitality",
+        "cultural fusion",
+        "wellness retreat",
+        "traditional architecture"
+      ],
+      "emotions": [
+        "relaxation",
+        "luxury",
+        "tranquility",
+        "cultural appreciation"
+      ],
+      "vibes": [
+        "serene",
+        "upscale",
+        "authentic",
+        "peaceful",
+        "sophisticated"
+      ],
+      "likely_source": "Instagram",
+      "key_interest": "Luxury ryokan experience combining Kyoto culture with Hakone nature",
+      "visual_hierarchy": [
+        "Traditional Japanese architecture with wooden elements",
+        "Mountain views through bamboo blinds",
+        "Open-air bath area",
+        "Wooden ceiling beams",
+        "Natural lighting"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Luxury Accommodation\", \"Japanese Culture\"],\n  \"headline\": \"Luxury hideaway in Hakone combining Machiya culture of Kyoto with nature, featuring mountain views and open-air baths\",\n  \"summary\": \"Nazuna Hakone Miyanoshita offers a luxurious stay fusing Kyoto's Machiya culture with Hakone's nature. Rooms overlook mountains from open-air baths, with free-flow sake and snacks from 15:00-17:00, plus evening tea soba room service. The Japanese modern rooms create a healing space with Kyoto aesthetic details.\",\n  \"media_metadata\": {\n    \"original_poster\": \"RIE | 週末旅する会社員\",\n    \"tagged_accounts\": [\"@Suguru Matsutani\"],\n    \"location_tags\": [\"Nazuna Hakone Miyanoshita\"],\n    \"audio_source\": \"Takumi - @Suguru Matsutani\",\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"RIE | 週末旅する会社員\", \"2025.05.15! Nazuna Hakone Miyanoshita\", \"We have enjoyed a luxurious hideaway stay where the Machiya culture of Kyoto and the nature of Hakone are fused\", \"Rooms You can overlook the mountains of Hakone from the open-air bath, perfect for refreshing.The bathing time is also the best\", \"After check-in from 15: 00 to 17: 00, free flow Hakone's unique sake and snacks are lined up in the lounge, and in the evening tea soba room service is (free)\", \"The Japanese modern room is a healing space where the aesthetic sense of Kyoto breathes in the details and you can relax from the heart\", \"Paid partnership\", \"See original\", \"Takumi - @Suguru Matsutani\"],\n    \"objects\": [\"wooden architecture\", \"bamboo blinds\", \"traditional Japanese interior\", \"open-air bath area\", \"mountain views\", \"wooden ceiling\", \"tatami-style flooring\"],\n    \"themes\": [\"luxury travel\", \"Japanese hospitality\", \"cultural fusion\", \"wellness retreat\", \"traditional architecture\"],\n    \"emotions\": [\"relaxation\", \"luxury\", \"tranquility\", \"cultural appreciation\"],\n    \"vibes\": [\"serene\", \"upscale\", \"authentic\", \"peaceful\", \"sophisticated\"],\n    \"likely_source\": \"Instagram\",\n    \"key_interest\": \"Luxury ryokan experience combining Kyoto culture with Hakone nature\",\n    \"visual_hierarchy\": [\"Traditional Japanese architecture with wooden elements\", \"Mountain views through bamboo blinds\", \"Open-air bath area\", \"Wooden ceiling beams\", \"Natural lighting\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 678
+  }
+}

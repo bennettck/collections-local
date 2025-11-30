@@ -1,0 +1,83 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_3/IMG_9466 Large.jpeg",
+  "image_name": "IMG_9466 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Travel",
+    "subcategories": [
+      "Nightlife",
+      "Hidden Gems"
+    ],
+    "headline": "Sunset Record bar in Euljiro, Seoul - hidden gem with Instagrammable vintage record store aesthetic",
+    "summary": "Sunset Record is a favorite bar located in Euljiro, Seoul, featuring vintage record store decor with neon rainbow signage and atmospheric lighting. The venue is described as a hidden gem with highly photogenic interiors.",
+    "media_metadata": {
+      "original_poster": "보라 bora",
+      "tagged_accounts": [
+        "Eulji-ro"
+      ],
+      "location_tags": [
+        "Euljiro, Seoul"
+      ],
+      "audio_source": "original sound - rikkizgf",
+      "hashtags": [
+        "seoul",
+        "hiddengems",
+        "fyp",
+        "bar",
+        "recommendations"
+      ]
+    },
+    "image_details": {
+      "extracted_text": [
+        "Instagrammable places in every corner",
+        "~HIDDEN GEM PT.1~",
+        "One of my favorite Bars in Seoul",
+        "Sunset Record / 선셋레코드",
+        "It's Located in Euljiro, Seoul",
+        "Search: sunset record bar"
+      ],
+      "objects": [
+        "neon rainbow sign",
+        "vintage records",
+        "bar counter",
+        "bottles",
+        "dim lighting",
+        "record store aesthetic"
+      ],
+      "themes": [
+        "hidden gems",
+        "nightlife",
+        "Seoul travel",
+        "bar recommendations",
+        "vintage aesthetics"
+      ],
+      "emotions": [
+        "cozy",
+        "atmospheric",
+        "trendy"
+      ],
+      "vibes": [
+        "moody",
+        "intimate",
+        "retro",
+        "hipster"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Sunset Record bar recommendation with search term provided",
+      "visual_hierarchy": [
+        "Sunset Record neon sign",
+        "Instagrammable places text overlay",
+        "vintage record collection",
+        "bar atmosphere",
+        "bottle displays"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Nightlife\", \"Hidden Gems\"],\n  \"headline\": \"Sunset Record bar in Euljiro, Seoul - hidden gem with Instagrammable vintage record store aesthetic\",\n  \"summary\": \"Sunset Record is a favorite bar located in Euljiro, Seoul, featuring vintage record store decor with neon rainbow signage and atmospheric lighting. The venue is described as a hidden gem with highly photogenic interiors.\",\n  \"media_metadata\": {\n    \"original_poster\": \"보라 bora\",\n    \"tagged_accounts\": [\"Eulji-ro\"],\n    \"location_tags\": [\"Euljiro, Seoul\"],\n    \"audio_source\": \"original sound - rikkizgf\",\n    \"hashtags\": [\"seoul\", \"hiddengems\", \"fyp\", \"bar\", \"recommendations\"]\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"Instagrammable places in every corner\", \"~HIDDEN GEM PT.1~\", \"One of my favorite Bars in Seoul\", \"Sunset Record / 선셋레코드\", \"It's Located in Euljiro, Seoul\", \"Search: sunset record bar\"],\n    \"objects\": [\"neon rainbow sign\", \"vintage records\", \"bar counter\", \"bottles\", \"dim lighting\", \"record store aesthetic\"],\n    \"themes\": [\"hidden gems\", \"nightlife\", \"Seoul travel\", \"bar recommendations\", \"vintage aesthetics\"],\n    \"emotions\": [\"cozy\", \"atmospheric\", \"trendy\"],\n    \"vibes\": [\"moody\", \"intimate\", \"retro\", \"hipster\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Sunset Record bar recommendation with search term provided\",\n    \"visual_hierarchy\": [\"Sunset Record neon sign\", \"Instagrammable places text overlay\", \"vintage record collection\", \"bar atmosphere\", \"bottle displays\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 461
+  }
+}

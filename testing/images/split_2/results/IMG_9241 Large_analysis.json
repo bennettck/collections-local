@@ -1,0 +1,80 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_2/IMG_9241 Large.jpeg",
+  "image_name": "IMG_9241 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Beauty",
+    "subcategories": [
+      "Skincare",
+      "Medical aesthetics"
+    ],
+    "headline": "Korean acne-prone skin treatment results without numbing cream - 7 procedures at Reone Dermatology",
+    "summary": "Brute Choi documented 7 skincare treatments in Korea for acne-prone skin without using numbing cream at Reone Dermatology in Gangnam. The before/after comparison shows treatment results using laser and anti-aging procedures.",
+    "media_metadata": {
+      "original_poster": "Brute Choi",
+      "tagged_accounts": [
+        "@reonedermatology"
+      ],
+      "location_tags": [
+        "Gangnam"
+      ],
+      "audio_source": null,
+      "hashtags": [
+        "#reone",
+        "#skincaretreatment",
+        "#antiaging",
+        "#acne",
+        "#lasertreatments",
+        "#koreatravel",
+        "#kbeauty",
+        "#koreanskincare"
+      ]
+    },
+    "image_details": {
+      "extracted_text": [
+        "I got 7 treatments in Korea without numbing cream frommy acne prone skin",
+        "@reonedermatology in gangnamalysis",
+        "#reone #skincaretreatment #antiaging #acne #lasertreatments #koreatravel #kbeauty #koreanskincare"
+      ],
+      "objects": [
+        "Before/after facial comparison photos",
+        "Blue light treatment visualization",
+        "Medical skincare equipment",
+        "Profile avatar"
+      ],
+      "themes": [
+        "Korean beauty treatments",
+        "Medical dermatology",
+        "Acne treatment",
+        "Skincare transformation"
+      ],
+      "emotions": [
+        "Informative",
+        "Educational",
+        "Confident"
+      ],
+      "vibes": [
+        "Medical",
+        "Professional",
+        "Transformative",
+        "Korean beauty culture"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Before/after results of 7 Korean dermatology treatments without numbing cream",
+      "visual_hierarchy": [
+        "Before/after facial comparison photos with blue light effect",
+        "Treatment description text overlay",
+        "Dermatology clinic tag and location",
+        "Hashtag collection",
+        "Engagement metrics on right side"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Beauty\",\n  \"subcategories\": [\"Skincare\", \"Medical aesthetics\"],\n  \"headline\": \"Korean acne-prone skin treatment results without numbing cream - 7 procedures at Reone Dermatology\",\n  \"summary\": \"Brute Choi documented 7 skincare treatments in Korea for acne-prone skin without using numbing cream at Reone Dermatology in Gangnam. The before/after comparison shows treatment results using laser and anti-aging procedures.\",\n  \"media_metadata\": {\n    \"original_poster\": \"Brute Choi\",\n    \"tagged_accounts\": [\"@reonedermatology\"],\n    \"location_tags\": [\"Gangnam\"],\n    \"audio_source\": null,\n    \"hashtags\": [\"#reone\", \"#skincaretreatment\", \"#antiaging\", \"#acne\", \"#lasertreatments\", \"#koreatravel\", \"#kbeauty\", \"#koreanskincare\"]\n  },\n  \"image_details\": {\n    \"extracted_text\": [\n      \"I got 7 treatments in Korea without numbing cream frommy acne prone skin\",\n      \"@reonedermatology in gangnamalysis\",\n      \"#reone #skincaretreatment #antiaging #acne #lasertreatments #koreatravel #kbeauty #koreanskincare\"\n    ],\n    \"objects\": [\"Before/after facial comparison photos\", \"Blue light treatment visualization\", \"Medical skincare equipment\", \"Profile avatar\"],\n    \"themes\": [\"Korean beauty treatments\", \"Medical dermatology\", \"Acne treatment\", \"Skincare transformation\"],\n    \"emotions\": [\"Informative\", \"Educational\", \"Confident\"],\n    \"vibes\": [\"Medical\", \"Professional\", \"Transformative\", \"Korean beauty culture\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Before/after results of 7 Korean dermatology treatments without numbing cream\",\n    \"visual_hierarchy\": [\n      \"Before/after facial comparison photos with blue light effect\",\n      \"Treatment description text overlay\",\n      \"Dermatology clinic tag and location\",\n      \"Hashtag collection\",\n      \"Engagement metrics on right side\"\n    ]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 541
+  }
+}

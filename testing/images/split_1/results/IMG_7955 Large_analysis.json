@@ -1,0 +1,83 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_1/IMG_7955 Large.jpeg",
+  "image_name": "IMG_7955 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Travel",
+    "subcategories": [
+      "Museums",
+      "Tokyo"
+    ],
+    "headline": "Design exhibition recommendation at Toranomon Hills in Tokyo",
+    "summary": "Recommendation to visit a design exhibition at Toranomon Hills. Features Japanese text promoting Tokyo outing spots and design exhibitions, with hashtags for travel recommendations and date spots.",
+    "media_metadata": {
+      "original_poster": "@都内お出かけスポット",
+      "tagged_accounts": [],
+      "location_tags": [
+        "Toranomon Hills"
+      ],
+      "audio_source": "original sound - @都内お出かけスポット",
+      "hashtags": [
+        "#デザインあ展",
+        "#デザインあ展neo",
+        "#お出かけスポット",
+        "#お出かけスポット",
+        "#vlog",
+        "#おすすめ旅行",
+        "#おすすめデート",
+        "#デートスポット",
+        "#展示会",
+        "#美術館"
+      ]
+    },
+    "image_details": {
+      "extracted_text": [
+        "都内お出かけスポット",
+        "I want you to go to the design exhibition @ Toranomon Hills",
+        "CapCut・Video adjustment",
+        "See original",
+        "less"
+      ],
+      "objects": [
+        "Person sitting on white stairs",
+        "Museum interior",
+        "White walls",
+        "Exhibition space",
+        "Handbag"
+      ],
+      "themes": [
+        "Museum visits",
+        "Tokyo attractions",
+        "Design exhibitions",
+        "Date spots"
+      ],
+      "emotions": [
+        "Inspiring",
+        "Cultural",
+        "Aesthetic"
+      ],
+      "vibes": [
+        "Minimalist",
+        "Modern",
+        "Artistic",
+        "Clean"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Design exhibition recommendation at Toranomon Hills",
+      "visual_hierarchy": [
+        "Person on white stairs",
+        "English recommendation text",
+        "Japanese caption text",
+        "Museum interior space",
+        "Hashtag collection"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Museums\", \"Tokyo\"],\n  \"headline\": \"Design exhibition recommendation at Toranomon Hills in Tokyo\",\n  \"summary\": \"Recommendation to visit a design exhibition at Toranomon Hills. Features Japanese text promoting Tokyo outing spots and design exhibitions, with hashtags for travel recommendations and date spots.\",\n  \"media_metadata\": {\n    \"original_poster\": \"@都内お出かけスポット\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [\"Toranomon Hills\"],\n    \"audio_source\": \"original sound - @都内お出かけスポット\",\n    \"hashtags\": [\"#デザインあ展\", \"#デザインあ展neo\", \"#お出かけスポット\", \"#お出かけスポット\", \"#vlog\", \"#おすすめ旅行\", \"#おすすめデート\", \"#デートスポット\", \"#展示会\", \"#美術館\"]\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"都内お出かけスポット\", \"I want you to go to the design exhibition @ Toranomon Hills\", \"CapCut・Video adjustment\", \"See original\", \"less\"],\n    \"objects\": [\"Person sitting on white stairs\", \"Museum interior\", \"White walls\", \"Exhibition space\", \"Handbag\"],\n    \"themes\": [\"Museum visits\", \"Tokyo attractions\", \"Design exhibitions\", \"Date spots\"],\n    \"emotions\": [\"Inspiring\", \"Cultural\", \"Aesthetic\"],\n    \"vibes\": [\"Minimalist\", \"Modern\", \"Artistic\", \"Clean\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Design exhibition recommendation at Toranomon Hills\",\n    \"visual_hierarchy\": [\"Person on white stairs\", \"English recommendation text\", \"Japanese caption text\", \"Museum interior space\", \"Hashtag collection\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 461
+  }
+}

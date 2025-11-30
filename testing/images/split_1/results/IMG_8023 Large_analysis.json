@@ -1,0 +1,85 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_1/IMG_8023 Large.jpeg",
+  "image_name": "IMG_8023 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Food",
+    "subcategories": [
+      "Korean Cuisine",
+      "Restaurant Review"
+    ],
+    "headline": "Oil Pry House in Seoul's Seongsu district serves potato fries for 7,900 won and potato mix for 9,900 won",
+    "summary": "Oil Pry House located at 41-18 Chungmujeon-gil, Seongdong-gu Seoul offers around 20 different kinds of potato dishes. Operating hours are 11:00-20:00 daily. Dr. Ellie credits @amy for discovering this Korean food spot.",
+    "media_metadata": {
+      "original_poster": "Dr. Ellie",
+      "tagged_accounts": [
+        "@amy"
+      ],
+      "location_tags": [
+        "Seongsu, Seoul, Korea • Seongdong-gu",
+        "1 km from city center"
+      ],
+      "audio_source": null,
+      "hashtags": [
+        "#lifeinkorea",
+        "#expatinkorea",
+        "#lifeinseoul",
+        "#livinginseoul",
+        "#thingstodoinseoul",
+        "#seoulfood",
+        "#seongsu",
+        "#seongsuhotplace"
+      ]
+    },
+    "image_details": {
+      "extracted_text": [
+        "AROUND 20 DIFFERENT KINDS",
+        "Dr. Ellie | Life in Seoul",
+        "Credit to @amy | beauty + life in korea for bringing this place to my FYP!",
+        "Oil Pry House",
+        "41-18, Chungmujeon-gil, Seongdong-gu Seoul, Korea / Yeonmujang-gil, Seongdong-gu, Seoul",
+        "Su-myeon 11: 00-20: 00",
+        "Potato Fries:\\ 7,900 / Potato Mix:\\ 9,900"
+      ],
+      "objects": [
+        "restaurant interior",
+        "wooden table",
+        "window view",
+        "food establishment"
+      ],
+      "themes": [
+        "Korean food discovery",
+        "Seoul dining",
+        "expat life",
+        "restaurant recommendation"
+      ],
+      "emotions": [
+        "appreciation",
+        "excitement",
+        "gratitude"
+      ],
+      "vibes": [
+        "cozy",
+        "local",
+        "authentic",
+        "trendy"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Restaurant details and pricing for Korean potato dishes",
+      "visual_hierarchy": [
+        "AROUND 20 DIFFERENT KINDS",
+        "Oil Pry House",
+        "Potato pricing information",
+        "Location address",
+        "Operating hours"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Food\",\n  \"subcategories\": [\"Korean Cuisine\", \"Restaurant Review\"],\n  \"headline\": \"Oil Pry House in Seoul's Seongsu district serves potato fries for 7,900 won and potato mix for 9,900 won\",\n  \"summary\": \"Oil Pry House located at 41-18 Chungmujeon-gil, Seongdong-gu Seoul offers around 20 different kinds of potato dishes. Operating hours are 11:00-20:00 daily. Dr. Ellie credits @amy for discovering this Korean food spot.\",\n  \"media_metadata\": {\n    \"original_poster\": \"Dr. Ellie\",\n    \"tagged_accounts\": [\"@amy\"],\n    \"location_tags\": [\"Seongsu, Seoul, Korea • Seongdong-gu\", \"1 km from city center\"],\n    \"audio_source\": null,\n    \"hashtags\": [\"#lifeinkorea\", \"#expatinkorea\", \"#lifeinseoul\", \"#livinginseoul\", \"#thingstodoinseoul\", \"#seoulfood\", \"#seongsu\", \"#seongsuhotplace\"]\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"AROUND 20 DIFFERENT KINDS\", \"Dr. Ellie | Life in Seoul\", \"Credit to @amy | beauty + life in korea for bringing this place to my FYP!\", \"Oil Pry House\", \"41-18, Chungmujeon-gil, Seongdong-gu Seoul, Korea / Yeonmujang-gil, Seongdong-gu, Seoul\", \"Su-myeon 11: 00-20: 00\", \"Potato Fries:\\\\ 7,900 / Potato Mix:\\\\ 9,900\"],\n    \"objects\": [\"restaurant interior\", \"wooden table\", \"window view\", \"food establishment\"],\n    \"themes\": [\"Korean food discovery\", \"Seoul dining\", \"expat life\", \"restaurant recommendation\"],\n    \"emotions\": [\"appreciation\", \"excitement\", \"gratitude\"],\n    \"vibes\": [\"cozy\", \"local\", \"authentic\", \"trendy\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Restaurant details and pricing for Korean potato dishes\",\n    \"visual_hierarchy\": [\"AROUND 20 DIFFERENT KINDS\", \"Oil Pry House\", \"Potato pricing information\", \"Location address\", \"Operating hours\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 590
+  }
+}

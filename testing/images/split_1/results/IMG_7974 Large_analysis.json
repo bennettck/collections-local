@@ -1,0 +1,71 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_1/IMG_7974 Large.jpeg",
+  "image_name": "IMG_7974 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Travel",
+    "subcategories": [
+      "Seoul",
+      "Tourism"
+    ],
+    "headline": "Top 5 places not to miss in Seoul - #5 Suwon (Hwasseong & Starfield)",
+    "summary": "Suwon ranks as the 5th must-visit place in Seoul, featuring Hwasseong Fortress and Starfield shopping complex. The location shows the historic fortress walls and grounds with modern city buildings visible in the background.",
+    "media_metadata": {
+      "original_poster": "LOUDIZCOUNTKLOOK",
+      "tagged_accounts": [
+        "LOU DIZ"
+      ],
+      "location_tags": [],
+      "audio_source": null,
+      "hashtags": []
+    },
+    "image_details": {
+      "extracted_text": [
+        "TOP 5 PLACES YOU SHOULD NOT MISS IN SEOUL:",
+        "5. Suwon (Hwasseong & Starfield)",
+        "LOUDIZCOUNTKLOOK • LOU DIZ",
+        "Airport Limousine / Midnight Bus, Hotel recommendation, and where to go... more"
+      ],
+      "objects": [
+        "historic fortress wall",
+        "traditional Korean architecture",
+        "stone steps",
+        "grassy area",
+        "modern buildings",
+        "trees",
+        "person walking"
+      ],
+      "themes": [
+        "Korean history",
+        "tourism recommendations",
+        "cultural sites",
+        "travel guide"
+      ],
+      "emotions": [
+        "informative",
+        "educational"
+      ],
+      "vibes": [
+        "historic",
+        "peaceful",
+        "cultural"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "Suwon recommendation as #5 must-visit Seoul destination",
+      "visual_hierarchy": [
+        "TOP 5 PLACES YOU SHOULD NOT MISS IN SEOUL:",
+        "5. Suwon (Hwasseong & Starfield)",
+        "Historic fortress wall and architecture",
+        "Username and caption text",
+        "Modern cityscape in background"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Seoul\", \"Tourism\"],\n  \"headline\": \"Top 5 places not to miss in Seoul - #5 Suwon (Hwasseong & Starfield)\",\n  \"summary\": \"Suwon ranks as the 5th must-visit place in Seoul, featuring Hwasseong Fortress and Starfield shopping complex. The location shows the historic fortress walls and grounds with modern city buildings visible in the background.\",\n  \"media_metadata\": {\n    \"original_poster\": \"LOUDIZCOUNTKLOOK\",\n    \"tagged_accounts\": [\"LOU DIZ\"],\n    \"location_tags\": [],\n    \"audio_source\": null,\n    \"hashtags\": []\n  },\n  \"image_details\": {\n    \"extracted_text\": [\n      \"TOP 5 PLACES YOU SHOULD NOT MISS IN SEOUL:\",\n      \"5. Suwon (Hwasseong & Starfield)\",\n      \"LOUDIZCOUNTKLOOK • LOU DIZ\",\n      \"Airport Limousine / Midnight Bus, Hotel recommendation, and where to go... more\"\n    ],\n    \"objects\": [\"historic fortress wall\", \"traditional Korean architecture\", \"stone steps\", \"grassy area\", \"modern buildings\", \"trees\", \"person walking\"],\n    \"themes\": [\"Korean history\", \"tourism recommendations\", \"cultural sites\", \"travel guide\"],\n    \"emotions\": [\"informative\", \"educational\"],\n    \"vibes\": [\"historic\", \"peaceful\", \"cultural\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"Suwon recommendation as #5 must-visit Seoul destination\",\n    \"visual_hierarchy\": [\n      \"TOP 5 PLACES YOU SHOULD NOT MISS IN SEOUL:\",\n      \"5. Suwon (Hwasseong & Starfield)\",\n      \"Historic fortress wall and architecture\",\n      \"Username and caption text\",\n      \"Modern cityscape in background\"\n    ]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 482
+  }
+}

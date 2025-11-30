@@ -1,0 +1,71 @@
+{
+  "status": "success",
+  "image_path": "/Users/chrisbennett/Desktop/image1JPG/split_1/IMG_8005 Large.jpeg",
+  "image_name": "IMG_8005 Large.jpeg",
+  "prompt": "structured_analysis",
+  "response": {
+    "category": "Technology",
+    "subcategories": [
+      "AI Tools",
+      "Browser Automation"
+    ],
+    "headline": "Gobii.ai creates AI agents for automated site logins and task completion",
+    "summary": "Gobii.ai spawns AI agents that log into authenticated sites and complete tasks automatically. The service provides secure, effortless access to logged-in websites through AI browser-use agents.",
+    "media_metadata": {
+      "original_poster": "ai.christianson",
+      "tagged_accounts": [],
+      "location_tags": [],
+      "audio_source": null,
+      "hashtags": [
+        "#ai",
+        "#agents"
+      ]
+    },
+    "image_details": {
+      "extracted_text": [
+        "Gobii.ai",
+        "Spawn AI agents that log in and get shit done",
+        "Secure, effortless access to authenticated sites",
+        "response on my",
+        "Access logged-in sites with AI browser-use agents",
+        "#ai #agents"
+      ],
+      "objects": [
+        "man with glasses and beard",
+        "browser window icon",
+        "AI bot illustration"
+      ],
+      "themes": [
+        "artificial intelligence",
+        "automation",
+        "web browsing",
+        "productivity tools"
+      ],
+      "emotions": [
+        "confident",
+        "professional",
+        "innovative"
+      ],
+      "vibes": [
+        "tech-forward",
+        "solution-oriented",
+        "cutting-edge"
+      ],
+      "likely_source": "TikTok",
+      "key_interest": "AI automation tool for website login and task completion",
+      "visual_hierarchy": [
+        "Gobii.ai branding",
+        "Main value proposition text",
+        "Speaker presenting",
+        "Service description",
+        "Hashtags"
+      ]
+    }
+  },
+  "raw_response": "```json\n{\n  \"category\": \"Technology\",\n  \"subcategories\": [\"AI Tools\", \"Browser Automation\"],\n  \"headline\": \"Gobii.ai creates AI agents for automated site logins and task completion\",\n  \"summary\": \"Gobii.ai spawns AI agents that log into authenticated sites and complete tasks automatically. The service provides secure, effortless access to logged-in websites through AI browser-use agents.\",\n  \"media_metadata\": {\n    \"original_poster\": \"ai.christianson\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [],\n    \"audio_source\": null,\n    \"hashtags\": [\"#ai\", \"#agents\"]\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"Gobii.ai\", \"Spawn AI agents that log in and get shit done\", \"Secure, effortless access to authenticated sites\", \"response on my\", \"Access logged-in sites with AI browser-use agents\", \"#ai #agents\"],\n    \"objects\": [\"man with glasses and beard\", \"browser window icon\", \"AI bot illustration\"],\n    \"themes\": [\"artificial intelligence\", \"automation\", \"web browsing\", \"productivity tools\"],\n    \"emotions\": [\"confident\", \"professional\", \"innovative\"],\n    \"vibes\": [\"tech-forward\", \"solution-oriented\", \"cutting-edge\"],\n    \"likely_source\": \"TikTok\",\n    \"key_interest\": \"AI automation tool for website login and task completion\",\n    \"visual_hierarchy\": [\"Gobii.ai branding\", \"Main value proposition text\", \"Speaker presenting\", \"Service description\", \"Hashtags\"]\n  }\n}\n```",
+  "model": "claude-sonnet-4-20250514",
+  "usage": {
+    "input_tokens": 2116,
+    "output_tokens": 383
+  }
+}
