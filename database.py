@@ -35,6 +35,7 @@ def init_db():
                 category TEXT,
                 summary TEXT,
                 raw_response TEXT,
+                provider_used TEXT,
                 model_used TEXT,
                 trace_id TEXT,
                 created_at TEXT NOT NULL,
@@ -44,6 +45,12 @@ def init_db():
             CREATE INDEX IF NOT EXISTS idx_analyses_item_id ON analyses(item_id);
             CREATE INDEX IF NOT EXISTS idx_analyses_category ON analyses(category);
         """)
+
+        # Migration: add provider_used column if it doesn't exist
+        cursor = conn.execute("PRAGMA table_info(analyses)")
+        columns = [row[1] for row in cursor.fetchall()]
+        if "provider_used" not in columns:
+            conn.execute("ALTER TABLE analyses ADD COLUMN provider_used TEXT")
 
 
 @contextmanager
@@ -131,6 +138,7 @@ def create_analysis(
     analysis_id: str,
     item_id: str,
     result: dict,
+    provider_used: str,
     model_used: str,
     trace_id: str = None
 ) -> dict:
@@ -148,12 +156,12 @@ def create_analysis(
 
         conn.execute(
             """INSERT INTO analyses (id, item_id, version, category, summary,
-               raw_response, model_used, trace_id, created_at)
-               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+               raw_response, provider_used, model_used, trace_id, created_at)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
             (
                 analysis_id, item_id, version, result.get("category"),
                 result.get("summary"), raw_response,
-                model_used, trace_id, now
+                provider_used, model_used, trace_id, now
             )
         )
     return get_analysis(analysis_id)

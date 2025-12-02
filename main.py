@@ -28,7 +28,7 @@ from database import (
     get_latest_analysis,
     get_item_analyses,
 )
-from llm import analyze_image, get_trace_id
+from llm import analyze_image, get_trace_id, get_resolved_provider_and_model
 
 # Load environment variables
 load_dotenv()
@@ -90,6 +90,7 @@ def _item_to_response(item: dict, include_analysis: bool = True) -> ItemResponse
                 category=analysis_data.get("category"),
                 summary=analysis_data.get("summary"),
                 raw_response=analysis_data.get("raw_response", {}),
+                provider_used=analysis_data.get("provider_used"),
                 model_used=analysis_data.get("model_used"),
                 trace_id=analysis_data.get("trace_id"),
                 created_at=_parse_datetime(analysis_data["created_at"]),
@@ -116,6 +117,7 @@ def _analysis_to_response(analysis: dict) -> AnalysisResponse:
         category=analysis.get("category"),
         summary=analysis.get("summary"),
         raw_response=analysis.get("raw_response", {}),
+        provider_used=analysis.get("provider_used"),
         model_used=analysis.get("model_used"),
         trace_id=analysis.get("trace_id"),
         created_at=_parse_datetime(analysis["created_at"]),
@@ -241,9 +243,15 @@ async def analyze_item_endpoint(
     if not file_path or not os.path.exists(file_path):
         raise HTTPException(status_code=404, detail="Image file not found")
 
+    # Resolve provider and model
+    provider_used, model_used = get_resolved_provider_and_model(
+        provider=request.provider,
+        model=request.model
+    )
+
     # Call LLM
     try:
-        result = analyze_image(file_path, model=request.model)
+        result = analyze_image(file_path, provider=request.provider, model=request.model)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Analysis failed: {str(e)}")
 
@@ -256,7 +264,8 @@ async def analyze_item_endpoint(
         analysis_id=analysis_id,
         item_id=item_id,
         result=result,
-        model_used=request.model,
+        provider_used=provider_used,
+        model_used=model_used,
         trace_id=trace_id,
     )
 

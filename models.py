@@ -1,12 +1,13 @@
 from pydantic import BaseModel, Field
 from pydantic_settings import BaseSettings
 from datetime import datetime
-from typing import Optional
+from typing import Optional, Literal
 
 
 class Settings(BaseSettings):
     """Application settings from environment variables."""
     anthropic_api_key: str
+    openai_api_key: Optional[str] = None
     langfuse_secret_key: str
     langfuse_public_key: str
     langfuse_host: str = "https://cloud.langfuse.com"
@@ -30,6 +31,7 @@ class AnalysisResponse(BaseModel):
     category: Optional[str] = None
     summary: Optional[str] = None
     raw_response: dict = {}
+    provider_used: Optional[str] = None
     model_used: Optional[str] = None
     trace_id: Optional[str] = None
     created_at: datetime
@@ -50,7 +52,8 @@ class ItemResponse(BaseModel):
 class AnalysisRequest(BaseModel):
     """Optional parameters for analysis."""
     force_reanalyze: bool = False
-    model: str = "claude-sonnet-4-20250514"
+    provider: Optional[Literal["anthropic", "openai"]] = None
+    model: Optional[str] = None
 
 
 class ItemListResponse(BaseModel):
