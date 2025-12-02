@@ -166,7 +166,8 @@ curl "http://localhost:8000/items?category=screenshot&limit=10&offset=0"
         "category": "Travel",
         "summary": "A TikTok screenshot about Togoshi Ginza...",
         "raw_response": { ... },
-        "model_used": "claude-sonnet-4-20250514",
+        "provider_used": "anthropic",
+        "model_used": "claude-sonnet-4-5",
         "trace_id": null,
         "created_at": "2025-11-30T12:05:00.000000"
       }
@@ -241,7 +242,8 @@ curl http://localhost:8000/items/uuid-string
         "visual_hierarchy": ["TOGOSHI GINZA title text", "Descriptive paragraph"]
       }
     },
-    "model_used": "claude-sonnet-4-20250514",
+    "provider_used": "anthropic",
+    "model_used": "claude-sonnet-4-5",
     "trace_id": null,
     "created_at": "2025-11-30T12:05:00.000000"
   }
@@ -303,7 +305,7 @@ Endpoints for AI-powered image analysis.
 
 ### Analyze Item
 
-Trigger AI analysis on an uploaded image. The analysis uses Claude's vision capabilities to:
+Trigger AI analysis on an uploaded image. The analysis uses AI vision capabilities (Anthropic Claude or OpenAI GPT-4o) to:
 - Categorize the image
 - Generate a summary
 - Extract text content
@@ -322,25 +324,44 @@ Trigger AI analysis on an uploaded image. The analysis uses Claude's vision capa
 ```json
 {
   "force_reanalyze": false,
-  "model": "claude-sonnet-4-20250514"
+  "provider": "anthropic",
+  "model": "claude-sonnet-4-5"
 }
 ```
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
-| `force_reanalyze` | boolean | false | If true, creates new analysis even if one exists |
-| `model` | string | claude-sonnet-4-20250514 | Anthropic model to use |
+| `force_reanalyze` | boolean | `false` | If true, creates new analysis even if one exists |
+| `provider` | string | `"anthropic"` | AI provider to use: `"anthropic"` or `"openai"` |
+| `model` | string | *(provider default)* | Model to use. Defaults to `"claude-sonnet-4-5"` for Anthropic or `"gpt-4o"` for OpenAI |
+
+**Provider Defaults:**
+
+| Provider | Default Model |
+|----------|---------------|
+| `anthropic` | `claude-sonnet-4-5` |
+| `openai` | `gpt-4o` |
 
 **Example (curl):**
 
 ```bash
-# Basic analysis (uses cached result if available)
+# Basic analysis (uses cached result if available, defaults to Anthropic)
 curl -X POST http://localhost:8000/items/uuid-string/analyze
 
-# Force reanalysis
+# Force reanalysis with default provider
 curl -X POST http://localhost:8000/items/uuid-string/analyze \
   -H "Content-Type: application/json" \
   -d '{"force_reanalyze": true}'
+
+# Use OpenAI instead of Anthropic
+curl -X POST http://localhost:8000/items/uuid-string/analyze \
+  -H "Content-Type: application/json" \
+  -d '{"provider": "openai"}'
+
+# Specify a different model
+curl -X POST http://localhost:8000/items/uuid-string/analyze \
+  -H "Content-Type: application/json" \
+  -d '{"provider": "anthropic", "model": "claude-opus-4"}'
 ```
 
 **Response:** `200 OK`
@@ -375,7 +396,8 @@ curl -X POST http://localhost:8000/items/uuid-string/analyze \
       "visual_hierarchy": ["TOGOSHI GINZA title text", "Descriptive paragraph"]
     }
   },
-  "model_used": "claude-sonnet-4-20250514",
+  "provider_used": "anthropic",
+  "model_used": "claude-sonnet-4-5",
   "trace_id": null,
   "created_at": "2025-11-30T12:05:00.000000"
 }
@@ -389,6 +411,7 @@ curl -X POST http://localhost:8000/items/uuid-string/analyze \
 | `category` | string | Primary category extracted from the analysis |
 | `summary` | string | 2-3 sentence summary of the content |
 | `raw_response` | object | Full LLM analysis response (see schema below) |
+| `provider_used` | string | AI provider used (`"anthropic"` or `"openai"`) |
 | `model_used` | string | AI model used for analysis |
 | `trace_id` | string/null | Langfuse trace ID for debugging |
 | `created_at` | string | ISO 8601 timestamp |
@@ -471,7 +494,8 @@ curl http://localhost:8000/items/uuid-string/analyses
       "media_metadata": { ... },
       "image_details": { ... }
     },
-    "model_used": "claude-sonnet-4-20250514",
+    "provider_used": "openai",
+    "model_used": "gpt-4o",
     "trace_id": null,
     "created_at": "2025-11-30T14:00:00.000000"
   },
@@ -489,7 +513,8 @@ curl http://localhost:8000/items/uuid-string/analyses
       "media_metadata": { ... },
       "image_details": { ... }
     },
-    "model_used": "claude-sonnet-4-20250514",
+    "provider_used": "anthropic",
+    "model_used": "claude-sonnet-4-5",
     "trace_id": null,
     "created_at": "2025-11-30T12:05:00.000000"
   }
@@ -556,7 +581,8 @@ curl http://localhost:8000/analyses/analysis-uuid
       "visual_hierarchy": ["TOGOSHI GINZA title text", "Descriptive paragraph"]
     }
   },
-  "model_used": "claude-sonnet-4-20250514",
+  "provider_used": "anthropic",
+  "model_used": "claude-sonnet-4-5",
   "trace_id": null,
   "created_at": "2025-11-30T12:05:00.000000"
 }
@@ -597,7 +623,8 @@ curl http://localhost:8000/analyses/analysis-uuid
 | `category` | string/null | Primary category (extracted from raw_response) |
 | `summary` | string/null | Content summary (extracted from raw_response) |
 | `raw_response` | object | Full LLM analysis response (see schema below) |
-| `model_used` | string | AI model used |
+| `provider_used` | string/null | AI provider used (`"anthropic"` or `"openai"`) |
+| `model_used` | string/null | AI model used |
 | `trace_id` | string/null | Langfuse trace ID |
 | `created_at` | string | ISO 8601 timestamp |
 
