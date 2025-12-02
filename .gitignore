@@ -36,13 +36,15 @@ env/
 *.swo
 *~
 
-# Database
+# Database - exclude binary database files
 data/*.db
 data/*.db-journal
+data/*.db-shm
+data/*.db-wal
 
-# Keep data directories but ignore contents
-!data/.gitkeep
-!data/images/.gitkeep
+# But DO track the JSON exports and images
+!data/exports/
+!data/images/
 
 # Testing
 .pytest_cache/
