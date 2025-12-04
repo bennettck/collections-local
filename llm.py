@@ -76,9 +76,16 @@ def _analyze_with_anthropic(image_data: str, media_type: str, model: str, system
 
 def _analyze_with_openai(image_data: str, media_type: str, model: str, system_prompt: str) -> str:
     """Call OpenAI API for image analysis."""
+    # GPT-5, o1, o3 are reasoning models that use max_completion_tokens
+    # They need higher limits because tokens are used for both reasoning and output
+    if model.startswith("gpt-5") or model.startswith("o1") or model.startswith("o3"):
+        token_param = {"max_completion_tokens": 8000}  # Higher limit for reasoning + output
+    else:
+        token_param = {"max_tokens": 1024}
+
     response = openai_client.chat.completions.create(
         model=model,
-        max_tokens=1024,
+        **token_param,
         messages=[
             {
                 "role": "system",
@@ -101,7 +108,8 @@ def _analyze_with_openai(image_data: str, media_type: str, model: str, system_pr
             }
         ],
     )
-    return response.choices[0].message.content
+
+    return response.choices[0].message.content or ""
 
 
 @observe(name="analyze_image")
@@ -142,7 +150,7 @@ def analyze_image(
         result_text = _analyze_with_anthropic(image_data, media_type, resolved_model, system_prompt)
 
     # Handle potential JSON wrapped in markdown code blocks
-    if result_text.startswith("```"):
+    if result_text and result_text.startswith("```"):
         # Remove markdown code block wrapper
         lines = result_text.split("\n")
         # Remove first line (```json or ```) and last line (```)

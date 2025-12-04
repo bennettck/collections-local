@@ -58,7 +58,7 @@ def analyze_image(client: httpx.Client, item_id: str, provider: str = None, mode
     response = client.post(
         f"{API_BASE}/items/{item_id}/analyze",
         json=payload,
-        timeout=120.0  # LLM calls can take a while
+        timeout=240.0  # 4 minutes for reasoning models like GPT-5
     )
     response.raise_for_status()
     return response.json()
