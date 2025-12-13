@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Golden Dataset Creator</title>
+    <link rel="stylesheet" href="/static/css/golden_dataset.css">
+</head>
+<body>
+    <!-- Header with progress -->
+    <header>
+        <h1>Golden Dataset Creator</h1>
+        <div class="progress-bar">
+            <div class="progress-info">
+                <span>Item <span id="current-index">0</span> of <span id="total-items">0</span></span>
+                <span class="separator">|</span>
+                <span>Reviewed: <span id="reviewed-count">0</span></span>
+                <span class="separator">|</span>
+                <span>Progress: <span id="progress-pct">0</span>%</span>
+            </div>
+            <div class="progress-fill-container">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="navigation">
+        <button id="btn-prev" class="nav-btn">← Previous</button>
+        <button id="btn-skip" class="nav-btn">Skip</button>
+        <button id="btn-next" class="nav-btn">Next →</button>
+        <div class="nav-spacer"></div>
+        <button id="btn-save" class="action-btn">Save (Ctrl+S)</button>
+        <button id="btn-save-next" class="action-btn primary">Save & Next</button>
+    </nav>
+
+    <!-- Loading state -->
+    <div id="loading" class="loading hidden">
+        <div class="spinner"></div>
+        <p>Loading item...</p>
+    </div>
+
+    <!-- Main content -->
+    <main id="main-content" class="hidden">
+        <!-- Split container: Image left, Attributes right -->
+        <div class="split-container">
+            <!-- LEFT: Image panel (40%, sticky) -->
+            <aside class="image-panel">
+                <div class="image-sticky">
+                    <h2>Image Preview</h2>
+                    <div class="image-container">
+                        <img id="main-image" src="" alt="Item Image">
+                    </div>
+                    <div class="image-info">
+                        <span id="item-id-display"></span>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- RIGHT: Tabbed attributes panel (60%) -->
+            <div class="attributes-panel">
+                <!-- Tab navigation -->
+                <nav class="section-tabs" role="tablist">
+                    <button class="tab-btn active" data-section="category" role="tab" aria-selected="true">Category</button>
+                    <button class="tab-btn" data-section="extracted-text" role="tab" aria-selected="false">Extracted Text</button>
+                    <button class="tab-btn" data-section="headline" role="tab" aria-selected="false">Headline</button>
+                    <button class="tab-btn" data-section="summary" role="tab" aria-selected="false">Summary</button>
+                    <button class="tab-btn" data-section="image-details" role="tab" aria-selected="false">Image Details</button>
+                    <button class="tab-btn" data-section="metadata" role="tab" aria-selected="false">Metadata</button>
+                </nav>
+
+                <!-- Section progress -->
+                <div class="section-progress">
+                    Section <span id="section-current">1</span> of <span id="section-total">6</span>
+                </div>
+
+                <!-- Tab content wrapper -->
+                <div class="tab-content-wrapper">
+                    <!-- SECTION 1: Category & Subcategories -->
+                    <div id="section-category" class="tab-panel active" role="tabpanel">
+                        <div class="field-group">
+                            <h3>Category (select one)</h3>
+                            <div id="category-options" class="radio-group"></div>
+                            <div class="manual-input">
+                                <input type="radio" name="category-choice" value="manual" id="category-manual-radio">
+                                <label for="category-manual-radio">Custom:</label>
+                                <input type="text" id="category-manual" placeholder="Enter custom category">
+                            </div>
+                        </div>
+                        <div class="field-group">
+                            <h3>Subcategories (select multiple)</h3>
+                            <div id="subcategory-options" class="checkbox-group"></div>
+                            <div class="add-item-container">
+                                <input type="text" id="subcategory-add-input" placeholder="Add new subcategory">
+                                <button id="subcategory-add-btn" class="add-btn">+ Add</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 2: Extracted Text -->
+                    <div id="section-extracted-text" class="tab-panel" role="tabpanel">
+                        <h2>Extracted Text <span class="method-badge">Levenshtein Similarity</span></h2>
+                        <div id="text-options" class="radio-group"></div>
+                        <div class="manual-input">
+                            <input type="radio" name="text-choice" value="manual" id="text-manual-radio">
+                            <label for="text-manual-radio">Custom text:</label>
+                            <textarea id="text-manual" rows="4" placeholder="Enter custom extracted text (comma-separated)"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 3: Headline -->
+                    <div id="section-headline" class="tab-panel" role="tabpanel">
+                        <h2>Headline <span class="method-badge">TF-IDF Similarity</span></h2>
+                        <div id="headline-options" class="radio-group"></div>
+                        <div class="manual-input">
+                            <input type="radio" name="headline-choice" value="manual" id="headline-manual-radio">
+                            <label for="headline-manual-radio">Custom headline:</label>
+                            <input type="text" id="headline-manual" placeholder="Enter custom headline">
+                        </div>
+                    </div>
+
+                    <!-- SECTION 4: Summary -->
+                    <div id="section-summary" class="tab-panel" role="tabpanel">
+                        <h2>Summary <span class="method-badge">TF-IDF Similarity</span></h2>
+                        <div id="summary-options" class="radio-group"></div>
+                        <div class="manual-input">
+                            <input type="radio" name="summary-choice" value="manual" id="summary-manual-radio">
+                            <label for="summary-manual-radio">Custom summary:</label>
+                            <textarea id="summary-manual" rows="4" placeholder="Enter custom summary"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 5: Image Details -->
+                    <div id="section-image-details" class="tab-panel" role="tabpanel">
+                        <h2>Image Details</h2>
+
+                        <div class="field-group">
+                            <h3>Objects</h3>
+                            <div id="objects-list" class="checkbox-group"></div>
+                            <div class="add-item-container">
+                                <input type="text" id="objects-add-input" placeholder="Add object">
+                                <button id="objects-add-btn" class="add-btn">+ Add</button>
+                            </div>
+                        </div>
+
+                        <div class="field-group">
+                            <h3>Themes</h3>
+                            <div id="themes-list" class="checkbox-group"></div>
+                            <div class="add-item-container">
+                                <input type="text" id="themes-add-input" placeholder="Add theme">
+                                <button id="themes-add-btn" class="add-btn">+ Add</button>
+                            </div>
+                        </div>
+
+                        <div class="field-group">
+                            <h3>Emotions</h3>
+                            <div id="emotions-list" class="checkbox-group"></div>
+                            <div class="add-item-container">
+                                <input type="text" id="emotions-add-input" placeholder="Add emotion">
+                                <button id="emotions-add-btn" class="add-btn">+ Add</button>
+                            </div>
+                        </div>
+
+                        <div class="field-group">
+                            <h3>Vibes</h3>
+                            <div id="vibes-list" class="checkbox-group"></div>
+                            <div class="add-item-container">
+                                <input type="text" id="vibes-add-input" placeholder="Add vibe">
+                                <button id="vibes-add-btn" class="add-btn">+ Add</button>
+                            </div>
+                        </div>
+
+                        <div class="field-group">
+                            <h3>Visual Hierarchy <span class="help-text">(Drag to rank by importance)</span></h3>
+
+                            <!-- Source indicator -->
+                            <div id="visual-hierarchy-source" class="hierarchy-source-indicator"></div>
+
+                            <div id="visual-hierarchy-list" class="ranking-list"></div>
+                            <div class="add-item-container">
+                                <input type="text" id="visual-hierarchy-add-input" placeholder="Add visual element">
+                                <button id="visual-hierarchy-add-btn" class="add-btn">+ Add</button>
+                            </div>
+                        </div>
+
+                        <div class="field-group">
+                            <h3>Key Interest</h3>
+                            <div id="key-interest-options" class="radio-group"></div>
+                            <div class="manual-input">
+                                <input type="radio" name="key-interest-choice" value="manual" id="key-interest-manual-radio">
+                                <label for="key-interest-manual-radio">Custom:</label>
+                                <input type="text" id="key-interest-manual" placeholder="Enter custom key interest">
+                            </div>
+                        </div>
+
+                        <div class="field-group">
+                            <h3>Likely Source</h3>
+                            <div id="likely-source-options" class="radio-group"></div>
+                            <div class="manual-input">
+                                <input type="radio" name="likely-source-choice" value="manual" id="likely-source-manual-radio">
+                                <label for="likely-source-manual-radio">Custom:</label>
+                                <input type="text" id="likely-source-manual" placeholder="Enter custom likely source">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 6: Media Metadata -->
+                    <div id="section-metadata" class="tab-panel" role="tabpanel">
+                        <h2>Media Metadata</h2>
+
+                        <div class="field-group">
+                            <h3>Original Poster</h3>
+                            <div id="original-poster-options" class="radio-group"></div>
+                            <div class="manual-input">
+                                <input type="radio" name="original-poster-choice" value="manual" id="original-poster-manual-radio">
+                                <label for="original-poster-manual-radio">Custom:</label>
+                                <input type="text" id="original-poster-manual" placeholder="Enter original poster">
+                            </div>
+                        </div>
+
+                        <div class="field-group">
+                            <h3>Tagged Accounts</h3>
+                            <div id="tagged-accounts-list" class="checkbox-group"></div>
+                            <div class="add-item-container">
+                                <input type="text" id="tagged-accounts-add-input" placeholder="Add tagged account">
+                                <button id="tagged-accounts-add-btn" class="add-btn">+ Add</button>
+                            </div>
+                        </div>
+
+                        <div class="field-group">
+                            <h3>Location Tags</h3>
+                            <div id="location-tags-list" class="checkbox-group"></div>
+                            <div class="add-item-container">
+                                <input type="text" id="location-tags-add-input" placeholder="Add location tag">
+                                <button id="location-tags-add-btn" class="add-btn">+ Add</button>
+                            </div>
+                        </div>
+
+                        <div class="field-group">
+                            <h3>Audio Source</h3>
+                            <div id="audio-source-options" class="radio-group"></div>
+                            <div class="manual-input">
+                                <input type="radio" name="audio-source-choice" value="manual" id="audio-source-manual-radio">
+                                <label for="audio-source-manual-radio">Custom:</label>
+                                <input type="text" id="audio-source-manual" placeholder="Enter audio source">
+                            </div>
+                        </div>
+
+                        <div class="field-group">
+                            <h3>Hashtags</h3>
+                            <div id="hashtags-list" class="checkbox-group"></div>
+                            <div class="add-item-container">
+                                <input type="text" id="hashtags-add-input" placeholder="Add hashtag">
+                                <button id="hashtags-add-btn" class="add-btn">+ Add</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section navigation buttons -->
+                <div class="section-nav">
+                    <button id="btn-prev-section" class="nav-btn" disabled>← Previous Section</button>
+                    <button id="btn-next-section" class="nav-btn">Next Section →</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-info">
+            <span id="auto-save-status">Auto-save: <span id="auto-save-time">Never</span></span>
+        </div>
+    </footer>
+
+    <script src="/static/js/golden_dataset.js"></script>
+</body>
+</html>

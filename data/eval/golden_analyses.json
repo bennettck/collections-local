@@ -1,0 +1,2413 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "created_at": "2025-12-13T19:29:22.021614Z",
+    "last_updated": "2025-12-13T22:23:53.199560Z",
+    "total_items": 20
+  },
+  "golden_analyses": [
+    {
+      "item_id": "fe0288ee-5bcf-46e5-8ce6-c1c65cae5395",
+      "reviewed_at": "2025-12-13T19:45:21.826Z",
+      "source_analyses_count": 4,
+      "source_analysis_ids": [
+        "92eb4ad6-3014-4045-a26a-a05d90415e46",
+        "8efa32e3-747a-43bf-815b-95c142ae16e8",
+        "852bc75e-a2e2-4593-8cdc-4ed746d15b76",
+        "ab48c3b4-5eed-4788-9aaf-ad2affeed8fe"
+      ],
+      "category": "Beauty",
+      "subcategories": [
+        "Fragrance",
+        "Product Review",
+        "Shopping",
+        "Perfume",
+        "Japan"
+      ],
+      "headline": "J-Scent Japanese Perfume House - Wood Flake, Hisui, Sumo Wrestler scents",
+      "summary": "J-Scent is a Japanese perfume house with story-driven fragrances at ¥4,950 per bottle. The creator purchased Wood Flake, Hisui, and Sumo Wrestler scents, and tested their famous Roasted Green Tea fragrance during a trip to Japan.",
+      "media_metadata": {
+        "original_poster": "Me [jear",
+        "tagged_accounts": [],
+        "location_tags": [
+          "Japan",
+          "JAPAN",
+          "J-Scent"
+        ],
+        "audio_source": "Harpy Hare - Yaelokre",
+        "hashtags": []
+      },
+      "image_details": {
+        "extracted_text": [
+          "J-SCENT",
+          "finally had the chance to try this famous Japanese perfume house, J-Scent, and i must say... I'M IN LOVE WITH THE STORIES BEHIND EACH PERFUME. i even got to sniff their most famous perfume, Roasted Green Tea! it's beautiful but i passed on it since i already have something similar. PLUS, THEY'RE SO AFFORDABLE OMG LOVE. each bottle is only ¥4,950!!!",
+          "*picked up Wood Flake, Hisui & Sumo Wrestler ❤️",
+          "TESTER",
+          "J-Scent",
+          "ME 🙌 JAPAN",
+          "J-Scent",
+          "I'm so glad to have discovered & smelled so many AMAZING perfumes during my trip to Japan! 🥹❤️ i might've gone a lil over my initial budget for perfume... more",
+          "Search · j scent perfume"
+        ],
+        "objects": [
+          "perfume bottles",
+          "perfume tester bottles",
+          "store display shelves",
+          "product signage",
+          "hand holding bottle",
+          "TikTok UI elements",
+          "J-Scent perfume bottles",
+          "Tester bottles",
+          "Perfume store display",
+          "Hand holding perfume",
+          "Store interior",
+          "tester bottles",
+          "retail display",
+          "product labels",
+          "hands holding bottles",
+          "store interior"
+        ],
+        "themes": [
+          "fragrance discovery",
+          "beauty shopping",
+          "product recommendation",
+          "Japanese brands",
+          "budget-friendly pricing",
+          "Japanese perfumery",
+          "Travel shopping",
+          "Fragrance discovery",
+          "Budget-friendly luxury",
+          "Japanese beauty products",
+          "perfume shopping",
+          "affordable luxury"
+        ],
+        "emotions": [
+          "excitement",
+          "delight",
+          "enthusiasm",
+          "Excitement",
+          "Joy",
+          "Discovery",
+          "Enthusiasm",
+          "appreciation",
+          "satisfaction"
+        ],
+        "vibes": [
+          "informative",
+          "enthusiastic",
+          "consumer review",
+          "Aesthetic shopping experience",
+          "Japan travel haul",
+          "Perfume enthusiast community",
+          "budget-conscious",
+          "discovery-focused"
+        ],
+        "visual_hierarchy": [
+          "Large title text: J‑SCENT",
+          "Overlay paragraph praising J‑Scent and stating price ¥4,950",
+          "Close‑up J‑Scent tester bottle",
+          "Line: *picked up Wood Flake, Hisui & Sumo Wrestler*",
+          "Caption mentioning discovery in Japan and many perfumes",
+          "J-SCENT brand name overlay",
+          "Perfume bottle close-ups",
+          "Price point ¥4,950",
+          "Purchased scents list",
+          "Store display background",
+          "J-SCENT brand name",
+          "TESTER bottles in hand",
+          "Specific perfume names purchased",
+          "Store display with multiple products"
+        ],
+        "key_interest": "Affordable Japanese perfume brand J-Scent with unique story-driven fragrances at ¥4,950",
+        "likely_source": "TikTok"
+      }
+    },
+    {
+      "item_id": "e85fb2dc-c994-48f3-8f6b-baeb936168ec",
+      "reviewed_at": "2025-12-13T19:47:32.594Z",
+      "source_analyses_count": 4,
+      "source_analysis_ids": [
+        "de4e6078-4e56-4345-86d5-c62bf1cb4880",
+        "9088b47b-d58f-493d-b121-2fc5644f839e",
+        "b0b4a4dc-ba4c-4f7c-b3af-89b641f9b0f0",
+        "58d46717-d34d-4a7f-8c10-ae6d4a3631ee"
+      ],
+      "category": "Travel",
+      "subcategories": [
+        "Tokyo",
+        "Shopping",
+        "Anime",
+        "Shopping-Destinations",
+        "Japan-Tourism",
+        "Anime-Culture"
+      ],
+      "headline": "Nakano Broadway: Tokyo's massive anime, manga, and vintage goods shopping complex with basement food hall",
+      "summary": "Nakano Broadway is a large shopping complex in Tokyo that sells anime and manga goods, vintage toys, video games, and clothes. The basement level features a food hall. This is a popular destination for anime and pop culture enthusiasts visiting Japan.",
+      "media_metadata": {
+        "original_poster": "recommend_ndre",
+        "tagged_accounts": [],
+        "location_tags": [
+          "Nakano Broadway, Tokyo",
+          "Tokyo"
+        ],
+        "audio_source": "bloodline - Ariana",
+        "hashtags": [
+          "#japan",
+          "#j"
+        ]
+      },
+      "image_details": {
+        "extracted_text": [
+          "NAKANO BROADWAY",
+          "A huge shopping complex selling Anime & Manga goods, vintage toys, video games, and clothes. In the basement there is a food hall.",
+          "Sebelum ke Tokyo kalian harus tau 😁",
+          "Tokyo tips and trick 😁",
+          "#japan #j... more",
+          "Contains: bloodline - Ariana"
+        ],
+        "objects": [
+          "shopping mall entrance (Nakano Broadway)",
+          "signage",
+          "people walking",
+          "text overlay",
+          "TikTok UI elements",
+          "profile avatar",
+          "Shopping mall entrance",
+          "Nakano Broadway signage",
+          "Pedestrians",
+          "Store displays",
+          "Red building facade",
+          "shopping complex entrance",
+          "people",
+          "shopping complex storefront",
+          "red signage",
+          "retail displays",
+          "pedestrians",
+          "street scene",
+          "merchandise racks"
+        ],
+        "themes": [
+          "travel tips",
+          "shopping destinations",
+          "otaku culture",
+          "food hall",
+          "Japan travel tips",
+          "Otaku culture",
+          "Shopping destinations",
+          "Tokyo tourism",
+          "shopping",
+          "pop culture",
+          "travel",
+          "Japanese pop culture",
+          "anime and manga shopping",
+          "Tokyo attractions",
+          "tourist recommendations"
+        ],
+        "emotions": [
+          "excited",
+          "curious",
+          "Excitement",
+          "Discovery",
+          "Enthusiasm",
+          "excitement",
+          "curiosity",
+          "enthusiasm",
+          "discovery"
+        ],
+        "vibes": [
+          "informative",
+          "energetic",
+          "touristy",
+          "Informative",
+          "Tourist-friendly",
+          "Niche culture appreciation",
+          "vibrant",
+          "bustling",
+          "urban",
+          "colorful",
+          "pop-culture"
+        ],
+        "visual_hierarchy": [
+          "Large title: NAKANO BROADWAY",
+          "Photo of Nakano Broadway entrance",
+          "Description paragraph about goods and food hall",
+          "Caption text about Tokyo tips",
+          "Username: recommend_ndre",
+          "NAKANO BROADWAY title text",
+          "Description of the shopping complex",
+          "Caption in Indonesian about Tokyo tips",
+          "TikTok interface elements",
+          "NAKANO BROADWAY",
+          "A huge shopping complex...",
+          "Shopping complex entrance with people",
+          "descriptive text about the shopping complex",
+          "storefront photograph",
+          "username recommend_ndre",
+          "caption about Tokyo tips"
+        ],
+        "key_interest": "Nakano Broadway shopping complex and what it sells",
+        "likely_source": "TikTok"
+      }
+    },
+    {
+      "item_id": "1f6495b0-6e8c-4421-be9a-50e86bf9381a",
+      "reviewed_at": "2025-12-13T19:49:06.419Z",
+      "source_analyses_count": 4,
+      "source_analysis_ids": [
+        "08136fab-d5ac-4b0d-92a5-0fb61b8c3d40",
+        "2f2062d1-3c2e-46d6-b693-b5b8f95d2e38",
+        "62978156-0114-43fd-ae32-a6fbc3d499f5",
+        "8b722673-14d7-45b0-8e6c-c214ce92ecd9"
+      ],
+      "category": "Travel",
+      "subcategories": [
+        "Tokyo",
+        "Bookstores",
+        "Neighborhoods",
+        "Neighborhood Guide",
+        "Travel-Tips"
+      ],
+      "headline": "Jimbocho: Tokyo's bookstore district with new and secondhand books plus English sections",
+      "summary": "Jimbocho is Tokyo's bookworm heaven, an area filled with bookstores selling new and secondhand books, many with English sections. The neighborhood also features quaint coffee shops, making it a must-visit destination for book lovers traveling to Japan.",
+      "media_metadata": {
+        "original_poster": "recommend_ndre",
+        "tagged_accounts": [],
+        "location_tags": [
+          "Jimbocho, Tokyo",
+          "Tokyo"
+        ],
+        "audio_source": "bloodline - Ariana",
+        "hashtags": [
+          "#japan",
+          "#j"
+        ]
+      },
+      "image_details": {
+        "extracted_text": [
+          "JIMBOCHO",
+          "An area of bookstores and quaint coffee shops. This is Bookworm heaven! You can shop for new and second hand books and they have English sections.",
+          "recommend_ndre",
+          "Sebelum ke Tokyo kalian harus tau 😁",
+          "Tokyo tips and trick 😁 #japan #i... more",
+          "Contains: bloodline - Ariana Grande"
+        ],
+        "objects": [
+          "bookstore storefront",
+          "books on outdoor shelves",
+          "street scene with pedestrians",
+          "TikTok interface elements",
+          "Traditional Japanese bookstore storefront",
+          "Books displayed outside shop",
+          "Street scene with pedestrians",
+          "Japanese signage",
+          "Urban buildings",
+          "street scene",
+          "books on display",
+          "pedestrians",
+          "urban architecture"
+        ],
+        "themes": [
+          "travel tips",
+          "Tokyo neighborhoods",
+          "bookstores",
+          "coffee culture",
+          "Book culture",
+          "Tokyo travel tips",
+          "Japanese neighborhoods",
+          "Secondhand shopping",
+          "literary culture",
+          "book shopping",
+          "cultural exploration",
+          "local recommendations"
+        ],
+        "emotions": [
+          "excitement",
+          "curiosity",
+          "Nostalgic",
+          "Curious",
+          "Excited",
+          "discovery",
+          "intellectual curiosity",
+          "wanderlust"
+        ],
+        "vibes": [
+          "informative",
+          "cozy",
+          "wanderlust",
+          "Literary",
+          "Charming",
+          "Cultural discovery",
+          "Vintage aesthetic",
+          "bookish",
+          "charming",
+          "cultural",
+          "nostalgic",
+          "literary"
+        ],
+        "visual_hierarchy": [
+          "Large title: JIMBOCHO",
+          "Description about bookstores and coffee shops",
+          "Photo of Jimbocho street with bookstores",
+          "Caption text about Tokyo tips and #japan",
+          "Audio attribution: bloodline - Ariana Grande",
+          "JIMBOCHO title text",
+          "Description of the area",
+          "Photo of 矢口書店 (Yaguchi Shoten) bookstore",
+          "Indonesian caption about Tokyo tips",
+          "TikTok interface elements",
+          "JIMBOCHO heading",
+          "Description text about bookstores",
+          "Street photo of bookstore",
+          "Username recommend_ndre",
+          "Caption with travel tip"
+        ],
+        "key_interest": "Jimbocho district as a destination for book lovers visiting Tokyo",
+        "likely_source": "TikTok"
+      }
+    },
+    {
+      "item_id": "9c443027-7b4b-4c03-a1a2-43c2fab1e8a6",
+      "reviewed_at": "2025-12-13T19:58:21.814Z",
+      "source_analyses_count": 4,
+      "source_analysis_ids": [
+        "315b8575-5d94-4f20-816b-7620144046ce",
+        "5260bd63-93f4-4563-9a2f-d9a9d99b85e3",
+        "9b8c4eae-bb98-4e8c-b0d9-66790ae6f5e2",
+        "7072c6c5-665e-45e0-97c3-ff21b56ffc93"
+      ],
+      "category": "Travel",
+      "subcategories": [
+        "Japan",
+        "Itinerary",
+        "Food",
+        "Food Tourism",
+        "Day Trips",
+        "Day Trip",
+        "Japan Travel"
+      ],
+      "headline": "Tokyo Day Trip to Kamakura, Enoshima & Yokohama featuring Japanese cuisine",
+      "summary": "Tokyo Day Trip covering Kamakura, Enoshima, and Yokohama. IG: @joanneffan is provided for more details.",
+      "media_metadata": {
+        "original_poster": "@joanneffan",
+        "tagged_accounts": [
+          "@joanneffan"
+        ],
+        "location_tags": [
+          "Tokyo, 744.4K people posted about this place"
+        ],
+        "audio_source": "",
+        "hashtags": []
+      },
+      "image_details": {
+        "extracted_text": [
+          "KAMAKURA + ENOSHIMA + YOKOHAMA",
+          "Tokyo Day Trip",
+          "it didn't depart",
+          "IG: @joanneffan",
+          "Tokyo",
+          "744.4K people posted about this place",
+          "a cozy escape from Tokyo to ... Kamakura, Enoshima, & Yok... more",
+          "Home Discover Inbox Profile",
+          "Explore Following Shop For You"
+        ],
+        "objects": [
+          "bowl of noodles",
+          "katsu don rice bowl",
+          "tempura plate",
+          "serving tray",
+          "spoon",
+          "TikTok UI icons",
+          "katsudon (pork cutlet bowl)",
+          "tempura",
+          "soba noodles",
+          "ceramic soup spoon",
+          "small condiment dish",
+          "lacquered tray",
+          "traditional Japanese bowls",
+          "plates of food",
+          "soup bowl",
+          "tempura shrimp",
+          "soba or ramen noodles",
+          "gyoza dumplings",
+          "ceramic bowls",
+          "lacquered serving trays",
+          "chopsticks",
+          "ceramic spoon",
+          "small sauce dishes"
+        ],
+        "themes": [
+          "day trip planning",
+          "Japanese cuisine",
+          "Tokyo region travel",
+          "travel vlog",
+          "day trip itinerary",
+          "food tourism",
+          "travel",
+          "day trip",
+          "day trip travel",
+          "food exploration",
+          "regional tourism",
+          "authentic dining"
+        ],
+        "emotions": [
+          "excitement",
+          "curiosity",
+          "wanderlust",
+          "comfort",
+          "anticipation",
+          "enjoyment",
+          "adventure",
+          "satisfaction",
+          "appreciation"
+        ],
+        "vibes": [
+          "cozy",
+          "informative",
+          "wanderlust",
+          "authentic",
+          "adventurous",
+          "cultural exploration",
+          "explorative",
+          "traditional",
+          "appetizing"
+        ],
+        "visual_hierarchy": [
+          "Tokyo Day Trip (large yellow text)",
+          "Kamakura + Enoshima + Yokohama (subtitle)",
+          "Japanese food dishes",
+          "IG: @joanneffan",
+          "Tokyo location tag",
+          "Tokyo Day Trip (large yellow script text)",
+          "KAMAKURA + ENOSHIMA + YOKAHAMA (white header text)",
+          "Katsudon bowl (centered, prominent)",
+          "Tempura and soba (upper portion)",
+          "Location tag - Tokyo",
+          "Tokyo Day Trip",
+          "KAMAKURA + ENOSHIMA + YOKAHAMA",
+          "it didn't depart",
+          "plates of food",
+          "Tokyo Day Trip headline in large yellow text",
+          "Pan-fried gyoza dumplings (bottom)",
+          "Tempura plate (left)",
+          "Noodle bowl (top right)",
+          "Location tag for Tokyo"
+        ],
+        "key_interest": "Tokyo Day Trip itinerary: Kamakura + Enoshima + Yokohama",
+        "likely_source": "TikTok"
+      }
+    },
+    {
+      "item_id": "30596c22-5e6d-47ea-8580-46d7c0dd597a",
+      "reviewed_at": "2025-12-13T20:36:24.584Z",
+      "source_analyses_count": 4,
+      "source_analysis_ids": [
+        "a6573beb-ca2c-41cf-8dad-171fed35c688",
+        "b459f7b6-2c11-4758-a995-62c4ded0a090",
+        "f1aaa2a3-8e5d-46ea-b97e-3ddd88047adf",
+        "afa120b2-9fe2-4df0-ab22-7d955a0f633a"
+      ],
+      "category": "Travel",
+      "subcategories": [
+        "Tokyo",
+        "Cafes",
+        "Itinerary",
+        "Tokyo Guide",
+        "Cafe Recommendations",
+        "Neighborhood Exploration",
+        "Tokyo-Guide",
+        "Cafe-Recommendations",
+        "Japan-Travel"
+      ],
+      "headline": "Tokyo cafe guide featuring Nakameguro's trendy spots with Lowkey Cafe, John's Ice Cream, and Hato's Bar recommendations",
+      "summary": "Episode 3 of “2 Hours in Tokyo” explores Nakameguro with @oxomargo. Places mentioned: Lowkey Cafe, John’s Ice Cream, Hato’s Bar. Access via the Toyoko or Hibiya lines to Nakameguro Station.",
+      "media_metadata": {
+        "original_poster": "Shelby's Cafe Diary",
+        "tagged_accounts": [
+          "@oxomargo"
+        ],
+        "location_tags": [
+          "Nakameguro — 175.4M views on posts of this place",
+          "Nakameguro",
+          "Nakameguro - 175.4M views on posts of this place"
+        ],
+        "audio_source": "",
+        "hashtags": [
+          "#tokyo",
+          "#japan",
+          "#japantravel",
+          "#tokyotravel",
+          "#Nakameguro"
+        ]
+      },
+      "image_details": {
+        "extracted_text": [
+          "Shelby's Cafe Diary",
+          "Nakameguro",
+          "175.4M views on posts of this place",
+          "Episode 3 of the \"2 Hours in Tokyo\" series where I ask my friends where they would go if they had only 2 hours in Tokyo!! In this episode, my friend @oxomargo shows me around the trendy area of Nakameguro.",
+          "It's minimal but packed with personality",
+          "Places mentioned:",
+          "⭐ Lowkey Cafe",
+          "⭐ John's Ice Cream",
+          "⭐ Hato's Bar",
+          "To get there, you can take the Toyoko line or Hibiya line to Nakameguro station!",
+          "#tokyo #japan #japantravel #tokyotravel #Nakameguro"
+        ],
+        "objects": [
+          "cafe counter",
+          "stacked cups",
+          "display fridge",
+          "flower arrangement",
+          "poster artwork",
+          "ceiling lights",
+          "TikTok interface icons",
+          "cafe interior",
+          "green counter/bar",
+          "espresso machine",
+          "colorful flower artwork on wall",
+          "wooden ceiling",
+          "menu board",
+          "barista workspace",
+          "counter",
+          "menu boards",
+          "artwork on wall",
+          "pendant lights",
+          "shelving",
+          "flowers",
+          "wooden surfaces",
+          "concrete ceiling"
+        ],
+        "themes": [
+          "city guide",
+          "cafe hopping",
+          "Tokyo neighborhoods",
+          "travel tips",
+          "Tokyo travel guide",
+          "neighborhood exploration",
+          "cafe culture",
+          "local recommendations",
+          "Tokyo neighborhood exploration",
+          "travel recommendations",
+          "local guides",
+          "trendy areas"
+        ],
+        "emotions": [
+          "curiosity",
+          "coziness",
+          "wanderlust",
+          "aesthetic appreciation",
+          "inviting",
+          "excitement"
+        ],
+        "vibes": [
+          "trendy",
+          "minimal",
+          "warm",
+          "cozy",
+          "hip",
+          "modern minimalist",
+          "urban-chic"
+        ],
+        "visual_hierarchy": [
+          "Large title: “Shelby's Cafe Diary”",
+          "Long description block about the 2-hour Tokyo series and @oxomargo",
+          "List of places: Lowkey Cafe, John’s Ice Cream, Hato’s Bar",
+          "Transit tip: Toyoko or Hibiya lines to Nakameguro Station",
+          "Location tag banner: Nakameguro",
+          "Shelby's Cafe Diary (account name)",
+          "Places mentioned list with star icons",
+          "Nakameguro location tag",
+          "Transit directions",
+          "Cafe interior scene",
+          "Shelby's Cafe Diary title",
+          "Cafe interior with counter and lighting",
+          "Episode description with friend tag @oxomargo",
+          "Star-marked place recommendations (Lowkey Cafe, John's Ice Cream, Hato's Bar)",
+          "Transportation directions to Nakameguro station"
+        ],
+        "key_interest": "Nakameguro cafe and bar recommendations with transit directions for a 2-hour Tokyo itinerary",
+        "likely_source": "TikTok"
+      }
+    },
+    {
+      "item_id": "9b825fe6-5c21-4261-9bba-030b4f5c0c15",
+      "reviewed_at": "2025-12-13T20:36:40.816Z",
+      "source_analyses_count": 4,
+      "source_analysis_ids": [
+        "4acb52eb-72ac-4508-9109-2df6e9785dc3",
+        "02c6eaee-c4ef-432f-b957-cc43c4caa438",
+        "87028d14-a764-40d6-8db3-30c3488db299",
+        "42ebb5af-9ff1-41fd-9eb2-591f0f327308"
+      ],
+      "category": "Travel",
+      "subcategories": [
+        "Japan",
+        "Asakusa",
+        "Experiences",
+        "Cultural Experience",
+        "Tokyo",
+        "Destination",
+        "Activities",
+        "Activity Center",
+        "Location Recommendation"
+      ],
+      "headline": "BUB Activity Center Asakusa: sushi-making experience recommendation in Tokyo",
+      "summary": "BUB Activity Center Asakusa in Tokyo offers a sushi‑making experience. \"you have to check this place out.\" blake in tokyo mentions becoming a sushi chef with a new knife.",
+      "media_metadata": {
+        "original_poster": "blake in tokyo 🇯🇵",
+        "tagged_accounts": [],
+        "location_tags": [
+          "BUB ACTIVITY CENTER Asakusa",
+          "Bub Activity Center, Asakusa"
+        ],
+        "audio_source": "",
+        "hashtags": []
+      },
+      "image_details": {
+        "extracted_text": [
+          "BUB ACTIVITY CENTER Asakusa",
+          "you have to check this place out",
+          "blake in tokyo 🇯🇵",
+          "Watch me become a sushi chef with my new knife tho 🔪 We had so much... more"
+        ],
+        "objects": [
+          "signage banner",
+          "location pin icon",
+          "floor cushions",
+          "tatami-style floor",
+          "black tray",
+          "knife and sharpening stone",
+          "TikTok UI buttons",
+          "White fabric banner with logo",
+          "Traditional tatami room",
+          "Green floor cushions",
+          "Central cooking station/box",
+          "Wood paneled walls",
+          "Banners",
+          "Cushions",
+          "Low table",
+          "white banner with text",
+          "wooden floor",
+          "seating cushions",
+          "storage cubbies",
+          "smartphones",
+          "location pin marker"
+        ],
+        "themes": [
+          "travel recommendation",
+          "local experiences",
+          "sushi-making class",
+          "Tokyo attractions",
+          "Japanese cultural experience",
+          "Culinary tourism",
+          "Hands-on activities",
+          "Travel recommendations",
+          "Travel",
+          "Cultural experience",
+          "travel destination",
+          "activity venue",
+          "cultural experience",
+          "Japanese tourism",
+          "location recommendation"
+        ],
+        "emotions": [
+          "excitement",
+          "enthusiasm",
+          "curiosity",
+          "Excitement",
+          "Recommendation enthusiasm",
+          "Discovery",
+          "Curiosity",
+          "recommendation"
+        ],
+        "vibes": [
+          "inviting",
+          "adventurous",
+          "informative",
+          "Authentic Japanese",
+          "Cozy traditional",
+          "Experiential travel",
+          "Inviting",
+          "Intriguing",
+          "minimalist",
+          "clean",
+          "modern Japanese",
+          "welcoming",
+          "cultural"
+        ],
+        "visual_hierarchy": [
+          "BUB ACTIVITY CENTER Asakusa (banner + location pin overlay)",
+          "Text: \"you have to check this place out\"",
+          "Tray with knife on floor cushions",
+          "Display name and caption about becoming a sushi chef",
+          "TikTok interface elements",
+          "BUB ACTIVITY CENTER Asakusa location tag",
+          "White banner with venue logo",
+          "you have to check this place out overlay text",
+          "Traditional tatami room setup",
+          "blake in tokyo caption",
+          "BUB ACTIVITY CENTER",
+          "Asakusa",
+          "you have to check this place out",
+          "White branded banner",
+          "Overlay text recommendation",
+          "Interior space and seating",
+          "Creator username and caption"
+        ],
+        "key_interest": "BUB Activity Center Asakusa location name",
+        "likely_source": "TikTok"
+      }
+    },
+    {
+      "item_id": "d4fa1f7b-e50c-4428-911a-06fa73e08fa3",
+      "reviewed_at": "2025-12-13T21:04:13.461Z",
+      "source_analyses_count": 4,
+      "source_analysis_ids": [
+        "27c03472-975f-4b03-b056-e363d64363da",
+        "6748d094-3eb3-4970-a252-7eb3ca8f85ce",
+        "641acd4e-8461-4ef2-a193-ed62c6074b16",
+        "77313069-05b5-43c6-ba70-69609e775aff"
+      ],
+      "category": "Travel",
+      "subcategories": [
+        "Tokyo",
+        "Shopping",
+        "Local tips",
+        "Local Culture",
+        "Japan",
+        "Shopping Districts"
+      ],
+      "headline": "Togoshi Ginza: Tokyo's 1.3km local shopping street with 400+ shops",
+      "summary": "Togoshi Ginza is a 1.3km shopping street in Tokyo featuring over 400 shops. The street represents authentic local shopping culture experienced by residents on a daily basis, without flashy tourist goods. This is characterized as a quaint, representative shopping street that reflects genuine Tokyo local life.",
+      "media_metadata": {
+        "original_poster": "recommend_ndre",
+        "tagged_accounts": [],
+        "location_tags": [
+          "Togoshi Ginza",
+          "Tokyo"
+        ],
+        "audio_source": "bloodline - Ariana Grande (Apple Music)",
+        "hashtags": [
+          "#japan",
+          "#j"
+        ]
+      },
+      "image_details": {
+        "extracted_text": [
+          "TOGOSHI GINZA",
+          "With over 400 shops, this street is 1.3km long. It is quaint, and representative of the type of shopping street that the locals experience on a daily basis. You won't find flashy goods here.",
+          "recommend_ndre",
+          "Sebelum ke Tokyo kalian harus tau 😁",
+          "Tokyo tips and trick 😁 #japan #i... more",
+          "Contains: bloodline - Ariana Grande"
+        ],
+        "objects": [
+          "large title text card",
+          "paragraph description text",
+          "street scene photo (shopping arcade)",
+          "TikTok UI elements (For You tab, caption, music bar, profile icon)",
+          "search icon",
+          "shopping street",
+          "Japanese shop signs",
+          "pedestrians",
+          "covered shopping arcade",
+          "store awnings",
+          "100 yen shop sign",
+          "Street view",
+          "Shops",
+          "People",
+          "Signs",
+          "Japanese shopping street entrance gate",
+          "Urban street scene",
+          "Signage in Japanese",
+          "Buildings",
+          "Pedestrians",
+          "Street banners"
+        ],
+        "themes": [
+          "travel recommendation",
+          "local shopping streets",
+          "Tokyo itinerary ideas",
+          "local Japanese culture",
+          "authentic travel experiences",
+          "hidden gems",
+          "budget shopping",
+          "Local shopping",
+          "Cultural experience",
+          "Local Japanese culture",
+          "Authentic shopping experience",
+          "Tokyo travel tips",
+          "Hidden gems",
+          "Non-touristy locations"
+        ],
+        "emotions": [
+          "curiosity",
+          "wanderlust",
+          "helpfulness",
+          "authenticity",
+          "discovery",
+          "Curiosity",
+          "Authentic",
+          "Local",
+          "Informative",
+          "Helpful"
+        ],
+        "vibes": [
+          "informative",
+          "authentic",
+          "urban",
+          "local",
+          "quaint",
+          "everyday life",
+          "unpretentious",
+          "Quaint",
+          "Authentic",
+          "Insider knowledge",
+          "Cultural immersion",
+          "Off-the-beaten-path",
+          "Practical travel advice"
+        ],
+        "visual_hierarchy": [
+          "Descriptive paragraph about the street",
+          "Street photo with 'GINZA' sign",
+          "Big title 'TOGOSHI GINZA'",
+          "Caption line: 'Sebelum ke Tokyo kalian harus tau'",
+          "Username and music attribution",
+          "TOGOSHI GINZA title text",
+          "Description about 400 shops and 1.3km length",
+          "Photo of the actual shopping street",
+          "戸越 GINZA street sign in image",
+          "Caption in Indonesian about Tokyo tips",
+          "TOGOSHI GINZA",
+          "Street view of Togoshi Ginza",
+          "Description text",
+          "People and shops",
+          "TOGOSHI GINZA heading",
+          "Descriptive text about the street",
+          "Photo of shopping street entrance",
+          "Username recommend_ndre",
+          "Caption in Indonesian and English"
+        ],
+        "key_interest": "Togoshi Ginza as an authentic local shopping destination with 400+ shops across 1.3km",
+        "likely_source": "TikTok"
+      }
+    },
+    {
+      "item_id": "2fcc79b3-2798-4f56-8669-822b1e214981",
+      "reviewed_at": "2025-12-13T21:11:39.783Z",
+      "source_analyses_count": 3,
+      "source_analysis_ids": [
+        "e72da054-bcb1-432c-8629-d44d1cf8ae04",
+        "0fe82f0f-081d-4db3-bcfe-0f8e6fe51235",
+        "e9b2ef45-af99-4d43-8a25-1d20bb69d5c8"
+      ],
+      "category": "Travel",
+      "subcategories": [
+        "Japan",
+        "Oita",
+        "Waterfalls",
+        "Food",
+        "Harajiri Falls"
+      ],
+      "headline": "Harajiri Falls, Otaki Waterfall & Yakiniku Restaurant Wiz in Oita Prefecture",
+      "summary": "Destinations in Oita Prefecture: Harajiri Falls in Bungo-Ono City, Otaki Waterfall in Bungo-Ono City, Restaurant Wils in Oita Prefecture featuring yakiniku, wine, and beef tongue, hostel + cafe たね",
+      "media_metadata": {
+        "original_poster": "JPN🇯🇵 ガラス玉…",
+        "tagged_accounts": [
+          "hostel+cafe たね・Yamato"
+        ],
+        "location_tags": [
+          "hostel + cafe たね・Yamato",
+          "Harajiri Falls, 410 Harajiri, Ogata-cho, Bungo-Ono City, Oita Prefecture 879-6631, Japan",
+          "917-1 Harajiri, Ogata-cho, Bungo-ono City, Oita Prefecture 879-6631, Japan",
+          "Otaki Waterfall, 2394 Yada, Ono-cho, Bungo-Ono City, Oita Prefecture 879-6423, Japan",
+          "Wine Restaurant Wiz, 1-6-28 Chuo, Hita City, Oita Prefecture 877-0015"
+        ],
+        "audio_source": "wind naruto speed up - @str",
+        "hashtags": []
+      },
+      "image_details": {
+        "extracted_text": [
+          "厚切り牛タンと赤身焼肉の",
+          "ワインレストラン Wiz",
+          "hostel + cafe たね・Yamato",
+          "See 1 reviews",
+          "JPN🇯🇵 ガラス玉「旅行,絶景,おすすめ…」",
+          "Harajiri Falls",
+          "410 Harajiri, Ogata-cho, Bungo-Ono City, Oita Prefecture 879-6631, Japan",
+          "Somen Nagashi Ryubu Road Station",
+          "Harajiri Falls",
+          "917-1 Harajiri, Ogata-cho, Bungo-ono City, Oita Prefecture 879-6631, Japan",
+          "If you tell them you watched the video, they will receive benefits. [Period deadline undecided]",
+          "Otaki Waterfall (Otaki Waterfall)",
+          "2394 Yada, Ono-cho, Bungo-Ono City, Oita Prefecture 879-6423, Japan",
+          "Thick-sliced beef tongue & lean yakiniku wine restaurant Wiz",
+          "1-6-28 Chuo, Hita City, Oita Prefecture 877-0015",
+          "The shop account",
+          "less",
+          "See original",
+          "Apple Music  wind naruto speed up - @str"
+        ],
+        "objects": [
+          "bowl/plate of yellow curry or soup with lemon slice",
+          "meat piece",
+          "metal sauce boat with sauce",
+          "TikTok UI elements (For You, heart, comment, share, profile)",
+          "caption text block",
+          "Bowl of somen noodles",
+          "Dipping sauce",
+          "Lemon garnish",
+          "Chopsticks",
+          "Wooden table",
+          "Restaurant interior"
+        ],
+        "themes": [
+          "travel planning",
+          "local food",
+          "Japan sightseeing",
+          "addresses",
+          "Japanese travel destinations",
+          "Waterfalls in Oita Prefecture",
+          "Japanese cuisine",
+          "Restaurant recommendations"
+        ],
+        "emotions": [
+          "wanderlust",
+          "curiosity",
+          "appetite",
+          "Wanderlust",
+          "Appetite",
+          "Curiosity"
+        ],
+        "vibes": [
+          "informative",
+          "adventurous",
+          "appetizing",
+          "Informative",
+          "Aspirational",
+          "Authentic Japanese"
+        ],
+        "visual_hierarchy": [
+          "Large overlaid Japanese title naming Wiz restaurant",
+          "Centered dish with bright yellow curry and lemon slice",
+          "Multi-line caption listing locations and addresses",
+          "Metal sauce boat near top-left",
+          "Right-side TikTok action icons"
+        ],
+        "key_interest": "Precise addresses for Oita attractions and the Wiz beef-tongue restaurant",
+        "likely_source": "TikTok"
+      }
+    },
+    {
+      "item_id": "5699558e-27c1-4937-bf6b-1af903835ee9",
+      "reviewed_at": "2025-12-13T21:14:16.054Z",
+      "source_analyses_count": 3,
+      "source_analysis_ids": [
+        "a3f997f2-d938-4ec1-9664-e9fb7c3ce8cc",
+        "4971b9fa-fde1-4209-b881-469b9be94128",
+        "4bf6e37a-2de0-4aca-b569-833927c0d40f"
+      ],
+      "category": "Travel",
+      "subcategories": [
+        "Japan",
+        "Sightseeing",
+        "Itinerary",
+        "Hidden Gems",
+        "Destinations List"
+      ],
+      "headline": "Japan itinerary ideas: Mizonokuchi Cave, Aya no Sato, Golden Torii, Nagasaki Bio Park, Honpuku‑ji Temple with addresses",
+      "summary": "A collection of lesser-known Japan travel spots: Mizonokuchi Cave in Kagoshima Prefecture, Aya no Sato in Miyazaki Prefecture, Golden Torii in Ibusuki City, Nagasaki Bio Park in Saikai City, and Sohonzan Honpuku-ji Temple. Featured restaurant: thick-cut beef tongue and red meat yakiniku at Wine Restaurant Wiz, located at hostel+cafe たね in Yamato.",
+      "media_metadata": {
+        "original_poster": "JPN🇯🇵ガラス玉【旅行.絶景.おすす…",
+        "tagged_accounts": [
+          "@str"
+        ],
+        "location_tags": [
+          "hostel+ cafe たね · Yamato",
+          "Mizonokuchi Cave, 4907 Shimozakarabe, Takarabe-cho, Soo City, Kagoshima Prefecture 899-4103, Japan",
+          "Aya no Sato, 〒880-1303 5690 Minamimata, Aya-cho, Higashimorogata-gun, Miyazaki Prefecture",
+          "Golden Torii, 3146-8 Ikeda, Ibusuki City, Kagoshima Prefecture 891-0312, Japan",
+          "Nagasaki Bio Park, 2291-1 Nakayamago, Nishikocho, Saikai City, Nagasaki Prefecture 851-3302, Japan",
+          "Sohonzan Honpuku-ji Temple, 2120 Miyaura, Kiyama-cho, Miyoki-gun",
+          "Mizonokuchi Cave - 4907 Shimozakarabe, Takarabe-cho, Soo City, Kagoshima Prefecture 899-4103, Japan",
+          "Aya no Sato - 〒880-1303 5690 Minamimata, Aya-cho, Higashimorogata-gun, Miyazaki Prefecture",
+          "Golden Torii - 3146-8 Ikeda, Ibusuki City, Kagoshima Prefecture 891-0312, Japan",
+          "Nagasaki Bio Park - 2291-1 Nakayamago, Nishikocho, Saikai City, Nagasaki Prefecture 851-3302, Japan",
+          "Sohonzan Honpuku-ji Temple - 2120 Miyaura, Kiyama-cho, Miyoki-gun",
+          "hostel+cafe たね · Yamato"
+        ],
+        "audio_source": "wind naruto speed up - @str",
+        "hashtags": []
+      },
+      "image_details": {
+        "extracted_text": [
+          "厚切り牛タンと赤身焼肉の ワインレストラン Wiz",
+          "hostel+ cafe たね · Yamato",
+          "See 1 reviews",
+          "JPN ガラス玉【旅行.絶景.おすすめ…】",
+          "Mizonokuchi Cave",
+          "4907 Shimozakarabe, Takarabe-cho, Soo City, Kagoshima Prefecture 899-4103, Japan",
+          "Aya no Sato",
+          "〒 880-1303 5690 Minamimata, Aya-cho, Higashimorogata-gun, Miyazaki Prefecture",
+          "Golden Torii",
+          "3146-8 Ikeda, Ibusuki City, Kagoshima Prefecture 891-0312, Japan",
+          "Nagasaki Bio Park",
+          "2291-1 Nakayamago, Nishikocho, Saikai City, Nagasaki Prefecture 851-3302, Japan",
+          "Sohonzan Honpuku-ji Temple",
+          "2120 Miyaura, Kiyama-cho, Miyoki-gun",
+          "See original",
+          "less",
+          "Apple Music  wind naruto speed up - @str",
+          "LIVE",
+          "Explore",
+          "Following",
+          "Shop",
+          "For You",
+          "Home",
+          "Discover",
+          "Inbox",
+          "Profile"
+        ],
+        "objects": [
+          "plate of yellow rice/curry with lemon slice",
+          "metal sauce boat with sauce",
+          "table surface",
+          "TikTok UI elements (icons, labels)",
+          "curry rice dish",
+          "lemon slice",
+          "red sauce/chutney",
+          "metal serving bowl",
+          "wooden table",
+          "restaurant interior"
+        ],
+        "themes": [
+          "travel recommendations",
+          "Japan attractions",
+          "trip planning",
+          "Japan travel destinations",
+          "hidden gems",
+          "food tourism",
+          "location guide"
+        ],
+        "emotions": [
+          "curiosity",
+          "wanderlust",
+          "inspiration",
+          "discovery"
+        ],
+        "vibes": [
+          "informative",
+          "guide-like",
+          "helpful",
+          "aspirational",
+          "cultural exploration"
+        ],
+        "visual_hierarchy": [
+          "Large white text block listing locations and addresses",
+          "Bright yellow rice/curry dish with lemon slice",
+          "Metal sauce boat near top-left",
+          "Header tags: JPN ガラス玉 and hostel+ cafe たね · Yamato",
+          "TikTok UI labels and icons"
+        ],
+        "key_interest": "List of Japanese attractions with full postal addresses",
+        "likely_source": "TikTok"
+      }
+    },
+    {
+      "item_id": "dd523f3e-eed2-4637-be7a-253b3960c584",
+      "reviewed_at": "2025-12-13T21:14:26.552Z",
+      "source_analyses_count": 4,
+      "source_analysis_ids": [
+        "ee36a5f4-d550-41cb-8330-8525d9152e31",
+        "6776bb13-0132-4b9c-aa9c-c81eb5064cbd",
+        "13ab8fd9-2222-400e-bb0d-8c13a91063b1",
+        "29c28753-67b5-4269-9229-bff34dd0a114"
+      ],
+      "category": "Travel",
+      "subcategories": [
+        "Itinerary",
+        "Japan",
+        "Fukuoka",
+        "Food Tourism",
+        "City-Guide"
+      ],
+      "headline": "Fukuoka 3-day itinerary: Day 1 spots—Nanzoin Temple, Seaside Momochi, Tenjin, yatai stalls",
+      "summary": "Day 1 itinerary for Fukuoka includes Nanzoin Temple (featuring the famous reclining Buddha), Seaside Momochi beach area, Tenjin area for shopping and food, and yatai stalls to end the night. The creator actually spent 5 days but condensed the guide to 3 days of photo-worthy activities.",
+      "media_metadata": {
+        "original_poster": "kathrinacorgan",
+        "tagged_accounts": [
+          "@Tomoko Aran"
+        ],
+        "location_tags": [
+          "Fukuoka, 61.8K people posted about this place"
+        ],
+        "audio_source": "Midnight Pretenders - @Tomoko Aran",
+        "hashtags": [
+          "#fukuoka",
+          "#traveltiktok",
+          "#japa...",
+          "#japa"
+        ]
+      },
+      "image_details": {
+        "extracted_text": [
+          "Day 1",
+          "- Nanzoin Temple",
+          "- Seaside Momochi",
+          "- Tenjin area (shopping and food trip)",
+          "- Cap off the night at yatai stalls",
+          "Fukuoka",
+          "61.8K people posted about this place",
+          "kathrinacorgan",
+          "Photo",
+          "Fukuoka in 3 Days",
+          "We actually stayed here for 5 days, but I didn’t include day 1 and day 5 since we mostly just ate and drank lol, and didn’t take much photos on our first and last day.",
+          "#fukuoka #traveltiktok #japa...",
+          "Midnight Pretenders - @Tomoko Aran",
+          "LIVE Explore Following Shop For You",
+          "Home Discover Inbox Profile"
+        ],
+        "objects": [
+          "TikTok interface",
+          "collage of travel photos",
+          "reclining Buddha statue",
+          "guardian deity statue",
+          "beach scene with person",
+          "coffee cup",
+          "pastry",
+          "plant",
+          "waterfront buildings",
+          "text overlays",
+          "Reclining Buddha statue",
+          "Guardian deity statue (Nio/Fudo Myoo)",
+          "Woman in green skirt at beach",
+          "Coffee cups (Komefuku)",
+          "Croissant pastry",
+          "Beach/waterfront scenery",
+          "samurai statue",
+          "coffee cups",
+          "pastries",
+          "TikTok interface elements"
+        ],
+        "themes": [
+          "city guide",
+          "sightseeing",
+          "food and drink",
+          "trip planning",
+          "Japan travel guide",
+          "Fukuoka tourism",
+          "Temple sightseeing",
+          "Food exploration",
+          "Multi-day itinerary",
+          "Japan travel",
+          "cultural tourism",
+          "food exploration",
+          "temple visits",
+          "city itinerary"
+        ],
+        "emotions": [
+          "wanderlust",
+          "curiosity",
+          "relaxed",
+          "Wanderlust",
+          "Excitement",
+          "Relaxation",
+          "Discovery",
+          "excitement",
+          "cultural appreciation"
+        ],
+        "vibes": [
+          "informative",
+          "aesthetic",
+          "exploratory",
+          "Aspirational travel",
+          "Cultural exploration",
+          "Foodie adventure",
+          "Casual tourism",
+          "travelog",
+          "cultural",
+          "casual"
+        ],
+        "visual_hierarchy": [
+          "Overlay text listing Day 1 itinerary",
+          "Four-photo collage of attractions and food",
+          "Location tag: Fukuoka",
+          "Caption title: Fukuoka in 3 Days with username",
+          "Audio attribution: Midnight Pretenders - @Tomoko Aran"
+        ],
+        "key_interest": "Day 1 Fukuoka itinerary list",
+        "likely_source": "TikTok"
+      }
+    },
+    {
+      "item_id": "b46ecb6f-8375-4e26-a282-34ca7b8b88d6",
+      "reviewed_at": "2025-12-13T21:16:34.568Z",
+      "source_analyses_count": 4,
+      "source_analysis_ids": [
+        "a320a0a4-2c19-4186-922c-ff09b33d9e93",
+        "9400befd-ab18-457b-bd4c-9b9af9c7c257",
+        "333a34e8-f9b2-4644-8be2-acb070bc6c6d",
+        "1516d465-7e82-429d-b432-be38c1bcb726"
+      ],
+      "category": "Travel",
+      "subcategories": [
+        "Japan",
+        "Kyushu",
+        "Restaurants",
+        "Destinations",
+        "Food",
+        "Japanese Cuisine",
+        "Restaurant Recommendations",
+        "Kyushu Region"
+      ],
+      "headline": "Kyushu Japan Travel Guide: 4 Must-Visit Locations",
+      "summary": "Four recommended spots in Kyushu, Japan: Aya no Sato (〒880-1303 5690 Minamimata, Aya-cho, Higashimorogata-gun, Miyazaki Prefecture), Golden Torii (3146-8 Ikeda, Ibusuki City, Kagoshima Prefecture 891-0312), Nagasaki Bio Park (2291-1 Nakayamago, Nishikocho, Saikai City, Nagasaki Prefecture 851-3302), and Sohonzan Honpuku-ji Temple (2120 Miyaura, Kiyama-cho, Miyoki-gun, Saga Prefecture 841-0204).",
+      "media_metadata": {
+        "original_poster": "JPN🇯🇵ガラス玉【旅行.絶景.おすすめ…",
+        "tagged_accounts": [
+          "hostel+cafe たね・Yamato",
+          "@str"
+        ],
+        "location_tags": [
+          "hostel+cafe たね・Yamato",
+          "Aya no Sato",
+          "〒880-1303 5690 Minamimata, Aya-cho, Higashimorokata-gun, Miyazaki Prefecture",
+          "Golden Torii",
+          "3146-8 Ikeda, Ibusuki City, Kagoshima Prefecture 891-0312, Japan",
+          "Nagasaki Bio Park",
+          "2291-1 Nakayamago, Nishikoocho, Saikai City, Nagasaki Prefecture 851-3302, Japan",
+          "Sohonzan Honpuku-ji Temple",
+          "2120 Miyaura, Kiyama-cho, Miyoki-gun, Saga Prefecture 841-0204",
+          "Aya no Sato, Miyazaki Prefecture",
+          "Golden Torii, Ibusuki City, Kagoshima Prefecture",
+          "Nagasaki Bio Park, Saikai City, Nagasaki Prefecture",
+          "Sohonzan Honpuku-ji Temple, Saga Prefecture",
+          "〒880-1303 5690 Minamimata, Aya-cho, Higashimorogata-gun, Miyazaki Prefecture",
+          "Golden Torii - 3146-8 Ikeda, Ibusuki City, Kagoshima Prefecture 891-0312, Japan",
+          "Nagasaki Bio Park - 2291-1 Nakayamago, Nishikocho, Saikai City, Nagasaki Prefecture 851-3302, Japan",
+          "Sohonzan Honpuku-ji Temple - 2120 Miyaura, Kiyama-cho, Miyoki-gun, Saga Prefecture 841-0204"
+        ],
+        "audio_source": "wind naruto speed up - @str",
+        "hashtags": [
+          "#九州",
+          "#九州旅行",
+          "#九州観光",
+          "#kyushu",
+          "#桜",
+          "#トラベルキャンペーン",
+          "#冬と春のホテルキャンペーン",
+          "#桜トラベルキャンペーン"
+        ]
+      },
+      "image_details": {
+        "extracted_text": [
+          "厚切り牛タンと赤身焼肉のワインレストランWiz",
+          "hostel+cafe たね・Yamato",
+          "See 1 reviews",
+          "JPN🇯🇵ガラス玉【旅行.絶景.おすす…",
+          "Aya no Sato",
+          "〒880-1303 5690 Minamimata, Aya-cho, Higashimorogata-gun, Miyazaki Prefecture",
+          "Golden Torii",
+          "3146-8 Ikeda, Ibusuki City, Kagoshima Prefecture 891-0312, Japan",
+          "Nagasaki Bio Park",
+          "2291-1 Nakayamago, Nishikocho, Saikai City, Nagasaki Prefecture 851-3302, Japan",
+          "Sohonzan Honpuku-ji Temple",
+          "2120 Miyaura, Kiyama-cho, Miyoki-gun, Saga Prefecture 841-0204",
+          "#九州 #九州旅行 #九州観光 #kyushu #桜",
+          "トラベルキャンペーン #冬と春のホテルキャンペーン"
+        ],
+        "objects": [
+          "curry dish",
+          "lemon slice",
+          "metal gravy boat",
+          "rice",
+          "wooden table",
+          "TikTok interface elements",
+          "text overlays",
+          "yellow rice dish (possibly curry rice or fried rice)",
+          "soup in metal bowl",
+          "restaurant table setting",
+          "ceramic serving dish",
+          "food",
+          "sauce",
+          "dining table",
+          "chopsticks",
+          "metal pan"
+        ],
+        "themes": [
+          "Kyushu travel",
+          "Japanese cuisine",
+          "restaurant guide",
+          "itinerary",
+          "Japan travel",
+          "Kyushu tourism",
+          "Japanese destinations",
+          "Restaurant recommendations",
+          "Japanese dining",
+          "travel destinations",
+          "restaurant recommendation",
+          "regional cuisine"
+        ],
+        "emotions": [
+          "wanderlust",
+          "curiosity",
+          "appetite",
+          "appreciation",
+          "appetizing",
+          "inviting",
+          "cultural appreciation"
+        ],
+        "vibes": [
+          "informative",
+          "cozy",
+          "mouthwatering",
+          "travel inspiration",
+          "cozy dining",
+          "culinary adventure",
+          "traditional Japanese",
+          "authentic dining"
+        ],
+        "visual_hierarchy": [
+          "Japanese food dish (curry rice with soup)",
+          "Location list with full addresses",
+          "Japanese overlay text about wine restaurant",
+          "Account name and hashtags",
+          "Audio attribution"
+        ],
+        "key_interest": "Detailed list of Kyushu attractions with full addresses",
+        "likely_source": "TikTok"
+      }
+    },
+    {
+      "item_id": "1c6a680c-e5e3-42e0-9bf2-bed7863237d9",
+      "reviewed_at": "2025-12-13T21:19:05.634Z",
+      "source_analyses_count": 4,
+      "source_analysis_ids": [
+        "322e6ad1-98b7-4dc9-80df-96d4f649997b",
+        "00bea676-e4cc-48d6-afd9-bbaca01d7f85",
+        "8af20e2d-2e55-4b0f-8ba6-bcd2b62701c0",
+        "581f546f-a87e-42df-a0d2-371335e76c23"
+      ],
+      "category": "Travel",
+      "subcategories": [
+        "Japan",
+        "Itinerary",
+        "Anime",
+        "Anime Tourism",
+        "Attractions",
+        "Anime Culture",
+        "Itinerary Guide"
+      ],
+      "headline": "Fukuoka Day 3: Hita Dam, Attack on Titan Museum, and yatai stalls itinerary",
+      "summary": "Day 3 includes visits to Hita Dam, the Attack on Titan Museum, and yatai stalls in Fukuoka. The post highlights these as essential spots for fans of Attack on Titan. Location is tagged as Fukuoka, with hashtags #fukuoka and #traveltiktok.",
+      "media_metadata": {
+        "original_poster": "kathrinacorgan",
+        "tagged_accounts": [
+          "@Tomoko Aran"
+        ],
+        "location_tags": [
+          "Fukuoka"
+        ],
+        "audio_source": "Midnight Pretenders - @Tomoko Aran",
+        "hashtags": [
+          "#fukuoka",
+          "#traveltiktok",
+          "#japan"
+        ]
+      },
+      "image_details": {
+        "extracted_text": [
+          "Day 3",
+          "- Hita Dam (must-see for AOT fans!)",
+          "- Attack on Titan Museum",
+          "- Cap off the night at yatai stalls (for the last time!)",
+          "Fukuoka in 3 Days",
+          "We actually stayed here for 5 days, but I didn't include day 1 and day 5 since we mostly just ate and drank lol, and didn't take much photos on our first and last day.",
+          "Fukuoka",
+          "61.8K people posted about this place"
+        ],
+        "objects": [
+          "collage of travel photos",
+          "anime poster (Attack on Titan art)",
+          "person posing",
+          "umbrella",
+          "child statues",
+          "dam",
+          "museum/exhibit figure (titan)",
+          "TikTok UI elements (heart, comment, share, bookmark)",
+          "profile avatar",
+          "location tag bubble",
+          "music/audio bar",
+          "text overlays",
+          "Attack on Titan anime artwork/mural",
+          "Woman posing with AOT sign",
+          "Bronze statue of children",
+          "Colossal Titan figure/statue",
+          "People with umbrellas",
+          "Person",
+          "Poster",
+          "Statues",
+          "Dam",
+          "Exhibit",
+          "Attack on Titan anime poster",
+          "statue of children with umbrellas",
+          "Colossal Titan figure",
+          "umbrellas",
+          "museum exhibits",
+          "TikTok interface elements"
+        ],
+        "themes": [
+          "travel planning",
+          "anime tourism",
+          "museum visit",
+          "food stalls",
+          "Anime pilgrimage",
+          "Japanese travel",
+          "Attack on Titan fandom",
+          "Travel itinerary",
+          "Travel",
+          "Anime",
+          "Tourism",
+          "cultural attractions",
+          "day-by-day itinerary"
+        ],
+        "emotions": [
+          "excitement",
+          "curiosity",
+          "nostalgia",
+          "Excitement",
+          "Nostalgia",
+          "Enthusiasm",
+          "Adventure",
+          "enthusiasm",
+          "wonder"
+        ],
+        "vibes": [
+          "adventurous",
+          "geeky",
+          "informative",
+          "Fan culture",
+          "Adventure",
+          "Cultural exploration",
+          "Enthusiastic",
+          "Touristic",
+          "fan culture",
+          "rainy day exploration",
+          "anime pilgrimage"
+        ],
+        "visual_hierarchy": [
+          "Day 3 itinerary text overlay",
+          "Colossal Titan red figure",
+          "AOT mural with woman posing",
+          "Bronze children statue",
+          "Fukuoka location tag"
+        ],
+        "key_interest": "Day 3 itinerary list: Hita Dam, Attack on Titan Museum, yatai stalls",
+        "likely_source": "TikTok"
+      }
+    },
+    {
+      "item_id": "0c284ee5-3c08-4c81-87d9-6dec24a0d81b",
+      "reviewed_at": "2025-12-13T21:46:56.558Z",
+      "source_analyses_count": 4,
+      "source_analysis_ids": [
+        "e377af93-ae47-442d-9a63-8af036f9d99c",
+        "262c0cc0-0647-4f52-a8dc-92882e495683",
+        "d6a538a1-e22e-400a-9e1c-fd720b7c21d7",
+        "fc86d4c1-ed80-4e72-96aa-d5846b1f5544"
+      ],
+      "category": "Travel",
+      "subcategories": [
+        "Japan",
+        "Fukuoka",
+        "Cultural performance",
+        "Cultural Experiences",
+        "Unique Attractions",
+        "Cultural-Attractions",
+        "Local-Events"
+      ],
+      "headline": "Ninja performances at Takemon Bridge in Yanagawa City face safety concerns due to river rafting accidents",
+      "summary": "Yanagawa City in Fukuoka Prefecture is known for river rafting and a ninja performance at the Takemon Bridge. \"Any idea what he's mad about?\" 彼が怒るのは当然だよね、、それだけ真剣勝負なのだ。 Local governments have asked rafting companies to stop due to risks of falling ninjas and gas pipe damage, reducing the number of operators.",
+      "media_metadata": {
+        "original_poster": "MAP Japan",
+        "tagged_accounts": [],
+        "location_tags": [
+          "Fukuoka 61.8K people posted about this place",
+          "Yanagawa City, Fukuoka Prefecture (mentioned)",
+          "Fukuoka, 61.8K people posted about this place"
+        ],
+        "audio_source": "",
+        "hashtags": []
+      },
+      "image_details": {
+        "extracted_text": [
+          "MAP Japan 🇯🇵",
+          "Any idea what he's mad about?",
+          "彼が怒るのは当然だよね、、それだけ真剣勝負なのだ。",
+          "I have a theory, but please comment with your thoughts ^_^.",
+          "Yanagawa City in Fukuoka Prefecture is famous for its river rafting, but the biggest spectacle is this ninja performance that takes place at the Takemon Bridge at the end.",
+          "As a matter of fact, local governments have asked river rafting companies to stop due to the possibility of falling ninjas and damage to gas pipes, and the number of companies offering this service has been decreasing.",
+          "Fukuoka - 61.8K people posted about this place",
+          "珈琲食事2F"
+        ],
+        "objects": [
+          "person in conical hat",
+          "traditional wooden buildings",
+          "bridge railing",
+          "street and river area",
+          "TikTok UI icons",
+          "location badge",
+          "ninja performer in traditional costume with conical hat",
+          "wooden boat/raft",
+          "traditional Japanese buildings",
+          "canal/river",
+          "power lines",
+          "tourists on boat",
+          "Japanese street scene",
+          "Traditional buildings",
+          "Power lines",
+          "Person in conical hat",
+          "Location pin icon",
+          "Map thumbnail"
+        ],
+        "themes": [
+          "tourism",
+          "local culture",
+          "river activities",
+          "safety regulations",
+          "Japan travel tips",
+          "Japanese cultural tourism",
+          "traditional performances",
+          "endangered local traditions",
+          "Japanese culture",
+          "Tourism",
+          "Safety concerns",
+          "Traditional entertainment",
+          "Local government regulations"
+        ],
+        "emotions": [
+          "curiosity",
+          "intrigue",
+          "concern",
+          "nostalgia",
+          "Curiosity",
+          "Concern",
+          "Humor",
+          "Cultural interest"
+        ],
+        "vibes": [
+          "informative",
+          "travel guide",
+          "cultural",
+          "rustic Japan",
+          "cultural authenticity",
+          "fleeting tradition",
+          "Informative",
+          "Quirky",
+          "Documentary-style",
+          "Educational"
+        ],
+        "visual_hierarchy": [
+          "Ninja performer standing on boat in traditional attire",
+          "MAP Japan account name with Japanese flag",
+          "Explanatory text about Yanagawa City ninja performances",
+          "Fukuoka location tag",
+          "Traditional Japanese waterfront buildings"
+        ],
+        "key_interest": "Ninja performance at Takemon Bridge in Yanagawa, Fukuoka",
+        "likely_source": "TikTok"
+      }
+    },
+    {
+      "item_id": "883726e1-f015-4d5b-b075-948263bdd2b5",
+      "reviewed_at": "2025-12-13T21:48:45.258Z",
+      "source_analyses_count": 4,
+      "source_analysis_ids": [
+        "f748b1d9-c98a-4b77-b6d9-6eb073b4eb47",
+        "7377fb03-7f90-49af-a26d-e4feed4a0f2a",
+        "6fb0f4f9-5ed0-4cc1-9d26-9282ebc62550",
+        "1ccdfa99-2276-4fff-a805-c95fcc22dd14"
+      ],
+      "category": "Travel",
+      "subcategories": [
+        "japan",
+        "restaurants",
+        "itinerary",
+        "food",
+        "restaurant recommendations",
+        "japanese restaurants",
+        "food tourism",
+        "hidden gems"
+      ],
+      "headline": "Discover Wine Restaurant Wiz in Oita, Japan",
+      "summary": "Thick-sliced beef tongue and lean yakiniku at wine restaurant Wiz located at 1-6-28 Chuo, Hita City, Oita Prefecture 877-0015. Also recommends Nanzoin Nirvana Statue at 392 Sasaguri, Sasaguri-cho, Kasuya-gun, Fukuoka Prefecture 811-2405. Mention seeing the video for benefits (period undecided).",
+      "media_metadata": {
+        "original_poster": "@JPN🇯🇵ガラス玉【旅行.絶景.おすす…",
+        "tagged_accounts": [
+          "riako",
+          "str"
+        ],
+        "location_tags": [
+          "hostelcafe yamato",
+          "glass waterfall glass waterfall 2394 yada ono-cho bungo-ono city oita prefecture 879-6423 japan",
+          "wine restaurant wiz 1-6-28 chuo hita city oita prefecture 877-0015",
+          "nanzoin nirvana statue 392 sasaguri sasaguri-cho kasuya-gun fukuoka prefecture 811-2405 japan",
+          "mizonokuchi cave",
+          "2394 yada ono-cho bungo-ono city oita prefecture 879-6423 japan",
+          "1-6-28 chuo hita city oita prefecture 877-0015",
+          "392 sasaguri sasaguri-cho kasuya-gun fukuoka prefecture 811-2405 japan"
+        ],
+        "audio_source": "wind naruto speed up - @str",
+        "hashtags": []
+      },
+      "image_details": {
+        "extracted_text": [
+          "厚切り牛タンと赤身焼肉のワインレストランWiz",
+          "JPN🇯🇵ガラス玉【旅行.絶景.おすす…",
+          "2394 Yada, Ono-cho, Bungo-Ono City, Oita Prefecture 879-6423, Japan",
+          "Thick-sliced beef tongue & lean yakiniku wine restaurant Wiz",
+          "1-6-28 Chuo, Hita City, Oita Prefecture 877-0015",
+          "The shop account @九州のこつめ社長🦦🗻歌であなたを癒します🌿",
+          "If you tell them you saw the video, they will receive benefits, [Period is undecided]",
+          "Nanzoin Nirvana Statue",
+          "392 Sasaguri, Sasaguri-cho, Kasuya-gun, Fukuoka Prefecture 811-2405, Japan",
+          "Subject @RiaKoリアコ🦎🇯🇵🇺🇸",
+          "Mizonokuchi Cave",
+          "hostel+cafe たね · Yamato"
+        ],
+        "objects": [
+          "large plated dish curryrice-like",
+          "metal sauce boat with sauce",
+          "table setting",
+          "bowl of soupstew",
+          "meat dish",
+          "japanese food",
+          "restaurant interior",
+          "wooden table",
+          "beef tongue",
+          "curry sauce",
+          "restaurant table",
+          "metal sauce pan",
+          "dipping sauce",
+          "japanese text overlay",
+          "profile picture icons"
+        ],
+        "themes": [
+          "travel recommendations",
+          "japanese food",
+          "restaurant promotion",
+          "sightseeing",
+          "japanese cuisine",
+          "restaurant discovery",
+          "regional japanese food",
+          "food tourism",
+          "regional dining"
+        ],
+        "emotions": [
+          "curiosity",
+          "excitement",
+          "wanderlust",
+          "appetizing",
+          "inviting",
+          "informative",
+          "helpful"
+        ],
+        "vibes": [
+          "informational",
+          "foodie",
+          "touristic",
+          "cozy",
+          "authentic",
+          "local discovery",
+          "informative",
+          "inviting",
+          "local experience",
+          "culinary adventure",
+          "travel guide"
+        ],
+        "visual_hierarchy": [
+          "Japanese text overlay: 厚切り牛タンと赤身焼肉のワインレストランWiz",
+          "Food imagery - soup bowl with meat",
+          "Restaurant Wiz address and details",
+          "Nanzoin Nirvana Statue location",
+          "Shop account information"
+        ],
+        "key_interest": "Wine Restaurant Wiz beef tongue mention and dish",
+        "likely_source": "TikTok"
+      }
+    },
+    {
+      "item_id": "07813e27-093c-4aeb-919e-e29f301e3e49",
+      "reviewed_at": "2025-12-13T21:50:51.304Z",
+      "source_analyses_count": 4,
+      "source_analysis_ids": [
+        "fa013379-c928-4b0c-9e18-b2f627c513f7",
+        "3bfef99c-c76e-4312-a818-f1bad42cefed",
+        "4cee6aee-4d34-4b30-9588-f58a69376532",
+        "cd774e11-5f8d-485b-b9d5-86dd8325fdfe"
+      ],
+      "category": "Travel",
+      "subcategories": [
+        "landmark",
+        "skyscraper",
+        "sightseeing",
+        "architecture",
+        "attractions",
+        "seoul",
+        "urban tourism",
+        "observation decks"
+      ],
+      "headline": "Seoul Sky Bridge at Lotte World Tower - 555m high observation walkway in Songpa-gu",
+      "summary": "Seoul Sky Bridge is an outdoor observation walkway at 555 meters height at Lotte World Tower in Songpa-gu, Seoul. The bridge offers dramatic aerial views of the city and surrounding Han River area from one of the world's tallest buildings.",
+      "media_metadata": {
+        "original_poster": "IG",
+        "tagged_accounts": [
+          "ig"
+        ],
+        "location_tags": [
+          "lotte world tower - songpa-gu",
+          "seoul sky bridge",
+          "lotte world tower songpa-gu"
+        ],
+        "audio_source": "",
+        "hashtags": [
+          "seoul",
+          "visitseoul",
+          "lotteworldtower",
+          "seoultravel",
+          "seoulsky",
+          "skybridge",
+          "southkorea"
+        ]
+      },
+      "image_details": {
+        "extracted_text": [
+          "LOTTE WORLD TOWER · Songpa-gu",
+          "Seoul Sky Bridge",
+          "555m",
+          "#Seoul #VisitSeoul #LotteWorldTower #Seoultravel #seoulsky #skybridge #southkorea",
+          "See more posts",
+          "IG",
+          "less"
+        ],
+        "objects": [
+          "sky bridge walkway",
+          "steel beams",
+          "handrails",
+          "city skyline",
+          "river",
+          "distant bridge",
+          "skyscrapers",
+          "tiktok ui icons",
+          "location tag badge",
+          "caption text",
+          "glass observation bridge",
+          "metal walkway structure",
+          "safety railings",
+          "tower structural beams",
+          "cityscape below",
+          "han river in distance",
+          "bridge supports",
+          "glass observation deck",
+          "metal railings",
+          "modern building facade",
+          "structural beams",
+          "cityscape view",
+          "urban skyline"
+        ],
+        "themes": [
+          "urban exploration",
+          "tourism",
+          "architecture",
+          "heights",
+          "heights and thrill-seeking",
+          "korean tourism",
+          "architectural landmarks",
+          "urban tourism",
+          "city observation decks",
+          "south korean travel destinations",
+          "modern architecture"
+        ],
+        "emotions": [
+          "awe",
+          "excitement",
+          "thrill",
+          "vertigo",
+          "wonder",
+          "adventure"
+        ],
+        "vibes": [
+          "adventurous",
+          "modern",
+          "high-altitude",
+          "urban",
+          "breathtaking",
+          "daring",
+          "elevated",
+          "expansive",
+          "architectural",
+          "touristic"
+        ],
+        "visual_hierarchy": [
+          "Modern architectural structure with glass walkways",
+          "LOTTE WORLD TOWER · Songpa-gu location tag",
+          "Seoul Sky Bridge 555m text",
+          "City skyline view in background",
+          "Hashtags for Seoul tourism"
+        ],
+        "key_interest": "Seoul Sky Bridge at 555m height - a dramatic outdoor observation experience at Lotte World Tower",
+        "likely_source": "TikTok"
+      }
+    },
+    {
+      "item_id": "d5ebd2cd-f71b-4d6e-898a-0e3cc02302ff",
+      "reviewed_at": "2025-12-13T21:53:38.386Z",
+      "source_analyses_count": 4,
+      "source_analysis_ids": [
+        "834357d3-f40e-48e7-91a3-16f9b3152a8c",
+        "371055cf-8194-4086-9103-519da2eef099",
+        "459762f6-ea5c-48a0-9758-e89dc0e59566",
+        "e2fda782-4503-4c5d-9a35-05d55ae066bd"
+      ],
+      "category": "Food",
+      "subcategories": [
+        "restaurants",
+        "ramen",
+        "fukuoka",
+        "travel destination",
+        "restaurant info",
+        "food",
+        "cultural",
+        "location",
+        "japan"
+      ],
+      "headline": "Ichiran Ramen Headquarters in Fukuoka - The Birthplace of Tonkotsu Ramen",
+      "summary": "Ichiran Shisha Honcha (一蘭本社総本店) is the original Ichiran Ramen location and company headquarters at 5 Chome-3-2 Nakasu, Hakata Ward, Fukuoka, 810-0801, Japan. Open 24 hours a day, seven days a week, it's considered the birthplace of tonkotsu ramen. Only the first two floors of the building are dedicated to the restaurant.",
+      "media_metadata": {
+        "original_poster": "",
+        "tagged_accounts": [],
+        "location_tags": [
+          "fukuoka japan 5 chome-3-2 nakasu hakata ward fukuoka 810-0801 japan",
+          "5 chome-3-2 nakasu hakata ward fukuoka 810-0801 japan"
+        ],
+        "audio_source": "",
+        "hashtags": []
+      },
+      "image_details": {
+        "extracted_text": [
+          "ichiran shisha honcha",
+          "AI Overview",
+          "The query \"ichiran shisha honcha\" likely refers to the Ichiran Ramen headquarters, known as \"Ichiran Shisha Honcha\" (一蘭本社総本店) in Japanese.",
+          "Ichiran Ramen Headquarters:",
+          "Location: Fukuoka, Japan (5 Chome-3-2 Nakasu, Hakata Ward, Fukuoka, 810-0801, Japan).",
+          "Significance: This is the original Ichiran location and also houses the company's headquarters.",
+          "Special Features: It's a popular spot for ramen lovers and is considered the \"birthplace of tonkotsu ramen,\" according to this Instagram post.",
+          "Operating Hours: Open 24 hours a day, seven days a week.",
+          "Note: While often mistaken for the entire building, only the first two floors are dedicated to the restaurant.",
+          "About Ichiran Ramen:",
+          "Ichiran is a famous Japanese ramen chain specializing in tonkotsu ramen, a pork bone"
+        ],
+        "objects": [
+          "google search interface",
+          "search bar",
+          "ai overview panel",
+          "bullet list",
+          "hyperlink text",
+          "navigation tabs",
+          "ramen",
+          "headquarters",
+          "location address",
+          "text content",
+          "ai overview badge",
+          "social media icons"
+        ],
+        "themes": [
+          "restaurant information",
+          "travel planning",
+          "japanese cuisine",
+          "ramen history",
+          "ramen restaurants",
+          "food tourism",
+          "tourism",
+          "cultural significance",
+          "ramen culture",
+          "travel destination"
+        ],
+        "emotions": [
+          "curiosity",
+          "anticipation",
+          "interest",
+          "informative",
+          "helpful",
+          "practical"
+        ],
+        "vibes": [
+          "informative",
+          "practical",
+          "research-oriented",
+          "travel planning",
+          "educational",
+          "inviting",
+          "informational",
+          "utilitarian",
+          "travel-planning"
+        ],
+        "visual_hierarchy": [
+          "Search query: ichiran shisha honcha",
+          "Ichiran Ramen Headquarters section header",
+          "Location with full address",
+          "Operating Hours: 24/7",
+          "Birthplace of tonkotsu ramen detail"
+        ],
+        "key_interest": "Location and details for Ichiran Ramen Headquarters",
+        "likely_source": "other"
+      }
+    },
+    {
+      "item_id": "19619477-d42a-41a0-bdf1-cabdf53aa4e3",
+      "reviewed_at": "2025-12-13T21:56:01.207Z",
+      "source_analyses_count": 4,
+      "source_analysis_ids": [
+        "a270e808-440f-4427-a5b5-def9963c7834",
+        "067cc6f1-666d-4a39-b3a7-390d8050f710",
+        "bfee66c4-1a23-44c8-ad67-b4f8f25cb1f3",
+        "6f3ad9e1-145f-44e9-a845-c6f2496dc031"
+      ],
+      "category": "Travel",
+      "subcategories": [
+        "itinerary",
+        "japan",
+        "city guide",
+        "food",
+        "sightseeing"
+      ],
+      "headline": "Fukuoka Day 2 itinerary: Daimyo, original Ippudo ramen, Takayama vintage luxury, Sushi Tadao, Art Museum, yatai stalls",
+      "summary": "Day 2 itinerary in Fukuoka includes exploring the Daimyo area with vintage shops and cute cafes, eating ramen at the original Ippudo branch, shopping secondhand luxury at Takayama, trying omakase at Sushi Tadao, visiting Fukuoka Art Museum, and dining at yatai stalls. The full 5-day trip was condensed to highlight days 2-4 with the most photo-worthy activities.",
+      "media_metadata": {
+        "original_poster": "kathrinacorgan",
+        "tagged_accounts": [
+          "tomoko aran"
+        ],
+        "location_tags": [
+          "fukuoka 618k people posted about this place",
+          "fukuoka",
+          "618k people posted about this place"
+        ],
+        "audio_source": "Midnight Pretenders - @Tomoko Aran",
+        "hashtags": [
+          "fukuoka",
+          "traveltiktok",
+          "japa"
+        ]
+      },
+      "image_details": {
+        "extracted_text": [
+          "Day 2",
+          "- Explore Daimyo area (vintage shops, cute cafes, eat ramen at the original branch of Ippudo)",
+          "- Shop second hand luxury at Takayama",
+          "- Try omakase at Sushi Tadao",
+          "- Fukuoka Art Museum",
+          "- Cap off the night at yatai stalls (again)",
+          "Fukuoka in 3 Days",
+          "We actually stayed here for 5 days, but I didn't include day 1 and day 5 since we mostly just ate and drank lol, and didn't take much photos on our first and last day."
+        ],
+        "objects": [
+          "overlay itinerary text",
+          "photo collage 4 tiles",
+          "yellow polka-dot pumpkin sculpture",
+          "sushiuni close-up",
+          "luxury handbags on shelves",
+          "bench and street scene",
+          "location tag pill",
+          "tiktok interface icons",
+          "yellow polka dot pumpkin sculpture yayoi kusama art",
+          "woman in black dress",
+          "man in white t-shirt and shorts",
+          "japanese foodsashimi plate",
+          "louis vuitton vintage bags",
+          "stone mailbox pillar",
+          "people",
+          "pumpkin sculpture",
+          "sushi",
+          "luxury bags",
+          "large yellow polka dot pumpkin sculpture",
+          "omakase sushi dish",
+          "luxury handbags on display",
+          "wooden bench",
+          "plants"
+        ],
+        "themes": [
+          "travel planning",
+          "food and dining",
+          "shopping",
+          "art and culture",
+          "japan",
+          "japan travel",
+          "city itinerary",
+          "food tourism",
+          "vintage shopping",
+          "travel itinerary",
+          "cultural exploration",
+          "gastronomy",
+          "japanese cuisine"
+        ],
+        "emotions": [
+          "excitement",
+          "curiosity",
+          "wanderlust",
+          "inspiration",
+          "excited",
+          "inspired",
+          "adventurous"
+        ],
+        "vibes": [
+          "adventurous",
+          "informative",
+          "urban",
+          "aesthetic travel content",
+          "curated guide",
+          "trendy exploration",
+          "cultural",
+          "curated",
+          "aesthetic",
+          "cultural exploration",
+          "foodie"
+        ],
+        "visual_hierarchy": [
+          "Day 2 itinerary text overlay",
+          "Yellow Kusama pumpkin sculpture",
+          "Food photo (sashimi)",
+          "Louis Vuitton bags display",
+          "Caption with trip context"
+        ],
+        "key_interest": "Day 2 Fukuoka itinerary list with specific places and activities",
+        "likely_source": "TikTok"
+      }
+    },
+    {
+      "item_id": "f509d013-83c6-4e77-b71f-0afbd9999c09",
+      "reviewed_at": "2025-12-13T21:59:54.920Z",
+      "source_analyses_count": 4,
+      "source_analysis_ids": [
+        "22b2ec55-2fa9-45ed-8ade-bf4a38a57207",
+        "7a488816-b392-45ef-9010-8153d7b427be",
+        "e1abdde7-0a86-4da3-a7fb-66045ff8aa8b",
+        "09a8640b-a158-4d7a-a66d-7e27986cf2bd"
+      ],
+      "category": "Travel",
+      "subcategories": [
+        "hiking",
+        "seoul",
+        "guide",
+        "outdoor activities",
+        "travel tips"
+      ],
+      "headline": "Complete guide to hiking Bukhansan National Park in Seoul with 3 trail options and gear rental tips",
+      "summary": "Three hiking trails to Baegundae Peak: Doseonsa Temple route (shortest/easiest, eastern side), Bukhansan Fortress Entrance (splits halfway with easier or steeper options), and Fortress to Ranger Station thru-hike. The Doseonsa Temple route takes under 3 hours round trip via Ui-Sinseol Line to Bukhansan Ui Station, then 15-min taxi or 1-hour walk. Gear rentable from Seoul Hiking Tourism Center; post-hike Korean BBQ recommended at Sununsan Mountain Range (선운산장) with dotori-muk acorn jelly.",
+      "media_metadata": {
+        "original_poster": "christinajotravels",
+        "tagged_accounts": [],
+        "location_tags": [
+          "bukhansan national park",
+          "baegundae peak",
+          "doseonsa temple ",
+          "bukhansan ui station",
+          "sununsan mountain range ",
+          "bukhansan fortress entrance"
+        ],
+        "audio_source": "",
+        "hashtags": []
+      },
+      "image_details": {
+        "extracted_text": [
+          "GRABBING",
+          "christinajotravels",
+          "From Doseonsa Temple (도선사) – Shortest & easiest route on the eastern side of the park.",
+          "From Bukhansan Fortress Entrance – Trail splits halfway; choose longer-but-easier or shorter-but-steeper.",
+          "Fortress to Ranger Station (via Baegundae) – A thru-hike across the park, starts at one end, ends at the other.",
+          "We did the Doseonsa Temple route.",
+          "- Took the Ui-Sinseol Line to Bukhansan Ui (북한산우이) Station",
+          "- Taxi to trailhead (15 min), or walk (1 hour along the road)",
+          "- Hike time: under 3 hours round trip",
+          "- Rented gear (boots, poles, backpacks) from Seoul Hiking Tourism Center so we didn’t have to pack our own",
+          "We hiked down, ate Korean BBQ at Sununsan Mountain Range (선운산장), and tried 도토리묵 (dotori-muk) acorn jelly that hits after a sweaty hike.",
+          "less"
+        ],
+        "objects": [
+          "hiker",
+          "mountain peak",
+          "rope handrail",
+          "city skyline",
+          "cloudy sky",
+          "tiktok ui elements",
+          "hiker with backpack",
+          "rocky summit",
+          "cityscape panorama",
+          "blue sky",
+          "clouds",
+          "mountains",
+          "sky",
+          "cityscape",
+          "profile picture",
+          "engagement buttons"
+        ],
+        "themes": [
+          "trail planning",
+          "transportation tips",
+          "outdoor adventure",
+          "food recommendations",
+          "hiking guide",
+          "korean travel",
+          "trail recommendations",
+          "local food recommendations",
+          "hiking",
+          "outdoor recreation",
+          "seoul travel",
+          "korean tourism"
+        ],
+        "emotions": [
+          "adventurous",
+          "informative",
+          "motivated",
+          "accomplished",
+          "helpful"
+        ],
+        "vibes": [
+          "practical",
+          "outdoorsy",
+          "uplifting",
+          "educational",
+          "inspirational",
+          "wanderlust",
+          "scenic"
+        ],
+        "visual_hierarchy": [
+          "Large title text “GRABBING”",
+          "Block of route and logistics instructions",
+          "Username “christinajotravels”",
+          "Hiker on rocky summit with rope rail",
+          "TikTok action icons and UI"
+        ],
+        "key_interest": "Hiking route and logistics text for Bukhansan",
+        "likely_source": "TikTok"
+      }
+    },
+    {
+      "item_id": "8e59d5c3-71ef-4caf-bc16-c23c5b1cc3eb",
+      "reviewed_at": "2025-12-13T22:01:11.926Z",
+      "source_analyses_count": 4,
+      "source_analysis_ids": [
+        "7c26fd3d-accc-4234-832a-b2a5931a186b",
+        "968888c8-b221-4791-acb8-eeae45a22d8c",
+        "f22b4589-0de8-4d01-9e58-a78a1bbb9438",
+        "30a4b8fc-d8b6-4e77-b0da-86dd61bf2264"
+      ],
+      "category": "Travel",
+      "subcategories": [
+        "japan",
+        "hakone",
+        "ryokan",
+        "hidden gems",
+        "destination",
+        "japanese gardens",
+        "day trips"
+      ],
+      "headline": "Matsuzakaya Honten: Hakone's Best Kept Secret",
+      "summary": "Matsuzakaya Honten is being called Hakone's best kept secret. The traditional Japanese inn features a serene garden pathway with carefully manicured landscaping, stone pathways, and traditional lanterns.",
+      "media_metadata": {
+        "original_poster": "tabi_japan_daytrips",
+        "tagged_accounts": [],
+        "location_tags": [
+          "hakone",
+          "matsuzakaya honten"
+        ],
+        "audio_source": "",
+        "hashtags": []
+      },
+      "image_details": {
+        "extracted_text": [
+          "This is Matsuzakaya Honten",
+          "tabi_japan_daytrips",
+          "Is this Hakone's best kept secret? This might be the coolest thing we did... more"
+        ],
+        "objects": [
+          "sunlit garden path",
+          "japanese garden landscaping",
+          "traditional lantern lights",
+          "trees and shrubs",
+          "buildingryokan exterior",
+          "tiktok interface buttons heart comment bookmark share",
+          "garden pathway",
+          "japanese pine trees",
+          "stone lantern",
+          "traditional buildings",
+          "manicured shrubs",
+          "stone steps",
+          "moss-covered rocks",
+          "garden path",
+          "trees",
+          "lanterns",
+          "stone pathway",
+          "pine trees",
+          "moss",
+          "rocks",
+          "traditional japanese architecture",
+          "manicured gardens",
+          "tree shadows"
+        ],
+        "themes": [
+          "hidden gem travel",
+          "accommodation recommendation",
+          "japanese culture",
+          "japanese hospitality",
+          "traditional ryokan",
+          "travel discovery",
+          "hidden destinations",
+          "travel",
+          "nature",
+          "relaxation",
+          "japanese garden aesthetics",
+          "traditional japanese culture",
+          "nature photography"
+        ],
+        "emotions": [
+          "curiosity",
+          "wonder",
+          "calm",
+          "serenity",
+          "tranquility",
+          "peaceful",
+          "serene",
+          "contemplative",
+          "awe"
+        ],
+        "vibes": [
+          "serene",
+          "natural",
+          "inviting",
+          "peaceful",
+          "traditional japanese",
+          "luxurious",
+          "nature-focused",
+          "tranquil",
+          "zen",
+          "authentic",
+          "off-the-beaten-path"
+        ],
+        "visual_hierarchy": [
+          "This is Matsuzakaya Honten (center overlay text)",
+          "Garden pathway leading through property",
+          "Traditional Japanese landscaping",
+          "Caption teasing Hakone's best kept secret",
+          "Account name tabi_japan_daytrips"
+        ],
+        "key_interest": "Overlay text naming the place: “This is Matsuzakaya Honten”",
+        "likely_source": "TikTok"
+      }
+    },
+    {
+      "item_id": "f5129142-8126-4f7b-8b72-72f4024d4078",
+      "reviewed_at": "2025-12-13T22:23:52.963Z",
+      "source_analyses_count": 4,
+      "source_analysis_ids": [
+        "072af23f-7169-47dd-8105-76cef2b0a358",
+        "c201da01-0384-4de2-b365-bafae982a465",
+        "b931b750-f636-4dc1-9e11-77f8c104865d",
+        "a81a2c47-c998-481a-bd82-8373b7085c3a"
+      ],
+      "category": "Travel",
+      "subcategories": [
+        "japan",
+        "attractions",
+        "budget",
+        "immersive art",
+        "budget breakdown",
+        "experience",
+        "art",
+        "art-installation",
+        "nightlife"
+      ],
+      "headline": "TeamLab Forest Fukuoka immersive digital art experience - 4800 JPY admission price",
+      "summary": "TeamLab Forest Fukuoka admission costs 4800 JPY (approximately $46.40 CAD). Part of a 7-day trip to Fukuoka, Japan documenting travel expenses. The immersive digital art installation features vibrant floral projections and mirror reflections.",
+      "media_metadata": {
+        "original_poster": "Spicy Sunday Finance",
+        "tagged_accounts": [],
+        "location_tags": [
+          "teamlab forest fukuoka",
+          "fukuoka japan"
+        ],
+        "audio_source": "CapCut · Filters just for you",
+        "hashtags": []
+      },
+      "image_details": {
+        "extracted_text": [
+          "TeamLab Forest Fukuoka",
+          "4800 JPY ~ $46.40 CAD",
+          "all",
+          "Spicy Sunday Finance 🌶️🍿",
+          "7 days in Fukuoka, Japan 💌🍑 here's the damage done but no regrets ... more"
+        ],
+        "objects": [
+          "digital art projectioninstallation",
+          "person in cap partially visible",
+          "tiktok ui elements",
+          "price label text overlay",
+          "person silhouette",
+          "digital floral projections",
+          "reflective floorsurface",
+          "sunglasses",
+          "digital art installation",
+          "digital art projection",
+          "immersive light installation",
+          "purple and pink illuminated surfaces",
+          "confetti-like light particles",
+          "smartphone interface",
+          "navigation bar"
+        ],
+        "themes": [
+          "travel planning",
+          "art installation",
+          "budgeting",
+          "japan tourism",
+          "travel budgeting",
+          "digital immersive art",
+          "cost transparency",
+          "travel",
+          "art",
+          "cultural experience",
+          "digital art",
+          "immersive experiences",
+          "japanese attractions",
+          "cultural tourism"
+        ],
+        "emotions": [
+          "excitement",
+          "curiosity",
+          "awe",
+          "wonder",
+          "adventure"
+        ],
+        "vibes": [
+          "vibrant",
+          "immersive",
+          "futuristic",
+          "dreamy",
+          "colorful",
+          "aesthetic",
+          "modern",
+          "magical",
+          "experiential"
+        ],
+        "visual_hierarchy": [
+          "TeamLab Forest Fukuoka title text",
+          "4800 JPY ~ $46.40 CAD price overlay",
+          "Vibrant pink/purple floral projections",
+          "Person silhouette experiencing the art",
+          "Spicy Sunday Finance account name"
+        ],
+        "key_interest": "Ticket price for TeamLab Forest Fukuoka (4800 JPY ~ $46.40 CAD)",
+        "likely_source": "TikTok"
+      }
+    }
+  ]
+}

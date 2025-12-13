@@ -203,6 +203,166 @@
         }
       ],
       "description": "Endpoints for AI-powered image analysis. Analysis responses include a `raw_response` field containing the full LLM analysis output."
+    },
+    {
+      "name": "Search",
+      "item": [
+        {
+          "name": "Search Collection",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"restaurants in Tokyo\",\n  \"top_k\": 5,\n  \"category_filter\": null,\n  \"include_answer\": true,\n  \"answer_model\": \"claude-sonnet-4-5\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/search",
+              "host": ["{{base_url}}"],
+              "path": ["search"]
+            },
+            "description": "## Search Collection\n\nNatural language search and Q&A over the collection. Retrieves relevant items using BM25 full-text search and optionally generates an AI-powered answer.\n\n### Request Body\n\n```json\n{\n  \"query\": \"restaurants in Tokyo\",\n  \"top_k\": 5,\n  \"category_filter\": null,\n  \"include_answer\": true,\n  \"answer_model\": \"claude-sonnet-4-5\"\n}\n```\n\n| Field | Type | Default | Description |\n|-------|------|---------|-------------|\n| `query` | string | - | Search query or question |\n| `top_k` | integer | `5` | Number of results to return |\n| `category_filter` | string/null | `null` | Filter by category |\n| `include_answer` | boolean | `false` | Generate AI answer to query |\n| `answer_model` | string | `\"claude-sonnet-4-5\"` | Model for answer generation |\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"query\": \"restaurants in Tokyo\",\n  \"results\": [\n    {\n      \"item_id\": \"uuid-string\",\n      \"rank\": 1,\n      \"score\": 12.5,\n      \"category\": \"Food\",\n      \"headline\": \"Tofuya Ukai dining spot beneath Tokyo Tower\",\n      \"summary\": \"Beautiful restaurant beneath Tokyo Tower...\",\n      \"image_url\": \"/images/uuid.jpg\",\n      \"metadata\": { ... }\n    }\n  ],\n  \"total_results\": 3,\n  \"answer\": \"Based on your collection, here are some restaurants in Tokyo...\",\n  \"answer_confidence\": \"high\",\n  \"citations\": [1, 2],\n  \"retrieval_time_ms\": 15.2,\n  \"answer_time_ms\": 823.4\n}\n```"
+          },
+          "response": []
+        }
+      ],
+      "description": "Natural language search and Q&A endpoints using BM25 full-text search."
+    },
+    {
+      "name": "Index Management",
+      "item": [
+        {
+          "name": "Rebuild Search Index",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/index/rebuild",
+              "host": ["{{base_url}}"],
+              "path": ["index", "rebuild"]
+            },
+            "description": "## Rebuild Search Index\n\nRebuild the FTS5 search index from current database. Useful after bulk analysis updates or if search results seem stale.\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"status\": \"success\",\n  \"num_documents\": 130,\n  \"build_time_seconds\": 1.23,\n  \"timestamp\": \"2025-12-13T12:00:00.000000\"\n}\n```"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Index Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/index/status",
+              "host": ["{{base_url}}"],
+              "path": ["index", "status"]
+            },
+            "description": "## Get Index Status\n\nGet current search index status and statistics.\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"doc_count\": 130,\n  \"total_items\": 130,\n  \"index_coverage\": 100.0\n}\n```"
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for managing the FTS5 search index."
+    },
+    {
+      "name": "Golden Dataset",
+      "item": [
+        {
+          "name": "Get Items for Review",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/golden-dataset/items?skip_reviewed=true&limit=1&offset=0",
+              "host": ["{{base_url}}"],
+              "path": ["golden-dataset", "items"],
+              "query": [
+                {
+                  "key": "skip_reviewed",
+                  "value": "true",
+                  "description": "Skip items that already have golden data"
+                },
+                {
+                  "key": "limit",
+                  "value": "1",
+                  "description": "Number of items to return (max 100)"
+                },
+                {
+                  "key": "offset",
+                  "value": "0",
+                  "description": "Offset for pagination"
+                }
+              ]
+            },
+            "description": "## Get Items for Review\n\nGet items for golden dataset review and curation.\n\n### Query Parameters\n\n| Parameter | Type | Default | Description |\n|-----------|------|---------|-------------|\n| `skip_reviewed` | boolean | `true` | Skip items with golden data |\n| `limit` | integer | `1` | Items to return (max 100) |\n| `offset` | integer | `0` | Pagination offset |\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"items\": [\n    {\n      \"item_id\": \"uuid-string\",\n      \"filename\": \"uuid.jpg\",\n      \"analyses\": [...],\n      \"has_golden\": false\n    }\n  ],\n  \"total\": 130,\n  \"reviewed_count\": 45\n}\n```"
+          },
+          "response": []
+        },
+        {
+          "name": "Compare Analyses",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"field_type\": \"extracted_text\",\n  \"values\": [\n    [\"TOGOSHI GINZA\", \"With over 400 shops\"],\n    [\"Togoshi Ginza\", \"400+ shops\"]\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/golden-dataset/compare",
+              "host": ["{{base_url}}"],
+              "path": ["golden-dataset", "compare"]
+            },
+            "description": "## Compare Analyses\n\nCalculate similarity between analysis values from different models. Uses Levenshtein distance for extracted_text and TF-IDF cosine similarity for headlines and summaries.\n\n### Request Body\n\n```json\n{\n  \"field_type\": \"extracted_text\",\n  \"values\": [\n    [\"text1\", \"text2\"],\n    [\"text1\", \"text3\"]\n  ]\n}\n```\n\n| Field | Type | Description |\n|-------|------|-------------|\n| `field_type` | string | Type of field: `\"extracted_text\"`, `\"headline\"`, or `\"summary\"` |\n| `values` | array | Array of values to compare |\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"method\": \"levenshtein\",\n  \"similarity_matrix\": [[1.0, 0.85], [0.85, 1.0]],\n  \"highest_agreement\": 0.85\n}\n```"
+          },
+          "response": []
+        },
+        {
+          "name": "Save Golden Entry",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"item_id\": \"{{item_id}}\",\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Japan\", \"Shopping\"],\n  \"headline\": \"Togoshi Ginza: Tokyo's authentic shopping street\",\n  \"summary\": \"A traditional 1.3km shopping district...\",\n  \"extracted_text\": [\"TOGOSHI GINZA\", \"With over 400 shops\"],\n  \"curator_notes\": \"Verified all text extractions\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/golden-dataset/save",
+              "host": ["{{base_url}}"],
+              "path": ["golden-dataset", "save"]
+            },
+            "description": "## Save Golden Entry\n\nSave or update a golden dataset entry with curated analysis values.\n\n### Request Body\n\n```json\n{\n  \"item_id\": \"uuid-string\",\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Japan\", \"Shopping\"],\n  \"headline\": \"Curated headline\",\n  \"summary\": \"Curated summary\",\n  \"extracted_text\": [\"Text 1\", \"Text 2\"],\n  \"curator_notes\": \"Optional notes\"\n}\n```\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"status\": \"success\",\n  \"item_id\": \"uuid-string\",\n  \"total_golden_count\": 46\n}\n```"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Golden Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/golden-dataset/status",
+              "host": ["{{base_url}}"],
+              "path": ["golden-dataset", "status"]
+            },
+            "description": "## Get Golden Status\n\nGet golden dataset progress statistics.\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"total_items\": 130,\n  \"reviewed_items\": 46,\n  \"progress_percentage\": 35.4\n}\n```"
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for creating and managing the golden dataset for evaluation."
     }
   ],
   "variable": [

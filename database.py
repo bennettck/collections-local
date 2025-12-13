@@ -44,6 +44,12 @@ def init_db():
 
             CREATE INDEX IF NOT EXISTS idx_analyses_item_id ON analyses(item_id);
             CREATE INDEX IF NOT EXISTS idx_analyses_category ON analyses(category);
+
+            CREATE VIRTUAL TABLE IF NOT EXISTS items_fts USING fts5(
+                item_id UNINDEXED,
+                content,
+                tokenize='unicode61 remove_diacritics 2'
+            );
         """)
 
         # Migration: add provider_used column if it doesn't exist
@@ -205,3 +211,201 @@ def get_item_analyses(item_id: str) -> list[dict]:
             result["raw_response"] = json.loads(result["raw_response"]) if result["raw_response"] else {}
             results.append(result)
         return results
+
+
+def _create_search_document(raw_response: dict) -> str:
+    """
+    Create weighted search document from analysis data.
+
+    Fields are repeated according to their importance for search ranking.
+    All fields from raw_response are included to ensure everything is searchable.
+    """
+    parts = []
+
+    # High priority fields (3x weight)
+    summary = raw_response.get("summary", "")
+    parts.extend([summary] * 3)
+
+    # High priority fields (2x weight)
+    headline = raw_response.get("headline", "")
+    image_details = raw_response.get("image_details", {})
+    extracted_text = " ".join(image_details.get("extracted_text", []))
+    parts.extend([headline, extracted_text] * 2)
+
+    # Medium-high priority (1.5x weight)
+    category = raw_response.get("category", "")
+    subcategories = " ".join(raw_response.get("subcategories", []))
+    key_interest = image_details.get("key_interest", "")
+    # Add 1.5x by repeating once, then adding 0.5 more
+    parts.extend([category, subcategories, key_interest])
+    parts.extend([category, subcategories, key_interest])
+
+    # Medium priority (1x weight)
+    themes = " ".join(image_details.get("themes", []))
+    objects = " ".join(image_details.get("objects", []))
+    media_metadata = raw_response.get("media_metadata", {})
+    location_tags = " ".join(media_metadata.get("location_tags", []))
+    parts.extend([themes, objects, location_tags])
+
+    # Low priority (0.5x weight)
+    emotions = " ".join(image_details.get("emotions", []))
+    vibes = " ".join(image_details.get("vibes", []))
+    hashtags = " ".join(media_metadata.get("hashtags", []))
+    parts.extend([emotions, vibes, hashtags])
+
+    # Minimal priority (0.3x weight) - add once
+    original_poster = media_metadata.get("original_poster", "")
+    tagged_accounts = " ".join(media_metadata.get("tagged_accounts", []))
+    audio_source = media_metadata.get("audio_source", "")
+    likely_source = image_details.get("likely_source", "")
+    visual_hierarchy = " ".join(image_details.get("visual_hierarchy", []))
+    minimal_fields = f"{original_poster} {tagged_accounts} {audio_source} {likely_source} {visual_hierarchy}"
+    parts.append(minimal_fields)
+
+    # Join all parts, filtering out empty strings
+    return " ".join([p for p in parts if p and p.strip()])
+
+
+def rebuild_search_index() -> dict:
+    """
+    Rebuild FTS5 search index from current analyses.
+
+    Returns dict with rebuild statistics.
+    """
+    with get_db() as conn:
+        # Clear existing FTS data
+        conn.execute("DELETE FROM items_fts")
+
+        # Get all items with their latest analysis
+        rows = conn.execute("""
+            SELECT
+                i.id as item_id,
+                a.raw_response
+            FROM items i
+            LEFT JOIN analyses a ON i.id = a.item_id
+            WHERE a.id = (
+                SELECT id FROM analyses
+                WHERE item_id = i.id
+                ORDER BY version DESC
+                LIMIT 1
+            )
+        """).fetchall()
+
+        # Insert into FTS table
+        indexed_count = 0
+        for row in rows:
+            item_id = row["item_id"]
+            raw_response = json.loads(row["raw_response"]) if row["raw_response"] else {}
+
+            if raw_response:
+                search_doc = _create_search_document(raw_response)
+                conn.execute(
+                    "INSERT INTO items_fts(item_id, content) VALUES (?, ?)",
+                    (item_id, search_doc)
+                )
+                indexed_count += 1
+
+        return {
+            "num_documents": indexed_count,
+            "timestamp": datetime.utcnow().isoformat()
+        }
+
+
+def _preprocess_query(query: str) -> str:
+    """
+    Preprocess search query by removing stopwords, punctuation, and normalizing.
+
+    Args:
+        query: Raw search query
+
+    Returns:
+        Preprocessed query suitable for FTS5
+    """
+    import re
+
+    # Remove punctuation (question marks, exclamation points, etc.)
+    query = re.sub(r'[?!.,;:\'"()\[\]{}]', ' ', query)
+
+    # Common English stopwords that don't add search value
+    stopwords = {
+        'a', 'an', 'and', 'are', 'as', 'at', 'be', 'by', 'for', 'from',
+        'has', 'he', 'in', 'is', 'it', 'its', 'of', 'on', 'that', 'the',
+        'to', 'was', 'will', 'with', 'what', 'where', 'when', 'who', 'how'
+    }
+
+    # Tokenize: split on whitespace and lowercase
+    tokens = query.lower().split()
+
+    # Remove stopwords and short tokens
+    filtered = [t for t in tokens if t not in stopwords and len(t) > 1]
+
+    # Return space-separated tokens
+    return ' '.join(filtered) if filtered else query
+
+
+def search_items(query: str, top_k: int = 10, category_filter: Optional[str] = None) -> list[tuple[str, float]]:
+    """
+    Search items using FTS5 BM25 ranking.
+
+    Args:
+        query: Search query string (will be preprocessed to remove stopwords)
+        top_k: Maximum number of results to return
+        category_filter: Optional category to filter results
+
+    Returns:
+        List of (item_id, bm25_score) tuples, ordered by relevance
+    """
+    # Preprocess query to remove stopwords
+    processed_query = _preprocess_query(query)
+
+    with get_db() as conn:
+        if category_filter:
+            # Join with analyses table to filter by category
+            rows = conn.execute("""
+                SELECT
+                    f.item_id,
+                    bm25(items_fts) as score
+                FROM items_fts f
+                JOIN analyses a ON f.item_id = a.item_id
+                WHERE items_fts MATCH ?
+                AND a.category = ?
+                AND a.id = (
+                    SELECT id FROM analyses
+                    WHERE item_id = f.item_id
+                    ORDER BY version DESC
+                    LIMIT 1
+                )
+                ORDER BY score
+                LIMIT ?
+            """, (processed_query, category_filter, top_k)).fetchall()
+        else:
+            # Simple search without category filter
+            rows = conn.execute("""
+                SELECT
+                    item_id,
+                    bm25(items_fts) as score
+                FROM items_fts
+                WHERE items_fts MATCH ?
+                ORDER BY score
+                LIMIT ?
+            """, (processed_query, top_k)).fetchall()
+
+        return [(row["item_id"], row["score"]) for row in rows]
+
+
+def get_search_status() -> dict:
+    """Get current search index status."""
+    with get_db() as conn:
+        # Count documents in FTS table
+        row = conn.execute("SELECT COUNT(*) as count FROM items_fts").fetchone()
+        doc_count = row["count"] if row else 0
+
+        # Get total items for comparison
+        total_items = conn.execute("SELECT COUNT(*) as count FROM items").fetchone()["count"]
+
+        return {
+            "doc_count": doc_count,
+            "total_items": total_items,
+            "is_loaded": doc_count > 0,
+            "index_coverage": doc_count / total_items if total_items > 0 else 0.0
+        }

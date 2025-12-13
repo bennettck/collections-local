@@ -1,10 +1,12 @@
 import os
+import time
 import uuid
 import aiofiles
 from datetime import datetime
 from pathlib import Path
 
 from fastapi import FastAPI, UploadFile, File, HTTPException, Query
+from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from dotenv import load_dotenv
@@ -15,6 +17,12 @@ from models import (
     AnalysisRequest,
     AnalysisResponse,
     Settings,
+    SearchRequest,
+    SearchResult,
+    SearchResponse,
+    GoldenAnalysisEntry,
+    CompareRequest,
+    CompareResponse,
 )
 from database import (
     init_db,
@@ -27,6 +35,9 @@ from database import (
     get_analysis,
     get_latest_analysis,
     get_item_analyses,
+    rebuild_search_index,
+    search_items,
+    get_search_status,
 )
 from llm import analyze_image, get_trace_id, get_resolved_provider_and_model
 
@@ -52,6 +63,16 @@ async def lifespan(app: FastAPI):
     init_db()
     # Ensure images directory exists
     os.makedirs(IMAGES_PATH, exist_ok=True)
+
+    # Initialize search index if empty
+    status = get_search_status()
+    if status['doc_count'] == 0 and status['total_items'] > 0:
+        print(f"Building search index for {status['total_items']} items...")
+        stats = rebuild_search_index()
+        print(f"Search index built: {stats['num_documents']} documents indexed")
+    else:
+        print(f"Search index ready: {status['doc_count']} documents")
+
     yield
     # Shutdown: cleanup if needed
 
@@ -70,6 +91,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Mount static files
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 def _parse_datetime(dt_str: str) -> datetime:
@@ -292,3 +316,302 @@ async def get_analysis_endpoint(analysis_id: str):
         raise HTTPException(status_code=404, detail="Analysis not found")
 
     return _analysis_to_response(analysis)
+
+
+# Search Endpoints
+@app.post("/search", response_model=SearchResponse)
+async def search_collection(request: SearchRequest):
+    """
+    Natural language search and Q&A over the collection.
+
+    Retrieves relevant items using BM25 full-text search and optionally
+    generates an AI-powered answer to the user's question.
+    """
+    start_time = time.time()
+
+    # Retrieve top-k items using FTS5 BM25
+    try:
+        search_results = search_items(
+            query=request.query,
+            top_k=request.top_k,
+            category_filter=request.category_filter
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Search failed: {str(e)}")
+
+    retrieval_time = (time.time() - start_time) * 1000
+
+    # Convert to SearchResult objects
+    results = []
+    for rank, (item_id, score) in enumerate(search_results, 1):
+        item = get_item(item_id)
+        if not item:
+            continue
+
+        analysis = get_latest_analysis(item_id)
+        raw_response = analysis.get("raw_response", {}) if analysis else {}
+
+        results.append(SearchResult(
+            item_id=item_id,
+            rank=rank,
+            score=score,
+            category=analysis.get("category") if analysis else None,
+            headline=raw_response.get("headline"),
+            summary=analysis.get("summary") if analysis else None,
+            image_url=f"/images/{item['filename']}",
+            metadata=raw_response
+        ))
+
+    # Optionally generate answer using LLM
+    answer = None
+    answer_time = None
+    citations = None
+    confidence = None
+
+    if request.include_answer and results:
+        answer_start = time.time()
+
+        from retrieval.answer_generator import generate_answer
+        answer_data = generate_answer(
+            query=request.query,
+            results=[r.model_dump() for r in results],
+            model=request.answer_model
+        )
+
+        answer = answer_data["answer"]
+        citations = answer_data["citations"]
+        confidence = answer_data["confidence"]
+        answer_time = (time.time() - answer_start) * 1000
+
+    return SearchResponse(
+        query=request.query,
+        results=results,
+        total_results=len(results),
+        answer=answer,
+        answer_confidence=confidence,
+        citations=citations,
+        retrieval_time_ms=retrieval_time,
+        answer_time_ms=answer_time
+    )
+
+
+# Index Management Endpoints
+@app.post("/index/rebuild")
+async def rebuild_index():
+    """
+    Rebuild the FTS5 search index from current database.
+
+    Useful after bulk analysis updates or if search results seem stale.
+    """
+    start_time = time.time()
+
+    try:
+        stats = rebuild_search_index()
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Index rebuild failed: {str(e)}")
+
+    build_time = time.time() - start_time
+
+    return {
+        "status": "success",
+        "num_documents": stats["num_documents"],
+        "build_time_seconds": round(build_time, 2),
+        "timestamp": stats["timestamp"]
+    }
+
+
+@app.get("/index/status")
+async def get_index_status_endpoint():
+    """Get current search index status and statistics."""
+    try:
+        status = get_search_status()
+        return status
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to get index status: {str(e)}")
+
+
+# Image Serving
+from fastapi.responses import FileResponse, HTMLResponse
+
+@app.get("/images/{filename}")
+async def serve_image(filename: str):
+    """Serve image files for search results and item display."""
+    file_path = os.path.join(IMAGES_PATH, filename)
+
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="Image not found")
+
+    return FileResponse(file_path)
+
+
+# Golden Dataset Tool Endpoints
+from utils.similarity import compare_text_arrays, tfidf_similarity
+from utils.golden_dataset import (
+    load_golden_dataset,
+    update_golden_entry,
+    has_golden_entry,
+    get_golden_entry,
+)
+
+
+@app.get("/golden-dataset", response_class=HTMLResponse)
+async def serve_golden_dataset_ui():
+    """Serve the golden dataset creation tool UI."""
+    html_path = Path("templates/golden_dataset.html")
+
+    if not html_path.exists():
+        raise HTTPException(status_code=404, detail="Golden dataset UI not found")
+
+    with open(html_path, 'r', encoding='utf-8') as f:
+        return HTMLResponse(content=f.read())
+
+
+@app.get("/golden-dataset/items")
+async def get_items_for_review(
+    skip_reviewed: bool = Query(True),
+    limit: int = Query(1, le=100),
+    offset: int = Query(0, ge=0)
+):
+    """
+    Get items for golden dataset review.
+
+    Args:
+        skip_reviewed: If True, skip items that already have golden data
+        limit: Number of items to return
+        offset: Offset for pagination
+
+    Returns:
+        Dict with items list, total count, and reviewed count
+    """
+    from database import get_db
+
+    with get_db() as conn:
+        # Get items with pagination
+        cursor = conn.cursor()
+
+        # Build query based on skip_reviewed flag
+        if skip_reviewed:
+            # Get all item IDs that have golden data
+            golden_data = load_golden_dataset()
+            reviewed_ids = {entry["item_id"] for entry in golden_data.get("golden_analyses", [])}
+
+            # Fetch items and filter out reviewed ones
+            all_items_rows = cursor.execute(
+                "SELECT id FROM items ORDER BY created_at"
+            ).fetchall()
+
+            unreviewed_item_ids = [
+                row['id'] for row in all_items_rows
+                if row['id'] not in reviewed_ids
+            ]
+
+            # Apply pagination
+            paginated_ids = unreviewed_item_ids[offset:offset + limit]
+        else:
+            # Get all items with pagination
+            rows = cursor.execute(
+                "SELECT id FROM items ORDER BY created_at LIMIT ? OFFSET ?",
+                (limit, offset)
+            ).fetchall()
+            paginated_ids = [row['id'] for row in rows]
+
+        # Build response for each item
+        items = []
+        for item_id in paginated_ids:
+            item = get_item(item_id)
+            if not item:
+                continue
+
+            analyses = get_item_analyses(item_id)
+
+            items.append({
+                "item_id": item_id,
+                "filename": item['filename'],
+                "analyses": analyses,
+                "has_golden": has_golden_entry(item_id)
+            })
+
+        # Count totals
+        total_count = cursor.execute("SELECT COUNT(*) FROM items").fetchone()[0]
+        golden_data = load_golden_dataset()
+        reviewed_count = len(golden_data.get('golden_analyses', []))
+
+        return {
+            "items": items,
+            "total": total_count,
+            "reviewed_count": reviewed_count
+        }
+
+
+@app.post("/golden-dataset/compare", response_model=CompareResponse)
+async def compare_analyses(request: CompareRequest):
+    """
+    Calculate similarity between analysis values.
+
+    Uses Levenshtein distance for extracted_text and TF-IDF cosine similarity
+    for headlines and summaries.
+
+    Args:
+        request: CompareRequest with field_type and values
+
+    Returns:
+        CompareResponse with similarity matrix and highest agreement
+    """
+    if request.field_type == "extracted_text":
+        result = compare_text_arrays(request.values)
+        result['method'] = 'levenshtein'
+    else:  # headline or summary
+        result = tfidf_similarity(request.values)
+        result['method'] = 'tfidf'
+
+    return CompareResponse(**result)
+
+
+@app.post("/golden-dataset/save")
+async def save_golden_entry(entry: GoldenAnalysisEntry):
+    """
+    Save or update a golden dataset entry.
+
+    Args:
+        entry: GoldenAnalysisEntry with curated values
+
+    Returns:
+        Dict with status and updated count
+    """
+    try:
+        update_golden_entry(entry.item_id, entry.model_dump())
+        golden_data = load_golden_dataset()
+
+        return {
+            "status": "success",
+            "item_id": entry.item_id,
+            "total_golden_count": len(golden_data.get('golden_analyses', []))
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to save golden entry: {str(e)}")
+
+
+@app.get("/golden-dataset/status")
+async def get_golden_status():
+    """
+    Get golden dataset progress statistics.
+
+    Returns:
+        Dict with total items, reviewed items, and progress percentage
+    """
+    from database import get_db
+
+    try:
+        with get_db() as conn:
+            total_items = conn.execute("SELECT COUNT(*) FROM items").fetchone()[0]
+
+        golden_data = load_golden_dataset()
+        reviewed_count = len(golden_data.get('golden_analyses', []))
+
+        return {
+            "total_items": total_items,
+            "reviewed_items": reviewed_count,
+            "progress_percentage": round((reviewed_count / total_items * 100), 1) if total_items > 0 else 0
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to get status: {str(e)}")
