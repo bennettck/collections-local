@@ -468,7 +468,7 @@ async def serve_golden_dataset_ui():
 
 @app.get("/golden-dataset/items")
 async def get_items_for_review(
-    skip_reviewed: bool = Query(True),
+    review_mode: str = Query("unreviewed", regex="^(unreviewed|all|reviewed)$"),
     limit: int = Query(1, le=100),
     offset: int = Query(0, ge=0)
 ):
@@ -476,7 +476,7 @@ async def get_items_for_review(
     Get items for golden dataset review.
 
     Args:
-        skip_reviewed: If True, skip items that already have golden data
+        review_mode: Filter mode - "unreviewed" (default), "all", or "reviewed"
         limit: Number of items to return
         offset: Offset for pagination
 
@@ -489,31 +489,33 @@ async def get_items_for_review(
         # Get items with pagination
         cursor = conn.cursor()
 
-        # Build query based on skip_reviewed flag
-        if skip_reviewed:
-            # Get all item IDs that have golden data
-            golden_data = load_golden_dataset()
-            reviewed_ids = {entry["item_id"] for entry in golden_data.get("golden_analyses", [])}
+        # Get all item IDs and golden data
+        golden_data = load_golden_dataset()
+        reviewed_ids = {entry["item_id"] for entry in golden_data.get("golden_analyses", [])}
 
-            # Fetch items and filter out reviewed ones
-            all_items_rows = cursor.execute(
-                "SELECT id FROM items ORDER BY created_at"
-            ).fetchall()
+        all_items_rows = cursor.execute(
+            "SELECT id FROM items ORDER BY created_at"
+        ).fetchall()
 
-            unreviewed_item_ids = [
+        # Filter based on review_mode
+        if review_mode == "unreviewed":
+            # Show only items without golden data
+            filtered_item_ids = [
                 row['id'] for row in all_items_rows
                 if row['id'] not in reviewed_ids
             ]
+        elif review_mode == "reviewed":
+            # Show only items with golden data
+            filtered_item_ids = [
+                row['id'] for row in all_items_rows
+                if row['id'] in reviewed_ids
+            ]
+        else:  # review_mode == "all"
+            # Show all items
+            filtered_item_ids = [row['id'] for row in all_items_rows]
 
-            # Apply pagination
-            paginated_ids = unreviewed_item_ids[offset:offset + limit]
-        else:
-            # Get all items with pagination
-            rows = cursor.execute(
-                "SELECT id FROM items ORDER BY created_at LIMIT ? OFFSET ?",
-                (limit, offset)
-            ).fetchall()
-            paginated_ids = [row['id'] for row in rows]
+        # Apply pagination
+        paginated_ids = filtered_item_ids[offset:offset + limit]
 
         # Build response for each item
         items = []
@@ -527,6 +529,7 @@ async def get_items_for_review(
             items.append({
                 "item_id": item_id,
                 "filename": item['filename'],
+                "original_filename": item.get('original_filename'),
                 "analyses": analyses,
                 "has_golden": has_golden_entry(item_id)
             })
@@ -579,7 +582,16 @@ async def save_golden_entry(entry: GoldenAnalysisEntry):
         Dict with status and updated count
     """
     try:
-        update_golden_entry(entry.item_id, entry.model_dump())
+        # Fetch item to get original_filename
+        item = get_item(entry.item_id)
+        if not item:
+            raise HTTPException(status_code=404, detail=f"Item {entry.item_id} not found")
+
+        # Convert entry to dict and inject original_filename from database
+        entry_dict = entry.model_dump()
+        entry_dict['original_filename'] = item.get('original_filename')
+
+        update_golden_entry(entry.item_id, entry_dict)
         golden_data = load_golden_dataset()
 
         return {
@@ -587,6 +599,8 @@ async def save_golden_entry(entry: GoldenAnalysisEntry):
             "item_id": entry.item_id,
             "total_golden_count": len(golden_data.get('golden_analyses', []))
         }
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to save golden entry: {str(e)}")
 
@@ -615,3 +629,39 @@ async def get_golden_status():
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to get status: {str(e)}")
+
+
+@app.post("/keepalive")
+async def keepalive():
+    """
+    Keepalive endpoint to prevent GitHub Codespace timeout.
+    Writes a timestamp to a temporary file to generate filesystem activity.
+
+    Returns:
+        Dict with status and current timestamp
+    """
+    try:
+        # Write to a temporary keepalive file to generate FS activity
+        keepalive_file = Path(".keepalive")
+        keepalive_file.write_text(str(time.time()))
+
+        return {"status": "alive", "timestamp": time.time()}
+    except Exception as e:
+        # Don't fail if keepalive fails, just log it
+        print(f"Keepalive error: {e}")
+        return {"status": "error", "message": str(e)}
+
+
+@app.get("/golden-dataset/entry/{item_id}")
+async def get_golden_entry_endpoint(item_id: str):
+    """
+    Get existing golden entry for an item.
+
+    Args:
+        item_id: Item UUID to fetch golden entry for
+
+    Returns:
+        Dict with entry (or None if not found)
+    """
+    entry = get_golden_entry(item_id)
+    return {"entry": entry}

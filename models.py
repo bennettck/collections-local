@@ -139,6 +139,7 @@ class SearchResponse(BaseModel):
 class GoldenAnalysisEntry(BaseModel):
     """Model for a golden dataset entry."""
     item_id: str
+    original_filename: Optional[str] = None
     reviewed_at: str  # ISO-8601 timestamp
     source_analyses_count: int
     source_analysis_ids: List[str]

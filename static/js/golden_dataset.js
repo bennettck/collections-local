@@ -12,6 +12,13 @@ class GoldenDatasetApp {
         this.reviewedCount = 0;
         this.autoSaveInterval = null;
 
+        // Keepalive and activity tracking
+        this.lastActivityTime = Date.now();
+        this.keepaliveInterval = null;
+
+        // Review mode (persist in localStorage)
+        this.reviewMode = localStorage.getItem('reviewMode') || 'unreviewed';
+
         // Section navigation state
         this.sections = [
             'category',
@@ -41,6 +48,16 @@ class GoldenDatasetApp {
         // Setup auto-save
         this.setupAutoSave();
 
+        // Setup activity tracking and keepalive
+        this.setupActivityTracking();
+        this.setupKeepalive();
+
+        // Setup auto-select for manual input fields
+        this.setupManualInputAutoSelect();
+
+        // Setup review mode selector
+        this.setupReviewMode();
+
         console.log('App initialized');
     }
 
@@ -48,7 +65,6 @@ class GoldenDatasetApp {
         // Navigation buttons
         document.getElementById('btn-prev').addEventListener('click', () => this.prevItem());
         document.getElementById('btn-next').addEventListener('click', () => this.nextItem());
-        document.getElementById('btn-skip').addEventListener('click', () => this.nextItem());
 
         // Action buttons
         document.getElementById('btn-save').addEventListener('click', () => this.saveEntry(false));
@@ -75,6 +91,25 @@ class GoldenDatasetApp {
 
         // Section navigation
         this.setupSectionNavigation();
+
+        // Clear review button
+        const clearReviewBtn = document.getElementById('clear-review');
+        if (clearReviewBtn) {
+            clearReviewBtn.addEventListener('click', () => {
+                if (confirm('Clear existing golden data and start fresh? This will clear all form fields.')) {
+                    this.clearManualFields();
+                    // Clear all checkboxes and radios
+                    document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+                    document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+                    // Clear visual hierarchy
+                    const hierarchyList = document.getElementById('visual-hierarchy-list');
+                    if (hierarchyList) hierarchyList.innerHTML = '';
+                    // Hide banner
+                    document.getElementById('existing-review-banner').style.display = 'none';
+                    console.log('Form cleared');
+                }
+            });
+        }
 
         // Visual hierarchy drag-and-drop ranking
         this.setupVisualHierarchyRanking();
@@ -191,6 +226,7 @@ class GoldenDatasetApp {
         // Previous/Next section buttons
         const prevBtn = document.getElementById('btn-prev-section');
         const nextBtn = document.getElementById('btn-next-section');
+        const saveNextSectionBtn = document.getElementById('btn-save-next-section');
 
         if (prevBtn) {
             prevBtn.addEventListener('click', () => {
@@ -206,6 +242,10 @@ class GoldenDatasetApp {
                     this.switchToSection(this.currentSectionIndex + 1);
                 }
             });
+        }
+
+        if (saveNextSectionBtn) {
+            saveNextSectionBtn.addEventListener('click', () => this.saveEntry(true));
         }
     }
 
@@ -239,11 +279,29 @@ class GoldenDatasetApp {
         // Update nav buttons
         const prevBtn = document.getElementById('btn-prev-section');
         const nextBtn = document.getElementById('btn-next-section');
+        const saveNextBtn = document.getElementById('btn-save-next-section');
+
         if (prevBtn) prevBtn.disabled = newIndex === 0;
-        if (nextBtn) nextBtn.disabled = newIndex === this.sections.length - 1;
+
+        // Show Save & Next in last section, Next Section in others
+        if (newIndex === this.sections.length - 1) {
+            if (nextBtn) nextBtn.style.display = 'none';
+            if (saveNextBtn) saveNextBtn.style.display = 'inline-block';
+        } else {
+            if (nextBtn) nextBtn.style.display = 'inline-block';
+            if (saveNextBtn) saveNextBtn.style.display = 'none';
+        }
 
         // Restore section state if cached
         this.restoreSectionState(sectionId);
+
+        // Scroll attributes panel to top (use setTimeout to ensure DOM is updated)
+        setTimeout(() => {
+            const attributesPanel = document.querySelector('.attributes-panel');
+            if (attributesPanel) {
+                attributesPanel.scrollTop = 0;
+            }
+        }, 10);
 
         console.log(`Switched to section: ${sectionId}`);
     }
@@ -490,6 +548,111 @@ class GoldenDatasetApp {
         }, 30000); // 30 seconds
     }
 
+    setupActivityTracking() {
+        // Track user interactions to detect activity
+        const events = ['mousemove', 'mousedown', 'keydown', 'scroll', 'touchstart'];
+        let debounceTimer;
+
+        const updateActivity = () => {
+            this.lastActivityTime = Date.now();
+        };
+
+        // Debounce activity updates to avoid excessive updates
+        events.forEach(event => {
+            document.addEventListener(event, () => {
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(updateActivity, 1000);
+            }, { passive: true });
+        });
+
+        console.log('Activity tracking initialized');
+    }
+
+    setupKeepalive() {
+        // Send keepalive pings every 2 minutes if user has been active
+        this.keepaliveInterval = setInterval(async () => {
+            // Only ping if page is visible and there's recent activity
+            if (!document.hidden) {
+                const timeSinceActivity = Date.now() - this.lastActivityTime;
+                const fiveMinutes = 5 * 60 * 1000;
+
+                if (timeSinceActivity < fiveMinutes) {
+                    await this.sendKeepalive();
+                }
+            }
+        }, 2 * 60 * 1000); // Every 2 minutes
+
+        console.log('Keepalive initialized');
+    }
+
+    async sendKeepalive() {
+        try {
+            const response = await fetch('/keepalive', { method: 'POST' });
+            if (response.ok) {
+                console.log('Keepalive sent successfully');
+            }
+        } catch (error) {
+            console.error('Keepalive failed:', error);
+        }
+    }
+
+    setupManualInputAutoSelect() {
+        // Map of input field IDs to their corresponding radio button IDs
+        const manualInputs = [
+            { inputId: 'category-manual', radioId: 'category-manual-radio' },
+            { inputId: 'text-manual', radioId: 'text-manual-radio' },
+            { inputId: 'headline-manual', radioId: 'headline-manual-radio' },
+            { inputId: 'summary-manual', radioId: 'summary-manual-radio' },
+            { inputId: 'key-interest-manual', radioId: 'key-interest-manual-radio' },
+            { inputId: 'likely-source-manual', radioId: 'likely-source-manual-radio' },
+            { inputId: 'original-poster-manual', radioId: 'original-poster-manual-radio' },
+            { inputId: 'audio-source-manual', radioId: 'audio-source-manual-radio' }
+        ];
+
+        manualInputs.forEach(({ inputId, radioId }) => {
+            const input = document.getElementById(inputId);
+            const radio = document.getElementById(radioId);
+
+            if (input && radio) {
+                // Auto-select radio when user types in the input
+                input.addEventListener('input', () => {
+                    if (!radio.checked) {
+                        radio.checked = true;
+                    }
+                });
+
+                // Also auto-select on focus for better UX
+                input.addEventListener('focus', () => {
+                    if (!radio.checked) {
+                        radio.checked = true;
+                    }
+                });
+            }
+        });
+
+        console.log('Manual input auto-select initialized');
+    }
+
+    setupReviewMode() {
+        const select = document.getElementById('review-mode');
+        if (!select) return;
+
+        // Set initial value from localStorage
+        select.value = this.reviewMode;
+
+        // Handle changes
+        select.addEventListener('change', async (e) => {
+            this.reviewMode = e.target.value;
+            localStorage.setItem('reviewMode', this.reviewMode);
+
+            // Reload from offset 0 with new mode
+            console.log(`Switching to review mode: ${this.reviewMode}`);
+            await this.loadItem(0);
+        });
+
+        console.log(`Review mode initialized: ${this.reviewMode}`);
+    }
+
     clearManualFields() {
         const manualInputs = [
             'category-manual',
@@ -525,7 +688,7 @@ class GoldenDatasetApp {
         this.showLoading(true);
 
         try {
-            const response = await fetch(`/golden-dataset/items?offset=${offset}&limit=1&skip_reviewed=true`);
+            const response = await fetch(`/golden-dataset/items?offset=${offset}&limit=1&review_mode=${this.reviewMode}`);
             const data = await response.json();
 
             if (data.items && data.items.length > 0) {
@@ -545,6 +708,9 @@ class GoldenDatasetApp {
                 // Reset to first section
                 this.switchToSection(0);
 
+                // Check if item has existing golden record
+                await this.loadExistingGoldenData(this.currentItem.item_id);
+
                 this.showLoading(false);
             } else {
                 alert('No more items to review!');
@@ -563,6 +729,7 @@ class GoldenDatasetApp {
         imgElement.src = `/images/${this.currentItem.filename}`;
 
         document.getElementById('item-id-display').textContent = `Item ID: ${this.currentItem.item_id}`;
+        document.getElementById('original-filename-display').textContent = `Original Filename: ${this.currentItem.original_filename || 'Unknown'}`;
 
         // Populate all sections
         await this.populateCategories();
@@ -572,6 +739,186 @@ class GoldenDatasetApp {
         await this.populateSummaries();
         this.populateImageDetails();
         this.populateMetadata();
+    }
+
+    async loadExistingGoldenData(itemId) {
+        const banner = document.getElementById('existing-review-banner');
+        if (!banner) return;
+
+        try {
+            const response = await fetch(`/golden-dataset/entry/${itemId}`);
+            const data = await response.json();
+
+            if (data.entry) {
+                // Show banner with timestamp
+                banner.style.display = 'flex';
+                const timestamp = new Date(data.entry.reviewed_at).toLocaleString();
+                document.getElementById('review-timestamp').textContent = timestamp;
+
+                // Pre-populate form with golden data
+                await this.populateFormWithGoldenData(data.entry);
+
+                console.log('Loaded existing golden data for item:', itemId);
+            } else {
+                // No existing record
+                banner.style.display = 'none';
+            }
+        } catch (error) {
+            console.error('Error loading golden entry:', error);
+            banner.style.display = 'none';
+        }
+    }
+
+    async populateFormWithGoldenData(goldenEntry) {
+        // Wait a bit for form to be fully rendered
+        await new Promise(resolve => setTimeout(resolve, 100));
+
+        // 1. Category
+        const categoryRadios = document.querySelectorAll('input[name="category-choice"]');
+        let categorySet = false;
+        categoryRadios.forEach(radio => {
+            if (radio.value === goldenEntry.category) {
+                radio.checked = true;
+                categorySet = true;
+            }
+        });
+        if (!categorySet && goldenEntry.category) {
+            document.getElementById('category-manual-radio').checked = true;
+            document.getElementById('category-manual').value = goldenEntry.category;
+        }
+
+        // 2. Subcategories
+        (goldenEntry.subcategories || []).forEach(sub => {
+            const checkbox = Array.from(document.querySelectorAll('#subcategory-options input[type="checkbox"]'))
+                .find(cb => cb.value === sub);
+            if (checkbox) checkbox.checked = true;
+        });
+
+        // 3. Extracted Text
+        const textManualRadio = document.getElementById('text-manual-radio');
+        const textManual = document.getElementById('text-manual');
+        if (textManualRadio && textManual && goldenEntry.image_details?.extracted_text) {
+            textManualRadio.checked = true;
+            textManual.value = goldenEntry.image_details.extracted_text.join(', ');
+        }
+
+        // 4. Headline
+        const headlineRadios = document.querySelectorAll('input[name="headline-choice"]');
+        let headlineSet = false;
+        headlineRadios.forEach(radio => {
+            if (radio.value !== 'manual' && parseInt(radio.value) !== NaN) {
+                const analyses = this.currentAnalyses;
+                const analysisHeadline = analyses[parseInt(radio.value)]?.raw_response?.headline;
+                if (analysisHeadline === goldenEntry.headline) {
+                    radio.checked = true;
+                    headlineSet = true;
+                }
+            }
+        });
+        if (!headlineSet && goldenEntry.headline) {
+            document.getElementById('headline-manual-radio').checked = true;
+            document.getElementById('headline-manual').value = goldenEntry.headline;
+        }
+
+        // 5. Summary
+        const summaryRadios = document.querySelectorAll('input[name="summary-choice"]');
+        let summarySet = false;
+        summaryRadios.forEach(radio => {
+            if (radio.value !== 'manual' && parseInt(radio.value) !== NaN) {
+                const analyses = this.currentAnalyses;
+                const analysisSummary = analyses[parseInt(radio.value)]?.summary;
+                if (analysisSummary === goldenEntry.summary) {
+                    radio.checked = true;
+                    summarySet = true;
+                }
+            }
+        });
+        if (!summarySet && goldenEntry.summary) {
+            document.getElementById('summary-manual-radio').checked = true;
+            document.getElementById('summary-manual').value = goldenEntry.summary;
+        }
+
+        // 6. Image Details - Lists (Objects, Themes, Emotions, Vibes)
+        ['objects', 'themes', 'emotions', 'vibes'].forEach(field => {
+            const items = goldenEntry.image_details?.[field] || [];
+            items.forEach(item => {
+                const checkbox = Array.from(document.querySelectorAll(`#${field}-list input[type="checkbox"]`))
+                    .find(cb => cb.value === item);
+                if (checkbox) checkbox.checked = true;
+            });
+        });
+
+        // 7. Visual Hierarchy
+        const hierarchyList = document.getElementById('visual-hierarchy-list');
+        if (hierarchyList && goldenEntry.image_details?.visual_hierarchy) {
+            hierarchyList.innerHTML = '';
+            goldenEntry.image_details.visual_hierarchy.forEach(item => {
+                this.addRankingItem(item);
+            });
+            this.visualHierarchyManuallyEdited = true;
+        }
+
+        // 8. Key Interest
+        this.setRadioOrManual('key-interest-choice', 'key-interest-manual-radio', 'key-interest-manual',
+            goldenEntry.image_details?.key_interest);
+
+        // 9. Likely Source
+        this.setRadioOrManual('likely-source-choice', 'likely-source-manual-radio', 'likely-source-manual',
+            goldenEntry.image_details?.likely_source);
+
+        // 10. Original Poster
+        this.setRadioOrManual('original-poster-choice', 'original-poster-manual-radio', 'original-poster-manual',
+            goldenEntry.media_metadata?.original_poster);
+
+        // 11. Tagged Accounts
+        (goldenEntry.media_metadata?.tagged_accounts || []).forEach(account => {
+            const checkbox = Array.from(document.querySelectorAll('#tagged-accounts-list input[type="checkbox"]'))
+                .find(cb => cb.value === account);
+            if (checkbox) checkbox.checked = true;
+        });
+
+        // 12. Location Tags
+        (goldenEntry.media_metadata?.location_tags || []).forEach(tag => {
+            const checkbox = Array.from(document.querySelectorAll('#location-tags-list input[type="checkbox"]'))
+                .find(cb => cb.value === tag);
+            if (checkbox) checkbox.checked = true;
+        });
+
+        // 13. Audio Source
+        this.setRadioOrManual('audio-source-choice', 'audio-source-manual-radio', 'audio-source-manual',
+            goldenEntry.media_metadata?.audio_source);
+
+        // 14. Hashtags
+        (goldenEntry.media_metadata?.hashtags || []).forEach(tag => {
+            const checkbox = Array.from(document.querySelectorAll('#hashtags-list input[type="checkbox"]'))
+                .find(cb => cb.value === tag);
+            if (checkbox) checkbox.checked = true;
+        });
+
+        console.log('Form populated with existing golden data');
+    }
+
+    setRadioOrManual(radioName, manualRadioId, manualInputId, value) {
+        if (!value) return;
+
+        const radios = document.querySelectorAll(`input[name="${radioName}"]`);
+        let valueSet = false;
+
+        radios.forEach(radio => {
+            if (radio.value === value) {
+                radio.checked = true;
+                valueSet = true;
+            }
+        });
+
+        if (!valueSet) {
+            const manualRadio = document.getElementById(manualRadioId);
+            const manualInput = document.getElementById(manualInputId);
+            if (manualRadio && manualInput) {
+                manualRadio.checked = true;
+                manualInput.value = value;
+            }
+        }
     }
 
     async populateCategories() {
@@ -612,12 +959,17 @@ class GoldenDatasetApp {
             const subs = analysis.raw_response?.subcategories || [];
             subs.forEach(sub => {
                 if (sub && typeof sub === 'string') {
-                    const normalized = this.normalizeForDeduplication(sub);
+                    // Split on slashes to handle cases like "food/dining" -> ["food", "dining"]
+                    const parts = sub.split('/').map(part => part.trim());
 
-                    // Add normalized value if not empty
-                    if (normalized) {
-                        normalizedSubcategories.add(normalized);
-                    }
+                    parts.forEach(part => {
+                        const normalized = this.normalizeForDeduplication(part);
+
+                        // Add normalized value if not empty
+                        if (normalized) {
+                            normalizedSubcategories.add(normalized);
+                        }
+                    });
                 }
             });
         });
@@ -891,12 +1243,17 @@ class GoldenDatasetApp {
             const items = analysis.raw_response?.[parentField]?.[fieldName] || [];
             items.forEach(item => {
                 if (item && typeof item === 'string') {
-                    const normalized = this.normalizeForDeduplication(item);
+                    // Split on slashes to handle "river/rapids" -> ["river", "rapids"]
+                    const parts = item.split('/').map(part => part.trim());
 
-                    // Add normalized value if not empty
-                    if (normalized) {
-                        normalizedItems.add(normalized);
-                    }
+                    parts.forEach(part => {
+                        const normalized = this.normalizeForDeduplication(part);
+
+                        // Add normalized value if not empty
+                        if (normalized) {
+                            normalizedItems.add(normalized);
+                        }
+                    });
                 }
             });
         });
@@ -1134,7 +1491,13 @@ class GoldenDatasetApp {
                 this.updateProgress();
 
                 if (navigateNext) {
-                    await this.nextItem();
+                    // In "unreviewed" mode, the saved item is removed from the list,
+                    // so the next unreviewed item is now at the same offset
+                    if (this.reviewMode === 'unreviewed') {
+                        await this.loadItem(this.currentOffset);
+                    } else {
+                        await this.nextItem();
+                    }
                 }
             } else {
                 throw new Error('Save failed');

@@ -1,5 +1,5 @@
 {
-  "exported_at": "2025-12-13T22:24:13.485929+00:00",
+  "exported_at": "2025-12-14T03:01:06.737986+00:00",
   "images_path": "./data/images",
   "images": [
     {
@@ -91,12 +91,6 @@
       "size": 109646,
       "modified": "2025-12-02T23:05:28.073490",
       "sha256": "5f23a104c2ab368d52d85e00c5363d4b5d2794c8cf95df033f7021d3372e4f49"
-    },
-    {
-      "filename": "0c284ee5-3c08-4c81-87d9-6dec24a0d81b.jpg",
-      "size": 207055,
-      "modified": "2025-12-02T23:05:28.015490",
-      "sha256": "3fa34e62ac8db717a34fa9b0cc8b4ef610b46664d27485c7a7cd80af567705ce"
     },
     {
       "filename": "0c7d2d22-635a-4509-b6a1-83a2abf99531.jpg",
@@ -819,12 +813,6 @@
       "sha256": "6d522854c5d336045e3b4d9d2002d3d95498a2b7ca935194142ff9885aa51c96"
     },
     {
-      "filename": "c2679911-6100-4a81-b999-c76da569a2f1.jpg",
-      "size": 200268,
-      "modified": "2025-12-02T23:05:28.366490",
-      "sha256": "7f111a9ef736587c8da1d0182c94d33e9b39c5931e71760870538057c33d3d12"
-    },
-    {
       "filename": "c29f2890-01df-473a-9d65-3b4935247861.jpg",
       "size": 169496,
       "modified": "2025-12-06T00:31:26.813895",
@@ -991,12 +979,6 @@
       "size": 219043,
       "modified": "2025-12-06T00:31:26.860895",
       "sha256": "9fe82e7d826a8b6ca221ade5257d00875d1f6303424e95c2305c555c00fb58a4"
-    },
-    {
-      "filename": "efd20ad1-db49-43cd-8711-32f0ac93e7c0.jpg",
-      "size": 140454,
-      "modified": "2025-12-02T23:05:28.259490",
-      "sha256": "44a48ee3bb9d0f84b2a9503b7944e87eaf8392e3f6fff038c9d0937b7e44b40c"
     },
     {
       "filename": "f0e2b4d6-ac3c-40bb-9644-9fb5edaa294c.jpg",

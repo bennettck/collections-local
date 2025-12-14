@@ -276,14 +276,14 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{base_url}}/golden-dataset/items?skip_reviewed=true&limit=1&offset=0",
+              "raw": "{{base_url}}/golden-dataset/items?review_mode=unreviewed&limit=1&offset=0",
               "host": ["{{base_url}}"],
               "path": ["golden-dataset", "items"],
               "query": [
                 {
-                  "key": "skip_reviewed",
-                  "value": "true",
-                  "description": "Skip items that already have golden data"
+                  "key": "review_mode",
+                  "value": "unreviewed",
+                  "description": "Review mode: 'unreviewed' (default), 'all', or 'reviewed'"
                 },
                 {
                   "key": "limit",
@@ -297,7 +297,21 @@
                 }
               ]
             },
-            "description": "## Get Items for Review\n\nGet items for golden dataset review and curation.\n\n### Query Parameters\n\n| Parameter | Type | Default | Description |\n|-----------|------|---------|-------------|\n| `skip_reviewed` | boolean | `true` | Skip items with golden data |\n| `limit` | integer | `1` | Items to return (max 100) |\n| `offset` | integer | `0` | Pagination offset |\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"items\": [\n    {\n      \"item_id\": \"uuid-string\",\n      \"filename\": \"uuid.jpg\",\n      \"analyses\": [...],\n      \"has_golden\": false\n    }\n  ],\n  \"total\": 130,\n  \"reviewed_count\": 45\n}\n```"
+            "description": "## Get Items for Review\n\nGet items for golden dataset review and curation with filtering by review status.\n\n### Query Parameters\n\n| Parameter | Type | Default | Description |\n|-----------|------|---------|-------------|\n| `review_mode` | string | `\"unreviewed\"` | Filter mode: `\"unreviewed\"` (items without golden data), `\"all\"` (all items), or `\"reviewed\"` (items with golden data only) |\n| `limit` | integer | `1` | Items to return (max 100) |\n| `offset` | integer | `0` | Pagination offset |\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"items\": [\n    {\n      \"item_id\": \"uuid-string\",\n      \"original_filename\": \"IMG_7901 Large.jpeg\",\n      \"filename\": \"uuid.jpg\",\n      \"analyses\": [...],\n      \"has_golden\": false\n    }\n  ],\n  \"total\": 87,\n  \"reviewed_count\": 30\n}\n```"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Golden Entry",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/golden-dataset/entry/{{item_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["golden-dataset", "entry", "{{item_id}}"]
+            },
+            "description": "## Get Golden Entry\n\nRetrieve the existing golden dataset entry for a specific item. Used when reviewing items with existing golden records to pre-populate the form.\n\n### Path Parameters\n\n| Parameter | Type | Description |\n|-----------|------|-------------|\n| `item_id` | string | UUID of the item |\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"entry\": {\n    \"item_id\": \"uuid-string\",\n    \"original_filename\": \"IMG_7901 Large.jpeg\",\n    \"reviewed_at\": \"2025-12-13T22:36:04.959Z\",\n    \"source_analyses_count\": 4,\n    \"source_analysis_ids\": [\"analysis-1\", \"analysis-2\"],\n    \"category\": \"Travel\",\n    \"subcategories\": [\"Japan\", \"Shopping\"],\n    \"headline\": \"Curated headline\",\n    \"summary\": \"Curated summary\",\n    \"media_metadata\": {...},\n    \"image_details\": {...}\n  }\n}\n```\n\n**Response when no golden entry exists:**\n\n```json\n{\n  \"entry\": null\n}\n```"
           },
           "response": []
         },
@@ -336,14 +350,14 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"item_id\": \"{{item_id}}\",\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Japan\", \"Shopping\"],\n  \"headline\": \"Togoshi Ginza: Tokyo's authentic shopping street\",\n  \"summary\": \"A traditional 1.3km shopping district...\",\n  \"extracted_text\": [\"TOGOSHI GINZA\", \"With over 400 shops\"],\n  \"curator_notes\": \"Verified all text extractions\"\n}"
+              "raw": "{\n  \"item_id\": \"{{item_id}}\",\n  \"reviewed_at\": \"2025-12-13T22:36:04.959Z\",\n  \"source_analyses_count\": 4,\n  \"source_analysis_ids\": [\"analysis-1\", \"analysis-2\", \"analysis-3\", \"analysis-4\"],\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Japan\", \"Shopping\"],\n  \"headline\": \"Togoshi Ginza: Tokyo's authentic shopping street\",\n  \"summary\": \"A traditional 1.3km shopping district...\",\n  \"media_metadata\": {\n    \"original_poster\": \"username\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [\"Tokyo\"],\n    \"audio_source\": \"original sound\",\n    \"hashtags\": [\"#japan\"]\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"TOGOSHI GINZA\", \"With over 400 shops\"],\n    \"objects\": [\"street scene\", \"signs\"],\n    \"themes\": [\"local culture\"],\n    \"emotions\": [\"curious\"],\n    \"vibes\": [\"authentic\"],\n    \"visual_hierarchy\": [\"title\", \"description\"],\n    \"key_interest\": \"Local shopping district\",\n    \"likely_source\": \"TikTok\"\n  }\n}"
             },
             "url": {
               "raw": "{{base_url}}/golden-dataset/save",
               "host": ["{{base_url}}"],
               "path": ["golden-dataset", "save"]
             },
-            "description": "## Save Golden Entry\n\nSave or update a golden dataset entry with curated analysis values.\n\n### Request Body\n\n```json\n{\n  \"item_id\": \"uuid-string\",\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Japan\", \"Shopping\"],\n  \"headline\": \"Curated headline\",\n  \"summary\": \"Curated summary\",\n  \"extracted_text\": [\"Text 1\", \"Text 2\"],\n  \"curator_notes\": \"Optional notes\"\n}\n```\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"status\": \"success\",\n  \"item_id\": \"uuid-string\",\n  \"total_golden_count\": 46\n}\n```"
+            "description": "## Save Golden Entry\n\nSave or update a golden dataset entry with curated analysis values. The `original_filename` field is automatically populated from the database.\n\n### Request Body\n\n```json\n{\n  \"item_id\": \"uuid-string\",\n  \"reviewed_at\": \"2025-12-13T22:36:04.959Z\",\n  \"source_analyses_count\": 4,\n  \"source_analysis_ids\": [\"analysis-1\", \"analysis-2\"],\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Japan\", \"Shopping\"],\n  \"headline\": \"Curated headline\",\n  \"summary\": \"Curated summary\",\n  \"media_metadata\": {\n    \"original_poster\": \"username\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [\"Tokyo\"],\n    \"audio_source\": \"original sound\",\n    \"hashtags\": [\"#japan\"]\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"Text 1\", \"Text 2\"],\n    \"objects\": [\"object1\"],\n    \"themes\": [\"theme1\"],\n    \"emotions\": [\"emotion1\"],\n    \"vibes\": [\"vibe1\"],\n    \"visual_hierarchy\": [\"element1\"],\n    \"key_interest\": \"Key point\",\n    \"likely_source\": \"TikTok\"\n  }\n}\n```\n\n**Note**: The `original_filename` field is automatically added by the backend from the database and does not need to be included in the request.\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"status\": \"success\",\n  \"item_id\": \"uuid-string\",\n  \"total_golden_count\": 30\n}\n```"
           },
           "response": []
         },
@@ -357,7 +371,21 @@
               "host": ["{{base_url}}"],
               "path": ["golden-dataset", "status"]
             },
-            "description": "## Get Golden Status\n\nGet golden dataset progress statistics.\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"total_items\": 130,\n  \"reviewed_items\": 46,\n  \"progress_percentage\": 35.4\n}\n```"
+            "description": "## Get Golden Status\n\nGet golden dataset progress statistics.\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"total_items\": 87,\n  \"reviewed_items\": 30,\n  \"progress_percentage\": 34.5\n}\n```"
+          },
+          "response": []
+        },
+        {
+          "name": "Keepalive",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/keepalive",
+              "host": ["{{base_url}}"],
+              "path": ["keepalive"]
+            },
+            "description": "## Keepalive\n\nSession keepalive endpoint to prevent GitHub Codespace timeout during active use of the golden dataset tool. The frontend automatically sends keepalive pings based on user activity.\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"status\": \"alive\",\n  \"timestamp\": 1702473600.123\n}\n```\n\n### Response Fields\n\n| Field | Type | Description |\n|-------|------|-------------|\n| `status` | string | Always \"alive\" |\n| `timestamp` | float | Unix timestamp |\n\n### Usage\n\nThis endpoint is primarily used by the golden dataset web tool to maintain the Codespace session active. It writes a timestamp to a `.keepalive` file which signals activity to the Codespace environment."
           },
           "response": []
         }

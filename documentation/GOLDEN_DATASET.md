@@ -87,9 +87,13 @@ The tool automatically calculates how similar different analyses are:
 ## Key Features
 
 ### Image & Analysis Display
-- **Large image viewer**: See exactly what the AI analyzed (800x600px)
-- **Multi-analysis comparison**: View all model outputs simultaneously
+- **Large image viewer**: Fixed-position image panel at 50% screen width with enlarged images (up to 900px height)
+- **Sticky image panel**: Image remains visible while scrolling through attributes
+- **Multi-analysis comparison**: View all model outputs simultaneously in tabbed sections
 - **Model attribution**: Each analysis labeled with provider (Anthropic/OpenAI) and model version
+- **Tabbed navigation**: Organized sections for Category, Extracted Text, Headline, Summary, Image Details, and Metadata
+- **Section progress indicator**: Shows current section position (e.g., "Section 2 of 6")
+- **Auto-scroll**: Automatically scrolls to top when navigating between sections
 
 ### Smart Comparison
 - **Automatic similarity calculation**: System identifies which values have highest agreement
@@ -99,7 +103,10 @@ The tool automatically calculates how similar different analyses are:
 ### Flexible Editing
 - **Select from analyses**: Pick the best value from any model's output
 - **Manual override**: Edit any field directly if all models are wrong
+- **Auto-select custom fields**: Clicking or typing in custom input fields automatically selects the corresponding radio button
 - **Merge & filter**: For list fields (objects, themes), system shows union of all results; curator unchecks incorrect items
+- **Drag-to-rank**: Visual hierarchy items can be reordered by dragging
+- **Pre-populated review**: When reviewing existing golden records, form automatically loads with previously saved values
 
 ### Field Types
 
@@ -115,16 +122,22 @@ The tool automatically calculates how similar different analyses are:
 | **Location Tags** | Checkboxes (merged list) | N/A |
 | **Hashtags** | Checkboxes (merged list) | N/A |
 
-### Progress Tracking
-- **Review counter**: Shows how many items have golden data (e.g., "25 of 182 reviewed")
+### Progress Tracking & Review Modes
+- **Review counter**: Shows how many items have golden data (e.g., "25 of 87 reviewed")
 - **Progress bar**: Visual indicator of completion
-- **Skip reviewed**: Option to hide already-reviewed items
+- **Review mode selector**: Three viewing options:
+  - **New Items Only** (default): Shows only items without golden records
+  - **All Items**: Shows all items regardless of review status
+  - **Reviewed Only**: Shows only items with existing golden records
+- **Existing review indicator**: Yellow banner appears when viewing an item with a golden record, showing the previous review timestamp
+- **Clear & Start Fresh**: Option to clear existing golden data and start a new review
 
-### Data Safety
-- **Auto-save**: Drafts saved every 30 seconds
-- **Manual save**: Explicit save button for control
-- **Atomic writes**: File corruption prevention
-- **Navigation warnings**: Prompt before leaving with unsaved changes
+### Data Safety & Session Management
+- **Manual save**: Explicit save button with Ctrl+S keyboard shortcut
+- **Save & Next**: Combined save and navigate action for efficient workflow
+- **Atomic writes**: File corruption prevention with temporary file strategy
+- **Session keepalive**: Prevents GitHub Codespace timeout during active use (30-minute inactivity timeout)
+- **Review mode persistence**: Selected view mode (New/All/Reviewed) persists across page refreshes via localStorage
 
 ## How to Use
 
@@ -159,9 +172,10 @@ The tool automatically calculates how similar different analyses are:
    - Auto-save runs every 30 seconds
 
 5. **Navigate**:
-   - "Next" button or Ctrl+N
-   - "Previous" button or Ctrl+P
-   - "Skip" button to skip items you're unsure about
+   - "Previous" button to go back to the previous item
+   - "Next" button to move forward to the next item
+   - Section navigation: "Previous Section" / "Next Section" buttons to move between attribute tabs
+   - Review mode selector to switch between viewing unreviewed, all, or reviewed-only items
 
 ### Items with Single Analysis
 
@@ -200,6 +214,7 @@ data/eval/golden_analyses.json
   "golden_analyses": [
     {
       "item_id": "abc-123-def",
+      "original_filename": "IMG_7901 Large.jpeg",
       "reviewed_at": "2025-12-13T10:30:00Z",
       "source_analyses_count": 3,
       "source_analysis_ids": ["analysis-id-1", "analysis-id-2", "analysis-id-3"],
@@ -237,6 +252,8 @@ data/eval/golden_analyses.json
 **Key Feature**: The golden dataset matches the exact structure of the `raw_response` field from the analyses table. This makes downstream evaluation straightforward - you can directly compare a new analysis against the golden data field-by-field.
 
 **Additional Metadata**:
+- `item_id`: Unique identifier for the item in the database
+- `original_filename`: Original filename of the uploaded image (e.g., "IMG_7901 Large.jpeg")
 - `reviewed_at`: Timestamp of when curator reviewed this item
 - `source_analyses_count`: How many analyses were compared
 - `source_analysis_ids`: Which specific analyses were reviewed (for traceability)
@@ -310,10 +327,12 @@ results = {
 
 **FastAPI Endpoints** (`main.py`):
 - `GET /golden-dataset` - Serves the web UI
-- `GET /golden-dataset/items` - Loads items with all analyses
+- `GET /golden-dataset/items` - Loads items with all analyses (supports `review_mode` parameter: unreviewed/all/reviewed)
+- `GET /golden-dataset/entry/{item_id}` - Retrieves existing golden entry for an item
 - `POST /golden-dataset/compare` - Calculates similarity scores
-- `POST /golden-dataset/save` - Saves golden dataset entries
+- `POST /golden-dataset/save` - Saves golden dataset entries (automatically includes `original_filename` from database)
 - `GET /golden-dataset/status` - Returns progress statistics
+- `POST /keepalive` - Session keepalive endpoint to prevent Codespace timeout
 
 **Similarity Utilities** (`utils/similarity.py`):
 - Levenshtein distance algorithm (character-level comparison)
@@ -442,9 +461,16 @@ User Edits → JavaScript (collect selections)
 
 - **Setup**: 5 minutes
 - **Per item review**: 2-5 minutes (depending on complexity)
-- **Full dataset (182 items)**: 6-15 hours of curator time
+- **Full dataset (87 unique items)**: 3-7 hours of curator time
 
-**Recommendation**: Review 10-20 items per session to avoid fatigue. Focus on items with multiple analyses first (higher value).
+**Recommendation**: Review 10-20 items per session to avoid fatigue. Use "New Items Only" mode to focus on unreviewed items. The tool will maintain your session active for up to 30 minutes of inactivity.
+
+### Database Cleanup
+
+The database has been cleaned to remove duplicate items (items with the same `original_filename`):
+- **Before cleanup**: 182 items (with duplicates)
+- **After cleanup**: 87 unique items
+- **Duplicate handling**: Kept items with golden records (most recently reviewed), or oldest item if no golden records exist
 
 ## Questions?
 

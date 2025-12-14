@@ -27,8 +27,18 @@
     <!-- Navigation -->
     <nav class="navigation">
         <button id="btn-prev" class="nav-btn">← Previous</button>
-        <button id="btn-skip" class="nav-btn">Skip</button>
         <button id="btn-next" class="nav-btn">Next →</button>
+
+        <!-- Review mode toggle -->
+        <div class="review-mode-toggle">
+            <label for="review-mode">View:</label>
+            <select id="review-mode" class="review-mode-select">
+                <option value="unreviewed">New Items Only</option>
+                <option value="all">All Items</option>
+                <option value="reviewed">Reviewed Only</option>
+            </select>
+        </div>
+
         <div class="nav-spacer"></div>
         <button id="btn-save" class="action-btn">Save (Ctrl+S)</button>
         <button id="btn-save-next" class="action-btn primary">Save & Next</button>
@@ -38,6 +48,15 @@
     <div id="loading" class="loading hidden">
         <div class="spinner"></div>
         <p>Loading item...</p>
+    </div>
+
+    <!-- Existing review banner -->
+    <div class="existing-review-banner" id="existing-review-banner" style="display: none;">
+        <span class="banner-icon">⚠️</span>
+        <span class="banner-text">
+            This item has an existing golden record (reviewed: <span id="review-timestamp"></span>)
+        </span>
+        <button id="clear-review" class="banner-btn">Clear & Start Fresh</button>
     </div>
 
     <!-- Main content -->
@@ -53,6 +72,7 @@
                     </div>
                     <div class="image-info">
                         <span id="item-id-display"></span>
+                        <span id="original-filename-display"></span>
                     </div>
                 </div>
             </aside>
@@ -261,6 +281,7 @@
                 <div class="section-nav">
                     <button id="btn-prev-section" class="nav-btn" disabled>← Previous Section</button>
                     <button id="btn-next-section" class="nav-btn">Next Section →</button>
+                    <button id="btn-save-next-section" class="action-btn primary" style="display: none;">Save & Next</button>
                 </div>
             </div>
         </div>
