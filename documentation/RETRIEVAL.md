@@ -104,15 +104,7 @@ Before executing the search, queries are preprocessed by the `_preprocess_query(
 
 **Preprocessing Steps:**
 1. **Punctuation Removal**: Removes `?`, `!`, `.`, `,`, `;`, `:`, quotes, brackets
-2. **Stopword Removal**: Filters common words that don't add search value
-3. **Tokenization**: Splits on whitespace and converts to lowercase
-4. **Length Filtering**: Removes tokens shorter than 2 characters
-
-**Stopwords Removed:**
-```
-a, an, and, are, as, at, be, by, for, from, has, he, in, is, it, its,
-of, on, that, the, to, was, will, with, what, where, when, who, how
-```
+2. **Lowercasing**: Converts all text to lowercase for case-insensitive matching
 
 **Example:**
 ```python
@@ -120,13 +112,13 @@ of, on, that, the, to, was, will, with, what, where, when, who, how
 "What restaurants are in Tokyo?"
 
 # After preprocessing
-"restaurants tokyo"
+"what restaurants are in tokyo"
 ```
 
 **Benefits:**
-- Improves precision by removing noise words
-- Reduces irrelevant matches on common terms
-- Faster search with fewer terms
+- Case-insensitive search
+- Cleaner query matching without punctuation noise
+- Preserves all meaningful words including location prepositions (in, at, near)
 
 #### Search Query
 
@@ -143,6 +135,65 @@ LIMIT ?
 - Lower (more negative) = better match
 - Typical range: -1 to -10+
 - Query is preprocessed to remove stopwords before matching
+
+#### Relevance Score Filtering
+
+The search system supports filtering out low-quality results using a `min_relevance_score` threshold. This is implemented in the `search_items()` function with two filtering checks:
+
+**Implementation (`database.py`):**
+
+```python
+def search_items(query: str, top_k: int = 10, category_filter: Optional[str] = None,
+                 min_relevance_score: float = -1.0) -> list[tuple[str, float]]:
+    # ... execute search query ...
+
+    results = [(row["item_id"], row["score"]) for row in rows]
+
+    # Check 1: If no results or best match is weak, return empty list
+    if not results or results[0][1] > min_relevance_score:
+        return []
+
+    # Check 2: Filter out weak tail results
+    return [r for r in results if r[1] < min_relevance_score]
+```
+
+**Filtering Logic:**
+
+1. **Early Return Check**: If the best (first) result has a score > `min_relevance_score`, all results are filtered out
+   - This prevents returning results when even the best match is weak
+   - Example: Best score is `-1.5`, threshold is `-5.0` → No results returned
+
+2. **Tail Filtering**: Remove results from the tail that don't meet the threshold
+   - Keeps only results with scores < `min_relevance_score` (more negative = stronger)
+   - Example: Scores `[-5.99, -5.98, -1.5]` with threshold `-2.0` → Returns `[-5.99, -5.98]`
+
+**Default Behavior:**
+
+- Default threshold: `-1.0`
+- Most real search results score more negatively than `-1.0`, so default effectively disables filtering
+- This allows tuning based on evaluation results
+
+**Usage Examples:**
+
+```bash
+# Default (no filtering) - most results pass
+curl -X POST http://localhost:8000/search \
+  -d '{"query": "perfume", "top_k": 10, "min_relevance_score": -1.0}'
+
+# Strict filtering - only very strong matches
+curl -X POST http://localhost:8000/search \
+  -d '{"query": "perfume", "top_k": 10, "min_relevance_score": -5.0}'
+
+# Moderate filtering - filter weak tail results
+curl -X POST http://localhost:8000/search \
+  -d '{"query": "perfume", "top_k": 10, "min_relevance_score": -2.0}'
+```
+
+**When to Adjust Threshold:**
+
+- **Lower (more negative)**: To filter aggressively and only return high-confidence results
+- **Higher (less negative)**: To be more permissive and return more results
+- **Monitor**: Use evaluation metrics to tune optimal threshold for your dataset
 
 ### 2. Answer Generation (`retrieval/answer_generator.py`)
 
@@ -253,8 +304,8 @@ confidence = 4.185 / 10.0 = 0.42 (42%)
 - Vague or generic queries (e.g., "photo", "image")
 - Missing key terms or very short queries
 - Only matching low-weight metadata fields
-- Queries with mostly stopwords (automatically filtered, may result in overly broad search)
-- Single-term queries after preprocessing
+- Queries with very common words that appear in many documents
+- Single-term queries
 
 ### 3. API Endpoints (`main.py`)
 
@@ -266,6 +317,7 @@ confidence = 4.185 / 10.0 = 0.42 (42%)
   "query": "Tokyo restaurants",
   "top_k": 10,
   "category_filter": null,
+  "min_relevance_score": -1.0,
   "include_answer": true,
   "answer_model": null
 }
@@ -416,6 +468,30 @@ curl -X POST http://localhost:8000/search \
 - Items matching more terms rank higher
 - Term proximity doesn't affect ranking (bag-of-words)
 
+### Relevance Score Filtering
+
+```bash
+# Default behavior - no filtering
+curl -X POST http://localhost:8000/search \
+  -H "Content-Type: application/json" \
+  -d '{"query": "perfume", "top_k": 10, "min_relevance_score": -1.0}'
+
+# Strict filtering - only very strong matches (scores < -5.0)
+curl -X POST http://localhost:8000/search \
+  -H "Content-Type: application/json" \
+  -d '{"query": "perfume", "top_k": 10, "min_relevance_score": -5.0}'
+
+# Moderate filtering - filter weak tail results (scores < -2.0)
+curl -X POST http://localhost:8000/search \
+  -H "Content-Type: application/json" \
+  -d '{"query": "perfume", "top_k": 10, "min_relevance_score": -2.0}'
+```
+
+**Use Cases:**
+- **Precision over Recall**: Use strict thresholds to only return high-confidence results
+- **Quality Control**: Filter out tangentially related items
+- **Tuning**: Adjust based on evaluation metrics to find optimal threshold
+
 ## Limitations
 
 ### Current Limitations
@@ -426,11 +502,11 @@ curl -X POST http://localhost:8000/search \
    - Can't handle paraphrases
    - Example: "Tokyo" won't match "Japan's capital"
 
-2. **Stopword Filtering Side Effects**
-   - Removes common question words automatically
-   - May affect very short queries
-   - Example: "What is in the photo?" → "photo" (single term)
-   - Workaround: Use more specific query terms
+2. **No Stopword Filtering**
+   - All words preserved in queries (including "a", "the", "in", etc.)
+   - May match common words that don't add search value
+   - BM25 naturally downweights frequently occurring terms
+   - Workaround: Use specific, descriptive terms for best results
 
 3. **No Query Expansion**
    - Searches exact preprocessed terms only
@@ -463,10 +539,10 @@ curl -X POST http://localhost:8000/search \
    - Best of both worlds - precision + recall
 
 2. **Smarter Query Preprocessing**
-   - Context-aware stopword removal
-   - Preserve important question phrases
+   - Optional stopword removal for very long queries
    - Query expansion with synonyms
    - LLM-based query reformulation
+   - Phrase detection and boosting
 
 3. **Automatic Index Updates**
    - Database triggers on analysis insert/update
@@ -536,9 +612,10 @@ curl -X POST http://localhost:8000/search \
 **Possible causes:**
 1. Index not built - check `/index/status`
 2. Query too specific - try broader terms
-3. All query terms were stopwords - query became empty after preprocessing
-4. No analyzed items - analyze images first
-5. Typo in query - check spelling
+3. No analyzed items - analyze images first
+4. Typo in query - check spelling
+5. Query terms don't match indexed content
+6. `min_relevance_score` threshold too strict - results filtered out
 
 **Solutions:**
 ```bash
@@ -552,16 +629,49 @@ curl -X POST http://localhost:8000/index/rebuild
 curl -X POST http://localhost:8000/search \
   -d '{"query": "tokyo", "include_answer": false}'
 
-# Avoid stopword-only queries
-# Bad: "What is this?"  (preprocesses to empty)
-# Good: "screenshot content" (meaningful terms)
+# Disable relevance filtering to see all results
+curl -X POST http://localhost:8000/search \
+  -d '{"query": "tokyo", "min_relevance_score": 0.0, "include_answer": false}'
+
+# Use specific, descriptive terms
+# Good: "tokyo restaurants"
+# Good: "digital art fukuoka"
+# Good: "perfume shopping japan"
 ```
 
 **Query Preprocessing Note:**
-Remember that common words are automatically removed. If your query is:
-- "What is in the photo?" → preprocesses to "photo"
-- "Show me the items" → preprocesses to "show items"
+Queries are lowercased and punctuation is removed. All words are preserved for matching.
+- "What restaurants are in Tokyo?" → "what restaurants are in tokyo"
 - Use specific nouns and descriptive terms for best results
+
+### Too Few Results Returned
+
+**Possible cause:**
+`min_relevance_score` threshold filtering out valid results
+
+**Diagnosis:**
+```bash
+# Check what scores results are getting
+curl -X POST http://localhost:8000/search \
+  -d '{"query": "your query", "min_relevance_score": 0.0, "include_answer": false}' \
+  | jq '.results[] | {rank, score}'
+```
+
+**Solutions:**
+- **Relax threshold**: Increase `min_relevance_score` to be less strict (e.g., from `-5.0` to `-2.0`)
+- **Disable filtering**: Set to `0.0` to see all results
+- **Review scores**: Examine actual BM25 scores to determine appropriate threshold
+
+**Example:**
+```bash
+# Too strict - filters out good results
+curl -X POST http://localhost:8000/search \
+  -d '{"query": "perfume", "min_relevance_score": -10.0}'  # Returns 0
+
+# More permissive - allows decent matches
+curl -X POST http://localhost:8000/search \
+  -d '{"query": "perfume", "min_relevance_score": -2.0}'   # Returns 3
+```
 
 ### Low Relevance Scores
 

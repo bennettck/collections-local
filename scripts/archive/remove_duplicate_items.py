@@ -10,14 +10,16 @@ Duplicate handling logic:
 """
 
 import sys
+import os
+import argparse
 from pathlib import Path
 from datetime import datetime
 from collections import defaultdict
 
 # Add parent directory to path
-sys.path.insert(0, str(Path(__file__).parent.parent))
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from database import get_db, delete_item
+from database import get_db, delete_item, database_context
 from utils.golden_dataset import load_golden_dataset
 
 
@@ -144,5 +146,25 @@ def remove_duplicates():
     print(f"Database cleanup complete!")
 
 
+def main():
+    """Main entry point with argument parsing."""
+    parser = argparse.ArgumentParser(
+        description="Remove duplicate items from database based on original_filename"
+    )
+    parser.add_argument(
+        '--db-path',
+        default=os.getenv("DATABASE_PATH", "./data/collections.db"),
+        help='Path to database file (default: $DATABASE_PATH or ./data/collections.db)'
+    )
+    args = parser.parse_args()
+
+    print(f"Database: {args.db_path}")
+    print()
+
+    # Use database context to override database path
+    with database_context(args.db_path):
+        remove_duplicates()
+
+
 if __name__ == "__main__":
-    remove_duplicates()
+    main()

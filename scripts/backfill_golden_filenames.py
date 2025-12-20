@@ -6,13 +6,15 @@ and adds the original_filename field to the golden record.
 """
 
 import sys
+import os
+import argparse
 from pathlib import Path
 
 # Add parent directory to path so we can import from the project
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from utils.golden_dataset import load_golden_dataset, save_golden_dataset
-from database import get_item
+from database import get_item, database_context
 
 
 def backfill_original_filenames():
@@ -76,5 +78,25 @@ def backfill_original_filenames():
     print("\nBackfill complete!")
 
 
+def main():
+    """Main entry point with argument parsing."""
+    parser = argparse.ArgumentParser(
+        description="Backfill original_filename for all golden dataset records"
+    )
+    parser.add_argument(
+        '--db-path',
+        default=os.getenv("DATABASE_PATH", "./data/collections.db"),
+        help='Path to database file (default: $DATABASE_PATH or ./data/collections.db)'
+    )
+    args = parser.parse_args()
+
+    print(f"Database: {args.db_path}")
+    print()
+
+    # Use database context to override database path
+    with database_context(args.db_path):
+        backfill_original_filenames()
+
+
 if __name__ == "__main__":
-    backfill_original_filenames()
+    main()

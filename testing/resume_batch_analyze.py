@@ -4,7 +4,7 @@ Resume batch image analysis from where it left off.
 Checks the database for missing analyses and only runs those.
 
 Usage:
-    python resume_batch_analyze.py
+    python resume_batch_analyze.py [--db-path PATH]
 
 The script will:
 1. Check all uploaded items in the database
@@ -13,13 +13,14 @@ The script will:
 """
 
 import sys
+import os
 import time
 import sqlite3
+import argparse
 import httpx
 from pathlib import Path
 
 API_BASE = "http://localhost:8000"
-DB_PATH = "/workspaces/collections-local/data/collections.db"
 
 # Model configurations to test
 MODEL_CONFIGS = [
@@ -30,14 +31,22 @@ MODEL_CONFIGS = [
 ]
 
 
-def get_db_connection():
-    """Create database connection."""
-    return sqlite3.connect(DB_PATH)
+def get_db_connection(db_path: str):
+    """Create database connection.
+
+    Args:
+        db_path: Path to database file
+    """
+    return sqlite3.connect(db_path)
 
 
-def get_all_items():
-    """Get all items from database."""
-    conn = get_db_connection()
+def get_all_items(db_path: str):
+    """Get all items from database.
+
+    Args:
+        db_path: Path to database file
+    """
+    conn = get_db_connection(db_path)
     cursor = conn.cursor()
     cursor.execute("SELECT id, original_filename FROM items ORDER BY original_filename")
     items = [{"id": row[0], "filename": row[1]} for row in cursor.fetchall()]
@@ -45,9 +54,13 @@ def get_all_items():
     return items
 
 
-def get_existing_analyses():
-    """Get all existing analyses grouped by item_id and provider/model."""
-    conn = get_db_connection()
+def get_existing_analyses(db_path: str):
+    """Get all existing analyses grouped by item_id and provider/model.
+
+    Args:
+        db_path: Path to database file
+    """
+    conn = get_db_connection(db_path)
     cursor = conn.cursor()
     cursor.execute("""
         SELECT item_id, provider_used, model_used
@@ -110,9 +123,20 @@ def analyze_image(client: httpx.Client, item_id: str, provider: str = None, mode
 
 
 def main():
+    parser = argparse.ArgumentParser(
+        description="Resume batch image analysis from where it left off"
+    )
+    parser.add_argument(
+        '--db-path',
+        default=os.getenv("DATABASE_PATH", "./data/collections.db"),
+        help='Path to database file (default: $DATABASE_PATH or ./data/collections.db)'
+    )
+    args = parser.parse_args()
+
     print("=" * 60)
     print("Resume Batch Analysis Script")
     print("=" * 60)
+    print(f"Database: {args.db_path}")
 
     # Check API health
     print("\nChecking API health...")
@@ -128,8 +152,8 @@ def main():
 
     # Get all items and existing analyses
     print("\nLoading data from database...")
-    items = get_all_items()
-    existing_analyses = get_existing_analyses()
+    items = get_all_items(args.db_path)
+    existing_analyses = get_existing_analyses(args.db_path)
 
     print(f"Found {len(items)} total items in database")
     print(f"Found {sum(len(a) for a in existing_analyses.values())} existing analyses")

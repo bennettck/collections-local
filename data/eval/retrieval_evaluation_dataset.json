@@ -1,0 +1,913 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "created_at": "2025-12-14T18:08:25.407997Z",
+    "description": "Golden dataset for retrieval quality evaluation",
+    "source_dataset": "golden_analyses_final.json",
+    "total_queries": 50,
+    "query_types": {
+      "single-item-precision": 15,
+      "multi-item-recall": 15,
+      "semantic": 12,
+      "edge-case-no-results": 8
+    },
+    "metrics_supported": [
+      "precision@k",
+      "recall@k",
+      "mrr",
+      "ndcg"
+    ]
+  },
+  "queries": [
+    {
+      "query_id": "q001",
+      "query_text": "TeamLab digital art museum Fukuoka",
+      "query_type": "single-item-precision",
+      "expected_items": [
+        {
+          "item_id": "f5129142-8126-4f7b-8b72-72f4024d4078",
+          "relevance": "high"
+        }
+      ],
+      "expected_count": 1
+    },
+    {
+      "query_id": "q002",
+      "query_text": "Attack on Titan museum Japan",
+      "query_type": "single-item-precision",
+      "expected_items": [
+        {
+          "item_id": "1c6a680c-e5e3-42e0-9bf2-bed7863237d9",
+          "relevance": "high"
+        }
+      ],
+      "expected_count": 1
+    },
+    {
+      "query_id": "q003",
+      "query_text": "Squid Game immersive experience Seoul",
+      "query_type": "single-item-precision",
+      "expected_items": [
+        {
+          "item_id": "54604ec9-785b-4c28-9a36-f0fd0d48fefe",
+          "relevance": "high"
+        }
+      ],
+      "expected_count": 1
+    },
+    {
+      "query_id": "q004",
+      "query_text": "Ichiran ramen headquarters",
+      "query_type": "single-item-precision",
+      "expected_items": [
+        {
+          "item_id": "d5ebd2cd-f71b-4d6e-898a-0e3cc02302ff",
+          "relevance": "high"
+        }
+      ],
+      "expected_count": 1
+    },
+    {
+      "query_id": "q005",
+      "query_text": "Lotte World Tower sky bridge observation",
+      "query_type": "single-item-precision",
+      "expected_items": [
+        {
+          "item_id": "07813e27-093c-4aeb-919e-e29f301e3e49",
+          "relevance": "high"
+        }
+      ],
+      "expected_count": 1
+    },
+    {
+      "query_id": "q006",
+      "query_text": "Luggage storage in Japan",
+      "query_type": "single-item-precision",
+      "expected_items": [
+        {
+          "item_id": "044aeaa6-9971-4a05-8b16-6b9e74e682bc",
+          "relevance": "high"
+        }
+      ],
+      "expected_count": 1
+    },
+    {
+      "query_id": "q007",
+      "query_text": "Bukhansan hiking trails Seoul",
+      "query_type": "single-item-precision",
+      "expected_items": [
+        {
+          "item_id": "f509d013-83c6-4e77-b71f-0afbd9999c09",
+          "relevance": "high"
+        }
+      ],
+      "expected_count": 1
+    },
+    {
+      "query_id": "q008",
+      "query_text": "wooden chopstick carving workshop",
+      "query_type": "single-item-precision",
+      "expected_items": [
+        {
+          "item_id": "9529aaf8-ff82-4fa0-ad99-23b0051ea0fd",
+          "relevance": "high"
+        }
+      ],
+      "expected_count": 1
+    },
+    {
+      "query_id": "q009",
+      "query_text": "Nakano Broadway anime shopping",
+      "query_type": "single-item-precision",
+      "expected_items": [
+        {
+          "item_id": "e85fb2dc-c994-48f3-8f6b-baeb936168ec",
+          "relevance": "high"
+        }
+      ],
+      "expected_count": 1
+    },
+    {
+      "query_id": "q010",
+      "query_text": "DIY perfume making Seoul",
+      "query_type": "single-item-precision",
+      "expected_items": [
+        {
+          "item_id": "a8c70bbe-a324-4e76-819b-c4f02ed902e2",
+          "relevance": "high"
+        }
+      ],
+      "expected_count": 1
+    },
+    {
+      "query_id": "q011",
+      "query_text": "manga drawing class Tokyo",
+      "query_type": "single-item-precision",
+      "expected_items": [
+        {
+          "item_id": "5b61408a-321d-4335-a4be-51f5fff86bec",
+          "relevance": "high"
+        }
+      ],
+      "expected_count": 1
+    },
+    {
+      "query_id": "q012",
+      "query_text": "sushi making class Asakusa",
+      "query_type": "single-item-precision",
+      "expected_items": [
+        {
+          "item_id": "9b825fe6-5c21-4261-9bba-030b4f5c0c15",
+          "relevance": "high"
+        }
+      ],
+      "expected_count": 1
+    },
+    {
+      "query_id": "q013",
+      "query_text": "Kuoe Kyoto bronze watch",
+      "query_type": "single-item-precision",
+      "expected_items": [
+        {
+          "item_id": "354b21da-958d-41df-b287-7593926d7474",
+          "relevance": "high"
+        }
+      ],
+      "expected_count": 1
+    },
+    {
+      "query_id": "q014",
+      "query_text": "J-Scent Japanese perfume",
+      "query_type": "single-item-precision",
+      "expected_items": [
+        {
+          "item_id": "fe0288ee-5bcf-46e5-8ce6-c1c65cae5395",
+          "relevance": "high"
+        }
+      ],
+      "expected_count": 1
+    },
+    {
+      "query_id": "q015",
+      "query_text": "Kanpachi Ichiroku sightseeing train",
+      "query_type": "single-item-precision",
+      "expected_items": [
+        {
+          "item_id": "2c30420a-4e28-483a-bb5f-2f61f48e7ea7",
+          "relevance": "high"
+        }
+      ],
+      "expected_count": 1
+    },
+    {
+      "query_id": "q016",
+      "query_text": "onsen hot spring accommodations Japan",
+      "query_type": "multi-item-recall",
+      "expected_items": [
+        {
+          "item_id": "ae73fefc-6ec1-4902-9e25-043de7ad52aa",
+          "relevance": "high"
+        },
+        {
+          "item_id": "ae8fd592-4bf6-405d-8662-b5376dea6fa1",
+          "relevance": "high"
+        },
+        {
+          "item_id": "892835c7-0bd1-4ff0-9d67-0f47c3b37351",
+          "relevance": "high"
+        },
+        {
+          "item_id": "365e6dc9-1123-44b6-91e1-c39ffe1be404",
+          "relevance": "medium"
+        }
+      ],
+      "expected_count_range": [
+        3,
+        5
+      ]
+    },
+    {
+      "query_id": "q017",
+      "query_text": "AI coding tools for developers",
+      "query_type": "multi-item-recall",
+      "expected_items": [
+        {
+          "item_id": "0bbb1238-8d46-4cc0-8c34-18ea42b2df00",
+          "relevance": "high"
+        },
+        {
+          "item_id": "73eaad2a-c23d-4829-b294-0082eceb9f91",
+          "relevance": "high"
+        },
+        {
+          "item_id": "ff1b2f83-9d52-415b-9a60-4b8a2169c5ff",
+          "relevance": "high"
+        },
+        {
+          "item_id": "5b8a3f21-d25b-4548-8581-2eb625f07514",
+          "relevance": "medium"
+        }
+      ],
+      "expected_count_range": [
+        3,
+        5
+      ]
+    },
+    {
+      "query_id": "q018",
+      "query_text": "hidden gem restaurants Japan",
+      "query_type": "multi-item-recall",
+      "expected_items": [
+        {
+          "item_id": "883726e1-f015-4d5b-b075-948263bdd2b5",
+          "relevance": "high"
+        },
+        {
+          "item_id": "8aed0ca7-6aed-4635-9cb2-ef47a2aba461",
+          "relevance": "high"
+        }
+      ],
+      "expected_count_range": [
+        2,
+        3
+      ]
+    },
+    {
+      "query_id": "q019",
+      "query_text": "Hokkaido nature photography spots",
+      "query_type": "multi-item-recall",
+      "expected_items": [
+        {
+          "item_id": "54356901-3403-44b1-983e-6ea324a794f1",
+          "relevance": "high"
+        },
+        {
+          "item_id": "1e15d04c-e6a5-4c47-a0db-daa026d09664",
+          "relevance": "high"
+        },
+        {
+          "item_id": "ff60cd2b-70db-45e7-9448-38aa90fad548",
+          "relevance": "high"
+        },
+        {
+          "item_id": "b11bd65b-2a80-4a8a-9188-98f027fa7c19",
+          "relevance": "high"
+        },
+        {
+          "item_id": "a691a4e9-9a01-44bd-8047-6a0c5ab96dce",
+          "relevance": "medium"
+        },
+        {
+          "item_id": "93f99f95-aae8-4833-bf5c-48e3dd981b3e",
+          "relevance": "high"
+        },
+        {
+          "item_id": "aa66e7f1-8fc4-4e4e-9cb7-178688b85690",
+          "relevance": "medium"
+        }
+      ],
+      "expected_count_range": [
+        5,
+        8
+      ]
+    },
+    {
+      "query_id": "q020",
+      "query_text": "Tokyo art museums and exhibitions",
+      "query_type": "multi-item-recall",
+      "expected_items": [
+        {
+          "item_id": "23c9c5aa-e523-43d4-a1ae-ce6e30fc5563",
+          "relevance": "high"
+        },
+        {
+          "item_id": "0c7d2d22-635a-4509-b6a1-83a2abf99531",
+          "relevance": "high"
+        }
+      ],
+      "expected_count_range": [
+        2,
+        3
+      ]
+    },
+    {
+      "query_id": "q021",
+      "query_text": "ryokan traditional Japanese accommodation",
+      "query_type": "multi-item-recall",
+      "expected_items": [
+        {
+          "item_id": "8e59d5c3-71ef-4caf-bc16-c23c5b1cc3eb",
+          "relevance": "high"
+        },
+        {
+          "item_id": "ae8fd592-4bf6-405d-8662-b5376dea6fa1",
+          "relevance": "high"
+        },
+        {
+          "item_id": "94a5fa55-fe27-4579-905f-e1bd32aa933d",
+          "relevance": "high"
+        },
+        {
+          "item_id": "f241cd64-f774-4295-ad5e-127ff4290ca6",
+          "relevance": "high"
+        }
+      ],
+      "expected_count_range": [
+        3,
+        5
+      ]
+    },
+    {
+      "query_id": "q022",
+      "query_text": "hands-on workshop experiences Japan",
+      "query_type": "multi-item-recall",
+      "expected_items": [
+        {
+          "item_id": "9529aaf8-ff82-4fa0-ad99-23b0051ea0fd",
+          "relevance": "high"
+        },
+        {
+          "item_id": "5b61408a-321d-4335-a4be-51f5fff86bec",
+          "relevance": "high"
+        },
+        {
+          "item_id": "9b825fe6-5c21-4261-9bba-030b4f5c0c15",
+          "relevance": "high"
+        },
+        {
+          "item_id": "cde0e64e-81f4-4e1c-9b4d-8be67639c4e8",
+          "relevance": "medium"
+        }
+      ],
+      "expected_count_range": [
+        3,
+        5
+      ]
+    },
+    {
+      "query_id": "q023",
+      "query_text": "scenic viewpoints sunset photography",
+      "query_type": "multi-item-recall",
+      "expected_items": [
+        {
+          "item_id": "ea52b79c-d10a-4b84-8e7a-f8917548a431",
+          "relevance": "medium"
+        },
+        {
+          "item_id": "1e15d04c-e6a5-4c47-a0db-daa026d09664",
+          "relevance": "high"
+        },
+        {
+          "item_id": "ff60cd2b-70db-45e7-9448-38aa90fad548",
+          "relevance": "high"
+        },
+        {
+          "item_id": "6390bcde-0606-4c11-af65-e81e89f5741a",
+          "relevance": "high"
+        },
+        {
+          "item_id": "af0723e4-55d9-42e9-942b-617961386b8d",
+          "relevance": "medium"
+        }
+      ],
+      "expected_count_range": [
+        3,
+        6
+      ]
+    },
+    {
+      "query_id": "q024",
+      "query_text": "Fukuoka travel itinerary food",
+      "query_type": "multi-item-recall",
+      "expected_items": [
+        {
+          "item_id": "19619477-d42a-41a0-bdf1-cabdf53aa4e3",
+          "relevance": "high"
+        },
+        {
+          "item_id": "1c6a680c-e5e3-42e0-9bf2-bed7863237d9",
+          "relevance": "high"
+        },
+        {
+          "item_id": "dd523f3e-eed2-4637-be7a-253b3960c584",
+          "relevance": "high"
+        }
+      ],
+      "expected_count_range": [
+        2,
+        4
+      ]
+    },
+    {
+      "query_id": "q025",
+      "query_text": "Tokyo neighborhood guide local culture",
+      "query_type": "multi-item-recall",
+      "expected_items": [
+        {
+          "item_id": "1f6495b0-6e8c-4421-be9a-50e86bf9381a",
+          "relevance": "high"
+        },
+        {
+          "item_id": "30596c22-5e6d-47ea-8580-46d7c0dd597a",
+          "relevance": "high"
+        },
+        {
+          "item_id": "d4fa1f7b-e50c-4428-911a-06fa73e08fa3",
+          "relevance": "high"
+        },
+        {
+          "item_id": "e51e7a61-0f0e-4801-b97b-066e70a25d4d",
+          "relevance": "high"
+        }
+      ],
+      "expected_count_range": [
+        3,
+        5
+      ]
+    },
+    {
+      "query_id": "q026",
+      "query_text": "anime otaku culture Japan travel",
+      "query_type": "multi-item-recall",
+      "expected_items": [
+        {
+          "item_id": "e85fb2dc-c994-48f3-8f6b-baeb936168ec",
+          "relevance": "high"
+        },
+        {
+          "item_id": "2c2c709a-4566-45b6-b65b-a9accb3a08f0",
+          "relevance": "high"
+        },
+        {
+          "item_id": "1c6a680c-e5e3-42e0-9bf2-bed7863237d9",
+          "relevance": "high"
+        }
+      ],
+      "expected_count_range": [
+        2,
+        4
+      ]
+    },
+    {
+      "query_id": "q027",
+      "query_text": "luxury travel experiences Japan",
+      "query_type": "multi-item-recall",
+      "expected_items": [
+        {
+          "item_id": "2c30420a-4e28-483a-bb5f-2f61f48e7ea7",
+          "relevance": "high"
+        },
+        {
+          "item_id": "ae8fd592-4bf6-405d-8662-b5376dea6fa1",
+          "relevance": "high"
+        },
+        {
+          "item_id": "f241cd64-f774-4295-ad5e-127ff4290ca6",
+          "relevance": "high"
+        },
+        {
+          "item_id": "8e59d5c3-71ef-4caf-bc16-c23c5b1cc3eb",
+          "relevance": "medium"
+        },
+        {
+          "item_id": "8aed0ca7-6aed-4635-9cb2-ef47a2aba461",
+          "relevance": "medium"
+        }
+      ],
+      "expected_count_range": [
+        3,
+        6
+      ]
+    },
+    {
+      "query_id": "q028",
+      "query_text": "day trip ideas from Tokyo",
+      "query_type": "multi-item-recall",
+      "expected_items": [
+        {
+          "item_id": "9c443027-7b4b-4c03-a1a2-43c2fab1e8a6",
+          "relevance": "high"
+        },
+        {
+          "item_id": "5699558e-27c1-4937-bf6b-1af903835ee9",
+          "relevance": "medium"
+        },
+        {
+          "item_id": "987f250b-7e99-4ce6-9504-0a9d7879dbdc",
+          "relevance": "medium"
+        }
+      ],
+      "expected_count_range": [
+        2,
+        4
+      ]
+    },
+    {
+      "query_id": "q029",
+      "query_text": "cafes and brunch spots",
+      "query_type": "multi-item-recall",
+      "expected_items": [
+        {
+          "item_id": "30596c22-5e6d-47ea-8580-46d7c0dd597a",
+          "relevance": "high"
+        },
+        {
+          "item_id": "d5ffab53-1ad8-44ee-93c9-14cdbd54f2bf",
+          "relevance": "high"
+        }
+      ],
+      "expected_count_range": [
+        2,
+        3
+      ]
+    },
+    {
+      "query_id": "q030",
+      "query_text": "fragrance perfume shopping Asia",
+      "query_type": "multi-item-recall",
+      "expected_items": [
+        {
+          "item_id": "fe0288ee-5bcf-46e5-8ce6-c1c65cae5395",
+          "relevance": "high"
+        },
+        {
+          "item_id": "a8c70bbe-a324-4e76-819b-c4f02ed902e2",
+          "relevance": "high"
+        }
+      ],
+      "expected_count_range": [
+        2,
+        3
+      ]
+    },
+    {
+      "query_id": "q031",
+      "query_text": "where can I relax in a hot spring with mountain views",
+      "query_type": "semantic",
+      "expected_items": [
+        {
+          "item_id": "ae8fd592-4bf6-405d-8662-b5376dea6fa1",
+          "relevance": "high"
+        },
+        {
+          "item_id": "892835c7-0bd1-4ff0-9d67-0f47c3b37351",
+          "relevance": "high"
+        },
+        {
+          "item_id": "94a5fa55-fe27-4579-905f-e1bd32aa933d",
+          "relevance": "high"
+        },
+        {
+          "item_id": "f241cd64-f774-4295-ad5e-127ff4290ca6",
+          "relevance": "high"
+        }
+      ],
+      "expected_count_range": [
+        2,
+        5
+      ]
+    },
+    {
+      "query_id": "q032",
+      "query_text": "cool things to do at night in Seoul",
+      "query_type": "semantic",
+      "expected_items": [
+        {
+          "item_id": "ea52b79c-d10a-4b84-8e7a-f8917548a431",
+          "relevance": "high"
+        },
+        {
+          "item_id": "54604ec9-785b-4c28-9a36-f0fd0d48fefe",
+          "relevance": "medium"
+        },
+        {
+          "item_id": "07813e27-093c-4aeb-919e-e29f301e3e49",
+          "relevance": "medium"
+        }
+      ],
+      "expected_count_range": [
+        2,
+        4
+      ]
+    },
+    {
+      "query_id": "q033",
+      "query_text": "I want to learn something creative while in Japan",
+      "query_type": "semantic",
+      "expected_items": [
+        {
+          "item_id": "9529aaf8-ff82-4fa0-ad99-23b0051ea0fd",
+          "relevance": "high"
+        },
+        {
+          "item_id": "5b61408a-321d-4335-a4be-51f5fff86bec",
+          "relevance": "high"
+        },
+        {
+          "item_id": "9b825fe6-5c21-4261-9bba-030b4f5c0c15",
+          "relevance": "high"
+        }
+      ],
+      "expected_count_range": [
+        2,
+        4
+      ]
+    },
+    {
+      "query_id": "q034",
+      "query_text": "trendy coffee shops Tokyo",
+      "query_type": "semantic",
+      "expected_items": [
+        {
+          "item_id": "30596c22-5e6d-47ea-8580-46d7c0dd597a",
+          "relevance": "high"
+        },
+        {
+          "item_id": "1f6495b0-6e8c-4421-be9a-50e86bf9381a",
+          "relevance": "medium"
+        }
+      ],
+      "expected_count_range": [
+        1,
+        3
+      ]
+    },
+    {
+      "query_id": "q035",
+      "query_text": "breathtaking flower fields to photograph",
+      "query_type": "semantic",
+      "expected_items": [
+        {
+          "item_id": "54356901-3403-44b1-983e-6ea324a794f1",
+          "relevance": "high"
+        },
+        {
+          "item_id": "b11bd65b-2a80-4a8a-9188-98f027fa7c19",
+          "relevance": "high"
+        },
+        {
+          "item_id": "aa66e7f1-8fc4-4e4e-9cb7-178688b85690",
+          "relevance": "high"
+        }
+      ],
+      "expected_count_range": [
+        2,
+        4
+      ]
+    },
+    {
+      "query_id": "q036",
+      "query_text": "Luggage storage in Japan",
+      "query_type": "semantic",
+      "expected_items": [
+        {
+          "item_id": "044aeaa6-9971-4a05-8b16-6b9e74e682bc",
+          "relevance": "high"
+        }
+      ],
+      "expected_count": 1
+    },
+    {
+      "query_id": "q037",
+      "query_text": "romantic sunset spots",
+      "query_type": "semantic",
+      "expected_items": [
+        {
+          "item_id": "ff60cd2b-70db-45e7-9448-38aa90fad548",
+          "relevance": "high"
+        },
+        {
+          "item_id": "6390bcde-0606-4c11-af65-e81e89f5741a",
+          "relevance": "high"
+        }
+      ],
+      "expected_count_range": [
+        1,
+        3
+      ]
+    },
+    {
+      "query_id": "q038",
+      "query_text": "authentic local food experiences off the tourist trail",
+      "query_type": "semantic",
+      "expected_items": [
+        {
+          "item_id": "883726e1-f015-4d5b-b075-948263bdd2b5",
+          "relevance": "high"
+        },
+        {
+          "item_id": "d4fa1f7b-e50c-4428-911a-06fa73e08fa3",
+          "relevance": "high"
+        },
+        {
+          "item_id": "d5ebd2cd-f71b-4d6e-898a-0e3cc02302ff",
+          "relevance": "medium"
+        }
+      ],
+      "expected_count_range": [
+        2,
+        4
+      ]
+    },
+    {
+      "query_id": "q039",
+      "query_text": "what coding tools use AI to help build websites",
+      "query_type": "semantic",
+      "expected_items": [
+        {
+          "item_id": "0bbb1238-8d46-4cc0-8c34-18ea42b2df00",
+          "relevance": "high"
+        },
+        {
+          "item_id": "73eaad2a-c23d-4829-b294-0082eceb9f91",
+          "relevance": "high"
+        },
+        {
+          "item_id": "ff1b2f83-9d52-415b-9a60-4b8a2169c5ff",
+          "relevance": "high"
+        }
+      ],
+      "expected_count_range": [
+        2,
+        4
+      ]
+    },
+    {
+      "query_id": "q040",
+      "query_text": "peaceful nature escapes near Tokyo",
+      "query_type": "semantic",
+      "expected_items": [
+        {
+          "item_id": "8e59d5c3-71ef-4caf-bc16-c23c5b1cc3eb",
+          "relevance": "high"
+        },
+        {
+          "item_id": "ae73fefc-6ec1-4902-9e25-043de7ad52aa",
+          "relevance": "high"
+        },
+        {
+          "item_id": "94a5fa55-fe27-4579-905f-e1bd32aa933d",
+          "relevance": "high"
+        }
+      ],
+      "expected_count_range": [
+        2,
+        4
+      ]
+    },
+    {
+      "query_id": "q041",
+      "query_text": "unique souvenirs to bring home from Japan",
+      "query_type": "semantic",
+      "expected_items": [
+        {
+          "item_id": "9529aaf8-ff82-4fa0-ad99-23b0051ea0fd",
+          "relevance": "high"
+        },
+        {
+          "item_id": "fe0288ee-5bcf-46e5-8ce6-c1c65cae5395",
+          "relevance": "medium"
+        },
+        {
+          "item_id": "354b21da-958d-41df-b287-7593926d7474",
+          "relevance": "medium"
+        }
+      ],
+      "expected_count_range": [
+        2,
+        4
+      ]
+    },
+    {
+      "query_id": "q042",
+      "query_text": "best views in Hokkaido for Instagram",
+      "query_type": "semantic",
+      "expected_items": [
+        {
+          "item_id": "1e15d04c-e6a5-4c47-a0db-daa026d09664",
+          "relevance": "high"
+        },
+        {
+          "item_id": "ff60cd2b-70db-45e7-9448-38aa90fad548",
+          "relevance": "high"
+        },
+        {
+          "item_id": "b11bd65b-2a80-4a8a-9188-98f027fa7c19",
+          "relevance": "high"
+        },
+        {
+          "item_id": "93f99f95-aae8-4833-bf5c-48e3dd981b3e",
+          "relevance": "high"
+        }
+      ],
+      "expected_count_range": [
+        3,
+        5
+      ]
+    },
+    {
+      "query_id": "q043",
+      "query_text": "things to do in Paris",
+      "query_type": "edge-case-no-results",
+      "expected_items": [],
+      "expected_count": 0,
+      "notes": "No Paris content in dataset"
+    },
+    {
+      "query_id": "q044",
+      "query_text": "best beaches in Thailand",
+      "query_type": "edge-case-no-results",
+      "expected_items": [],
+      "expected_count": 0,
+      "notes": "No Thailand content in dataset"
+    },
+    {
+      "query_id": "q045",
+      "query_text": "Mexican food restaurants",
+      "query_type": "edge-case-no-results",
+      "expected_items": [],
+      "expected_count": 0,
+      "notes": "No Mexican cuisine in dataset"
+    },
+    {
+      "query_id": "q046",
+      "query_text": "ski resorts Japan",
+      "query_type": "edge-case-no-results",
+      "expected_items": [],
+      "expected_count": 0,
+      "notes": "No skiing content in dataset"
+    },
+    {
+      "query_id": "q047",
+      "query_text": "budget hotels Tokyo",
+      "query_type": "edge-case-no-results",
+      "expected_items": [],
+      "expected_count": 0,
+      "notes": "Accommodations are ryokans/onsen, not budget hotels"
+    },
+    {
+      "query_id": "q048",
+      "query_text": "nightclub recommendations Seoul",
+      "query_type": "edge-case-no-results",
+      "expected_items": [],
+      "expected_count": 0,
+      "notes": "Night content exists but no nightclubs"
+    },
+    {
+      "query_id": "q049",
+      "query_text": "children's activities Japan",
+      "query_type": "edge-case-no-results",
+      "expected_items": [],
+      "expected_count": 0,
+      "notes": "No kid-specific content"
+    },
+    {
+      "query_id": "q050",
+      "query_text": "cryptocurrency investment tips",
+      "query_type": "edge-case-no-results",
+      "expected_items": [],
+      "expected_count": 0,
+      "notes": "Completely unrelated domain"
+    }
+  ]
+}

@@ -334,7 +334,8 @@ async def search_collection(request: SearchRequest):
         search_results = search_items(
             query=request.query,
             top_k=request.top_k,
-            category_filter=request.category_filter
+            category_filter=request.category_filter,
+            min_relevance_score=request.min_relevance_score
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Search failed: {str(e)}")

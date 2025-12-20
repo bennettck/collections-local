@@ -6,15 +6,19 @@ This script restores the database from the exported JSON files.
 import sqlite3
 import json
 import os
+import argparse
 from datetime import datetime
 
 # Paths
-DB_PATH = os.getenv("DATABASE_PATH", "./data/collections.db")
 EXPORT_DIR = "./data/exports"
 
 
-def import_database():
-    """Import database from JSON export."""
+def import_database(db_path: str):
+    """Import database from JSON export.
+
+    Args:
+        db_path: Path to database file to import into
+    """
     export_file = os.path.join(EXPORT_DIR, "database.json")
 
     if not os.path.exists(export_file):
@@ -28,12 +32,12 @@ def import_database():
     print(f"Importing data from export created at: {export_data['exported_at']}")
 
     # Ensure database directory exists
-    db_dir = os.path.dirname(DB_PATH)
+    db_dir = os.path.dirname(db_path)
     if db_dir:
         os.makedirs(db_dir, exist_ok=True)
 
     # Create connection
-    conn = sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect(db_path)
     conn.execute("PRAGMA foreign_keys = OFF")  # Temporarily disable for import
 
     try:
@@ -75,7 +79,7 @@ def import_database():
         print(f"Imported {len(analyses)} analyses")
 
         conn.commit()
-        print(f"\nSuccessfully restored database to {DB_PATH}")
+        print(f"\nSuccessfully restored database to {db_path}")
         return True
 
     except Exception as e:
@@ -124,12 +128,29 @@ def verify_images():
             print(f"  ... and {len(missing) - 10} more")
 
 
-if __name__ == "__main__":
+def main():
+    """Main entry point with argument parsing."""
+    parser = argparse.ArgumentParser(
+        description="Import database from JSON export"
+    )
+    parser.add_argument(
+        '--db-path',
+        default=os.getenv("DATABASE_PATH", "./data/collections.db"),
+        help='Path to database file (default: $DATABASE_PATH or ./data/collections.db)'
+    )
+    args = parser.parse_args()
+
     print("Starting database import...")
     print("=" * 50)
+    print(f"Database: {args.db_path}")
+    print("=" * 50)
 
-    if import_database():
+    if import_database(args.db_path):
         verify_images()
 
     print("=" * 50)
     print("Import complete!")
+
+
+if __name__ == "__main__":
+    main()

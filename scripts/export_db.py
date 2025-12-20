@@ -6,12 +6,12 @@ This script exports both the database content and creates a manifest of images.
 import sqlite3
 import json
 import os
+import argparse
 import hashlib
 from pathlib import Path
 from datetime import datetime, timezone
 
 # Paths
-DB_PATH = os.getenv("DATABASE_PATH", "./data/collections.db")
 IMAGES_PATH = os.getenv("IMAGES_PATH", "./data/images")
 EXPORT_DIR = "./data/exports"
 
@@ -25,21 +25,25 @@ def calculate_file_hash(filepath):
     return sha256_hash.hexdigest()
 
 
-def export_database():
-    """Export database tables to JSON."""
-    if not os.path.exists(DB_PATH):
-        print(f"Database not found at {DB_PATH}")
+def export_database(db_path: str):
+    """Export database tables to JSON.
+
+    Args:
+        db_path: Path to database file to export
+    """
+    if not os.path.exists(db_path):
+        print(f"Database not found at {db_path}")
         return
 
     # Create export directory
     os.makedirs(EXPORT_DIR, exist_ok=True)
 
-    conn = sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
 
     export_data = {
         "exported_at": datetime.now(timezone.utc).isoformat(),
-        "database_path": DB_PATH,
+        "database_path": db_path,
         "tables": {}
     }
 
@@ -102,11 +106,28 @@ def export_images_manifest():
     return manifest_file
 
 
-if __name__ == "__main__":
+def main():
+    """Main entry point with argument parsing."""
+    parser = argparse.ArgumentParser(
+        description="Export database to JSON format for version control"
+    )
+    parser.add_argument(
+        '--db-path',
+        default=os.getenv("DATABASE_PATH", "./data/collections.db"),
+        help='Path to database file (default: $DATABASE_PATH or ./data/collections.db)'
+    )
+    args = parser.parse_args()
+
     print("Starting database and images export...")
     print("=" * 50)
-    export_database()
+    print(f"Database: {args.db_path}")
+    print("=" * 50)
+    export_database(args.db_path)
     print()
     export_images_manifest()
     print("=" * 50)
     print("Export complete!")
+
+
+if __name__ == "__main__":
+    main()

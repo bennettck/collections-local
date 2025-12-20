@@ -81,6 +81,11 @@ class SearchRequest(BaseModel):
         description="Filter by category (e.g., 'Food', 'Travel', 'Beauty'). Leave null for no filter.",
         examples=[None, "Food", "Travel"]
     )
+    min_relevance_score: float = Field(
+        -1.0,
+        description="Minimum BM25 relevance score threshold. Results with scores > this value will be filtered out. Default -1.0 effectively disables filtering since most results score lower (more negative = better match).",
+        examples=[-1.0, -5.0, -10.0]
+    )
     include_answer: bool = Field(
         True,
         description="Generate LLM answer from results"

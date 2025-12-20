@@ -1,17 +1,59 @@
 import sqlite3
 import os
 import json
+import threading
 from contextlib import contextmanager
 from datetime import datetime
 from typing import Optional
 
 DATABASE_PATH = os.getenv("DATABASE_PATH", "./data/collections.db")
 
+# Thread-local storage for database path context override
+_context = threading.local()
+
+
+@contextmanager
+def database_context(db_path: str):
+    """
+    Context manager to temporarily override database path.
+
+    This allows scripts to use a different database without modifying
+    the global DATABASE_PATH variable.
+
+    Usage:
+        with database_context("/path/to/other.db"):
+            item = get_item(item_id)  # Uses overridden path
+
+    Args:
+        db_path: Path to database file to use within this context
+    """
+    previous = getattr(_context, 'db_path', None)
+    _context.db_path = db_path
+    try:
+        yield
+    finally:
+        if previous is None:
+            if hasattr(_context, 'db_path'):
+                delattr(_context, 'db_path')
+        else:
+            _context.db_path = previous
+
+
+def _get_active_db_path() -> str:
+    """
+    Get the active database path from thread-local context or default.
+
+    Returns:
+        Database path - either from context override or global DATABASE_PATH
+    """
+    return getattr(_context, 'db_path', DATABASE_PATH)
+
 
 def init_db():
     """Initialize database with schema."""
     # Ensure data directory exists
-    db_dir = os.path.dirname(DATABASE_PATH)
+    active_path = _get_active_db_path()
+    db_dir = os.path.dirname(active_path)
     if db_dir:
         os.makedirs(db_dir, exist_ok=True)
 
@@ -62,7 +104,8 @@ def init_db():
 @contextmanager
 def get_db():
     """Get database connection with row factory."""
-    conn = sqlite3.connect(DATABASE_PATH)
+    active_path = _get_active_db_path()
+    conn = sqlite3.connect(active_path)
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA foreign_keys = ON")
     try:
@@ -313,37 +356,31 @@ def rebuild_search_index() -> dict:
 
 def _preprocess_query(query: str) -> str:
     """
-    Preprocess search query by removing stopwords, punctuation, and normalizing.
+    Preprocess search query by removing punctuation and normalizing.
 
     Args:
         query: Raw search query
 
     Returns:
-        Preprocessed query suitable for FTS5
+        Preprocessed query suitable for FTS5 with OR logic
     """
     import re
 
     # Remove punctuation (question marks, exclamation points, etc.)
     query = re.sub(r'[?!.,;:\'"()\[\]{}]', ' ', query)
 
-    # Common English stopwords that don't add search value
-    stopwords = {
-        'a', 'an', 'and', 'are', 'as', 'at', 'be', 'by', 'for', 'from',
-        'has', 'he', 'in', 'is', 'it', 'its', 'of', 'on', 'that', 'the',
-        'to', 'was', 'will', 'with', 'what', 'where', 'when', 'who', 'how'
-    }
-
-    # Tokenize: split on whitespace and lowercase
+    # Split into tokens and join with OR for better recall
     tokens = query.lower().split()
 
-    # Remove stopwords and short tokens
-    filtered = [t for t in tokens if t not in stopwords and len(t) > 1]
+    # If empty or single token, return as-is
+    if len(tokens) <= 1:
+        return query.lower()
 
-    # Return space-separated tokens
-    return ' '.join(filtered) if filtered else query
+    # Join tokens with OR operator for FTS5
+    return " OR ".join(tokens)
 
 
-def search_items(query: str, top_k: int = 10, category_filter: Optional[str] = None) -> list[tuple[str, float]]:
+def search_items(query: str, top_k: int = 10, category_filter: Optional[str] = None, min_relevance_score: float = -1.0) -> list[tuple[str, float]]:
     """
     Search items using FTS5 BM25 ranking.
 
@@ -351,6 +388,9 @@ def search_items(query: str, top_k: int = 10, category_filter: Optional[str] = N
         query: Search query string (will be preprocessed to remove stopwords)
         top_k: Maximum number of results to return
         category_filter: Optional category to filter results
+        min_relevance_score: Minimum BM25 score threshold. Results with scores > this value
+                           will be filtered out. Default -1.0 effectively disables filtering.
+                           (Note: BM25 scores are negative; more negative = better match)
 
     Returns:
         List of (item_id, bm25_score) tuples, ordered by relevance
@@ -390,7 +430,14 @@ def search_items(query: str, top_k: int = 10, category_filter: Optional[str] = N
                 LIMIT ?
             """, (processed_query, top_k)).fetchall()
 
-        return [(row["item_id"], row["score"]) for row in rows]
+        results = [(row["item_id"], row["score"]) for row in rows]
+
+        # If no results or best match is weak, return empty list
+        if not results or results[0][1] > min_relevance_score:
+            return []
+
+        # Filter out weak tail results
+        return [r for r in results if r[1] < min_relevance_score]
 
 
 def get_search_status() -> dict:

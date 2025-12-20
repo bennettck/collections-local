@@ -1,0 +1,2850 @@
+{
+  "run_id": "eval_20251214_204125",
+  "timestamp": "2025-12-14T20:41:25.761060+00:00",
+  "config": {
+    "api_base_url": "http://localhost:8001",
+    "dataset_path": "data/eval/retrieval_evaluation_dataset.json",
+    "top_k_values": [
+      1,
+      3,
+      5,
+      10
+    ],
+    "dataset_version": "1.0",
+    "total_queries": 50,
+    "target_item_count": 55,
+    "actual_item_count": 55
+  },
+  "summary": {
+    "precision": {
+      "@1": 0.85,
+      "@3": 0.5,
+      "@5": 0.37,
+      "@10": 0.205
+    },
+    "recall": {
+      "@1": 0.5335714285714286,
+      "@3": 0.7423809523809524,
+      "@5": 0.8386904761904763,
+      "@10": 0.8795833333333333
+    },
+    "ndcg": {
+      "@1": 0.8333333333333334,
+      "@3": 0.7859838516746411,
+      "@5": 0.8246302071466545,
+      "@10": 0.8487752733611249
+    },
+    "mrr": 0.8800000000000001,
+    "edge_cases": {
+      "total": 8,
+      "true_negatives": 0,
+      "false_positives": 8,
+      "tn_rate": 0.0,
+      "fp_rate": 1.0
+    }
+  },
+  "by_query_type": {
+    "single-item-precision": {
+      "count": 14,
+      "precision": {
+        "@1": 1.0,
+        "@3": 0.3333333333333333,
+        "@5": 0.2,
+        "@10": 0.1
+      },
+      "recall": {
+        "@1": 1.0,
+        "@3": 1.0,
+        "@5": 1.0,
+        "@10": 1.0
+      },
+      "ndcg": {
+        "@1": 1.0,
+        "@3": 1.0,
+        "@5": 1.0,
+        "@10": 1.0
+      },
+      "mrr": 1.0
+    },
+    "multi-item-recall": {
+      "count": 14,
+      "precision": {
+        "@1": 0.8571428571428571,
+        "@3": 0.7380952380952381,
+        "@5": 0.5714285714285714,
+        "@10": 0.33571428571428574
+      },
+      "recall": {
+        "@1": 0.27448979591836736,
+        "@3": 0.692517006802721,
+        "@5": 0.8486394557823129,
+        "@10": 0.9476190476190476
+      },
+      "ndcg": {
+        "@1": 0.8333333333333333,
+        "@3": 0.8153195488721804,
+        "@5": 0.8539958527270557,
+        "@10": 0.9122674704826851
+      },
+      "mrr": 0.8952380952380953
+    },
+    "semantic": {
+      "count": 12,
+      "precision": {
+        "@1": 0.6666666666666666,
+        "@3": 0.4166666666666667,
+        "@5": 0.3333333333333333,
+        "@10": 0.17500000000000002
+      },
+      "recall": {
+        "@1": 0.2916666666666667,
+        "@3": 0.5,
+        "@5": 0.638888888888889,
+        "@10": 0.6597222222222222
+      },
+      "ndcg": {
+        "@1": 0.638888888888889,
+        "@3": 0.50207336523126,
+        "@5": 0.5857721956406167,
+        "@10": 0.5982721956406167
+      },
+      "mrr": 0.7222222222222222
+    }
+  },
+  "query_results": [
+    {
+      "query_id": "q001",
+      "query_text": "TeamLab digital art museum Fukuoka",
+      "query_type": "single-item-precision",
+      "expected_items": [
+        "f5129142-8126-4f7b-8b72-72f4024d4078"
+      ],
+      "expected_relevance": {
+        "f5129142-8126-4f7b-8b72-72f4024d4078": "high"
+      },
+      "retrieved_items": [
+        "f5129142-8126-4f7b-8b72-72f4024d4078",
+        "19619477-d42a-41a0-bdf1-cabdf53aa4e3",
+        "1c6a680c-e5e3-42e0-9bf2-bed7863237d9",
+        "0c7d2d22-635a-4509-b6a1-83a2abf99531",
+        "dd523f3e-eed2-4637-be7a-253b3960c584",
+        "f0e2b4d6-ac3c-40bb-9644-9fb5edaa294c",
+        "d5ebd2cd-f71b-4d6e-898a-0e3cc02302ff",
+        "883726e1-f015-4d5b-b075-948263bdd2b5",
+        "23c9c5aa-e523-43d4-a1ae-ce6e30fc5563",
+        "5b61408a-321d-4335-a4be-51f5fff86bec"
+      ],
+      "retrieved_scores": [
+        -18.3342032907079,
+        -12.267831410221458,
+        -10.44600732523681,
+        -6.492195338456465,
+        -3.848601438282083,
+        -3.683276278880092,
+        -3.5919967514559374,
+        -3.1848738715737723,
+        -2.7287192133251876,
+        -2.1384969922668686
+      ],
+      "retrieval_time_ms": 2.268075942993164,
+      "metrics": {
+        "precision": {
+          "@1": 1.0,
+          "@3": 0.3333333333333333,
+          "@5": 0.2,
+          "@10": 0.1
+        },
+        "recall": {
+          "@1": 1.0,
+          "@3": 1.0,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "ndcg": {
+          "@1": 1.0,
+          "@3": 1.0,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "reciprocal_rank": 1.0
+      },
+      "first_relevant_rank": 1,
+      "status": "pass"
+    },
+    {
+      "query_id": "q002",
+      "query_text": "Attack on Titan museum Japan",
+      "query_type": "single-item-precision",
+      "expected_items": [
+        "1c6a680c-e5e3-42e0-9bf2-bed7863237d9"
+      ],
+      "expected_relevance": {
+        "1c6a680c-e5e3-42e0-9bf2-bed7863237d9": "high"
+      },
+      "retrieved_items": [
+        "1c6a680c-e5e3-42e0-9bf2-bed7863237d9",
+        "19619477-d42a-41a0-bdf1-cabdf53aa4e3",
+        "0c7d2d22-635a-4509-b6a1-83a2abf99531",
+        "23c9c5aa-e523-43d4-a1ae-ce6e30fc5563",
+        "ae73fefc-6ec1-4902-9e25-043de7ad52aa",
+        "0bbb1238-8d46-4cc0-8c34-18ea42b2df00",
+        "2c30420a-4e28-483a-bb5f-2f61f48e7ea7",
+        "5b8a3f21-d25b-4548-8581-2eb625f07514",
+        "365e6dc9-1123-44b6-91e1-c39ffe1be404",
+        "6390bcde-0606-4c11-af65-e81e89f5741a"
+      ],
+      "retrieved_scores": [
+        -19.999798488132058,
+        -5.2502277142906255,
+        -3.485604552982429,
+        -2.7287192133251876,
+        -1.267393586427497,
+        -1.24566393255153,
+        -1.2423889200799803,
+        -1.1587726419127358,
+        -1.1387235812334218,
+        -1.0041305574475103
+      ],
+      "retrieval_time_ms": 5.487918853759766,
+      "metrics": {
+        "precision": {
+          "@1": 1.0,
+          "@3": 0.3333333333333333,
+          "@5": 0.2,
+          "@10": 0.1
+        },
+        "recall": {
+          "@1": 1.0,
+          "@3": 1.0,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "ndcg": {
+          "@1": 1.0,
+          "@3": 1.0,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "reciprocal_rank": 1.0
+      },
+      "first_relevant_rank": 1,
+      "status": "pass"
+    },
+    {
+      "query_id": "q003",
+      "query_text": "Squid Game immersive experience Seoul",
+      "query_type": "single-item-precision",
+      "expected_items": [
+        "54604ec9-785b-4c28-9a36-f0fd0d48fefe"
+      ],
+      "expected_relevance": {
+        "54604ec9-785b-4c28-9a36-f0fd0d48fefe": "high"
+      },
+      "retrieved_items": [
+        "54604ec9-785b-4c28-9a36-f0fd0d48fefe",
+        "a8c70bbe-a324-4e76-819b-c4f02ed902e2",
+        "f5129142-8126-4f7b-8b72-72f4024d4078",
+        "07813e27-093c-4aeb-919e-e29f301e3e49",
+        "ea52b79c-d10a-4b84-8e7a-f8917548a431",
+        "d5ffab53-1ad8-44ee-93c9-14cdbd54f2bf",
+        "9b825fe6-5c21-4261-9bba-030b4f5c0c15",
+        "d4fa1f7b-e50c-4428-911a-06fa73e08fa3",
+        "f509d013-83c6-4e77-b71f-0afbd9999c09",
+        "cde0e64e-81f4-4e1c-9b4d-8be67639c4e8"
+      ],
+      "retrieved_scores": [
+        -27.16535095488777,
+        -7.968312238234862,
+        -4.490805129096198,
+        -4.267598367611445,
+        -4.225040462121696,
+        -4.1198765061664595,
+        -3.648693112530717,
+        -3.59997526416135,
+        -3.563820737047314,
+        -2.6865456288100384
+      ],
+      "retrieval_time_ms": 9.667396545410156,
+      "metrics": {
+        "precision": {
+          "@1": 1.0,
+          "@3": 0.3333333333333333,
+          "@5": 0.2,
+          "@10": 0.1
+        },
+        "recall": {
+          "@1": 1.0,
+          "@3": 1.0,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "ndcg": {
+          "@1": 1.0,
+          "@3": 1.0,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "reciprocal_rank": 1.0
+      },
+      "first_relevant_rank": 1,
+      "status": "pass"
+    },
+    {
+      "query_id": "q004",
+      "query_text": "Ichiran ramen headquarters",
+      "query_type": "single-item-precision",
+      "expected_items": [
+        "d5ebd2cd-f71b-4d6e-898a-0e3cc02302ff"
+      ],
+      "expected_relevance": {
+        "d5ebd2cd-f71b-4d6e-898a-0e3cc02302ff": "high"
+      },
+      "retrieved_items": [
+        "d5ebd2cd-f71b-4d6e-898a-0e3cc02302ff",
+        "19619477-d42a-41a0-bdf1-cabdf53aa4e3"
+      ],
+      "retrieved_scores": [
+        -20.861322287235463,
+        -5.472835550639553
+      ],
+      "retrieval_time_ms": 0.6890296936035156,
+      "metrics": {
+        "precision": {
+          "@1": 1.0,
+          "@3": 0.3333333333333333,
+          "@5": 0.2,
+          "@10": 0.1
+        },
+        "recall": {
+          "@1": 1.0,
+          "@3": 1.0,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "ndcg": {
+          "@1": 1.0,
+          "@3": 1.0,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "reciprocal_rank": 1.0
+      },
+      "first_relevant_rank": 1,
+      "status": "pass"
+    },
+    {
+      "query_id": "q005",
+      "query_text": "Lotte World Tower sky bridge observation",
+      "query_type": "single-item-precision",
+      "expected_items": [
+        "07813e27-093c-4aeb-919e-e29f301e3e49"
+      ],
+      "expected_relevance": {
+        "07813e27-093c-4aeb-919e-e29f301e3e49": "high"
+      },
+      "retrieved_items": [
+        "07813e27-093c-4aeb-919e-e29f301e3e49",
+        "1e15d04c-e6a5-4c47-a0db-daa026d09664",
+        "ea52b79c-d10a-4b84-8e7a-f8917548a431",
+        "e51e7a61-0f0e-4801-b97b-066e70a25d4d",
+        "8aed0ca7-6aed-4635-9cb2-ef47a2aba461",
+        "ff60cd2b-70db-45e7-9448-38aa90fad548",
+        "aa66e7f1-8fc4-4e4e-9cb7-178688b85690",
+        "93f99f95-aae8-4833-bf5c-48e3dd981b3e",
+        "54356901-3403-44b1-983e-6ea324a794f1",
+        "a691a4e9-9a01-44bd-8047-6a0c5ab96dce"
+      ],
+      "retrieved_scores": [
+        -29.66395992683343,
+        -7.16413053611824,
+        -6.7910880472297475,
+        -5.878844422644615,
+        -5.576864779671042,
+        -2.364887519014399,
+        -1.8767778756348392,
+        -1.8384369785518992,
+        -1.8088740328124187,
+        -1.7570739523002532
+      ],
+      "retrieval_time_ms": 0.6804466247558594,
+      "metrics": {
+        "precision": {
+          "@1": 1.0,
+          "@3": 0.3333333333333333,
+          "@5": 0.2,
+          "@10": 0.1
+        },
+        "recall": {
+          "@1": 1.0,
+          "@3": 1.0,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "ndcg": {
+          "@1": 1.0,
+          "@3": 1.0,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "reciprocal_rank": 1.0
+      },
+      "first_relevant_rank": 1,
+      "status": "pass"
+    },
+    {
+      "query_id": "q006",
+      "query_text": "Luggage storage in Japan",
+      "query_type": "single-item-precision",
+      "expected_items": [
+        "044aeaa6-9971-4a05-8b16-6b9e74e682bc"
+      ],
+      "expected_relevance": {
+        "044aeaa6-9971-4a05-8b16-6b9e74e682bc": "high"
+      },
+      "retrieved_items": [
+        "044aeaa6-9971-4a05-8b16-6b9e74e682bc",
+        "f241cd64-f774-4295-ad5e-127ff4290ca6",
+        "892835c7-0bd1-4ff0-9d67-0f47c3b37351",
+        "f5129142-8126-4f7b-8b72-72f4024d4078",
+        "e51e7a61-0f0e-4801-b97b-066e70a25d4d",
+        "1e15d04c-e6a5-4c47-a0db-daa026d09664",
+        "54356901-3403-44b1-983e-6ea324a794f1",
+        "cde0e64e-81f4-4e1c-9b4d-8be67639c4e8",
+        "b11bd65b-2a80-4a8a-9188-98f027fa7c19",
+        "8e59d5c3-71ef-4caf-bc16-c23c5b1cc3eb"
+      ],
+      "retrieved_scores": [
+        -10.684754797184395,
+        -4.063255166412907e-06,
+        -4.054764225604966e-06,
+        -3.9994733632553e-06,
+        -3.991022457137545e-06,
+        -3.9805853709568335e-06,
+        -3.9121497652126936e-06,
+        -3.890779288547922e-06,
+        -3.840807899707538e-06,
+        -3.8250259690125305e-06
+      ],
+      "retrieval_time_ms": 2.3953914642333984,
+      "metrics": {
+        "precision": {
+          "@1": 1.0,
+          "@3": 0.3333333333333333,
+          "@5": 0.2,
+          "@10": 0.1
+        },
+        "recall": {
+          "@1": 1.0,
+          "@3": 1.0,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "ndcg": {
+          "@1": 1.0,
+          "@3": 1.0,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "reciprocal_rank": 1.0
+      },
+      "first_relevant_rank": 1,
+      "status": "pass"
+    },
+    {
+      "query_id": "q007",
+      "query_text": "Bukhansan hiking trails Seoul",
+      "query_type": "single-item-precision",
+      "expected_items": [
+        "f509d013-83c6-4e77-b71f-0afbd9999c09"
+      ],
+      "expected_relevance": {
+        "f509d013-83c6-4e77-b71f-0afbd9999c09": "high"
+      },
+      "retrieved_items": [
+        "f509d013-83c6-4e77-b71f-0afbd9999c09",
+        "07813e27-093c-4aeb-919e-e29f301e3e49",
+        "ea52b79c-d10a-4b84-8e7a-f8917548a431",
+        "54604ec9-785b-4c28-9a36-f0fd0d48fefe",
+        "a8c70bbe-a324-4e76-819b-c4f02ed902e2",
+        "d5ffab53-1ad8-44ee-93c9-14cdbd54f2bf"
+      ],
+      "retrieved_scores": [
+        -22.29293869793544,
+        -4.267598367611445,
+        -4.225040462121696,
+        -4.149926883908625,
+        -4.142620738389105,
+        -4.1198765061664595
+      ],
+      "retrieval_time_ms": 2.6230812072753906,
+      "metrics": {
+        "precision": {
+          "@1": 1.0,
+          "@3": 0.3333333333333333,
+          "@5": 0.2,
+          "@10": 0.1
+        },
+        "recall": {
+          "@1": 1.0,
+          "@3": 1.0,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "ndcg": {
+          "@1": 1.0,
+          "@3": 1.0,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "reciprocal_rank": 1.0
+      },
+      "first_relevant_rank": 1,
+      "status": "pass"
+    },
+    {
+      "query_id": "q008",
+      "query_text": "wooden chopstick carving workshop",
+      "query_type": "single-item-precision",
+      "expected_items": [
+        "9529aaf8-ff82-4fa0-ad99-23b0051ea0fd"
+      ],
+      "expected_relevance": {
+        "9529aaf8-ff82-4fa0-ad99-23b0051ea0fd": "high"
+      },
+      "retrieved_items": [
+        "9529aaf8-ff82-4fa0-ad99-23b0051ea0fd",
+        "5b61408a-321d-4335-a4be-51f5fff86bec",
+        "ae73fefc-6ec1-4902-9e25-043de7ad52aa",
+        "af0723e4-55d9-42e9-942b-617961386b8d",
+        "987f250b-7e99-4ce6-9504-0a9d7879dbdc",
+        "d5ffab53-1ad8-44ee-93c9-14cdbd54f2bf",
+        "ae8fd592-4bf6-405d-8662-b5376dea6fa1",
+        "b46ecb6f-8375-4e26-a282-34ca7b8b88d6"
+      ],
+      "retrieved_scores": [
+        -18.443756033151576,
+        -4.108183782611126,
+        -2.685498072463367,
+        -2.1726619366214828,
+        -2.1091208435727617,
+        -1.8859855758877293,
+        -1.5310823749165416,
+        -1.4673608191713656
+      ],
+      "retrieval_time_ms": 4.6710968017578125,
+      "metrics": {
+        "precision": {
+          "@1": 1.0,
+          "@3": 0.3333333333333333,
+          "@5": 0.2,
+          "@10": 0.1
+        },
+        "recall": {
+          "@1": 1.0,
+          "@3": 1.0,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "ndcg": {
+          "@1": 1.0,
+          "@3": 1.0,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "reciprocal_rank": 1.0
+      },
+      "first_relevant_rank": 1,
+      "status": "pass"
+    },
+    {
+      "query_id": "q009",
+      "query_text": "Nakano Broadway anime shopping",
+      "query_type": "single-item-precision",
+      "expected_items": [
+        "e85fb2dc-c994-48f3-8f6b-baeb936168ec"
+      ],
+      "expected_relevance": {
+        "e85fb2dc-c994-48f3-8f6b-baeb936168ec": "high"
+      },
+      "retrieved_items": [
+        "e85fb2dc-c994-48f3-8f6b-baeb936168ec",
+        "5b61408a-321d-4335-a4be-51f5fff86bec",
+        "2c2c709a-4566-45b6-b65b-a9accb3a08f0",
+        "d4fa1f7b-e50c-4428-911a-06fa73e08fa3",
+        "1c6a680c-e5e3-42e0-9bf2-bed7863237d9",
+        "dd523f3e-eed2-4637-be7a-253b3960c584",
+        "354b21da-958d-41df-b287-7593926d7474",
+        "fe0288ee-5bcf-46e5-8ce6-c1c65cae5395",
+        "6390bcde-0606-4c11-af65-e81e89f5741a",
+        "19619477-d42a-41a0-bdf1-cabdf53aa4e3"
+      ],
+      "retrieved_scores": [
+        -22.281541975180122,
+        -6.313780784098587,
+        -4.69170762919931,
+        -4.025956867782787,
+        -3.901130864403962,
+        -3.448874228747705,
+        -3.1857701240567384,
+        -2.9148977440504122,
+        -2.5288731842426406,
+        -1.7046784051501576
+      ],
+      "retrieval_time_ms": 0.6110668182373047,
+      "metrics": {
+        "precision": {
+          "@1": 1.0,
+          "@3": 0.3333333333333333,
+          "@5": 0.2,
+          "@10": 0.1
+        },
+        "recall": {
+          "@1": 1.0,
+          "@3": 1.0,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "ndcg": {
+          "@1": 1.0,
+          "@3": 1.0,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "reciprocal_rank": 1.0
+      },
+      "first_relevant_rank": 1,
+      "status": "pass"
+    },
+    {
+      "query_id": "q010",
+      "query_text": "DIY perfume making Seoul",
+      "query_type": "single-item-precision",
+      "expected_items": [
+        "a8c70bbe-a324-4e76-819b-c4f02ed902e2"
+      ],
+      "expected_relevance": {
+        "a8c70bbe-a324-4e76-819b-c4f02ed902e2": "high"
+      },
+      "retrieved_items": [
+        "a8c70bbe-a324-4e76-819b-c4f02ed902e2",
+        "fe0288ee-5bcf-46e5-8ce6-c1c65cae5395",
+        "9529aaf8-ff82-4fa0-ad99-23b0051ea0fd",
+        "9b825fe6-5c21-4261-9bba-030b4f5c0c15",
+        "07813e27-093c-4aeb-919e-e29f301e3e49",
+        "ea52b79c-d10a-4b84-8e7a-f8917548a431",
+        "54604ec9-785b-4c28-9a36-f0fd0d48fefe",
+        "d5ffab53-1ad8-44ee-93c9-14cdbd54f2bf",
+        "f509d013-83c6-4e77-b71f-0afbd9999c09"
+      ],
+      "retrieved_scores": [
+        -16.16970330870148,
+        -6.1903190008056885,
+        -5.649857092321795,
+        -5.020180454713745,
+        -4.267598367611445,
+        -4.225040462121696,
+        -4.149926883908625,
+        -4.1198765061664595,
+        -3.563820737047314
+      ],
+      "retrieval_time_ms": 6.60252571105957,
+      "metrics": {
+        "precision": {
+          "@1": 1.0,
+          "@3": 0.3333333333333333,
+          "@5": 0.2,
+          "@10": 0.1
+        },
+        "recall": {
+          "@1": 1.0,
+          "@3": 1.0,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "ndcg": {
+          "@1": 1.0,
+          "@3": 1.0,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "reciprocal_rank": 1.0
+      },
+      "first_relevant_rank": 1,
+      "status": "pass"
+    },
+    {
+      "query_id": "q011",
+      "query_text": "manga drawing class Tokyo",
+      "query_type": "single-item-precision",
+      "expected_items": [
+        "5b61408a-321d-4335-a4be-51f5fff86bec"
+      ],
+      "expected_relevance": {
+        "5b61408a-321d-4335-a4be-51f5fff86bec": "high"
+      },
+      "retrieved_items": [
+        "5b61408a-321d-4335-a4be-51f5fff86bec",
+        "e85fb2dc-c994-48f3-8f6b-baeb936168ec",
+        "9b825fe6-5c21-4261-9bba-030b4f5c0c15",
+        "e51e7a61-0f0e-4801-b97b-066e70a25d4d",
+        "9c443027-7b4b-4c03-a1a2-43c2fab1e8a6",
+        "8aed0ca7-6aed-4635-9cb2-ef47a2aba461",
+        "1f6495b0-6e8c-4421-be9a-50e86bf9381a",
+        "30596c22-5e6d-47ea-8580-46d7c0dd597a",
+        "d4fa1f7b-e50c-4428-911a-06fa73e08fa3",
+        "987f250b-7e99-4ce6-9504-0a9d7879dbdc"
+      ],
+      "retrieved_scores": [
+        -14.482030922687613,
+        -7.596874673222139,
+        -5.483865147205967,
+        -1.8418269443524666,
+        -1.838635699298908,
+        -1.809268718003406,
+        -1.7831078281996346,
+        -1.7761853163243224,
+        -1.7577619030143374,
+        -1.754318429670554
+      ],
+      "retrieval_time_ms": 0.8547306060791016,
+      "metrics": {
+        "precision": {
+          "@1": 1.0,
+          "@3": 0.3333333333333333,
+          "@5": 0.2,
+          "@10": 0.1
+        },
+        "recall": {
+          "@1": 1.0,
+          "@3": 1.0,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "ndcg": {
+          "@1": 1.0,
+          "@3": 1.0,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "reciprocal_rank": 1.0
+      },
+      "first_relevant_rank": 1,
+      "status": "pass"
+    },
+    {
+      "query_id": "q012",
+      "query_text": "sushi making class Asakusa",
+      "query_type": "single-item-precision",
+      "expected_items": [
+        "9b825fe6-5c21-4261-9bba-030b4f5c0c15"
+      ],
+      "expected_relevance": {
+        "9b825fe6-5c21-4261-9bba-030b4f5c0c15": "high"
+      },
+      "retrieved_items": [
+        "9b825fe6-5c21-4261-9bba-030b4f5c0c15",
+        "19619477-d42a-41a0-bdf1-cabdf53aa4e3",
+        "a8c70bbe-a324-4e76-819b-c4f02ed902e2",
+        "9529aaf8-ff82-4fa0-ad99-23b0051ea0fd"
+      ],
+      "retrieved_scores": [
+        -22.266108645497447,
+        -5.711369683525621,
+        -2.7426059091232173,
+        -2.6510010773120576
+      ],
+      "retrieval_time_ms": 1.7104148864746094,
+      "metrics": {
+        "precision": {
+          "@1": 1.0,
+          "@3": 0.3333333333333333,
+          "@5": 0.2,
+          "@10": 0.1
+        },
+        "recall": {
+          "@1": 1.0,
+          "@3": 1.0,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "ndcg": {
+          "@1": 1.0,
+          "@3": 1.0,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "reciprocal_rank": 1.0
+      },
+      "first_relevant_rank": 1,
+      "status": "pass"
+    },
+    {
+      "query_id": "q013",
+      "query_text": "Kuoe Kyoto bronze watch",
+      "query_type": "single-item-precision",
+      "expected_items": [
+        "354b21da-958d-41df-b287-7593926d7474"
+      ],
+      "expected_relevance": {
+        "354b21da-958d-41df-b287-7593926d7474": "high"
+      },
+      "retrieved_items": [
+        "354b21da-958d-41df-b287-7593926d7474",
+        "ae8fd592-4bf6-405d-8662-b5376dea6fa1",
+        "9b825fe6-5c21-4261-9bba-030b4f5c0c15",
+        "0bbb1238-8d46-4cc0-8c34-18ea42b2df00"
+      ],
+      "retrieved_scores": [
+        -25.706853540275283,
+        -5.769003992847751,
+        -3.818416718784151,
+        -3.6259304126181866
+      ],
+      "retrieval_time_ms": 0.7035732269287109,
+      "metrics": {
+        "precision": {
+          "@1": 1.0,
+          "@3": 0.3333333333333333,
+          "@5": 0.2,
+          "@10": 0.1
+        },
+        "recall": {
+          "@1": 1.0,
+          "@3": 1.0,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "ndcg": {
+          "@1": 1.0,
+          "@3": 1.0,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "reciprocal_rank": 1.0
+      },
+      "first_relevant_rank": 1,
+      "status": "pass"
+    },
+    {
+      "query_id": "q014",
+      "query_text": "J-Scent Japanese perfume",
+      "query_type": "single-item-precision",
+      "expected_items": [
+        "fe0288ee-5bcf-46e5-8ce6-c1c65cae5395"
+      ],
+      "expected_relevance": {
+        "fe0288ee-5bcf-46e5-8ce6-c1c65cae5395": "high"
+      },
+      "retrieved_items": [],
+      "retrieved_scores": [],
+      "retrieval_time_ms": 0,
+      "error": "500 Server Error: Internal Server Error for url: http://localhost:8001/search",
+      "status": "error",
+      "metrics": {}
+    },
+    {
+      "query_id": "q015",
+      "query_text": "Kanpachi Ichiroku sightseeing train",
+      "query_type": "single-item-precision",
+      "expected_items": [
+        "2c30420a-4e28-483a-bb5f-2f61f48e7ea7"
+      ],
+      "expected_relevance": {
+        "2c30420a-4e28-483a-bb5f-2f61f48e7ea7": "high"
+      },
+      "retrieved_items": [
+        "2c30420a-4e28-483a-bb5f-2f61f48e7ea7",
+        "044aeaa6-9971-4a05-8b16-6b9e74e682bc",
+        "5699558e-27c1-4937-bf6b-1af903835ee9",
+        "aa66e7f1-8fc4-4e4e-9cb7-178688b85690",
+        "07813e27-093c-4aeb-919e-e29f301e3e49",
+        "54356901-3403-44b1-983e-6ea324a794f1",
+        "ff60cd2b-70db-45e7-9448-38aa90fad548",
+        "a691a4e9-9a01-44bd-8047-6a0c5ab96dce",
+        "1e15d04c-e6a5-4c47-a0db-daa026d09664",
+        "f0e2b4d6-ac3c-40bb-9644-9fb5edaa294c"
+      ],
+      "retrieved_scores": [
+        -22.167993292078506,
+        -3.3456575150634285,
+        -1.453331070201883,
+        -1.3421983154550732,
+        -1.310201425363075,
+        -1.310201425363075,
+        -1.299872135625402,
+        -1.2852363434901046,
+        -1.2247716007252372,
+        -1.1365903651341496
+      ],
+      "retrieval_time_ms": 0.75531005859375,
+      "metrics": {
+        "precision": {
+          "@1": 1.0,
+          "@3": 0.3333333333333333,
+          "@5": 0.2,
+          "@10": 0.1
+        },
+        "recall": {
+          "@1": 1.0,
+          "@3": 1.0,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "ndcg": {
+          "@1": 1.0,
+          "@3": 1.0,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "reciprocal_rank": 1.0
+      },
+      "first_relevant_rank": 1,
+      "status": "pass"
+    },
+    {
+      "query_id": "q016",
+      "query_text": "onsen hot spring accommodations Japan",
+      "query_type": "multi-item-recall",
+      "expected_items": [
+        "ae73fefc-6ec1-4902-9e25-043de7ad52aa",
+        "ae8fd592-4bf6-405d-8662-b5376dea6fa1",
+        "892835c7-0bd1-4ff0-9d67-0f47c3b37351",
+        "365e6dc9-1123-44b6-91e1-c39ffe1be404"
+      ],
+      "expected_relevance": {
+        "ae73fefc-6ec1-4902-9e25-043de7ad52aa": "high",
+        "ae8fd592-4bf6-405d-8662-b5376dea6fa1": "high",
+        "892835c7-0bd1-4ff0-9d67-0f47c3b37351": "high",
+        "365e6dc9-1123-44b6-91e1-c39ffe1be404": "medium"
+      },
+      "retrieved_items": [
+        "ae73fefc-6ec1-4902-9e25-043de7ad52aa",
+        "f0e2b4d6-ac3c-40bb-9644-9fb5edaa294c",
+        "892835c7-0bd1-4ff0-9d67-0f47c3b37351",
+        "365e6dc9-1123-44b6-91e1-c39ffe1be404",
+        "ae8fd592-4bf6-405d-8662-b5376dea6fa1",
+        "94a5fa55-fe27-4579-905f-e1bd32aa933d",
+        "044aeaa6-9971-4a05-8b16-6b9e74e682bc",
+        "f241cd64-f774-4295-ad5e-127ff4290ca6",
+        "b11bd65b-2a80-4a8a-9188-98f027fa7c19",
+        "5699558e-27c1-4937-bf6b-1af903835ee9"
+      ],
+      "retrieved_scores": [
+        -16.844094633956825,
+        -5.479719316956649,
+        -4.6919206385125465,
+        -4.1479873148163415,
+        -3.1253948388620807,
+        -2.2947366837420344,
+        -2.051365349842165e-06,
+        -2.050304977275077e-06,
+        -2.0460214776621856e-06,
+        -2.00998250069483e-06
+      ],
+      "retrieval_time_ms": 4.507780075073242,
+      "metrics": {
+        "precision": {
+          "@1": 1.0,
+          "@3": 0.6666666666666666,
+          "@5": 0.8,
+          "@10": 0.4
+        },
+        "recall": {
+          "@1": 0.25,
+          "@3": 0.5,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "ndcg": {
+          "@1": 1.0,
+          "@3": 0.625,
+          "@5": 0.8928571428571427,
+          "@10": 0.8928571428571427
+        },
+        "reciprocal_rank": 1.0
+      },
+      "first_relevant_rank": 1,
+      "status": "pass"
+    },
+    {
+      "query_id": "q017",
+      "query_text": "AI coding tools for developers",
+      "query_type": "multi-item-recall",
+      "expected_items": [
+        "0bbb1238-8d46-4cc0-8c34-18ea42b2df00",
+        "73eaad2a-c23d-4829-b294-0082eceb9f91",
+        "ff1b2f83-9d52-415b-9a60-4b8a2169c5ff",
+        "5b8a3f21-d25b-4548-8581-2eb625f07514"
+      ],
+      "expected_relevance": {
+        "0bbb1238-8d46-4cc0-8c34-18ea42b2df00": "high",
+        "73eaad2a-c23d-4829-b294-0082eceb9f91": "high",
+        "ff1b2f83-9d52-415b-9a60-4b8a2169c5ff": "high",
+        "5b8a3f21-d25b-4548-8581-2eb625f07514": "medium"
+      },
+      "retrieved_items": [
+        "ff1b2f83-9d52-415b-9a60-4b8a2169c5ff",
+        "73eaad2a-c23d-4829-b294-0082eceb9f91",
+        "0bbb1238-8d46-4cc0-8c34-18ea42b2df00",
+        "5b8a3f21-d25b-4548-8581-2eb625f07514",
+        "5b61408a-321d-4335-a4be-51f5fff86bec",
+        "d5ebd2cd-f71b-4d6e-898a-0e3cc02302ff",
+        "2c30420a-4e28-483a-bb5f-2f61f48e7ea7",
+        "2c2c709a-4566-45b6-b65b-a9accb3a08f0",
+        "f241cd64-f774-4295-ad5e-127ff4290ca6",
+        "1c6a680c-e5e3-42e0-9bf2-bed7863237d9"
+      ],
+      "retrieved_scores": [
+        -13.102710784353096,
+        -11.977942803135036,
+        -11.375232070271476,
+        -5.914481677820741,
+        -4.019697501889039,
+        -2.928089566295073,
+        -2.7818310271105786,
+        -2.044127278416191e-06,
+        -1.9756229270331313e-06,
+        -1.936245422448443e-06
+      ],
+      "retrieval_time_ms": 4.123687744140625,
+      "metrics": {
+        "precision": {
+          "@1": 1.0,
+          "@3": 1.0,
+          "@5": 0.8,
+          "@10": 0.4
+        },
+        "recall": {
+          "@1": 0.25,
+          "@3": 0.75,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "ndcg": {
+          "@1": 1.0,
+          "@3": 1.0,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "reciprocal_rank": 1.0
+      },
+      "first_relevant_rank": 1,
+      "status": "pass"
+    },
+    {
+      "query_id": "q018",
+      "query_text": "hidden gem restaurants Japan",
+      "query_type": "multi-item-recall",
+      "expected_items": [
+        "883726e1-f015-4d5b-b075-948263bdd2b5",
+        "8aed0ca7-6aed-4635-9cb2-ef47a2aba461"
+      ],
+      "expected_relevance": {
+        "883726e1-f015-4d5b-b075-948263bdd2b5": "high",
+        "8aed0ca7-6aed-4635-9cb2-ef47a2aba461": "high"
+      },
+      "retrieved_items": [
+        "8e59d5c3-71ef-4caf-bc16-c23c5b1cc3eb",
+        "ea52b79c-d10a-4b84-8e7a-f8917548a431",
+        "8aed0ca7-6aed-4635-9cb2-ef47a2aba461",
+        "d5ebd2cd-f71b-4d6e-898a-0e3cc02302ff",
+        "883726e1-f015-4d5b-b075-948263bdd2b5",
+        "b46ecb6f-8375-4e26-a282-34ca7b8b88d6",
+        "892835c7-0bd1-4ff0-9d67-0f47c3b37351",
+        "044aeaa6-9971-4a05-8b16-6b9e74e682bc",
+        "f241cd64-f774-4295-ad5e-127ff4290ca6",
+        "b11bd65b-2a80-4a8a-9188-98f027fa7c19"
+      ],
+      "retrieved_scores": [
+        -7.581159106186193,
+        -5.616589925570312,
+        -3.321237837662602,
+        -2.9991122848201752,
+        -2.8703051610083796,
+        -2.823366030484582,
+        -2.071001752031467e-06,
+        -2.051365349842165e-06,
+        -2.050304977275077e-06,
+        -2.0460214776621856e-06
+      ],
+      "retrieval_time_ms": 1.3217926025390625,
+      "metrics": {
+        "precision": {
+          "@1": 0.0,
+          "@3": 0.3333333333333333,
+          "@5": 0.4,
+          "@10": 0.2
+        },
+        "recall": {
+          "@1": 0.0,
+          "@3": 0.5,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "ndcg": {
+          "@1": 0.0,
+          "@3": 0.3333333333333333,
+          "@5": 0.6666666666666666,
+          "@10": 0.6666666666666666
+        },
+        "reciprocal_rank": 0.3333333333333333
+      },
+      "first_relevant_rank": 3,
+      "status": "partial"
+    },
+    {
+      "query_id": "q019",
+      "query_text": "Hokkaido nature photography spots",
+      "query_type": "multi-item-recall",
+      "expected_items": [
+        "54356901-3403-44b1-983e-6ea324a794f1",
+        "1e15d04c-e6a5-4c47-a0db-daa026d09664",
+        "ff60cd2b-70db-45e7-9448-38aa90fad548",
+        "b11bd65b-2a80-4a8a-9188-98f027fa7c19",
+        "a691a4e9-9a01-44bd-8047-6a0c5ab96dce",
+        "93f99f95-aae8-4833-bf5c-48e3dd981b3e",
+        "aa66e7f1-8fc4-4e4e-9cb7-178688b85690"
+      ],
+      "expected_relevance": {
+        "54356901-3403-44b1-983e-6ea324a794f1": "high",
+        "1e15d04c-e6a5-4c47-a0db-daa026d09664": "high",
+        "ff60cd2b-70db-45e7-9448-38aa90fad548": "high",
+        "b11bd65b-2a80-4a8a-9188-98f027fa7c19": "high",
+        "a691a4e9-9a01-44bd-8047-6a0c5ab96dce": "medium",
+        "93f99f95-aae8-4833-bf5c-48e3dd981b3e": "high",
+        "aa66e7f1-8fc4-4e4e-9cb7-178688b85690": "medium"
+      },
+      "retrieved_items": [
+        "54356901-3403-44b1-983e-6ea324a794f1",
+        "b11bd65b-2a80-4a8a-9188-98f027fa7c19",
+        "93f99f95-aae8-4833-bf5c-48e3dd981b3e",
+        "1e15d04c-e6a5-4c47-a0db-daa026d09664",
+        "aa66e7f1-8fc4-4e4e-9cb7-178688b85690",
+        "a691a4e9-9a01-44bd-8047-6a0c5ab96dce",
+        "ff60cd2b-70db-45e7-9448-38aa90fad548",
+        "365e6dc9-1123-44b6-91e1-c39ffe1be404",
+        "2c2c709a-4566-45b6-b65b-a9accb3a08f0",
+        "883726e1-f015-4d5b-b075-948263bdd2b5"
+      ],
+      "retrieved_scores": [
+        -13.796996367798508,
+        -9.684435880749769,
+        -6.574892259213077,
+        -5.585616950680917,
+        -5.361930310303594,
+        -5.3345147121136804,
+        -3.5841451656865893,
+        -3.4539427709041117,
+        -3.449129569359459,
+        -3.048041156481932
+      ],
+      "retrieval_time_ms": 2.6030540466308594,
+      "metrics": {
+        "precision": {
+          "@1": 1.0,
+          "@3": 1.0,
+          "@5": 1.0,
+          "@10": 0.7
+        },
+        "recall": {
+          "@1": 0.14285714285714285,
+          "@3": 0.42857142857142855,
+          "@5": 0.7142857142857143,
+          "@10": 1.0
+        },
+        "ndcg": {
+          "@1": 1.0,
+          "@3": 1.0,
+          "@5": 0.9444444444444445,
+          "@10": 0.9883720930232559
+        },
+        "reciprocal_rank": 1.0
+      },
+      "first_relevant_rank": 1,
+      "status": "pass"
+    },
+    {
+      "query_id": "q020",
+      "query_text": "Tokyo art museums and exhibitions",
+      "query_type": "multi-item-recall",
+      "expected_items": [
+        "23c9c5aa-e523-43d4-a1ae-ce6e30fc5563",
+        "0c7d2d22-635a-4509-b6a1-83a2abf99531"
+      ],
+      "expected_relevance": {
+        "23c9c5aa-e523-43d4-a1ae-ce6e30fc5563": "high",
+        "0c7d2d22-635a-4509-b6a1-83a2abf99531": "high"
+      },
+      "retrieved_items": [
+        "23c9c5aa-e523-43d4-a1ae-ce6e30fc5563",
+        "0c7d2d22-635a-4509-b6a1-83a2abf99531",
+        "19619477-d42a-41a0-bdf1-cabdf53aa4e3",
+        "5b61408a-321d-4335-a4be-51f5fff86bec",
+        "f5129142-8126-4f7b-8b72-72f4024d4078",
+        "1c6a680c-e5e3-42e0-9bf2-bed7863237d9",
+        "e51e7a61-0f0e-4801-b97b-066e70a25d4d",
+        "9c443027-7b4b-4c03-a1a2-43c2fab1e8a6",
+        "8aed0ca7-6aed-4635-9cb2-ef47a2aba461",
+        "1f6495b0-6e8c-4421-be9a-50e86bf9381a"
+      ],
+      "retrieved_scores": [
+        -12.27205918935481,
+        -5.439322819530743,
+        -4.056434877878818,
+        -3.840892079341923,
+        -3.250362504346458,
+        -1.9523975932246678,
+        -1.8418286956855474,
+        -1.8386375668239783,
+        -1.8092702785729926,
+        -1.783109912251286
+      ],
+      "retrieval_time_ms": 1.3403892517089844,
+      "metrics": {
+        "precision": {
+          "@1": 1.0,
+          "@3": 0.6666666666666666,
+          "@5": 0.4,
+          "@10": 0.2
+        },
+        "recall": {
+          "@1": 0.5,
+          "@3": 1.0,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "ndcg": {
+          "@1": 1.0,
+          "@3": 1.0,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "reciprocal_rank": 1.0
+      },
+      "first_relevant_rank": 1,
+      "status": "pass"
+    },
+    {
+      "query_id": "q021",
+      "query_text": "ryokan traditional Japanese accommodation",
+      "query_type": "multi-item-recall",
+      "expected_items": [
+        "8e59d5c3-71ef-4caf-bc16-c23c5b1cc3eb",
+        "ae8fd592-4bf6-405d-8662-b5376dea6fa1",
+        "94a5fa55-fe27-4579-905f-e1bd32aa933d",
+        "f241cd64-f774-4295-ad5e-127ff4290ca6"
+      ],
+      "expected_relevance": {
+        "8e59d5c3-71ef-4caf-bc16-c23c5b1cc3eb": "high",
+        "ae8fd592-4bf6-405d-8662-b5376dea6fa1": "high",
+        "94a5fa55-fe27-4579-905f-e1bd32aa933d": "high",
+        "f241cd64-f774-4295-ad5e-127ff4290ca6": "high"
+      },
+      "retrieved_items": [
+        "8e59d5c3-71ef-4caf-bc16-c23c5b1cc3eb",
+        "f241cd64-f774-4295-ad5e-127ff4290ca6",
+        "94a5fa55-fe27-4579-905f-e1bd32aa933d",
+        "ae73fefc-6ec1-4902-9e25-043de7ad52aa",
+        "ae8fd592-4bf6-405d-8662-b5376dea6fa1",
+        "5b61408a-321d-4335-a4be-51f5fff86bec",
+        "9529aaf8-ff82-4fa0-ad99-23b0051ea0fd",
+        "fe0288ee-5bcf-46e5-8ce6-c1c65cae5395",
+        "d5ebd2cd-f71b-4d6e-898a-0e3cc02302ff",
+        "9c443027-7b4b-4c03-a1a2-43c2fab1e8a6"
+      ],
+      "retrieved_scores": [
+        -11.754058852688408,
+        -8.941315573556865,
+        -8.123585720254933,
+        -4.391139321792188,
+        -2.6659100989313855,
+        -0.8573507470420483,
+        -0.8326691419179815,
+        -0.8217125572385373,
+        -0.7910458481492015,
+        -0.7199588906724466
+      ],
+      "retrieval_time_ms": 0.5497932434082031,
+      "metrics": {
+        "precision": {
+          "@1": 1.0,
+          "@3": 1.0,
+          "@5": 0.8,
+          "@10": 0.4
+        },
+        "recall": {
+          "@1": 0.25,
+          "@3": 0.75,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "ndcg": {
+          "@1": 1.0,
+          "@3": 1.0,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "reciprocal_rank": 1.0
+      },
+      "first_relevant_rank": 1,
+      "status": "pass"
+    },
+    {
+      "query_id": "q022",
+      "query_text": "hands-on workshop experiences Japan",
+      "query_type": "multi-item-recall",
+      "expected_items": [
+        "9529aaf8-ff82-4fa0-ad99-23b0051ea0fd",
+        "5b61408a-321d-4335-a4be-51f5fff86bec",
+        "9b825fe6-5c21-4261-9bba-030b4f5c0c15",
+        "cde0e64e-81f4-4e1c-9b4d-8be67639c4e8"
+      ],
+      "expected_relevance": {
+        "9529aaf8-ff82-4fa0-ad99-23b0051ea0fd": "high",
+        "5b61408a-321d-4335-a4be-51f5fff86bec": "high",
+        "9b825fe6-5c21-4261-9bba-030b4f5c0c15": "high",
+        "cde0e64e-81f4-4e1c-9b4d-8be67639c4e8": "medium"
+      },
+      "retrieved_items": [],
+      "retrieved_scores": [],
+      "retrieval_time_ms": 0,
+      "error": "500 Server Error: Internal Server Error for url: http://localhost:8001/search",
+      "status": "error",
+      "metrics": {}
+    },
+    {
+      "query_id": "q023",
+      "query_text": "scenic viewpoints sunset photography",
+      "query_type": "multi-item-recall",
+      "expected_items": [
+        "ea52b79c-d10a-4b84-8e7a-f8917548a431",
+        "1e15d04c-e6a5-4c47-a0db-daa026d09664",
+        "ff60cd2b-70db-45e7-9448-38aa90fad548",
+        "6390bcde-0606-4c11-af65-e81e89f5741a",
+        "af0723e4-55d9-42e9-942b-617961386b8d"
+      ],
+      "expected_relevance": {
+        "ea52b79c-d10a-4b84-8e7a-f8917548a431": "medium",
+        "1e15d04c-e6a5-4c47-a0db-daa026d09664": "high",
+        "ff60cd2b-70db-45e7-9448-38aa90fad548": "high",
+        "6390bcde-0606-4c11-af65-e81e89f5741a": "high",
+        "af0723e4-55d9-42e9-942b-617961386b8d": "medium"
+      },
+      "retrieved_items": [
+        "6390bcde-0606-4c11-af65-e81e89f5741a",
+        "1e15d04c-e6a5-4c47-a0db-daa026d09664",
+        "af0723e4-55d9-42e9-942b-617961386b8d",
+        "ff60cd2b-70db-45e7-9448-38aa90fad548",
+        "2c2c709a-4566-45b6-b65b-a9accb3a08f0",
+        "54356901-3403-44b1-983e-6ea324a794f1",
+        "ea52b79c-d10a-4b84-8e7a-f8917548a431",
+        "892835c7-0bd1-4ff0-9d67-0f47c3b37351",
+        "93f99f95-aae8-4833-bf5c-48e3dd981b3e",
+        "aa66e7f1-8fc4-4e4e-9cb7-178688b85690"
+      ],
+      "retrieved_scores": [
+        -9.853420974711929,
+        -9.006729424056237,
+        -4.68559100709048,
+        -4.502634580689991,
+        -4.364157361752177,
+        -4.0920335600331,
+        -2.9797000787003127,
+        -2.7070708738788594,
+        -2.687310358297988,
+        -1.8767778756348392
+      ],
+      "retrieval_time_ms": 0.6489753723144531,
+      "metrics": {
+        "precision": {
+          "@1": 1.0,
+          "@3": 1.0,
+          "@5": 0.8,
+          "@10": 0.5
+        },
+        "recall": {
+          "@1": 0.2,
+          "@3": 0.6,
+          "@5": 0.8,
+          "@10": 1.0
+        },
+        "ndcg": {
+          "@1": 1.0,
+          "@3": 0.9166666666666666,
+          "@5": 0.8749999999999999,
+          "@10": 0.9687499999999999
+        },
+        "reciprocal_rank": 1.0
+      },
+      "first_relevant_rank": 1,
+      "status": "pass"
+    },
+    {
+      "query_id": "q024",
+      "query_text": "Fukuoka travel itinerary food",
+      "query_type": "multi-item-recall",
+      "expected_items": [
+        "19619477-d42a-41a0-bdf1-cabdf53aa4e3",
+        "1c6a680c-e5e3-42e0-9bf2-bed7863237d9",
+        "dd523f3e-eed2-4637-be7a-253b3960c584"
+      ],
+      "expected_relevance": {
+        "19619477-d42a-41a0-bdf1-cabdf53aa4e3": "high",
+        "1c6a680c-e5e3-42e0-9bf2-bed7863237d9": "high",
+        "dd523f3e-eed2-4637-be7a-253b3960c584": "high"
+      },
+      "retrieved_items": [
+        "dd523f3e-eed2-4637-be7a-253b3960c584",
+        "1c6a680c-e5e3-42e0-9bf2-bed7863237d9",
+        "19619477-d42a-41a0-bdf1-cabdf53aa4e3",
+        "883726e1-f015-4d5b-b075-948263bdd2b5",
+        "d5ebd2cd-f71b-4d6e-898a-0e3cc02302ff",
+        "f0e2b4d6-ac3c-40bb-9644-9fb5edaa294c",
+        "f5129142-8126-4f7b-8b72-72f4024d4078",
+        "9c443027-7b4b-4c03-a1a2-43c2fab1e8a6",
+        "e85fb2dc-c994-48f3-8f6b-baeb936168ec",
+        "8aed0ca7-6aed-4635-9cb2-ef47a2aba461"
+      ],
+      "retrieved_scores": [
+        -7.167309222838439,
+        -5.922702806594426,
+        -5.908424857633323,
+        -5.299934758170333,
+        -5.126348756758233,
+        -4.190994978179854,
+        -3.890219124754526,
+        -3.1038478325924572,
+        -2.4484905979542497,
+        -2.3780745951295117
+      ],
+      "retrieval_time_ms": 0.8230209350585938,
+      "metrics": {
+        "precision": {
+          "@1": 1.0,
+          "@3": 1.0,
+          "@5": 0.6,
+          "@10": 0.3
+        },
+        "recall": {
+          "@1": 0.3333333333333333,
+          "@3": 1.0,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "ndcg": {
+          "@1": 1.0,
+          "@3": 1.0,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "reciprocal_rank": 1.0
+      },
+      "first_relevant_rank": 1,
+      "status": "pass"
+    },
+    {
+      "query_id": "q025",
+      "query_text": "Tokyo neighborhood guide local culture",
+      "query_type": "multi-item-recall",
+      "expected_items": [
+        "1f6495b0-6e8c-4421-be9a-50e86bf9381a",
+        "30596c22-5e6d-47ea-8580-46d7c0dd597a",
+        "d4fa1f7b-e50c-4428-911a-06fa73e08fa3",
+        "e51e7a61-0f0e-4801-b97b-066e70a25d4d"
+      ],
+      "expected_relevance": {
+        "1f6495b0-6e8c-4421-be9a-50e86bf9381a": "high",
+        "30596c22-5e6d-47ea-8580-46d7c0dd597a": "high",
+        "d4fa1f7b-e50c-4428-911a-06fa73e08fa3": "high",
+        "e51e7a61-0f0e-4801-b97b-066e70a25d4d": "high"
+      },
+      "retrieved_items": [
+        "d4fa1f7b-e50c-4428-911a-06fa73e08fa3",
+        "e51e7a61-0f0e-4801-b97b-066e70a25d4d",
+        "5b61408a-321d-4335-a4be-51f5fff86bec",
+        "2c2c709a-4566-45b6-b65b-a9accb3a08f0",
+        "9b825fe6-5c21-4261-9bba-030b4f5c0c15",
+        "1f6495b0-6e8c-4421-be9a-50e86bf9381a",
+        "e85fb2dc-c994-48f3-8f6b-baeb936168ec",
+        "19619477-d42a-41a0-bdf1-cabdf53aa4e3",
+        "ae8fd592-4bf6-405d-8662-b5376dea6fa1",
+        "30596c22-5e6d-47ea-8580-46d7c0dd597a"
+      ],
+      "retrieved_scores": [
+        -10.288087976843496,
+        -8.11206453966918,
+        -5.332819611617858,
+        -5.223834375388287,
+        -3.8627279855215457,
+        -3.834948697352755,
+        -3.7316239713424952,
+        -3.083084747640524,
+        -3.07283522349304,
+        -2.890430746350545
+      ],
+      "retrieval_time_ms": 0.5114078521728516,
+      "metrics": {
+        "precision": {
+          "@1": 1.0,
+          "@3": 0.6666666666666666,
+          "@5": 0.4,
+          "@10": 0.4
+        },
+        "recall": {
+          "@1": 0.25,
+          "@3": 0.5,
+          "@5": 0.5,
+          "@10": 1.0
+        },
+        "ndcg": {
+          "@1": 1.0,
+          "@3": 0.75,
+          "@5": 0.6,
+          "@10": 0.95
+        },
+        "reciprocal_rank": 1.0
+      },
+      "first_relevant_rank": 1,
+      "status": "pass"
+    },
+    {
+      "query_id": "q026",
+      "query_text": "anime otaku culture Japan travel",
+      "query_type": "multi-item-recall",
+      "expected_items": [
+        "e85fb2dc-c994-48f3-8f6b-baeb936168ec",
+        "2c2c709a-4566-45b6-b65b-a9accb3a08f0",
+        "1c6a680c-e5e3-42e0-9bf2-bed7863237d9"
+      ],
+      "expected_relevance": {
+        "e85fb2dc-c994-48f3-8f6b-baeb936168ec": "high",
+        "2c2c709a-4566-45b6-b65b-a9accb3a08f0": "high",
+        "1c6a680c-e5e3-42e0-9bf2-bed7863237d9": "high"
+      },
+      "retrieved_items": [
+        "e85fb2dc-c994-48f3-8f6b-baeb936168ec",
+        "2c2c709a-4566-45b6-b65b-a9accb3a08f0",
+        "1c6a680c-e5e3-42e0-9bf2-bed7863237d9",
+        "ae8fd592-4bf6-405d-8662-b5376dea6fa1",
+        "6390bcde-0606-4c11-af65-e81e89f5741a",
+        "8e59d5c3-71ef-4caf-bc16-c23c5b1cc3eb",
+        "1f6495b0-6e8c-4421-be9a-50e86bf9381a",
+        "54604ec9-785b-4c28-9a36-f0fd0d48fefe",
+        "19619477-d42a-41a0-bdf1-cabdf53aa4e3",
+        "892835c7-0bd1-4ff0-9d67-0f47c3b37351"
+      ],
+      "retrieved_scores": [
+        -10.54844251884961,
+        -6.607298762046684,
+        -3.9011337225772142,
+        -3.0728378280309365,
+        -2.528876742407227,
+        -2.1260823286983834,
+        -2.05184427804615,
+        -1.9155892418403127,
+        -1.5673866450434617,
+        -4.132704342454654e-06
+      ],
+      "retrieval_time_ms": 0.6029605865478516,
+      "metrics": {
+        "precision": {
+          "@1": 1.0,
+          "@3": 1.0,
+          "@5": 0.6,
+          "@10": 0.3
+        },
+        "recall": {
+          "@1": 0.3333333333333333,
+          "@3": 1.0,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "ndcg": {
+          "@1": 1.0,
+          "@3": 1.0,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "reciprocal_rank": 1.0
+      },
+      "first_relevant_rank": 1,
+      "status": "pass"
+    },
+    {
+      "query_id": "q027",
+      "query_text": "luxury travel experiences Japan",
+      "query_type": "multi-item-recall",
+      "expected_items": [
+        "2c30420a-4e28-483a-bb5f-2f61f48e7ea7",
+        "ae8fd592-4bf6-405d-8662-b5376dea6fa1",
+        "f241cd64-f774-4295-ad5e-127ff4290ca6",
+        "8e59d5c3-71ef-4caf-bc16-c23c5b1cc3eb",
+        "8aed0ca7-6aed-4635-9cb2-ef47a2aba461"
+      ],
+      "expected_relevance": {
+        "2c30420a-4e28-483a-bb5f-2f61f48e7ea7": "high",
+        "ae8fd592-4bf6-405d-8662-b5376dea6fa1": "high",
+        "f241cd64-f774-4295-ad5e-127ff4290ca6": "high",
+        "8e59d5c3-71ef-4caf-bc16-c23c5b1cc3eb": "medium",
+        "8aed0ca7-6aed-4635-9cb2-ef47a2aba461": "medium"
+      },
+      "retrieved_items": [
+        "19619477-d42a-41a0-bdf1-cabdf53aa4e3",
+        "9b825fe6-5c21-4261-9bba-030b4f5c0c15",
+        "54604ec9-785b-4c28-9a36-f0fd0d48fefe",
+        "cde0e64e-81f4-4e1c-9b4d-8be67639c4e8",
+        "f241cd64-f774-4295-ad5e-127ff4290ca6",
+        "2c30420a-4e28-483a-bb5f-2f61f48e7ea7",
+        "5b61408a-321d-4335-a4be-51f5fff86bec",
+        "ae8fd592-4bf6-405d-8662-b5376dea6fa1",
+        "892835c7-0bd1-4ff0-9d67-0f47c3b37351",
+        "044aeaa6-9971-4a05-8b16-6b9e74e682bc"
+      ],
+      "retrieved_scores": [
+        -4.544473070069706,
+        -3.904256485858821,
+        -3.4114747450386016,
+        -3.2255785191196593,
+        -2.6518818237688695,
+        -2.425263884471726,
+        -2.3509576674375867,
+        -1.999305363497711,
+        -4.132704342454654e-06,
+        -4.092124840490317e-06
+      ],
+      "retrieval_time_ms": 0.8208751678466797,
+      "metrics": {
+        "precision": {
+          "@1": 0.0,
+          "@3": 0.0,
+          "@5": 0.2,
+          "@10": 0.3
+        },
+        "recall": {
+          "@1": 0.0,
+          "@3": 0.0,
+          "@5": 0.2,
+          "@10": 0.6
+        },
+        "ndcg": {
+          "@1": 0.0,
+          "@3": 0.0,
+          "@5": 0.1875,
+          "@10": 0.515625
+        },
+        "reciprocal_rank": 0.2
+      },
+      "first_relevant_rank": 5,
+      "status": "partial"
+    },
+    {
+      "query_id": "q028",
+      "query_text": "day trip ideas from Tokyo",
+      "query_type": "multi-item-recall",
+      "expected_items": [
+        "9c443027-7b4b-4c03-a1a2-43c2fab1e8a6",
+        "5699558e-27c1-4937-bf6b-1af903835ee9",
+        "987f250b-7e99-4ce6-9504-0a9d7879dbdc"
+      ],
+      "expected_relevance": {
+        "9c443027-7b4b-4c03-a1a2-43c2fab1e8a6": "high",
+        "5699558e-27c1-4937-bf6b-1af903835ee9": "medium",
+        "987f250b-7e99-4ce6-9504-0a9d7879dbdc": "medium"
+      },
+      "retrieved_items": [
+        "987f250b-7e99-4ce6-9504-0a9d7879dbdc",
+        "9c443027-7b4b-4c03-a1a2-43c2fab1e8a6",
+        "94a5fa55-fe27-4579-905f-e1bd32aa933d",
+        "19619477-d42a-41a0-bdf1-cabdf53aa4e3",
+        "2c2c709a-4566-45b6-b65b-a9accb3a08f0",
+        "0c7d2d22-635a-4509-b6a1-83a2abf99531",
+        "f509d013-83c6-4e77-b71f-0afbd9999c09",
+        "dd523f3e-eed2-4637-be7a-253b3960c584",
+        "23c9c5aa-e523-43d4-a1ae-ce6e30fc5563",
+        "d4fa1f7b-e50c-4428-911a-06fa73e08fa3"
+      ],
+      "retrieved_scores": [
+        -9.122529201526762,
+        -9.047375908951597,
+        -7.26418108547637,
+        -6.556892003228615,
+        -5.439289917042287,
+        -4.492204901701689,
+        -4.443090948674116,
+        -4.431449144080597,
+        -4.33844312651878,
+        -4.19156985614395
+      ],
+      "retrieval_time_ms": 0.5741119384765625,
+      "metrics": {
+        "precision": {
+          "@1": 1.0,
+          "@3": 0.6666666666666666,
+          "@5": 0.4,
+          "@10": 0.2
+        },
+        "recall": {
+          "@1": 0.3333333333333333,
+          "@3": 0.6666666666666666,
+          "@5": 0.6666666666666666,
+          "@10": 0.6666666666666666
+        },
+        "ndcg": {
+          "@1": 0.6666666666666666,
+          "@3": 0.7894736842105263,
+          "@5": 0.7894736842105263,
+          "@10": 0.7894736842105263
+        },
+        "reciprocal_rank": 1.0
+      },
+      "first_relevant_rank": 1,
+      "status": "pass"
+    },
+    {
+      "query_id": "q029",
+      "query_text": "cafes and brunch spots",
+      "query_type": "multi-item-recall",
+      "expected_items": [
+        "30596c22-5e6d-47ea-8580-46d7c0dd597a",
+        "d5ffab53-1ad8-44ee-93c9-14cdbd54f2bf"
+      ],
+      "expected_relevance": {
+        "30596c22-5e6d-47ea-8580-46d7c0dd597a": "high",
+        "d5ffab53-1ad8-44ee-93c9-14cdbd54f2bf": "high"
+      },
+      "retrieved_items": [
+        "d5ffab53-1ad8-44ee-93c9-14cdbd54f2bf",
+        "30596c22-5e6d-47ea-8580-46d7c0dd597a",
+        "19619477-d42a-41a0-bdf1-cabdf53aa4e3",
+        "b11bd65b-2a80-4a8a-9188-98f027fa7c19",
+        "54356901-3403-44b1-983e-6ea324a794f1",
+        "2c2c709a-4566-45b6-b65b-a9accb3a08f0",
+        "883726e1-f015-4d5b-b075-948263bdd2b5",
+        "dd523f3e-eed2-4637-be7a-253b3960c584",
+        "1e15d04c-e6a5-4c47-a0db-daa026d09664",
+        "ea52b79c-d10a-4b84-8e7a-f8917548a431"
+      ],
+      "retrieved_scores": [
+        -4.975060086438747,
+        -3.8931919629411746,
+        -3.723389582455033,
+        -3.4783945788034836,
+        -3.4616975769161553,
+        -3.4491313597797517,
+        -3.0480431137094315,
+        -2.363461961395076,
+        -1.922553055384646,
+        -1.5798717047192445
+      ],
+      "retrieval_time_ms": 0.7526874542236328,
+      "metrics": {
+        "precision": {
+          "@1": 1.0,
+          "@3": 0.6666666666666666,
+          "@5": 0.4,
+          "@10": 0.2
+        },
+        "recall": {
+          "@1": 0.5,
+          "@3": 1.0,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "ndcg": {
+          "@1": 1.0,
+          "@3": 1.0,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "reciprocal_rank": 1.0
+      },
+      "first_relevant_rank": 1,
+      "status": "pass"
+    },
+    {
+      "query_id": "q030",
+      "query_text": "fragrance perfume shopping Asia",
+      "query_type": "multi-item-recall",
+      "expected_items": [
+        "fe0288ee-5bcf-46e5-8ce6-c1c65cae5395",
+        "a8c70bbe-a324-4e76-819b-c4f02ed902e2"
+      ],
+      "expected_relevance": {
+        "fe0288ee-5bcf-46e5-8ce6-c1c65cae5395": "high",
+        "a8c70bbe-a324-4e76-819b-c4f02ed902e2": "high"
+      },
+      "retrieved_items": [
+        "fe0288ee-5bcf-46e5-8ce6-c1c65cae5395",
+        "a8c70bbe-a324-4e76-819b-c4f02ed902e2",
+        "e85fb2dc-c994-48f3-8f6b-baeb936168ec",
+        "d4fa1f7b-e50c-4428-911a-06fa73e08fa3",
+        "dd523f3e-eed2-4637-be7a-253b3960c584",
+        "354b21da-958d-41df-b287-7593926d7474",
+        "19619477-d42a-41a0-bdf1-cabdf53aa4e3"
+      ],
+      "retrieved_scores": [
+        -14.21336532453088,
+        -10.430963757316874,
+        -4.065624179284885,
+        -4.025956867782787,
+        -3.448874228747705,
+        -3.1857701240567384,
+        -1.7046784051501576
+      ],
+      "retrieval_time_ms": 0.4954338073730469,
+      "metrics": {
+        "precision": {
+          "@1": 1.0,
+          "@3": 0.6666666666666666,
+          "@5": 0.4,
+          "@10": 0.2
+        },
+        "recall": {
+          "@1": 0.5,
+          "@3": 1.0,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "ndcg": {
+          "@1": 1.0,
+          "@3": 1.0,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "reciprocal_rank": 1.0
+      },
+      "first_relevant_rank": 1,
+      "status": "pass"
+    },
+    {
+      "query_id": "q031",
+      "query_text": "where can I relax in a hot spring with mountain views",
+      "query_type": "semantic",
+      "expected_items": [
+        "ae8fd592-4bf6-405d-8662-b5376dea6fa1",
+        "892835c7-0bd1-4ff0-9d67-0f47c3b37351",
+        "94a5fa55-fe27-4579-905f-e1bd32aa933d",
+        "f241cd64-f774-4295-ad5e-127ff4290ca6"
+      ],
+      "expected_relevance": {
+        "ae8fd592-4bf6-405d-8662-b5376dea6fa1": "high",
+        "892835c7-0bd1-4ff0-9d67-0f47c3b37351": "high",
+        "94a5fa55-fe27-4579-905f-e1bd32aa933d": "high",
+        "f241cd64-f774-4295-ad5e-127ff4290ca6": "high"
+      },
+      "retrieved_items": [
+        "ae8fd592-4bf6-405d-8662-b5376dea6fa1",
+        "ae73fefc-6ec1-4902-9e25-043de7ad52aa",
+        "30596c22-5e6d-47ea-8580-46d7c0dd597a",
+        "f241cd64-f774-4295-ad5e-127ff4290ca6",
+        "f0e2b4d6-ac3c-40bb-9644-9fb5edaa294c",
+        "5b8a3f21-d25b-4548-8581-2eb625f07514",
+        "ea52b79c-d10a-4b84-8e7a-f8917548a431",
+        "6390bcde-0606-4c11-af65-e81e89f5741a",
+        "f509d013-83c6-4e77-b71f-0afbd9999c09",
+        "a8c70bbe-a324-4e76-819b-c4f02ed902e2"
+      ],
+      "retrieved_scores": [
+        -18.66983528984939,
+        -12.252093037165265,
+        -10.054532602286661,
+        -6.9517540427754945,
+        -6.848859744693914,
+        -4.905617045442173,
+        -4.7667340554329884,
+        -4.6413984973633475,
+        -4.139454603864875,
+        -3.951457823557674
+      ],
+      "retrieval_time_ms": 1.0285377502441406,
+      "metrics": {
+        "precision": {
+          "@1": 1.0,
+          "@3": 0.3333333333333333,
+          "@5": 0.4,
+          "@10": 0.2
+        },
+        "recall": {
+          "@1": 0.25,
+          "@3": 0.25,
+          "@5": 0.5,
+          "@10": 0.5
+        },
+        "ndcg": {
+          "@1": 1.0,
+          "@3": 0.375,
+          "@5": 0.5,
+          "@10": 0.5
+        },
+        "reciprocal_rank": 1.0
+      },
+      "first_relevant_rank": 1,
+      "status": "pass"
+    },
+    {
+      "query_id": "q032",
+      "query_text": "cool things to do at night in Seoul",
+      "query_type": "semantic",
+      "expected_items": [
+        "ea52b79c-d10a-4b84-8e7a-f8917548a431",
+        "54604ec9-785b-4c28-9a36-f0fd0d48fefe",
+        "07813e27-093c-4aeb-919e-e29f301e3e49"
+      ],
+      "expected_relevance": {
+        "ea52b79c-d10a-4b84-8e7a-f8917548a431": "high",
+        "54604ec9-785b-4c28-9a36-f0fd0d48fefe": "medium",
+        "07813e27-093c-4aeb-919e-e29f301e3e49": "medium"
+      },
+      "retrieved_items": [
+        "f241cd64-f774-4295-ad5e-127ff4290ca6",
+        "a8c70bbe-a324-4e76-819b-c4f02ed902e2",
+        "ea52b79c-d10a-4b84-8e7a-f8917548a431",
+        "07813e27-093c-4aeb-919e-e29f301e3e49",
+        "54604ec9-785b-4c28-9a36-f0fd0d48fefe",
+        "d5ffab53-1ad8-44ee-93c9-14cdbd54f2bf",
+        "1e15d04c-e6a5-4c47-a0db-daa026d09664",
+        "f509d013-83c6-4e77-b71f-0afbd9999c09",
+        "e51e7a61-0f0e-4801-b97b-066e70a25d4d",
+        "6390bcde-0606-4c11-af65-e81e89f5741a"
+      ],
+      "retrieved_scores": [
+        -15.30095249824203,
+        -10.21308471622894,
+        -8.087668435758449,
+        -4.897146990104765,
+        -4.76306817654134,
+        -4.568870751716212,
+        -4.298069051642211,
+        -4.1597639540691524,
+        -3.3285515648502844,
+        -3.2631238998924363
+      ],
+      "retrieval_time_ms": 0.9484291076660156,
+      "metrics": {
+        "precision": {
+          "@1": 0.0,
+          "@3": 0.3333333333333333,
+          "@5": 0.6,
+          "@10": 0.3
+        },
+        "recall": {
+          "@1": 0.0,
+          "@3": 0.3333333333333333,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "ndcg": {
+          "@1": 0.0,
+          "@3": 0.31578947368421056,
+          "@5": 0.7368421052631579,
+          "@10": 0.7368421052631579
+        },
+        "reciprocal_rank": 0.3333333333333333
+      },
+      "first_relevant_rank": 3,
+      "status": "partial"
+    },
+    {
+      "query_id": "q033",
+      "query_text": "I want to learn something creative while in Japan",
+      "query_type": "semantic",
+      "expected_items": [
+        "9529aaf8-ff82-4fa0-ad99-23b0051ea0fd",
+        "5b61408a-321d-4335-a4be-51f5fff86bec",
+        "9b825fe6-5c21-4261-9bba-030b4f5c0c15"
+      ],
+      "expected_relevance": {
+        "9529aaf8-ff82-4fa0-ad99-23b0051ea0fd": "high",
+        "5b61408a-321d-4335-a4be-51f5fff86bec": "high",
+        "9b825fe6-5c21-4261-9bba-030b4f5c0c15": "high"
+      },
+      "retrieved_items": [
+        "fe0288ee-5bcf-46e5-8ce6-c1c65cae5395",
+        "23c9c5aa-e523-43d4-a1ae-ce6e30fc5563",
+        "5b61408a-321d-4335-a4be-51f5fff86bec",
+        "2c2c709a-4566-45b6-b65b-a9accb3a08f0",
+        "d5ebd2cd-f71b-4d6e-898a-0e3cc02302ff",
+        "54604ec9-785b-4c28-9a36-f0fd0d48fefe",
+        "d5ffab53-1ad8-44ee-93c9-14cdbd54f2bf",
+        "5b8a3f21-d25b-4548-8581-2eb625f07514",
+        "2c30420a-4e28-483a-bb5f-2f61f48e7ea7",
+        "6390bcde-0606-4c11-af65-e81e89f5741a"
+      ],
+      "retrieved_scores": [
+        -10.2224491574423,
+        -8.564173264880782,
+        -8.283236567565297,
+        -5.484762647208184,
+        -3.769207811925494,
+        -1.8827088997009973,
+        -1.8724537214051815,
+        -1.7998827562395217,
+        -1.7757483129911114,
+        -1.6843083491502127
+      ],
+      "retrieval_time_ms": 0.9374618530273438,
+      "metrics": {
+        "precision": {
+          "@1": 0.0,
+          "@3": 0.3333333333333333,
+          "@5": 0.2,
+          "@10": 0.1
+        },
+        "recall": {
+          "@1": 0.0,
+          "@3": 0.3333333333333333,
+          "@5": 0.3333333333333333,
+          "@10": 0.3333333333333333
+        },
+        "ndcg": {
+          "@1": 0.0,
+          "@3": 0.25,
+          "@5": 0.25,
+          "@10": 0.25
+        },
+        "reciprocal_rank": 0.3333333333333333
+      },
+      "first_relevant_rank": 3,
+      "status": "partial"
+    },
+    {
+      "query_id": "q034",
+      "query_text": "trendy coffee shops Tokyo",
+      "query_type": "semantic",
+      "expected_items": [
+        "30596c22-5e6d-47ea-8580-46d7c0dd597a",
+        "1f6495b0-6e8c-4421-be9a-50e86bf9381a"
+      ],
+      "expected_relevance": {
+        "30596c22-5e6d-47ea-8580-46d7c0dd597a": "high",
+        "1f6495b0-6e8c-4421-be9a-50e86bf9381a": "medium"
+      },
+      "retrieved_items": [
+        "1f6495b0-6e8c-4421-be9a-50e86bf9381a",
+        "d4fa1f7b-e50c-4428-911a-06fa73e08fa3",
+        "30596c22-5e6d-47ea-8580-46d7c0dd597a",
+        "19619477-d42a-41a0-bdf1-cabdf53aa4e3",
+        "354b21da-958d-41df-b287-7593926d7474",
+        "dd523f3e-eed2-4637-be7a-253b3960c584",
+        "e51e7a61-0f0e-4801-b97b-066e70a25d4d",
+        "9c443027-7b4b-4c03-a1a2-43c2fab1e8a6",
+        "8aed0ca7-6aed-4635-9cb2-ef47a2aba461",
+        "e85fb2dc-c994-48f3-8f6b-baeb936168ec"
+      ],
+      "retrieved_scores": [
+        -13.14263389323038,
+        -7.01284375672626,
+        -6.307241273079012,
+        -3.2914899711667185,
+        -3.0551562734802253,
+        -2.7228818398597943,
+        -1.8418269443524666,
+        -1.838635699298908,
+        -1.809268718003406,
+        -1.7613219982858974
+      ],
+      "retrieval_time_ms": 0.6988048553466797,
+      "metrics": {
+        "precision": {
+          "@1": 1.0,
+          "@3": 0.6666666666666666,
+          "@5": 0.4,
+          "@10": 0.2
+        },
+        "recall": {
+          "@1": 0.5,
+          "@3": 1.0,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "ndcg": {
+          "@1": 0.6666666666666666,
+          "@3": 0.8,
+          "@5": 0.8,
+          "@10": 0.8
+        },
+        "reciprocal_rank": 1.0
+      },
+      "first_relevant_rank": 1,
+      "status": "pass"
+    },
+    {
+      "query_id": "q035",
+      "query_text": "breathtaking flower fields to photograph",
+      "query_type": "semantic",
+      "expected_items": [
+        "54356901-3403-44b1-983e-6ea324a794f1",
+        "b11bd65b-2a80-4a8a-9188-98f027fa7c19",
+        "aa66e7f1-8fc4-4e4e-9cb7-178688b85690"
+      ],
+      "expected_relevance": {
+        "54356901-3403-44b1-983e-6ea324a794f1": "high",
+        "b11bd65b-2a80-4a8a-9188-98f027fa7c19": "high",
+        "aa66e7f1-8fc4-4e4e-9cb7-178688b85690": "high"
+      },
+      "retrieved_items": [
+        "b11bd65b-2a80-4a8a-9188-98f027fa7c19",
+        "54356901-3403-44b1-983e-6ea324a794f1",
+        "aa66e7f1-8fc4-4e4e-9cb7-178688b85690",
+        "30596c22-5e6d-47ea-8580-46d7c0dd597a",
+        "ff1b2f83-9d52-415b-9a60-4b8a2169c5ff",
+        "23c9c5aa-e523-43d4-a1ae-ce6e30fc5563",
+        "044aeaa6-9971-4a05-8b16-6b9e74e682bc",
+        "73eaad2a-c23d-4829-b294-0082eceb9f91",
+        "f509d013-83c6-4e77-b71f-0afbd9999c09",
+        "94a5fa55-fe27-4579-905f-e1bd32aa933d"
+      ],
+      "retrieved_scores": [
+        -10.358504163427934,
+        -4.832312573730593,
+        -4.710148194000058,
+        -2.4196926538476378,
+        -2.0398755307832464e-06,
+        -2.00634529446296e-06,
+        -1.9973870010900154e-06,
+        -1.992605385880771e-06,
+        -1.992245913561908e-06,
+        -1.9774054050497326e-06
+      ],
+      "retrieval_time_ms": 1.8193721771240234,
+      "metrics": {
+        "precision": {
+          "@1": 1.0,
+          "@3": 1.0,
+          "@5": 0.6,
+          "@10": 0.3
+        },
+        "recall": {
+          "@1": 0.3333333333333333,
+          "@3": 1.0,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "ndcg": {
+          "@1": 1.0,
+          "@3": 1.0,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "reciprocal_rank": 1.0
+      },
+      "first_relevant_rank": 1,
+      "status": "pass"
+    },
+    {
+      "query_id": "q036",
+      "query_text": "Luggage storage in Japan",
+      "query_type": "semantic",
+      "expected_items": [
+        "044aeaa6-9971-4a05-8b16-6b9e74e682bc"
+      ],
+      "expected_relevance": {
+        "044aeaa6-9971-4a05-8b16-6b9e74e682bc": "high"
+      },
+      "retrieved_items": [
+        "044aeaa6-9971-4a05-8b16-6b9e74e682bc",
+        "f241cd64-f774-4295-ad5e-127ff4290ca6",
+        "892835c7-0bd1-4ff0-9d67-0f47c3b37351",
+        "f5129142-8126-4f7b-8b72-72f4024d4078",
+        "e51e7a61-0f0e-4801-b97b-066e70a25d4d",
+        "1e15d04c-e6a5-4c47-a0db-daa026d09664",
+        "54356901-3403-44b1-983e-6ea324a794f1",
+        "cde0e64e-81f4-4e1c-9b4d-8be67639c4e8",
+        "b11bd65b-2a80-4a8a-9188-98f027fa7c19",
+        "8e59d5c3-71ef-4caf-bc16-c23c5b1cc3eb"
+      ],
+      "retrieved_scores": [
+        -10.684754797184395,
+        -4.063255166412907e-06,
+        -4.054764225604966e-06,
+        -3.9994733632553e-06,
+        -3.991022457137545e-06,
+        -3.9805853709568335e-06,
+        -3.9121497652126936e-06,
+        -3.890779288547922e-06,
+        -3.840807899707538e-06,
+        -3.8250259690125305e-06
+      ],
+      "retrieval_time_ms": 0.8597373962402344,
+      "metrics": {
+        "precision": {
+          "@1": 1.0,
+          "@3": 0.3333333333333333,
+          "@5": 0.2,
+          "@10": 0.1
+        },
+        "recall": {
+          "@1": 1.0,
+          "@3": 1.0,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "ndcg": {
+          "@1": 1.0,
+          "@3": 1.0,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "reciprocal_rank": 1.0
+      },
+      "first_relevant_rank": 1,
+      "status": "pass"
+    },
+    {
+      "query_id": "q037",
+      "query_text": "romantic sunset spots",
+      "query_type": "semantic",
+      "expected_items": [
+        "ff60cd2b-70db-45e7-9448-38aa90fad548",
+        "6390bcde-0606-4c11-af65-e81e89f5741a"
+      ],
+      "expected_relevance": {
+        "ff60cd2b-70db-45e7-9448-38aa90fad548": "high",
+        "6390bcde-0606-4c11-af65-e81e89f5741a": "high"
+      },
+      "retrieved_items": [
+        "6390bcde-0606-4c11-af65-e81e89f5741a",
+        "2c2c709a-4566-45b6-b65b-a9accb3a08f0",
+        "1e15d04c-e6a5-4c47-a0db-daa026d09664",
+        "ff60cd2b-70db-45e7-9448-38aa90fad548",
+        "b11bd65b-2a80-4a8a-9188-98f027fa7c19",
+        "54356901-3403-44b1-983e-6ea324a794f1",
+        "883726e1-f015-4d5b-b075-948263bdd2b5",
+        "8aed0ca7-6aed-4635-9cb2-ef47a2aba461",
+        "dd523f3e-eed2-4637-be7a-253b3960c584",
+        "ea52b79c-d10a-4b84-8e7a-f8917548a431"
+      ],
+      "retrieved_scores": [
+        -7.947009173887304,
+        -7.8132869311116355,
+        -6.783081522209786,
+        -4.502634580689991,
+        -3.4783930631772173,
+        -3.461696437941841,
+        -3.048041156481932,
+        -3.023229981077262,
+        -2.3634599057887233,
+        -1.5798698366822919
+      ],
+      "retrieval_time_ms": 0.7467269897460938,
+      "metrics": {
+        "precision": {
+          "@1": 1.0,
+          "@3": 0.3333333333333333,
+          "@5": 0.4,
+          "@10": 0.2
+        },
+        "recall": {
+          "@1": 0.5,
+          "@3": 0.5,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "ndcg": {
+          "@1": 1.0,
+          "@3": 0.5,
+          "@5": 0.8333333333333334,
+          "@10": 0.8333333333333334
+        },
+        "reciprocal_rank": 1.0
+      },
+      "first_relevant_rank": 1,
+      "status": "pass"
+    },
+    {
+      "query_id": "q038",
+      "query_text": "authentic local food experiences off the tourist trail",
+      "query_type": "semantic",
+      "expected_items": [
+        "883726e1-f015-4d5b-b075-948263bdd2b5",
+        "d4fa1f7b-e50c-4428-911a-06fa73e08fa3",
+        "d5ebd2cd-f71b-4d6e-898a-0e3cc02302ff"
+      ],
+      "expected_relevance": {
+        "883726e1-f015-4d5b-b075-948263bdd2b5": "high",
+        "d4fa1f7b-e50c-4428-911a-06fa73e08fa3": "high",
+        "d5ebd2cd-f71b-4d6e-898a-0e3cc02302ff": "medium"
+      },
+      "retrieved_items": [
+        "d4fa1f7b-e50c-4428-911a-06fa73e08fa3",
+        "f509d013-83c6-4e77-b71f-0afbd9999c09",
+        "cde0e64e-81f4-4e1c-9b4d-8be67639c4e8",
+        "9b825fe6-5c21-4261-9bba-030b4f5c0c15",
+        "dd523f3e-eed2-4637-be7a-253b3960c584",
+        "1c6a680c-e5e3-42e0-9bf2-bed7863237d9",
+        "19619477-d42a-41a0-bdf1-cabdf53aa4e3",
+        "5b61408a-321d-4335-a4be-51f5fff86bec",
+        "54604ec9-785b-4c28-9a36-f0fd0d48fefe",
+        "2fcc79b3-2798-4f56-8669-822b1e214981"
+      ],
+      "retrieved_scores": [
+        -7.3075417638162445,
+        -6.692631622638324,
+        -6.326592534591393,
+        -6.01052400858537,
+        -5.694742323028424,
+        -4.504033938727411,
+        -4.338590525712383,
+        -4.30903964667978,
+        -3.411475104230562,
+        -2.724860112119587
+      ],
+      "retrieval_time_ms": 0.9481906890869141,
+      "metrics": {
+        "precision": {
+          "@1": 1.0,
+          "@3": 0.3333333333333333,
+          "@5": 0.2,
+          "@10": 0.1
+        },
+        "recall": {
+          "@1": 0.3333333333333333,
+          "@3": 0.3333333333333333,
+          "@5": 0.3333333333333333,
+          "@10": 0.3333333333333333
+        },
+        "ndcg": {
+          "@1": 1.0,
+          "@3": 0.4090909090909091,
+          "@5": 0.4090909090909091,
+          "@10": 0.4090909090909091
+        },
+        "reciprocal_rank": 1.0
+      },
+      "first_relevant_rank": 1,
+      "status": "pass"
+    },
+    {
+      "query_id": "q039",
+      "query_text": "what coding tools use AI to help build websites",
+      "query_type": "semantic",
+      "expected_items": [
+        "0bbb1238-8d46-4cc0-8c34-18ea42b2df00",
+        "73eaad2a-c23d-4829-b294-0082eceb9f91",
+        "ff1b2f83-9d52-415b-9a60-4b8a2169c5ff"
+      ],
+      "expected_relevance": {
+        "0bbb1238-8d46-4cc0-8c34-18ea42b2df00": "high",
+        "73eaad2a-c23d-4829-b294-0082eceb9f91": "high",
+        "ff1b2f83-9d52-415b-9a60-4b8a2169c5ff": "high"
+      },
+      "retrieved_items": [
+        "73eaad2a-c23d-4829-b294-0082eceb9f91",
+        "ff1b2f83-9d52-415b-9a60-4b8a2169c5ff",
+        "0bbb1238-8d46-4cc0-8c34-18ea42b2df00",
+        "5b8a3f21-d25b-4548-8581-2eb625f07514",
+        "5b61408a-321d-4335-a4be-51f5fff86bec",
+        "e85fb2dc-c994-48f3-8f6b-baeb936168ec",
+        "af0723e4-55d9-42e9-942b-617961386b8d",
+        "d5ebd2cd-f71b-4d6e-898a-0e3cc02302ff",
+        "2c30420a-4e28-483a-bb5f-2f61f48e7ea7",
+        "23c9c5aa-e523-43d4-a1ae-ce6e30fc5563"
+      ],
+      "retrieved_scores": [
+        -18.001215976207195,
+        -13.102711124552723,
+        -11.375232070271476,
+        -10.205463557586143,
+        -9.384661180626198,
+        -5.12536331497599,
+        -4.181691696197068,
+        -2.9280896961177505,
+        -2.78183070865391,
+        -2.00634529446296e-06
+      ],
+      "retrieval_time_ms": 1.055002212524414,
+      "metrics": {
+        "precision": {
+          "@1": 1.0,
+          "@3": 1.0,
+          "@5": 0.6,
+          "@10": 0.3
+        },
+        "recall": {
+          "@1": 0.3333333333333333,
+          "@3": 1.0,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "ndcg": {
+          "@1": 1.0,
+          "@3": 1.0,
+          "@5": 1.0,
+          "@10": 1.0
+        },
+        "reciprocal_rank": 1.0
+      },
+      "first_relevant_rank": 1,
+      "status": "pass"
+    },
+    {
+      "query_id": "q040",
+      "query_text": "peaceful nature escapes near Tokyo",
+      "query_type": "semantic",
+      "expected_items": [
+        "8e59d5c3-71ef-4caf-bc16-c23c5b1cc3eb",
+        "ae73fefc-6ec1-4902-9e25-043de7ad52aa",
+        "94a5fa55-fe27-4579-905f-e1bd32aa933d"
+      ],
+      "expected_relevance": {
+        "8e59d5c3-71ef-4caf-bc16-c23c5b1cc3eb": "high",
+        "ae73fefc-6ec1-4902-9e25-043de7ad52aa": "high",
+        "94a5fa55-fe27-4579-905f-e1bd32aa933d": "high"
+      },
+      "retrieved_items": [
+        "f241cd64-f774-4295-ad5e-127ff4290ca6",
+        "ea52b79c-d10a-4b84-8e7a-f8917548a431",
+        "93f99f95-aae8-4833-bf5c-48e3dd981b3e",
+        "ae8fd592-4bf6-405d-8662-b5376dea6fa1",
+        "892835c7-0bd1-4ff0-9d67-0f47c3b37351",
+        "b11bd65b-2a80-4a8a-9188-98f027fa7c19",
+        "54356901-3403-44b1-983e-6ea324a794f1",
+        "5699558e-27c1-4937-bf6b-1af903835ee9",
+        "2fcc79b3-2798-4f56-8669-822b1e214981",
+        "aa66e7f1-8fc4-4e4e-9cb7-178688b85690"
+      ],
+      "retrieved_scores": [
+        -4.964104117283855,
+        -2.9797000787003127,
+        -2.9607253234131012,
+        -2.7288727572772875,
+        -2.7070708738788594,
+        -2.685528243466454,
+        -2.6660798516049735,
+        -2.0568654132305197,
+        -2.026683864782585,
+        -1.8767778756348392
+      ],
+      "retrieval_time_ms": 0.5543231964111328,
+      "metrics": {
+        "precision": {
+          "@1": 0.0,
+          "@3": 0.0,
+          "@5": 0.0,
+          "@10": 0.0
+        },
+        "recall": {
+          "@1": 0.0,
+          "@3": 0.0,
+          "@5": 0.0,
+          "@10": 0.0
+        },
+        "ndcg": {
+          "@1": 0.0,
+          "@3": 0.0,
+          "@5": 0.0,
+          "@10": 0.0
+        },
+        "reciprocal_rank": 0.0
+      },
+      "first_relevant_rank": null,
+      "status": "fail"
+    },
+    {
+      "query_id": "q041",
+      "query_text": "unique souvenirs to bring home from Japan",
+      "query_type": "semantic",
+      "expected_items": [
+        "9529aaf8-ff82-4fa0-ad99-23b0051ea0fd",
+        "fe0288ee-5bcf-46e5-8ce6-c1c65cae5395",
+        "354b21da-958d-41df-b287-7593926d7474"
+      ],
+      "expected_relevance": {
+        "9529aaf8-ff82-4fa0-ad99-23b0051ea0fd": "high",
+        "fe0288ee-5bcf-46e5-8ce6-c1c65cae5395": "medium",
+        "354b21da-958d-41df-b287-7593926d7474": "medium"
+      },
+      "retrieved_items": [
+        "ae8fd592-4bf6-405d-8662-b5376dea6fa1",
+        "cde0e64e-81f4-4e1c-9b4d-8be67639c4e8",
+        "987f250b-7e99-4ce6-9504-0a9d7879dbdc",
+        "6390bcde-0606-4c11-af65-e81e89f5741a",
+        "9c443027-7b4b-4c03-a1a2-43c2fab1e8a6",
+        "f509d013-83c6-4e77-b71f-0afbd9999c09",
+        "ea52b79c-d10a-4b84-8e7a-f8917548a431",
+        "94a5fa55-fe27-4579-905f-e1bd32aa933d",
+        "19619477-d42a-41a0-bdf1-cabdf53aa4e3",
+        "5b61408a-321d-4335-a4be-51f5fff86bec"
+      ],
+      "retrieved_scores": [
+        -6.84991429625748,
+        -4.05382057053438,
+        -4.052218755111792,
+        -3.6536723794030905,
+        -3.2255300947410728,
+        -3.1625217039425007,
+        -3.0814186869955913,
+        -2.75260485917584,
+        -2.458056915756903,
+        -0.6970792519134433
+      ],
+      "retrieval_time_ms": 0.8087158203125,
+      "metrics": {
+        "precision": {
+          "@1": 0.0,
+          "@3": 0.0,
+          "@5": 0.0,
+          "@10": 0.0
+        },
+        "recall": {
+          "@1": 0.0,
+          "@3": 0.0,
+          "@5": 0.0,
+          "@10": 0.0
+        },
+        "ndcg": {
+          "@1": 0.0,
+          "@3": 0.0,
+          "@5": 0.0,
+          "@10": 0.0
+        },
+        "reciprocal_rank": 0.0
+      },
+      "first_relevant_rank": null,
+      "status": "fail"
+    },
+    {
+      "query_id": "q042",
+      "query_text": "best views in Hokkaido for Instagram",
+      "query_type": "semantic",
+      "expected_items": [
+        "1e15d04c-e6a5-4c47-a0db-daa026d09664",
+        "ff60cd2b-70db-45e7-9448-38aa90fad548",
+        "b11bd65b-2a80-4a8a-9188-98f027fa7c19",
+        "93f99f95-aae8-4833-bf5c-48e3dd981b3e"
+      ],
+      "expected_relevance": {
+        "1e15d04c-e6a5-4c47-a0db-daa026d09664": "high",
+        "ff60cd2b-70db-45e7-9448-38aa90fad548": "high",
+        "b11bd65b-2a80-4a8a-9188-98f027fa7c19": "high",
+        "93f99f95-aae8-4833-bf5c-48e3dd981b3e": "high"
+      },
+      "retrieved_items": [
+        "1e15d04c-e6a5-4c47-a0db-daa026d09664",
+        "54356901-3403-44b1-983e-6ea324a794f1",
+        "365e6dc9-1123-44b6-91e1-c39ffe1be404",
+        "ff60cd2b-70db-45e7-9448-38aa90fad548",
+        "ae8fd592-4bf6-405d-8662-b5376dea6fa1",
+        "ea52b79c-d10a-4b84-8e7a-f8917548a431",
+        "8e59d5c3-71ef-4caf-bc16-c23c5b1cc3eb",
+        "93f99f95-aae8-4833-bf5c-48e3dd981b3e",
+        "cde0e64e-81f4-4e1c-9b4d-8be67639c4e8",
+        "a691a4e9-9a01-44bd-8047-6a0c5ab96dce"
+      ],
+      "retrieved_scores": [
+        -10.298774276968519,
+        -8.12325169503294,
+        -6.2539756678357445,
+        -5.520585778036876,
+        -4.655995030953935,
+        -3.7381856102941633,
+        -3.6243303664791853,
+        -3.6141701448686634,
+        -3.5835947550077205,
+        -3.5774437044279828
+      ],
+      "retrieval_time_ms": 0.9136199951171875,
+      "metrics": {
+        "precision": {
+          "@1": 1.0,
+          "@3": 0.3333333333333333,
+          "@5": 0.4,
+          "@10": 0.3
+        },
+        "recall": {
+          "@1": 0.25,
+          "@3": 0.25,
+          "@5": 0.5,
+          "@10": 0.75
+        },
+        "ndcg": {
+          "@1": 1.0,
+          "@3": 0.375,
+          "@5": 0.5,
+          "@10": 0.65
+        },
+        "reciprocal_rank": 1.0
+      },
+      "first_relevant_rank": 1,
+      "status": "pass"
+    },
+    {
+      "query_id": "q043",
+      "query_text": "things to do in Paris",
+      "query_type": "edge-case-no-results",
+      "expected_items": [],
+      "expected_relevance": {},
+      "retrieved_items": [
+        "f241cd64-f774-4295-ad5e-127ff4290ca6",
+        "a8c70bbe-a324-4e76-819b-c4f02ed902e2",
+        "1e15d04c-e6a5-4c47-a0db-daa026d09664",
+        "54356901-3403-44b1-983e-6ea324a794f1",
+        "94a5fa55-fe27-4579-905f-e1bd32aa933d",
+        "9b825fe6-5c21-4261-9bba-030b4f5c0c15",
+        "cde0e64e-81f4-4e1c-9b4d-8be67639c4e8",
+        "044aeaa6-9971-4a05-8b16-6b9e74e682bc",
+        "30596c22-5e6d-47ea-8580-46d7c0dd597a",
+        "ea52b79c-d10a-4b84-8e7a-f8917548a431"
+      ],
+      "retrieved_scores": [
+        -12.158008196014805,
+        -5.459460642421865,
+        -3.9469616105962374e-06,
+        -3.874872438377873e-06,
+        -3.872629018058329e-06,
+        -3.85041396810922e-06,
+        -3.842977344767091e-06,
+        -3.82633382040366e-06,
+        -3.801912378807717e-06,
+        -3.5634838093793076e-06
+      ],
+      "retrieval_time_ms": 0.8878707885742188,
+      "status": "false_positive",
+      "metrics": {}
+    },
+    {
+      "query_id": "q044",
+      "query_text": "best beaches in Thailand",
+      "query_type": "edge-case-no-results",
+      "expected_items": [],
+      "expected_relevance": {},
+      "retrieved_items": [
+        "8e59d5c3-71ef-4caf-bc16-c23c5b1cc3eb",
+        "1e15d04c-e6a5-4c47-a0db-daa026d09664",
+        "8aed0ca7-6aed-4635-9cb2-ef47a2aba461",
+        "f0e2b4d6-ac3c-40bb-9644-9fb5edaa294c",
+        "2c30420a-4e28-483a-bb5f-2f61f48e7ea7",
+        "ea52b79c-d10a-4b84-8e7a-f8917548a431",
+        "ae8fd592-4bf6-405d-8662-b5376dea6fa1",
+        "9529aaf8-ff82-4fa0-ad99-23b0051ea0fd",
+        "cde0e64e-81f4-4e1c-9b4d-8be67639c4e8",
+        "f241cd64-f774-4295-ad5e-127ff4290ca6"
+      ],
+      "retrieved_scores": [
+        -3.624328865573065,
+        -3.452884806384606,
+        -3.4083784681646394,
+        -3.0536448294963914,
+        -2.5577820947289274,
+        -2.2818803130659586,
+        -2.2305516245683985,
+        -2.049613396522604e-06,
+        -2.0409282767846345e-06,
+        -2.01295018913783e-06
+      ],
+      "retrieval_time_ms": 0.7381439208984375,
+      "status": "false_positive",
+      "metrics": {}
+    },
+    {
+      "query_id": "q045",
+      "query_text": "Mexican food restaurants",
+      "query_type": "edge-case-no-results",
+      "expected_items": [],
+      "expected_relevance": {},
+      "retrieved_items": [
+        "8aed0ca7-6aed-4635-9cb2-ef47a2aba461",
+        "d5ebd2cd-f71b-4d6e-898a-0e3cc02302ff",
+        "883726e1-f015-4d5b-b075-948263bdd2b5",
+        "b46ecb6f-8375-4e26-a282-34ca7b8b88d6",
+        "e85fb2dc-c994-48f3-8f6b-baeb936168ec",
+        "dd523f3e-eed2-4637-be7a-253b3960c584",
+        "9c443027-7b4b-4c03-a1a2-43c2fab1e8a6",
+        "d5ffab53-1ad8-44ee-93c9-14cdbd54f2bf",
+        "f509d013-83c6-4e77-b71f-0afbd9999c09",
+        "cde0e64e-81f4-4e1c-9b4d-8be67639c4e8"
+      ],
+      "retrieved_scores": [
+        -5.6993090008434,
+        -4.533461693778424,
+        -4.338756379470715,
+        -2.823364234321826,
+        -2.448488982000893,
+        -2.2659616285849062,
+        -2.1157066701890335,
+        -1.9701966695337096,
+        -1.7244474193839827,
+        -1.1799902006606753
+      ],
+      "retrieval_time_ms": 0.4658699035644531,
+      "status": "false_positive",
+      "metrics": {}
+    },
+    {
+      "query_id": "q046",
+      "query_text": "ski resorts Japan",
+      "query_type": "edge-case-no-results",
+      "expected_items": [],
+      "expected_relevance": {},
+      "retrieved_items": [
+        "892835c7-0bd1-4ff0-9d67-0f47c3b37351",
+        "044aeaa6-9971-4a05-8b16-6b9e74e682bc",
+        "f241cd64-f774-4295-ad5e-127ff4290ca6",
+        "b11bd65b-2a80-4a8a-9188-98f027fa7c19",
+        "5699558e-27c1-4937-bf6b-1af903835ee9",
+        "f5129142-8126-4f7b-8b72-72f4024d4078",
+        "e51e7a61-0f0e-4801-b97b-066e70a25d4d",
+        "987f250b-7e99-4ce6-9504-0a9d7879dbdc",
+        "8e59d5c3-71ef-4caf-bc16-c23c5b1cc3eb",
+        "6390bcde-0606-4c11-af65-e81e89f5741a"
+      ],
+      "retrieved_scores": [
+        -2.071001752031467e-06,
+        -2.051365349842165e-06,
+        -2.050304977275077e-06,
+        -2.0460214776621856e-06,
+        -2.00998250069483e-06,
+        -1.99973668162765e-06,
+        -1.9955112285687723e-06,
+        -1.9905313723201926e-06,
+        -1.9705398835646275e-06,
+        -1.9564224698480503e-06
+      ],
+      "retrieval_time_ms": 0.7810592651367188,
+      "status": "false_positive",
+      "metrics": {}
+    },
+    {
+      "query_id": "q047",
+      "query_text": "budget hotels Tokyo",
+      "query_type": "edge-case-no-results",
+      "expected_items": [],
+      "expected_relevance": {},
+      "retrieved_items": [
+        "f5129142-8126-4f7b-8b72-72f4024d4078",
+        "fe0288ee-5bcf-46e5-8ce6-c1c65cae5395",
+        "ae8fd592-4bf6-405d-8662-b5376dea6fa1",
+        "e51e7a61-0f0e-4801-b97b-066e70a25d4d",
+        "9c443027-7b4b-4c03-a1a2-43c2fab1e8a6",
+        "8aed0ca7-6aed-4635-9cb2-ef47a2aba461",
+        "1f6495b0-6e8c-4421-be9a-50e86bf9381a",
+        "30596c22-5e6d-47ea-8580-46d7c0dd597a",
+        "e85fb2dc-c994-48f3-8f6b-baeb936168ec",
+        "d4fa1f7b-e50c-4428-911a-06fa73e08fa3"
+      ],
+      "retrieved_scores": [
+        -5.614861223816127,
+        -4.398384923822948,
+        -4.293107352382614,
+        -1.8418269443524666,
+        -1.838635699298908,
+        -1.809268718003406,
+        -1.7831078281996346,
+        -1.7761853163243224,
+        -1.7613219982858974,
+        -1.7577619030143374
+      ],
+      "retrieval_time_ms": 0.6427764892578125,
+      "status": "false_positive",
+      "metrics": {}
+    },
+    {
+      "query_id": "q048",
+      "query_text": "nightclub recommendations Seoul",
+      "query_type": "edge-case-no-results",
+      "expected_items": [],
+      "expected_relevance": {},
+      "retrieved_items": [
+        "f509d013-83c6-4e77-b71f-0afbd9999c09",
+        "07813e27-093c-4aeb-919e-e29f301e3e49",
+        "ea52b79c-d10a-4b84-8e7a-f8917548a431",
+        "54604ec9-785b-4c28-9a36-f0fd0d48fefe",
+        "a8c70bbe-a324-4e76-819b-c4f02ed902e2",
+        "d5ffab53-1ad8-44ee-93c9-14cdbd54f2bf",
+        "f0e2b4d6-ac3c-40bb-9644-9fb5edaa294c",
+        "30596c22-5e6d-47ea-8580-46d7c0dd597a",
+        "ff60cd2b-70db-45e7-9448-38aa90fad548",
+        "365e6dc9-1123-44b6-91e1-c39ffe1be404"
+      ],
+      "retrieved_scores": [
+        -5.044879252011362,
+        -4.267598367611445,
+        -4.225040462121696,
+        -4.149926883908625,
+        -4.142620738389105,
+        -4.1198765061664595,
+        -2.8131936409645792,
+        -2.3722946761005117,
+        -2.1007429658508445,
+        -1.9975898775904501
+      ],
+      "retrieval_time_ms": 0.6766319274902344,
+      "status": "false_positive",
+      "metrics": {}
+    },
+    {
+      "query_id": "q049",
+      "query_text": "children's activities Japan",
+      "query_type": "edge-case-no-results",
+      "expected_items": [],
+      "expected_relevance": {},
+      "retrieved_items": [
+        "19619477-d42a-41a0-bdf1-cabdf53aa4e3",
+        "30596c22-5e6d-47ea-8580-46d7c0dd597a",
+        "e51e7a61-0f0e-4801-b97b-066e70a25d4d",
+        "2c30420a-4e28-483a-bb5f-2f61f48e7ea7",
+        "54604ec9-785b-4c28-9a36-f0fd0d48fefe",
+        "8e59d5c3-71ef-4caf-bc16-c23c5b1cc3eb",
+        "54356901-3403-44b1-983e-6ea324a794f1",
+        "d5ebd2cd-f71b-4d6e-898a-0e3cc02302ff",
+        "5b61408a-321d-4335-a4be-51f5fff86bec",
+        "f5129142-8126-4f7b-8b72-72f4024d4078"
+      ],
+      "retrieved_scores": [
+        -4.366779108833392,
+        -1.4532685077341208,
+        -1.4099707651634796,
+        -1.3700869753882343,
+        -1.3361292394524282,
+        -1.310326576486387,
+        -1.310326547556385,
+        -1.2687863082491708,
+        -1.237428946156561,
+        -1.1654208208898367
+      ],
+      "retrieval_time_ms": 0.7317066192626953,
+      "status": "false_positive",
+      "metrics": {}
+    },
+    {
+      "query_id": "q050",
+      "query_text": "cryptocurrency investment tips",
+      "query_type": "edge-case-no-results",
+      "expected_items": [],
+      "expected_relevance": {},
+      "retrieved_items": [
+        "e85fb2dc-c994-48f3-8f6b-baeb936168ec",
+        "1f6495b0-6e8c-4421-be9a-50e86bf9381a",
+        "d4fa1f7b-e50c-4428-911a-06fa73e08fa3",
+        "044aeaa6-9971-4a05-8b16-6b9e74e682bc",
+        "2c2c709a-4566-45b6-b65b-a9accb3a08f0",
+        "e51e7a61-0f0e-4801-b97b-066e70a25d4d",
+        "0c7d2d22-635a-4509-b6a1-83a2abf99531",
+        "23c9c5aa-e523-43d4-a1ae-ce6e30fc5563",
+        "30596c22-5e6d-47ea-8580-46d7c0dd597a",
+        "ea52b79c-d10a-4b84-8e7a-f8917548a431"
+      ],
+      "retrieved_scores": [
+        -2.5776443543049563,
+        -2.380840488941081,
+        -2.2884623840336555,
+        -2.2246810994952186,
+        -2.1552003455757798,
+        -1.9683734936873738,
+        -1.5391316593587352,
+        -1.5148054612500552,
+        -1.2090564683556597,
+        -1.145247438322969
+      ],
+      "retrieval_time_ms": 0.4775524139404297,
+      "status": "false_positive",
+      "metrics": {}
+    }
+  ],
+  "timing": {
+    "total_evaluation_time_s": 0.9792835712432861,
+    "avg_retrieval_time_ms": 1.5857617060343425,
+    "min_retrieval_time_ms": 0.4658699035644531,
+    "max_retrieval_time_ms": 9.667396545410156
+  }
+}

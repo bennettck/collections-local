@@ -615,6 +615,7 @@ Perform natural language search over your collection and optionally generate AI-
   "query": "Tokyo restaurants",
   "top_k": 10,
   "category_filter": null,
+  "min_relevance_score": -1.0,
   "include_answer": true,
   "answer_model": null
 }
@@ -625,6 +626,7 @@ Perform natural language search over your collection and optionally generate AI-
 | `query` | string | *required* | Natural language search query (min 3 characters) |
 | `top_k` | integer | `10` | Number of results to return (1-50) |
 | `category_filter` | string | `null` | Filter results by category |
+| `min_relevance_score` | float | `-1.0` | Minimum BM25 relevance score threshold. Results with scores > this value will be filtered out. Default `-1.0` effectively disables filtering since most results score lower (more negative = better match). |
 | `include_answer` | boolean | `true` | Generate LLM answer from search results |
 | `answer_model` | string | `null` | Model for answer generation (defaults to `claude-sonnet-4-5`) |
 
@@ -650,6 +652,11 @@ curl -X POST http://localhost:8000/search \
 curl -X POST http://localhost:8000/search \
   -H "Content-Type: application/json" \
   -d '{"query": "Tokyo restaurants", "answer_model": "gpt-4o"}'
+
+# Filter out weak matches with strict threshold
+curl -X POST http://localhost:8000/search \
+  -H "Content-Type: application/json" \
+  -d '{"query": "perfume", "top_k": 10, "min_relevance_score": -5.0}'
 ```
 
 **Response:** `200 OK`
@@ -714,6 +721,7 @@ curl -X POST http://localhost:8000/search \
 - **BM25 Full-Text Search**: Fast keyword-based search using SQLite FTS5
 - **All Fields Searchable**: Searches across categories, summaries, extracted text, locations, hashtags, and all metadata
 - **Weighted Ranking**: Important fields (summary, headline) ranked higher than others
+- **Relevance Score Filtering**: Filter out low-quality results using `min_relevance_score` threshold
 - **Natural Language Queries**: Ask questions like "Show me Tokyo restaurants" or "beauty products"
 - **AI Answer Generation**: Optional LLM-powered answers with citations to specific items
 - **Category Filtering**: Narrow results to specific categories
@@ -1275,6 +1283,7 @@ Request model for search and Q&A endpoint.
 | `query` | string | *required* | Natural language search query (min 3 characters) |
 | `top_k` | integer | `10` | Number of results to return (1-50) |
 | `category_filter` | string | `null` | Filter results by category |
+| `min_relevance_score` | float | `-1.0` | Minimum BM25 relevance score threshold. Results with scores > this value will be filtered out. Default `-1.0` effectively disables filtering since most results score lower (more negative = better match). |
 | `include_answer` | boolean | `true` | Generate LLM answer from search results |
 | `answer_model` | string | `null` | Model for answer generation (defaults to `claude-sonnet-4-5`) |
 
