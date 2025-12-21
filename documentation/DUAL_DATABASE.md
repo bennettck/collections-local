@@ -1,6 +1,19 @@
 # Dual-Database Environment
 
-This guide explains how to run the Collections App with separate production and golden databases for evaluation purposes.
+> **DEPRECATION NOTICE**
+>
+> This document describes the **legacy dual-server approach** that has been superseded by single-server middleware routing.
+>
+> **Current Architecture:** The Collections Local API now uses a single server on port 8000 with host-based database routing. See [database-routing.md](database-routing.md) for the current implementation.
+>
+> **What This Document Is Still Useful For:**
+> - Understanding the `database_context()` utility (used by scripts and middleware)
+> - Setting up the golden database using `scripts/setup_golden_db.py`
+> - Database environment variables and configuration
+>
+> **Migration:** If you're running two servers on ports 8000 and 8001, please migrate to the single-server architecture described in [database-routing.md](database-routing.md).
+
+This guide explains how to run the Collections App with separate production and golden databases for evaluation purposes using the legacy dual-server approach.
 
 ## Overview
 
@@ -48,6 +61,8 @@ python3 scripts/setup_golden_db.py \
 
 ### 2. Run API with Golden Database
 
+**Legacy Approach (Deprecated):**
+
 Start the golden API on port 8001:
 
 ```bash
@@ -65,6 +80,14 @@ Production API can still run simultaneously on port 8000:
 ```bash
 uvicorn main:app --port 8000
 ```
+
+**Current Approach (Recommended):**
+
+With the new single-server architecture, access the golden database via:
+- Query parameter: `http://localhost:8000/items?_db=golden`
+- Subdomain: `http://golden.localhost:8000/items`
+
+See [database-routing.md](database-routing.md) for details.
 
 ## Using Scripts with Custom Databases
 
@@ -130,9 +153,11 @@ GOLDEN_API_PORT=9000 ./scripts/run_golden_api.sh
 
 ## Architecture
 
+> **Note:** This section describes the historical dual-server architecture. For the current single-server middleware routing architecture, see [database-routing.md](database-routing.md).
+
 ### Database Context Manager
 
-The `database.py` module provides a thread-local context manager for temporarily overriding the database path:
+The `database.py` module provides a thread-local context manager for temporarily overriding the database path. This utility is still used by the current middleware routing implementation and by scripts:
 
 ```python
 from database import database_context, get_item
@@ -169,6 +194,8 @@ python3 scripts/setup_golden_db.py --force
 
 ### Run Evaluation
 
+**Legacy Approach:**
+
 Run retrieval evaluation against the golden database:
 
 ```bash
@@ -177,6 +204,21 @@ Run retrieval evaluation against the golden database:
 
 # In another terminal, run evaluation
 python3 testing/run_evaluation.py --api-url http://localhost:8001
+```
+
+**Current Approach:**
+
+Run evaluation against single server with golden routing:
+
+```bash
+# Start server (if not already running)
+uvicorn main:app --port 8000
+
+# Run evaluation with query parameter routing
+python3 scripts/evaluate_retrieval.py --api-url "http://localhost:8000?_db=golden"
+
+# Or with subdomain routing (requires /etc/hosts setup)
+python3 scripts/evaluate_retrieval.py --api-url http://golden.localhost:8000
 ```
 
 ### Compare Databases
@@ -196,6 +238,8 @@ diff data/exports/database.json data/exports/database_golden.json
 
 ### Verify Item Counts
 
+**Legacy Approach:**
+
 Check that both APIs are running correctly:
 
 ```bash
@@ -206,10 +250,32 @@ curl http://localhost:8000/items | jq '.total'
 curl http://localhost:8001/items | jq '.total'
 ```
 
+**Current Approach:**
+
+Check both databases from single server:
+
+```bash
+# Production count (should be > 55)
+curl http://localhost:8000/items | jq '.total'
+
+# Golden count (should be exactly 55)
+curl "http://localhost:8000/items?_db=golden" | jq '.total'
+```
+
 ### Test Search on Golden Database
+
+**Legacy Approach:**
 
 ```bash
 curl -X POST http://localhost:8001/search \
+  -H "Content-Type: application/json" \
+  -d '{"query": "Tokyo restaurants", "top_k": 5}'
+```
+
+**Current Approach:**
+
+```bash
+curl -X POST "http://localhost:8000/search?_db=golden" \
   -H "Content-Type: application/json" \
   -d '{"query": "Tokyo restaurants", "top_k": 5}'
 ```
@@ -339,6 +405,7 @@ Both databases use identical schema:
 
 ## See Also
 
+- **[database-routing.md](database-routing.md) - Current single-server architecture (RECOMMENDED)**
 - [scripts/README.md](../scripts/README.md) - Script usage documentation
 - [RETRIEVAL.md](RETRIEVAL.md) - Retrieval system documentation
 - Golden dataset curation UI: http://localhost:8000/golden-dataset

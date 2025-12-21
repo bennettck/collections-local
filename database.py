@@ -1,9 +1,16 @@
-import sqlite3
+# Use pysqlite3 for extension support (falls back to sqlite3 if not available)
+try:
+    import pysqlite3.dbapi2 as sqlite3
+except ImportError:
+    import sqlite3
+
+import sqlite_vec
 import os
 import json
+import uuid
 import threading
 from contextlib import contextmanager
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional
 
 DATABASE_PATH = os.getenv("DATABASE_PATH", "./data/collections.db")
@@ -100,13 +107,37 @@ def init_db():
         if "provider_used" not in columns:
             conn.execute("ALTER TABLE analyses ADD COLUMN provider_used TEXT")
 
+        # Embeddings table for vector search metadata
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS embeddings (
+                id TEXT PRIMARY KEY,
+                item_id TEXT NOT NULL,
+                analysis_id TEXT NOT NULL,
+                embedding_model TEXT NOT NULL,
+                embedding_dimensions INTEGER NOT NULL,
+                embedding_source TEXT NOT NULL,
+                created_at TEXT NOT NULL,
+                FOREIGN KEY (item_id) REFERENCES items(id) ON DELETE CASCADE,
+                FOREIGN KEY (analysis_id) REFERENCES analyses(id) ON DELETE CASCADE
+            )
+        """)
+
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_embeddings_item_id ON embeddings(item_id)")
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_embeddings_analysis_id ON embeddings(analysis_id)")
+
+        # Note: vec_items virtual table should be created separately after sqlite-vec is loaded
+        # See init_vector_table() function below
+
 
 @contextmanager
 def get_db():
-    """Get database connection with row factory."""
+    """Get database connection with row factory and vec extension loaded."""
     active_path = _get_active_db_path()
     conn = sqlite3.connect(active_path)
     conn.row_factory = sqlite3.Row
+    conn.enable_load_extension(True)
+    sqlite_vec.load(conn)
+    conn.enable_load_extension(False)
     conn.execute("PRAGMA foreign_keys = ON")
     try:
         yield conn
@@ -372,12 +403,19 @@ def _preprocess_query(query: str) -> str:
     # Split into tokens and join with OR for better recall
     tokens = query.lower().split()
 
-    # If empty or single token, return as-is
-    if len(tokens) <= 1:
-        return query.lower()
+    # Filter out empty tokens and very short tokens (< 2 chars) that might cause FTS5 issues
+    tokens = [t for t in tokens if len(t) >= 2]
 
-    # Join tokens with OR operator for FTS5
-    return " OR ".join(tokens)
+    # If empty, return empty string
+    if not tokens:
+        return ""
+
+    # If single token, return quoted
+    if len(tokens) == 1:
+        return f'"{tokens[0]}"'
+
+    # Join tokens with OR operator for FTS5, quote each token to prevent syntax errors
+    return " OR ".join(f'"{token}"' for token in tokens)
 
 
 def search_items(query: str, top_k: int = 10, category_filter: Optional[str] = None, min_relevance_score: float = -1.0) -> list[tuple[str, float]]:
@@ -456,3 +494,322 @@ def get_search_status() -> dict:
             "is_loaded": doc_count > 0,
             "index_coverage": doc_count / total_items if total_items > 0 else 0.0
         }
+
+
+def init_vector_table(embedding_dimensions: int = 512):
+    """
+    Initialize the vec_items virtual table for vector storage.
+
+    Must be called after sqlite-vec extension is loaded.
+
+    Args:
+        embedding_dimensions: Vector dimensions (512 for voyage-3.5-lite,
+                             1024 for voyage-3.5)
+    """
+    with get_db() as conn:
+        conn.execute(f"""
+            CREATE VIRTUAL TABLE IF NOT EXISTS vec_items USING vec0(
+                item_id TEXT PRIMARY KEY,
+                embedding float[{embedding_dimensions}] distance_metric=cosine,
+                category TEXT
+            )
+        """)
+
+
+def create_embedding(
+    item_id: str,
+    analysis_id: str,
+    embedding: list[float],
+    model: str,
+    source_fields: dict,
+    category: Optional[str] = None
+) -> str:
+    """
+    Create embedding record and insert into vector table.
+
+    Args:
+        item_id: ID of the item being embedded
+        analysis_id: ID of the analysis used to create the embedding
+        embedding: Vector embedding as list of floats
+        model: Name of the embedding model used
+        source_fields: Dictionary of fields used to create the embedding
+        category: Optional category for metadata filtering
+
+    Returns:
+        The ID of the created embedding record
+    """
+    with get_db() as conn:
+        embedding_id = str(uuid.uuid4())
+        now = datetime.now(timezone.utc).isoformat()
+
+        # Store metadata
+        conn.execute("""
+            INSERT INTO embeddings (
+                id, item_id, analysis_id, embedding_model,
+                embedding_dimensions, embedding_source, created_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?)
+        """, (
+            embedding_id,
+            item_id,
+            analysis_id,
+            model,
+            len(embedding),
+            json.dumps(source_fields),
+            now
+        ))
+
+        # Store vector with metadata (sqlite-vec)
+        # Serialize embedding for sqlite-vec
+        serialized_embedding = sqlite_vec.serialize_float32(embedding)
+        conn.execute(
+            "INSERT INTO vec_items (item_id, embedding, category) VALUES (?, ?, ?)",
+            (item_id, serialized_embedding, category)
+        )
+
+    return embedding_id
+
+
+def get_embedding(item_id: str) -> Optional[dict]:
+    """
+    Get latest embedding for an item.
+
+    Args:
+        item_id: ID of the item
+
+    Returns:
+        Dictionary containing embedding metadata, or None if no embedding exists
+    """
+    with get_db() as conn:
+        row = conn.execute("""
+            SELECT * FROM embeddings
+            WHERE item_id = ?
+            ORDER BY created_at DESC
+            LIMIT 1
+        """, (item_id,)).fetchone()
+
+        if row:
+            return dict(row)
+        return None
+
+
+def vector_search_items(
+    query_embedding: list[float],
+    top_k: int = 10,
+    category_filter: Optional[str] = None,
+    min_similarity_score: float = 0.0
+) -> list[tuple[str, float]]:
+    """
+    Search items using vector similarity.
+
+    Uses sqlite-vec's KNN search with metadata filtering for optimal performance.
+    Returns list of (item_id, similarity_score) tuples.
+
+    Note: sqlite-vec with cosine distance returns distance values where:
+    - distance = 1 - cosine_similarity
+    - Lower distance = higher similarity
+    - We convert to similarity score (0-1) where 1 is most similar
+
+    Args:
+        query_embedding: Query vector (must match table dimensions)
+        top_k: Number of results to return
+        category_filter: Optional category to filter by (uses metadata column)
+        min_similarity_score: Minimum similarity threshold (0-1)
+
+    Returns:
+        List of (item_id, similarity_score) tuples sorted by similarity (descending)
+    """
+    with get_db() as conn:
+        # Serialize query embedding for sqlite-vec
+        serialized_query = sqlite_vec.serialize_float32(query_embedding)
+
+        # Build query with metadata filtering (no JOIN needed)
+        if category_filter:
+            query = """
+                SELECT
+                    item_id,
+                    distance
+                FROM vec_items
+                WHERE embedding MATCH ?
+                  AND k = ?
+                  AND category = ?
+            """
+            rows = conn.execute(query, (serialized_query, top_k, category_filter)).fetchall()
+        else:
+            query = """
+                SELECT
+                    item_id,
+                    distance
+                FROM vec_items
+                WHERE embedding MATCH ?
+                  AND k = ?
+            """
+            rows = conn.execute(query, (serialized_query, top_k)).fetchall()
+
+        # Convert distance to similarity and filter by threshold
+        # For cosine distance: similarity = 1 - distance
+        results = []
+        for row in rows:
+            item_id = row["item_id"]
+            distance = row["distance"]
+            similarity = 1.0 - distance
+
+            if similarity >= min_similarity_score:
+                results.append((item_id, similarity))
+
+    return results
+
+
+def rebuild_vector_index(
+    embedding_model: str = "voyage-3.5-lite",
+    batch_size: int = 128
+):
+    """
+    Rebuild the vector search index for all analyzed items.
+    Generates embeddings for items that don't have them.
+
+    Uses batch processing to minimize API calls and avoid rate limits.
+
+    Args:
+        embedding_model: VoyageAI model to use for embeddings
+        batch_size: Number of documents to embed per API request (max 128)
+
+    Returns:
+        Dict with embedded_count, skipped_count, total_processed
+    """
+    from embeddings import generate_embeddings_batch, _create_embedding_document
+    import logging
+
+    logger = logging.getLogger(__name__)
+
+    with get_db() as conn:
+        cursor = conn.cursor()
+
+        # Get all items with analyses that need embeddings
+        cursor.execute("""
+            SELECT DISTINCT a.item_id, a.id as analysis_id, a.raw_response
+            FROM analyses a
+            LEFT JOIN embeddings e ON a.item_id = e.item_id
+            WHERE a.raw_response IS NOT NULL
+              AND e.id IS NULL
+            ORDER BY a.created_at DESC
+        """)
+
+        rows = cursor.fetchall()
+
+    if not rows:
+        logger.info("No items need embeddings")
+        return {
+            "embedded_count": 0,
+            "skipped_count": 0,
+            "total_processed": 0
+        }
+
+    # Prepare batch data
+    items_to_embed = []
+    skipped_count = 0
+    for row in rows:
+        item_id = row["item_id"]
+        analysis_id = row["analysis_id"]
+        raw_response = json.loads(row["raw_response"])
+        category = raw_response.get("category")
+
+        try:
+            embedding_doc = _create_embedding_document(raw_response)
+            # Skip empty documents
+            if not embedding_doc or not embedding_doc.strip():
+                logger.warning(f"Skipping {item_id}: empty embedding document")
+                skipped_count += 1
+                continue
+            items_to_embed.append({
+                "item_id": item_id,
+                "analysis_id": analysis_id,
+                "embedding_doc": embedding_doc,
+                "category": category,
+                "raw_response": raw_response
+            })
+        except Exception as e:
+            logger.error(f"Error creating embedding document for {item_id}: {e}")
+            skipped_count += 1
+
+    if not items_to_embed:
+        return {
+            "embedded_count": 0,
+            "skipped_count": 0,
+            "total_processed": 0
+        }
+
+    # Generate embeddings in batches
+    embedded_count = 0
+    total_batches = (len(items_to_embed) + batch_size - 1) // batch_size
+
+    logger.info(f"Generating embeddings for {len(items_to_embed)} items in {total_batches} batches")
+
+    for batch_idx in range(0, len(items_to_embed), batch_size):
+        batch = items_to_embed[batch_idx:batch_idx + batch_size]
+        batch_docs = [item["embedding_doc"] for item in batch]
+
+        try:
+            # Generate embeddings for entire batch in one API call
+            embeddings = generate_embeddings_batch(
+                batch_docs,
+                model=embedding_model,
+                batch_size=len(batch)  # Use actual batch size
+            )
+
+            # Store all embeddings
+            source_fields = {
+                "weighting_strategy": "bm25_mirror",
+                "fields": ["summary", "headline", "extracted_text", "category", "themes", "objects"]
+            }
+
+            for item, embedding in zip(batch, embeddings):
+                try:
+                    create_embedding(
+                        item_id=item["item_id"],
+                        analysis_id=item["analysis_id"],
+                        embedding=embedding,
+                        model=embedding_model,
+                        source_fields=source_fields,
+                        category=item["category"]
+                    )
+                    embedded_count += 1
+
+                except Exception as e:
+                    logger.error(f"Error storing embedding for {item['item_id']}: {e}")
+
+            logger.info(f"Batch {batch_idx//batch_size + 1}/{total_batches}: "
+                       f"Embedded {len(batch)} items ({embedded_count} total)")
+
+        except Exception as e:
+            logger.error(f"Error generating embeddings for batch {batch_idx//batch_size + 1}: {e}")
+
+    return {
+        "embedded_count": embedded_count,
+        "skipped_count": skipped_count,
+        "total_processed": embedded_count + skipped_count
+    }
+
+
+def get_vector_index_status() -> dict:
+    """Get statistics about the vector index."""
+    with get_db() as conn:
+        cursor = conn.cursor()
+
+        # Count items with analyses
+        cursor.execute("SELECT COUNT(DISTINCT item_id) FROM analyses")
+        total_analyzed = cursor.fetchone()[0]
+
+        # Count embeddings
+        cursor.execute("SELECT COUNT(*) FROM embeddings")
+        total_embeddings = cursor.fetchone()[0]
+
+        # Count vector entries
+        cursor.execute("SELECT COUNT(*) FROM vec_items")
+        total_vectors = cursor.fetchone()[0]
+
+    return {
+        "total_analyzed_items": total_analyzed,
+        "total_embeddings": total_embeddings,
+        "total_vectors": total_vectors,
+        "coverage": (total_embeddings / total_analyzed * 100) if total_analyzed > 0 else 0
+    }

@@ -1,6 +1,8 @@
 import os
 import time
 import uuid
+import json
+import logging
 import aiofiles
 from datetime import datetime
 from pathlib import Path
@@ -37,12 +39,18 @@ from database import (
     get_item_analyses,
     rebuild_search_index,
     search_items,
+    vector_search_items,
     get_search_status,
+    create_embedding,
 )
 from llm import analyze_image, get_trace_id, get_resolved_provider_and_model
+from embeddings import generate_embedding, generate_query_embedding, _create_embedding_document, DEFAULT_EMBEDDING_MODEL
 
 # Load environment variables
 load_dotenv()
+
+# Setup logging
+logger = logging.getLogger(__name__)
 
 # Get settings - support both new and old env var names (backwards compatibility)
 PROD_DATABASE_PATH = os.getenv("PROD_DATABASE_PATH") or os.getenv("DATABASE_PATH", "./data/collections.db")
@@ -354,6 +362,33 @@ async def analyze_item_endpoint(
         trace_id=trace_id,
     )
 
+    # Generate and store embedding (non-blocking)
+    try:
+        # Create embedding document
+        embedding_doc = _create_embedding_document(result)
+
+        # Generate embedding
+        embedding = generate_embedding(embedding_doc)
+
+        # Store embedding with category metadata
+        category = result.get("category")
+        source_fields = {
+            "weighting_strategy": "bm25_mirror",
+            "fields": ["summary", "headline", "extracted_text", "category", "themes", "objects"]
+        }
+
+        create_embedding(
+            item_id=item_id,
+            analysis_id=analysis_id,
+            embedding=embedding,
+            model=DEFAULT_EMBEDDING_MODEL,
+            source_fields=source_fields,
+            category=category
+        )
+    except Exception as e:
+        # Log error but don't fail the analysis
+        logger.warning(f"Failed to generate embedding for {item_id}: {e}")
+
     return _analysis_to_response(analysis)
 
 
@@ -385,46 +420,66 @@ async def search_collection(request: SearchRequest):
     """
     Natural language search and Q&A over the collection.
 
-    Retrieves relevant items using BM25 full-text search and optionally
-    generates an AI-powered answer to the user's question.
+    Supports both BM25 full-text search and vector semantic search.
     """
-    start_time = time.time()
+    retrieval_start = time.time()
 
-    # Retrieve top-k items using FTS5 BM25
-    try:
+    # Route to appropriate search method
+    if request.search_type == "vector":
+        # Vector search
+        # Generate query embedding
+        query_embedding = generate_query_embedding(request.query)
+
+        # Search using vector similarity
+        search_results = vector_search_items(
+            query_embedding=query_embedding,
+            top_k=request.top_k,
+            category_filter=request.category_filter,
+            min_similarity_score=request.min_similarity_score
+        )
+
+        score_type = "similarity"
+
+    else:  # BM25 (default)
+        # Existing BM25 search
         search_results = search_items(
             query=request.query,
             top_k=request.top_k,
             category_filter=request.category_filter,
             min_relevance_score=request.min_relevance_score
         )
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Search failed: {str(e)}")
 
-    retrieval_time = (time.time() - start_time) * 1000
+        score_type = "bm25"
 
-    # Convert to SearchResult objects
+    retrieval_time = (time.time() - retrieval_start) * 1000
+
+    # Build SearchResult objects (same for both search types)
     results = []
-    for rank, (item_id, score) in enumerate(search_results, 1):
+    for rank, (item_id, score) in enumerate(search_results, start=1):
         item = get_item(item_id)
         if not item:
             continue
 
         analysis = get_latest_analysis(item_id)
-        raw_response = analysis.get("raw_response", {}) if analysis else {}
+        if not analysis:
+            continue
+
+        # raw_response is already a dict from the database
+        analysis_data = analysis.get("raw_response", {})
 
         results.append(SearchResult(
             item_id=item_id,
             rank=rank,
             score=score,
-            category=analysis.get("category") if analysis else None,
-            headline=raw_response.get("headline"),
-            summary=analysis.get("summary") if analysis else None,
+            score_type=score_type,
+            category=analysis_data.get("category"),
+            headline=analysis_data.get("headline"),
+            summary=analysis_data.get("summary"),
             image_url=f"/images/{item['filename']}",
-            metadata=raw_response
+            metadata=analysis_data
         ))
 
-    # Optionally generate answer using LLM
+    # Generate answer (same for both search types)
     answer = None
     answer_time = None
     citations = None
@@ -447,6 +502,7 @@ async def search_collection(request: SearchRequest):
 
     return SearchResponse(
         query=request.query,
+        search_type=request.search_type,
         results=results,
         total_results=len(results),
         answer=answer,
@@ -490,6 +546,22 @@ async def get_index_status_endpoint():
         return status
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to get index status: {str(e)}")
+
+
+# Vector Index Management Endpoints
+@app.post("/vector-index/rebuild")
+async def rebuild_vector_index_endpoint():
+    """Rebuild vector search index."""
+    from database import rebuild_vector_index
+    result = rebuild_vector_index()
+    return result
+
+
+@app.get("/vector-index/status")
+async def vector_index_status():
+    """Get vector index statistics."""
+    from database import get_vector_index_status
+    return get_vector_index_status()
 
 
 # Image Serving

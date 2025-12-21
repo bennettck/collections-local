@@ -2,7 +2,7 @@
   "info": {
     "_postman_id": "collections-local-api",
     "name": "Collections Local API",
-    "description": "API collection for the Collections App Local - a minimal local version that analyzes and categorizes screenshot images using AI.\n\n## Overview\n\nThis API allows you to:\n- Upload and manage image items\n- Trigger AI-powered analysis on images\n- Retrieve categorization, summaries, and extracted text\n- Access full LLM analysis response via raw_response field\n\n## Database Routing\n\nThe API supports two databases via host-based routing:\n\n- **Production Database** (default): Use `{{base_url}}` (`http://localhost:8000`)\n- **Golden Database** (evaluation subset): Use `{{golden_base_url}}` (`http://golden.localhost:8000`) or append `?_db=golden` to any endpoint\n\nAll responses include an `X-Database-Context` header indicating which database was used.\n\nFor complete details, see `documentation/database-routing.md`.\n\n## Authentication\n\nNo authentication required for local development.\n\n## Base URL\n\n`http://localhost:8000`",
+    "description": "API collection for the Collections App Local - a minimal local version that analyzes and categorizes screenshot images using AI.\n\n## Overview\n\nThis API allows you to:\n- Upload and manage image items\n- Trigger AI-powered analysis on images\n- Retrieve categorization, summaries, and extracted text\n- Access full LLM analysis response via raw_response field\n- Search collection using BM25 keyword search or vector semantic search\n- Generate AI-powered answers to questions about your collection\n\n## Search Capabilities\n\n- **BM25 Search**: Fast keyword-based full-text search using SQLite FTS5\n- **Vector Search**: Semantic similarity search using VoyageAI embeddings (voyage-3.5, 1024 dimensions)\n- Both search types support category filtering, Q&A generation, and answer citations\n\n## Database Routing\n\nThe API supports two databases via host-based routing:\n\n- **Production Database** (default): Use `{{base_url}}` (`http://localhost:8000`)\n- **Golden Database** (evaluation subset): Use `{{golden_base_url}}` (`http://golden.localhost:8000`) or append `?_db=golden` to any endpoint\n\nAll responses include an `X-Database-Context` header indicating which database was used.\n\nFor complete details, see `documentation/database-routing.md`.\n\n## Authentication\n\nNo authentication required for local development.\n\n## Base URL\n\n`http://localhost:8000`",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -355,7 +355,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"query\": \"restaurants in Tokyo\",\n  \"top_k\": 5,\n  \"category_filter\": null,\n  \"include_answer\": true,\n  \"answer_model\": \"claude-sonnet-4-5\"\n}"
+              "raw": "{\n  \"query\": \"restaurants in Tokyo\",\n  \"search_type\": \"bm25\",\n  \"top_k\": 5,\n  \"category_filter\": null,\n  \"min_relevance_score\": -1.0,\n  \"min_similarity_score\": 0.0,\n  \"include_answer\": true,\n  \"answer_model\": \"claude-sonnet-4-5\"\n}"
             },
             "url": {
               "raw": "{{base_url}}/search",
@@ -366,12 +366,93 @@
                 "search"
               ]
             },
-            "description": "## Search Collection\n\nNatural language search and Q&A over the collection. Retrieves relevant items using BM25 full-text search and optionally generates an AI-powered answer.\n\n### Request Body\n\n```json\n{\n  \"query\": \"restaurants in Tokyo\",\n  \"top_k\": 5,\n  \"category_filter\": null,\n  \"include_answer\": true,\n  \"answer_model\": \"claude-sonnet-4-5\"\n}\n```\n\n| Field | Type | Default | Description |\n|-------|------|---------|-------------|\n| `query` | string | - | Search query or question |\n| `top_k` | integer | `5` | Number of results to return |\n| `category_filter` | string/null | `null` | Filter by category |\n| `include_answer` | boolean | `false` | Generate AI answer to query |\n| `answer_model` | string | `\"claude-sonnet-4-5\"` | Model for answer generation |\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"query\": \"restaurants in Tokyo\",\n  \"results\": [\n    {\n      \"item_id\": \"uuid-string\",\n      \"rank\": 1,\n      \"score\": 12.5,\n      \"category\": \"Food\",\n      \"headline\": \"Tofuya Ukai dining spot beneath Tokyo Tower\",\n      \"summary\": \"Beautiful restaurant beneath Tokyo Tower...\",\n      \"image_url\": \"/images/uuid.jpg\",\n      \"metadata\": { ... }\n    }\n  ],\n  \"total_results\": 3,\n  \"answer\": \"Based on your collection, here are some restaurants in Tokyo...\",\n  \"answer_confidence\": \"high\",\n  \"citations\": [1, 2],\n  \"retrieval_time_ms\": 15.2,\n  \"answer_time_ms\": 823.4\n}\n```"
+            "description": "## Search Collection (BM25)\n\nNatural language search and Q&A over the collection using BM25 keyword-based full-text search. For semantic search, use `search_type: \"vector\"`.\n\n### Request Body\n\n```json\n{\n  \"query\": \"restaurants in Tokyo\",\n  \"search_type\": \"bm25\",\n  \"top_k\": 5,\n  \"category_filter\": null,\n  \"min_relevance_score\": -1.0,\n  \"min_similarity_score\": 0.0,\n  \"include_answer\": true,\n  \"answer_model\": \"claude-sonnet-4-5\"\n}\n```\n\n| Field | Type | Default | Description |\n|-------|------|---------|-------------|\n| `query` | string | - | Search query or question |\n| `search_type` | string | `\"bm25\"` | Search method: `\"bm25\"` (keyword) or `\"vector\"` (semantic) |\n| `top_k` | integer | `5` | Number of results to return |\n| `category_filter` | string/null | `null` | Filter by category |\n| `min_relevance_score` | float | `-1.0` | Minimum BM25 score (only for BM25 search) |\n| `min_similarity_score` | float | `0.0` | Minimum similarity score (only for vector search) |\n| `include_answer` | boolean | `false` | Generate AI answer to query |\n| `answer_model` | string | `\"claude-sonnet-4-5\"` | Model for answer generation |\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"query\": \"restaurants in Tokyo\",\n  \"results\": [\n    {\n      \"item_id\": \"uuid-string\",\n      \"rank\": 1,\n      \"score\": -2.5,\n      \"score_type\": \"bm25\",\n      \"category\": \"Food\",\n      \"headline\": \"Tofuya Ukai dining spot beneath Tokyo Tower\",\n      \"summary\": \"Beautiful restaurant beneath Tokyo Tower...\",\n      \"image_url\": \"/images/uuid.jpg\",\n      \"metadata\": { ... }\n    }\n  ],\n  \"total_results\": 3,\n  \"answer\": \"Based on your collection, here are some restaurants in Tokyo...\",\n  \"answer_confidence\": \"high\",\n  \"citations\": [1, 2],\n  \"retrieval_time_ms\": 15.2,\n  \"answer_time_ms\": 823.4\n}\n```\n\n### Score Interpretation\n\n| Search Type | Score Range | Interpretation |\n|-------------|-------------|----------------|\n| BM25 | Negative values (e.g., -2.5) | More negative = less relevant |\n| Vector | 0.0 to 1.0 | Higher = more similar (cosine similarity) |"
+          },
+          "response": []
+        },
+        {
+          "name": "Vector Search - Basic",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"Japanese beauty products and perfume\",\n  \"search_type\": \"vector\",\n  \"top_k\": 5,\n  \"include_answer\": true,\n  \"answer_model\": \"claude-sonnet-4-5\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/search",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "search"
+              ]
+            },
+            "description": "## Vector Search - Basic\n\nSemantic similarity search using VoyageAI embeddings. Returns results based on semantic meaning rather than exact keyword matches.\n\n### Request Body\n\n```json\n{\n  \"query\": \"Japanese beauty products and perfume\",\n  \"search_type\": \"vector\",\n  \"top_k\": 5,\n  \"include_answer\": true,\n  \"answer_model\": \"claude-sonnet-4-5\"\n}\n```\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"query\": \"Japanese beauty products and perfume\",\n  \"results\": [\n    {\n      \"item_id\": \"uuid-string\",\n      \"rank\": 1,\n      \"score\": 0.87,\n      \"score_type\": \"similarity\",\n      \"category\": \"Beauty\",\n      \"headline\": \"...\",\n      \"summary\": \"...\",\n      \"image_url\": \"/images/uuid.jpg\",\n      \"metadata\": { ... }\n    }\n  ],\n  \"total_results\": 5,\n  \"answer\": \"Based on your collection...\",\n  \"answer_confidence\": \"high\",\n  \"citations\": [1, 2, 3],\n  \"retrieval_time_ms\": 25.3,\n  \"answer_time_ms\": 901.2\n}\n```\n\n### Benefits of Vector Search\n\n- Finds semantically similar items even without exact keyword matches\n- Better for conceptual queries (e.g., \"cozy cafes\" matches \"warm coffee shops\")\n- Handles synonyms and related concepts naturally\n- Returns similarity scores from 0.0 (dissimilar) to 1.0 (identical)"
+          },
+          "response": []
+        },
+        {
+          "name": "Vector Search - with Similarity Threshold",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"traditional Japanese architecture\",\n  \"search_type\": \"vector\",\n  \"top_k\": 10,\n  \"min_similarity_score\": 0.7,\n  \"include_answer\": false\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/search",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "search"
+              ]
+            },
+            "description": "## Vector Search - with Similarity Threshold\n\nFilter vector search results by minimum similarity score to return only highly relevant items.\n\n### Request Body\n\n```json\n{\n  \"query\": \"traditional Japanese architecture\",\n  \"search_type\": \"vector\",\n  \"top_k\": 10,\n  \"min_similarity_score\": 0.7,\n  \"include_answer\": false\n}\n```\n\n| Field | Type | Description |\n|-------|------|-------------|\n| `min_similarity_score` | float | Only return items with similarity >= this threshold (0.0-1.0) |\n\n### Recommended Thresholds\n\n- **0.9+**: Nearly identical content\n- **0.7-0.9**: Highly relevant\n- **0.5-0.7**: Moderately relevant\n- **<0.5**: Loosely related\n\n### Response\n\nReturns only items with similarity score >= 0.7. If fewer than `top_k` items meet the threshold, fewer results are returned."
+          },
+          "response": []
+        },
+        {
+          "name": "Vector Search - with Category Filter",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"delicious food and dining experiences\",\n  \"search_type\": \"vector\",\n  \"top_k\": 5,\n  \"category_filter\": \"Food\",\n  \"include_answer\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/search",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "search"
+              ]
+            },
+            "description": "## Vector Search - with Category Filter\n\nCombine semantic search with category filtering to find relevant items within a specific category.\n\n### Request Body\n\n```json\n{\n  \"query\": \"delicious food and dining experiences\",\n  \"search_type\": \"vector\",\n  \"top_k\": 5,\n  \"category_filter\": \"Food\",\n  \"include_answer\": true\n}\n```\n\n| Field | Type | Description |\n|-------|------|-------------|\n| `category_filter` | string | Only search within this category |\n\n### Use Cases\n\n- Search for \"relaxing experience\" within \"Travel\" category\n- Find \"affordable options\" in \"Shopping\" category\n- Discover \"family-friendly\" items in \"Entertainment\" category\n\n### Response\n\nReturns only items in the specified category, ranked by semantic similarity to the query."
           },
           "response": []
         }
       ],
-      "description": "Natural language search and Q&A endpoints using BM25 full-text search."
+      "description": "Natural language search and Q&A endpoints supporting both BM25 keyword search and vector semantic search."
     },
     {
       "name": "Index Management",
@@ -413,9 +494,47 @@
             "description": "## Get Index Status\n\nGet current search index status and statistics.\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"doc_count\": 130,\n  \"total_items\": 130,\n  \"index_coverage\": 100.0\n}\n```"
           },
           "response": []
+        },
+        {
+          "name": "Rebuild Vector Index",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/vector-index/rebuild",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "vector-index",
+                "rebuild"
+              ]
+            },
+            "description": "## Rebuild Vector Index\n\nGenerate embeddings for all analyzed items that don't have embeddings yet. This is used for:\n- Initial backfill after enabling vector search\n- Re-indexing items after analysis updates\n- Recovering from missing embeddings\n\n### Process\n\n1. Finds all analyzed items without embeddings\n2. Creates weighted documents from analysis data\n3. Generates embeddings via VoyageAI API in batches\n4. Stores embeddings in vec_items table\n5. Skips items with empty/sparse analysis data\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"status\": \"success\",\n  \"embedded_count\": 84,\n  \"skipped_count\": 3,\n  \"skipped_items\": [\n    {\n      \"item_id\": \"uuid-1\",\n      \"reason\": \"Empty embedding document\"\n    },\n    {\n      \"item_id\": \"uuid-2\",\n      \"reason\": \"Empty embedding document\"\n    }\n  ],\n  \"build_time_seconds\": 12.5\n}\n```\n\n### Response Fields\n\n| Field | Type | Description |\n|-------|------|-------------|\n| `status` | string | \"success\" or \"error\" |\n| `embedded_count` | integer | Number of embeddings generated |\n| `skipped_count` | integer | Number of items skipped |\n| `skipped_items` | array | Details of skipped items |\n| `build_time_seconds` | float | Time taken for the operation |\n\n### Notes\n\n- Items with existing embeddings are not re-embedded\n- Items with sparse analysis data are skipped\n- Uses batch processing to minimize API calls\n- May take several minutes for large collections"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Vector Index Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/vector-index/status",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "vector-index",
+                "status"
+              ]
+            },
+            "description": "## Get Vector Index Status\n\nGet current vector search index statistics and coverage.\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"total_items\": 87,\n  \"analyzed_items\": 87,\n  \"embedded_items\": 84,\n  \"coverage_percentage\": 96.6,\n  \"embedding_model\": \"voyage-3.5\",\n  \"embedding_dimensions\": 1024\n}\n```\n\n### Response Fields\n\n| Field | Type | Description |\n|-------|------|-------------|\n| `total_items` | integer | Total items in database |\n| `analyzed_items` | integer | Items with analysis |\n| `embedded_items` | integer | Items with embeddings |\n| `coverage_percentage` | float | Percentage of analyzed items with embeddings |\n| `embedding_model` | string | VoyageAI model being used |\n| `embedding_dimensions` | integer | Dimension of embedding vectors |\n\n### Interpreting Coverage\n\n- **100%**: All analyzed items have embeddings - vector search is fully operational\n- **80-99%**: Most items covered - vector search is usable, some items skipped\n- **<80%**: Low coverage - consider running rebuild or re-analyzing items"
+          },
+          "response": []
         }
       ],
-      "description": "Endpoints for managing the FTS5 search index."
+      "description": "Endpoints for managing the BM25 FTS5 search index and vector search index."
     },
     {
       "name": "Golden Dataset",
@@ -577,6 +696,10 @@
     {
       "key": "base_url",
       "value": "http://localhost:8000"
+    },
+    {
+      "key": "golden_base_url",
+      "value": "http://golden.localhost:8000"
     }
   ]
 }

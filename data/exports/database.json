@@ -1,5 +1,5 @@
 {
-  "exported_at": "2025-12-21T04:00:01.775779+00:00",
+  "exported_at": "2025-12-21T07:22:52.627566+00:00",
   "database_path": "./data/collections.db",
   "tables": {
     "items": [
@@ -842,6 +842,16 @@
         "mime_type": "image/jpeg",
         "created_at": "2025-12-02T23:05:28.687735",
         "updated_at": "2025-12-02T23:05:28.687735"
+      },
+      {
+        "id": "fe753c9b-37c8-4cd8-9a72-b5e604753b36",
+        "filename": "fe753c9b-37c8-4cd8-9a72-b5e604753b36.jpg",
+        "original_filename": "IMG_0205.jpg",
+        "file_path": "./data/images/fe753c9b-37c8-4cd8-9a72-b5e604753b36.jpg",
+        "file_size": 590105,
+        "mime_type": "image/jpeg",
+        "created_at": "2025-12-21T06:10:02.633005",
+        "updated_at": "2025-12-21T06:10:02.633005"
       }
     ],
     "analyses": [
@@ -5032,6 +5042,18 @@
         "trace_id": null,
         "created_at": "2025-12-03T23:43:06.159202",
         "provider_used": "openai"
+      },
+      {
+        "id": "21defcf9-89ed-49b8-bb46-a03eafbf7e0b",
+        "item_id": "fe753c9b-37c8-4cd8-9a72-b5e604753b36",
+        "version": 1,
+        "category": "Entertainment",
+        "summary": "A curated list of 10 highly-rated Korean dramas, all scoring 8.9/10 or higher. The top three are Mouse (9.9/10), Alchemy of Souls (9.8/10), and Twinkling Watermelon (9.8/10). Other notable titles include My Mister, Twenty Five Twenty One, Bloodhounds, Goblin, Mr Queen, Descendants of the Sun, and Healer.",
+        "raw_response": "{\"category\": \"Entertainment\", \"subcategories\": [\"Korean Drama\", \"TV Recommendations\", \"Ratings\"], \"headline\": \"Top 10 rated Korean dramas with near-perfect scores, featuring Mouse, Alchemy of Souls, and Twinkling Watermelon\", \"summary\": \"A curated list of 10 highly-rated Korean dramas, all scoring 8.9/10 or higher. The top three are Mouse (9.9/10), Alchemy of Souls (9.8/10), and Twinkling Watermelon (9.8/10). Other notable titles include My Mister, Twenty Five Twenty One, Bloodhounds, Goblin, Mr Queen, Descendants of the Sun, and Healer.\", \"media_metadata\": {\"original_poster\": \"Kdrama Kenny\", \"tagged_accounts\": [], \"location_tags\": [], \"audio_source\": null, \"hashtags\": []}, \"image_details\": {\"extracted_text\": [\"The ONLY 10/10 Kdramas (Only Done it 9 Times)\", \"Mouse 9.9/10\", \"Alchemy of souls 9.8/10\", \"Twinkling Watermelon 9.8/10\", \"My Mister 9.7/10\", \"Twenty five Twenty One 9.4/10\", \"Bloodhounds 9.4/10\", \"Goblin 9.1/10\", \"Mr Queen 9/10\", \"Descendants of the Sun 9/10\", \"Healer 8.9/10\", \"Kdramas I've watched that were really good guys,\", \"Effect \\u00b7 Green Screen\", \"These are the ONLY PERFECT Kdramas that exist! What others would I giv... more\", \"Search \\u00b7 mr sunshine review\"], \"objects\": [\"Netflix logo\", \"Person's face/hair\", \"Text overlay\", \"Like button (9,823)\", \"Comment button (436)\", \"Share button (704)\", \"Bookmark icon (5,548)\", \"Profile picture icon\"], \"themes\": [\"Korean drama recommendations\", \"TV show ratings\", \"Entertainment curation\", \"Kdrama community\"], \"emotions\": [\"enthusiastic\", \"passionate\", \"opinionated\"], \"vibes\": [\"informative\", \"fan-created\", \"recommendation-focused\"], \"likely_source\": \"TikTok\", \"key_interest\": \"The ranked list of 10 Korean dramas with specific numerical ratings, particularly the top three highest-rated shows\", \"visual_hierarchy\": [\"Title text: 'The ONLY 10/10 Kdramas'\", \"Mouse 9.9/10 (top of list)\", \"Netflix logo (upper right)\", \"Black text overlay box with complete rankings\", \"Bottom caption and username\"]}}",
+        "model_used": "claude-sonnet-4-5",
+        "trace_id": null,
+        "created_at": "2025-12-21T06:11:12.375874",
+        "provider_used": "anthropic"
       }
     ]
   }

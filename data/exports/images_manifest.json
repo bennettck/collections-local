@@ -1,5 +1,5 @@
 {
-  "exported_at": "2025-12-21T04:00:01.806380+00:00",
+  "exported_at": "2025-12-21T07:22:52.665287+00:00",
   "images_path": "./data/images",
   "images": [
     {
@@ -1063,6 +1063,12 @@
       "size": 231979,
       "modified": "2025-12-02T23:05:27.798490",
       "sha256": "e9076ca3893f37c5a8f8555c28d61e1683df437b0801523aa50906b09add65cc"
+    },
+    {
+      "filename": "fe753c9b-37c8-4cd8-9a72-b5e604753b36.jpg",
+      "size": 590105,
+      "modified": "2025-12-21T06:10:02.630624",
+      "sha256": "e9fc4dd51e0097397dab4805885691edbe81bbc0a7c369ba54416828e659b08b"
     },
     {
       "filename": "ff1b2f83-9d52-415b-9a60-4b8a2169c5ff.jpg",

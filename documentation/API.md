@@ -109,6 +109,47 @@ X-Database-Context: golden
 
 ---
 
+### Keepalive
+
+Prevent GitHub Codespace timeout by generating filesystem activity. This endpoint writes a timestamp to a temporary file to keep the workspace active.
+
+**Endpoint:** `POST /keepalive`
+
+**Description:** This utility endpoint is useful for keeping GitHub Codespaces from timing out during long-running operations or when you need to keep the environment active.
+
+**Example (curl):**
+
+```bash
+curl -X POST http://localhost:8000/keepalive
+```
+
+**Response:** `200 OK`
+
+```json
+{
+  "status": "alive",
+  "timestamp": 1703001234.567
+}
+```
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `status` | string | Status indicator, always `"alive"` on success |
+| `timestamp` | float | Current Unix timestamp |
+
+**Error Response:** `200 OK` (errors are non-fatal)
+
+```json
+{
+  "status": "error",
+  "message": "error description"
+}
+```
+
+**Note:** This endpoint does not fail even if the filesystem write fails. It will return an error status but still return HTTP 200 to avoid disrupting automated keepalive scripts.
+
+---
+
 ## Items
 
 Endpoints for managing collection items (images).
@@ -664,11 +705,11 @@ curl http://localhost:8000/analyses/analysis-uuid
 
 ## Search & Retrieval
 
-Natural language search and Q&A over your image collection using BM25 full-text search with AI-powered answer generation.
+Natural language search and Q&A over your image collection using **BM25 full-text search** or **vector semantic search** with AI-powered answer generation.
 
 ### Search Collection
 
-Perform natural language search over your collection and optionally generate AI-powered answers to questions.
+Perform natural language search over your collection using keyword-based BM25 or semantic vector search, and optionally generate AI-powered answers to questions.
 
 **Endpoint:** `POST /search`
 
@@ -677,9 +718,11 @@ Perform natural language search over your collection and optionally generate AI-
 ```json
 {
   "query": "Tokyo restaurants",
+  "search_type": "bm25",
   "top_k": 10,
   "category_filter": null,
   "min_relevance_score": -1.0,
+  "min_similarity_score": 0.0,
   "include_answer": true,
   "answer_model": null
 }
@@ -688,43 +731,56 @@ Perform natural language search over your collection and optionally generate AI-
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `query` | string | *required* | Natural language search query (min 3 characters) |
+| `search_type` | string | `"bm25"` | Search method: `"bm25"` (keyword) or `"vector"` (semantic) |
 | `top_k` | integer | `10` | Number of results to return (1-50) |
 | `category_filter` | string | `null` | Filter results by category |
-| `min_relevance_score` | float | `-1.0` | Minimum BM25 relevance score threshold. Results with scores > this value will be filtered out. Default `-1.0` effectively disables filtering since most results score lower (more negative = better match). |
+| `min_relevance_score` | float | `-1.0` | **BM25 only**: Minimum BM25 relevance score threshold. Results with scores > this value will be filtered out. Default `-1.0` effectively disables filtering since most results score lower (more negative = better match). |
+| `min_similarity_score` | float | `0.0` | **Vector only**: Minimum similarity score threshold (0-1 range, higher = more similar) |
 | `include_answer` | boolean | `true` | Generate LLM answer from search results |
 | `answer_model` | string | `null` | Model for answer generation (defaults to `claude-sonnet-4-5`) |
 
 **Example (curl):**
 
 ```bash
-# Basic search with answer generation
+# Basic BM25 search (default)
 curl -X POST http://localhost:8000/search \
   -H "Content-Type: application/json" \
   -d '{"query": "Tokyo restaurants", "top_k": 5}'
+
+# Vector semantic search
+curl -X POST http://localhost:8000/search \
+  -H "Content-Type: application/json" \
+  -d '{"query": "Japanese beauty products", "search_type": "vector", "top_k": 5}'
+
+# Vector search with similarity threshold
+curl -X POST http://localhost:8000/search \
+  -H "Content-Type: application/json" \
+  -d '{"query": "perfume", "search_type": "vector", "min_similarity_score": 0.6}'
 
 # Search without answer generation (faster)
 curl -X POST http://localhost:8000/search \
   -H "Content-Type: application/json" \
   -d '{"query": "beauty products perfume", "include_answer": false}'
 
-# Search with category filter
+# Vector search with category filter
 curl -X POST http://localhost:8000/search \
   -H "Content-Type: application/json" \
-  -d '{"query": "food", "category_filter": "Food", "top_k": 10}'
+  -d '{"query": "delicious food", "search_type": "vector", "category_filter": "Food"}'
 
 # Use different model for answer
 curl -X POST http://localhost:8000/search \
   -H "Content-Type: application/json" \
   -d '{"query": "Tokyo restaurants", "answer_model": "gpt-4o"}'
 
-# Filter out weak matches with strict threshold
+# BM25 search with strict relevance threshold
 curl -X POST http://localhost:8000/search \
   -H "Content-Type: application/json" \
-  -d '{"query": "perfume", "top_k": 10, "min_relevance_score": -5.0}'
+  -d '{"query": "perfume", "search_type": "bm25", "min_relevance_score": -5.0}'
 ```
 
 **Response:** `200 OK`
 
+**BM25 Search Response Example:**
 ```json
 {
   "query": "Tokyo restaurants",
@@ -733,6 +789,7 @@ curl -X POST http://localhost:8000/search \
       "item_id": "8aed0ca7-6aed-4635-9cb2-ef47a2aba461",
       "rank": 1,
       "score": -4.640884826212837,
+      "score_type": "bm25",
       "category": "Food",
       "headline": "Tofuya Ukai dining spot beneath Tokyo Tower in Minato City",
       "summary": "Tofuya Ukai (東京 芝 とうふ屋うかい) is presented as a beautiful restaurant...",
@@ -756,6 +813,32 @@ curl -X POST http://localhost:8000/search \
 }
 ```
 
+**Vector Search Response Example:**
+```json
+{
+  "query": "Japanese beauty products",
+  "results": [
+    {
+      "item_id": "fe0288ee-5bcf-46e5-8ce6-c1c65cae5395",
+      "rank": 1,
+      "score": 0.6682,
+      "score_type": "similarity",
+      "category": "Beauty",
+      "headline": "J-Scent fragrance review with picks: Wood Flake, Hisui, Sumo",
+      "summary": "J-Scent perfume house offers affordable Japanese-inspired fragrances...",
+      "image_url": "/images/fe0288ee-5bcf-46e5-8ce6-c1c65cae5395.jpg",
+      "metadata": { ... }
+    }
+  ],
+  "total_results": 5,
+  "answer": "Based on your collection, you have images of J-Scent, a Japanese perfume house...",
+  "answer_confidence": 0.75,
+  "citations": ["1"],
+  "retrieval_time_ms": 45.2,
+  "answer_time_ms": 3821.4
+}
+```
+
 | Field | Type | Description |
 |-------|------|-------------|
 | `query` | string | The search query that was executed |
@@ -773,27 +856,53 @@ curl -X POST http://localhost:8000/search \
 |-------|------|-------------|
 | `item_id` | string | Unique identifier of the item |
 | `rank` | integer | Rank position (1-based) |
-| `score` | float | BM25 relevance score (lower/more negative = better match) |
+| `score` | float | Relevance/similarity score (interpretation depends on score_type) |
+| `score_type` | string | Type of score: `"bm25"` or `"similarity"` |
 | `category` | string/null | Primary category |
 | `headline` | string/null | Item headline |
 | `summary` | string/null | Item summary |
 | `image_url` | string | URL to access the image file |
 | `metadata` | object | Full raw_response analysis data |
 
+**Score Interpretation:**
+
+| score_type | Score Range | Meaning |
+|------------|-------------|---------|
+| `"bm25"` | Negative values (e.g., -4.5, -2.1) | More negative = better match |
+| `"similarity"` | 0.0 to 1.0 | Higher = more similar (1.0 = identical) |
+
 **Search Features:**
 
-- **BM25 Full-Text Search**: Fast keyword-based search using SQLite FTS5
-- **All Fields Searchable**: Searches across categories, summaries, extracted text, locations, hashtags, and all metadata
-- **Weighted Ranking**: Important fields (summary, headline) ranked higher than others
-- **Relevance Score Filtering**: Filter out low-quality results using `min_relevance_score` threshold
+**BM25 Full-Text Search (`search_type: "bm25"`):**
+- Fast keyword-based search using SQLite FTS5
+- Best for exact term matching and keyword queries
+- All fields searchable: categories, summaries, extracted text, locations, hashtags, metadata
+- Weighted ranking: Important fields (summary, headline) ranked higher
+- Typical retrieval time: ~2-5ms
+
+**Vector Semantic Search (`search_type: "vector"`):**
+- Semantic similarity using VoyageAI embeddings (1024-dimensional vectors)
+- Best for conceptual queries and finding meaning, not just keywords
+- Understands synonyms and related concepts (e.g., "perfume" finds "fragrance")
+- Cosine similarity ranking (0-1 scale)
+- Typical retrieval time: ~10-100ms (includes query embedding generation)
+
+**Common Features:**
 - **Natural Language Queries**: Ask questions like "Show me Tokyo restaurants" or "beauty products"
 - **AI Answer Generation**: Optional LLM-powered answers with citations to specific items
-- **Category Filtering**: Narrow results to specific categories
+- **Category Filtering**: Narrow results to specific categories (works with both search types)
+- **Answer generation**: ~4-5 seconds (when enabled, works with both search types)
 
-**Performance:**
+**Which Search Type to Use:**
 
-- Retrieval: ~2-5ms for typical queries
-- Answer generation: ~4-5 seconds (when enabled)
+| Use Case | Recommended Type | Example Query |
+|----------|------------------|---------------|
+| Exact keyword match | BM25 | "Tokyo Tower restaurant" |
+| Conceptual/semantic search | Vector | "affordable luxury experiences" |
+| Abbreviations/OCR text | BM25 | "J-SCENT" (exact text match) |
+| Related concepts | Vector | "Japanese culture" (finds travel, food, traditions) |
+| Mixed keywords | BM25 | "perfume shopping Tokyo" |
+| Vague descriptions | Vector | "authentic local vibes" |
 
 **Error Response:** `500 Internal Server Error`
 
@@ -898,6 +1007,117 @@ curl http://localhost:8000/index/status
 
 ---
 
+### Rebuild Vector Index
+
+Rebuild the vector search index by generating embeddings for all analyzed items. This is useful after analyzing new items or if vector search results seem outdated.
+
+**Endpoint:** `POST /vector-index/rebuild`
+
+**Request Body (optional):**
+
+```json
+{
+  "embedding_model": "voyage-3.5-lite"
+}
+```
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `embedding_model` | string | `"voyage-3.5-lite"` | VoyageAI model to use for generating embeddings |
+
+**Example (curl):**
+
+```bash
+# Rebuild with default model
+curl -X POST http://localhost:8000/vector-index/rebuild
+
+# Rebuild with specific model
+curl -X POST http://localhost:8000/vector-index/rebuild \
+  -H "Content-Type: application/json" \
+  -d '{"embedding_model": "voyage-3.5-lite"}'
+```
+
+**Response:** `200 OK`
+
+```json
+{
+  "embedded_count": 45,
+  "skipped_count": 85,
+  "total_processed": 130
+}
+```
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `embedded_count` | integer | Number of items that had embeddings generated |
+| `skipped_count` | integer | Number of items that already had embeddings |
+| `total_processed` | integer | Total number of items processed |
+
+**When to Rebuild:**
+
+- After analyzing new items in bulk
+- If vector search results seem outdated
+- After changing analysis data
+- To switch to a different embedding model
+
+**Note:** This operation calls the VoyageAI API for items that don't have embeddings yet. Items with existing embeddings are skipped unless the embedding model has changed.
+
+**Error Response:** `500 Internal Server Error`
+
+```json
+{
+  "detail": "Vector index rebuild failed: <error message>"
+}
+```
+
+---
+
+### Get Vector Index Status
+
+Get current status and statistics for the vector search index.
+
+**Endpoint:** `GET /vector-index/status`
+
+**Example (curl):**
+
+```bash
+curl http://localhost:8000/vector-index/status
+```
+
+**Response:** `200 OK`
+
+```json
+{
+  "total_analyzed_items": 130,
+  "total_embeddings": 85,
+  "total_vectors": 85,
+  "coverage": 0.6538461538461539
+}
+```
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `total_analyzed_items` | integer | Total number of items with analyses |
+| `total_embeddings` | integer | Number of items with embeddings |
+| `total_vectors` | integer | Number of vectors in the search index |
+| `coverage` | float | Percentage of analyzed items that have embeddings (0.0-1.0) |
+
+**Understanding Vector Index Coverage:**
+
+- Coverage < 1.0 means some analyzed items don't have embeddings yet
+- Run `/vector-index/rebuild` to generate embeddings for remaining items
+- Vector search only works on items with embeddings
+
+**Error Response:** `500 Internal Server Error`
+
+```json
+{
+  "detail": "Failed to get vector index status: <error message>"
+}
+```
+
+---
+
 ### Serve Image
 
 Serve image files for display in search results and item details.
@@ -971,18 +1191,29 @@ Retrieve items for golden dataset curation with their analyses.
 
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
-| `skip_reviewed` | boolean | `true` | Skip items that already have golden data |
+| `review_mode` | string | `"unreviewed"` | Filter mode: `"unreviewed"`, `"all"`, or `"reviewed"` |
 | `limit` | integer | `1` | Number of items to return (max 100) |
 | `offset` | integer | `0` | Offset for pagination |
+
+**Review Modes:**
+
+| Mode | Description |
+|------|-------------|
+| `"unreviewed"` | Only items without golden data (default) |
+| `"all"` | All items, regardless of review status |
+| `"reviewed"` | Only items that already have golden data |
 
 **Example (curl):**
 
 ```bash
-# Get next unreviewed item
-curl "http://localhost:8000/golden-dataset/items?skip_reviewed=true&limit=1"
+# Get next unreviewed item (default)
+curl "http://localhost:8000/golden-dataset/items?review_mode=unreviewed&limit=1"
 
 # Get all items including reviewed
-curl "http://localhost:8000/golden-dataset/items?skip_reviewed=false&limit=10"
+curl "http://localhost:8000/golden-dataset/items?review_mode=all&limit=10"
+
+# Get only reviewed items
+curl "http://localhost:8000/golden-dataset/items?review_mode=reviewed&limit=5"
 ```
 
 **Response:** `200 OK`

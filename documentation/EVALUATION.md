@@ -71,7 +71,7 @@ See [DUAL_DATABASE.md](./DUAL_DATABASE.md) for complete dual-database documentat
 
 File: `data/eval/retrieval_evaluation_dataset.json`
 
-**Structure**:
+**Basic Structure** (backward compatible):
 ```json
 {
   "metadata": {
@@ -100,6 +100,42 @@ File: `data/eval/retrieval_evaluation_dataset.json`
   ]
 }
 ```
+
+**Extended Structure** (per-search-type expectations):
+```json
+{
+  "queries": [
+    {
+      "query_id": "q025",
+      "query_text": "peaceful nature escapes",
+      "query_type": "semantic",
+      "expected_items_by_search_type": {
+        "bm25": [
+          {
+            "item_id": "f509d013-83c6-4e77-b71f-0afbd9999c09",
+            "relevance": "high"
+          }
+        ],
+        "vector": [
+          {
+            "item_id": "f509d013-83c6-4e77-b71f-0afbd9999c09",
+            "relevance": "high"
+          },
+          {
+            "item_id": "8e59d5c3-71ef-4caf-bc16-c23c5b1cc3eb",
+            "relevance": "medium"
+          }
+        ]
+      }
+    }
+  ]
+}
+```
+
+**Expected Items Resolution**:
+- If `expected_items_by_search_type` exists for the current search type → use it
+- Else if `expected_items` exists → use it (backward compatible)
+- This allows different expected results for BM25 vs vector search
 
 **Query Types**:
 
@@ -250,7 +286,7 @@ Required:
   (none - all have defaults)
 
 Optional:
-  --port PORT              API port (default: 8001)
+  --port PORT              API port (default: 8000)
   --base-url URL          Full base URL (overrides --port)
   --dataset PATH          Evaluation dataset JSON
                           (default: data/eval/retrieval_evaluation_dataset.json)
@@ -262,49 +298,91 @@ Optional:
                           (default: 55 for golden DB)
   --skip-item-check       Skip item count validation
   --verbose               Print detailed progress
+
+Multi-Search Type Options:
+  --search-types TYPES    Comma-separated search types to evaluate:
+                          'bm25', 'vector', or 'all' (default: all)
+  --parallel              Run search types in parallel per query
+                          for faster evaluation (default: enabled)
+  --no-parallel           Disable parallel execution
+                          (run search types sequentially)
+
+Subdomain Routing Options:
+  --use-golden-subdomain  Use golden.localhost subdomain routing to access
+                          golden database (default: enabled)
+  --no-golden-subdomain   Disable golden subdomain routing
+                          (for testing against production DB)
 ```
 
 ### Common Workflows
 
-#### 1. Standard Evaluation (Golden DB)
+#### 1. Standard Evaluation (All Search Types)
 
 ```bash
-# Start golden API on port 8001
-./scripts/run_golden_api.sh
+# Start API on port 8000
+uvicorn main:app --port 8000
 
-# Run evaluation with verbose output
+# Run evaluation for both BM25 and vector search (default)
 python scripts/evaluate_retrieval.py --verbose
+
+# This will:
+# - Route to golden database via golden.localhost subdomain
+# - Evaluate both BM25 and vector search in parallel
+# - Generate comparison reports
 ```
 
-#### 2. Evaluate Production Database
+#### 2. Evaluate Single Search Type
+
+```bash
+# Evaluate BM25 only
+python scripts/evaluate_retrieval.py --search-types bm25
+
+# Evaluate vector search only
+python scripts/evaluate_retrieval.py --search-types vector
+```
+
+#### 3. Sequential vs Parallel Execution
+
+```bash
+# Parallel execution (default, faster)
+python scripts/evaluate_retrieval.py --search-types all --parallel
+
+# Sequential execution (slower, but easier to debug)
+python scripts/evaluate_retrieval.py --search-types all --no-parallel
+```
+
+#### 4. Evaluate Production Database
 
 ```bash
 # Start production API
-uvicorn app.main:app --port 8000
+uvicorn main:app --port 8000
 
-# Run evaluation (skip item count check since production has >55 items)
-python scripts/evaluate_retrieval.py --port 8000 --skip-item-check
+# Disable golden subdomain routing and skip item count check
+python scripts/evaluate_retrieval.py \
+  --no-golden-subdomain \
+  --skip-item-check \
+  --search-types all
 ```
 
 ⚠️ **Warning**: Production evaluation may show lower scores because:
 - Production has many more items (more "distractor" items)
 - Golden dataset is designed for the 55-item golden database
 
-#### 3. Custom K Values
+#### 5. Custom K Values
 
 ```bash
 # Test with different K values
 python scripts/evaluate_retrieval.py --top-k 1,5,10,20,50
 ```
 
-#### 4. Remote Server Evaluation
+#### 6. Remote Server Evaluation
 
 ```bash
 # Evaluate remote API endpoint
-python scripts/evaluate_retrieval.py --base-url http://192.168.1.100:8001
+python scripts/evaluate_retrieval.py --base-url http://192.168.1.100:8000
 ```
 
-#### 5. Custom Output Location
+#### 7. Custom Output Location
 
 ```bash
 # Save reports to custom directory
@@ -324,14 +402,15 @@ Each evaluation run generates two timestamped files:
 - `eval_20241214_153022_report.md`
 - `eval_20241214_153022_report.json`
 
-### Markdown Report Structure
+### Markdown Report Structure (Single Search Type)
 
 ```markdown
 # Retrieval Evaluation Report
 
 **Run ID**: eval_20241214_153022
 **Timestamp**: 2024-12-14T15:30:22Z
-**API Endpoint**: http://localhost:8001
+**API Endpoint**: http://localhost:8000
+**Search Type**: bm25
 **Dataset**: retrieval_evaluation_dataset.json (50 queries)
 **Target Items**: 55 | **Actual Items**: 55 ✓
 
@@ -368,6 +447,97 @@ Each evaluation run generates two timestamped files:
 - **Status**: ✓ PASS
 
 [... all 50 queries ...]
+```
+
+### Markdown Report Structure (Multi-Search Comparison)
+
+When evaluating multiple search types, the report includes side-by-side comparisons:
+
+```markdown
+# Retrieval Evaluation Report (Multi-Search Comparison)
+
+**Run ID**: eval_20251221_064325
+**Timestamp**: 2025-12-21T06:43:25Z
+**API Endpoint**: http://localhost:8000
+**Dataset**: retrieval_evaluation_dataset.json (50 queries)
+**Search Types**: bm25, vector
+**Parallel Execution**: Yes
+**Target Items**: 55 | **Actual Items**: 55 ✓
+
+---
+
+## Performance Comparison
+
+| Search Type | Avg Time (ms) | Min (ms) | Max (ms) |
+|-------------|---------------|----------|----------|
+| **bm25**    | 1.0           | 0.7      | 3.1      |
+| **vector**  | 103.6         | 80.5     | 406.4    |
+
+---
+
+## Summary Metrics Comparison
+
+### Precision
+
+| Metric | **bm25** | **vector** | Δ (abs) | Δ (%)  | Winner |
+|--------|----------|------------|---------|--------|--------|
+| **@1** | 0.881    | 0.976      | +0.095  | +10.8% | VECTOR |
+| **@5** | 0.376    | 0.414      | +0.038  | +10.1% | VECTOR |
+
+### Recall
+
+| Metric | **bm25** | **vector** | Δ (abs) | Δ (%)  | Winner |
+|--------|----------|------------|---------|--------|--------|
+| **@1** | 0.546    | 0.578      | +0.033  | +6.0%  | VECTOR |
+| **@5** | 0.846    | 0.901      | +0.055  | +6.4%  | VECTOR |
+
+### NDCG
+
+| Metric | **bm25** | **vector** | Δ (abs) | Δ (%)  | Winner |
+|--------|----------|------------|---------|--------|--------|
+| **@1** | 0.865    | 0.976      | +0.111  | +12.8% | VECTOR |
+| **@5** | 0.836    | 0.910      | +0.074  | +8.9%  | VECTOR |
+
+### Mean Reciprocal Rank (MRR)
+
+| Search Type | MRR   | Δ vs first | Winner |
+|-------------|-------|------------|--------|
+| **bm25**    | 0.902 | -          |        |
+| **vector**  | 0.976 | +0.075     | VECTOR |
+
+---
+
+## Agreement Analysis
+
+### Rank-1 Agreement
+- **61.9%** of queries return the same top result
+- Based on 42 comparable queries
+
+### Top-K Overlap (Jaccard Similarity)
+- **Top-3 Average**: 0.50 (50% overlap in top 3 results)
+- **Top-5 Average**: 0.44 (44% overlap in top 5 results)
+
+---
+
+## By Query Type Comparison
+
+### multi-item-recall
+
+| Metric | **bm25** | **vector** | Winner |
+|--------|----------|------------|--------|
+| P@5    | 0.59     | 0.63       | VECTOR |
+| R@5    | 0.86     | 0.91       | VECTOR |
+| MRR    | 0.90     | 1.00       | VECTOR |
+
+### semantic
+
+| Metric | **bm25** | **vector** | Winner |
+|--------|----------|------------|--------|
+| P@5    | 0.33     | 0.45       | VECTOR |
+| R@5    | 0.64     | 0.74       | VECTOR |
+| MRR    | 0.78     | 0.81       | VECTOR |
+
+[... other query types ...]
 ```
 
 ### JSON Report Structure

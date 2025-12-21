@@ -71,6 +71,10 @@ class SearchRequest(BaseModel):
         description="Natural language search query",
         examples=["What restaurants are in Tokyo?", "Show me beauty products", "perfume"]
     )
+    search_type: Literal["bm25", "vector"] = Field(
+        "bm25",
+        description="Search type: 'bm25' for full-text search or 'vector' for semantic search"
+    )
     top_k: int = Field(
         10,
         ge=1,
@@ -87,6 +91,10 @@ class SearchRequest(BaseModel):
         description="Minimum BM25 relevance score threshold. Results with scores > this value will be filtered out. Default -1.0 effectively disables filtering since most results score lower (more negative = better match).",
         examples=[-1.0, -5.0, -10.0]
     )
+    min_similarity_score: float = Field(
+        0.0,
+        description="Minimum similarity score threshold for vector search (0-1 range). Results below this threshold will be filtered out."
+    )
     include_answer: bool = Field(
         True,
         description="Generate LLM answer from results"
@@ -102,15 +110,31 @@ class SearchRequest(BaseModel):
             "examples": [
                 {
                     "query": "What restaurants are in Tokyo?",
+                    "search_type": "bm25",
                     "top_k": 10,
                     "category_filter": None,
+                    "min_relevance_score": -1.0,
+                    "min_similarity_score": 0.0,
                     "include_answer": True,
                     "answer_model": None
                 },
                 {
-                    "query": "beauty products",
+                    "query": "Japanese beauty products and perfume",
+                    "search_type": "vector",
                     "top_k": 5,
-                    "category_filter": "Beauty",
+                    "category_filter": None,
+                    "min_relevance_score": -1.0,
+                    "min_similarity_score": 0.7,
+                    "include_answer": True,
+                    "answer_model": "claude-sonnet-4-5"
+                },
+                {
+                    "query": "traditional architecture",
+                    "search_type": "vector",
+                    "top_k": 10,
+                    "category_filter": "Travel",
+                    "min_relevance_score": -1.0,
+                    "min_similarity_score": 0.0,
                     "include_answer": False,
                     "answer_model": None
                 }
@@ -123,6 +147,10 @@ class SearchResult(BaseModel):
     item_id: str
     rank: int
     score: float
+    score_type: Literal["bm25", "similarity"] = Field(
+        "bm25",
+        description="Type of score: 'bm25' for full-text search scores or 'similarity' for vector search scores"
+    )
     category: Optional[str] = None
     headline: Optional[str] = None
     summary: Optional[str] = None
@@ -133,6 +161,9 @@ class SearchResult(BaseModel):
 class SearchResponse(BaseModel):
     """Response model for search and Q&A."""
     query: str
+    search_type: Literal["bm25", "vector"] = Field(
+        description="Search method used: 'bm25' for keyword search or 'vector' for semantic search"
+    )
     results: list[SearchResult]
     total_results: int
     answer: Optional[str] = None

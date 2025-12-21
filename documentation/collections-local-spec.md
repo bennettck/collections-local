@@ -1,5 +1,33 @@
 # Collections App Local v0 - Implementation Spec
 
+---
+
+> **📋 HISTORICAL DOCUMENT NOTICE**
+>
+> This document represents the **original v0 specification** written at project inception. The actual implementation has evolved significantly beyond this initial design.
+>
+> **Major differences from current implementation:**
+>
+> - **Schema changes**: The database now uses a `raw_response` JSON field instead of separate analysis fields (`category`, `subcategory`, `summary`, etc.)
+> - **New features**: Vector search with embeddings, BM25 full-text search, golden dataset curation tools, and comprehensive retrieval evaluation system
+> - **Multiple providers**: Support for both Anthropic Claude and OpenAI models (including reasoning models with extended token limits)
+> - **Dynamic categories**: Categories are now determined dynamically by the LLM rather than from a hardcoded list
+> - **Expanded API**: Many new endpoints beyond basic CRUD, including search, retrieval, review modes, and evaluation tools
+> - **Database routing**: Host-based routing system to switch between development and golden datasets
+>
+> **For current documentation, see:**
+>
+> - [`API.md`](/workspaces/collections-local/documentation/API.md) - Current API endpoints and usage
+> - [`RETRIEVAL.md`](/workspaces/collections-local/documentation/RETRIEVAL.md) - Search and retrieval system documentation
+> - [`database-routing.md`](/workspaces/collections-local/documentation/database-routing.md) - Database architecture and routing
+> - Other documentation files in the [`/documentation/`](/workspaces/collections-local/documentation/) folder
+>
+> **This document is preserved for historical reference** to understand the original design intentions and track how the project evolved from its initial conception.
+
+---
+
+## Original v0 Specification
+
 ## Overview
 
 Build a minimal local version of the Collections App that analyzes and categorizes screenshot images using AI. This serves as a development/testing environment that mirrors the production AWS architecture patterns.
