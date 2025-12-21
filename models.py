@@ -11,7 +11,8 @@ class Settings(BaseSettings):
     langfuse_secret_key: str
     langfuse_public_key: str
     langfuse_host: str = "https://cloud.langfuse.com"
-    database_path: str = "./data/collections.db"
+    prod_database_path: str = "./data/collections.db"
+    golden_database_path: str = "./data/collections_golden.db"
     images_path: str = "./data/images"
 
     class Config:

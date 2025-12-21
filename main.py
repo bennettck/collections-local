@@ -5,7 +5,7 @@ import aiofiles
 from datetime import datetime
 from pathlib import Path
 
-from fastapi import FastAPI, UploadFile, File, HTTPException, Query
+from fastapi import FastAPI, UploadFile, File, HTTPException, Query, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
@@ -44,8 +44,14 @@ from llm import analyze_image, get_trace_id, get_resolved_provider_and_model
 # Load environment variables
 load_dotenv()
 
-# Get settings
+# Get settings - support both new and old env var names (backwards compatibility)
+PROD_DATABASE_PATH = os.getenv("PROD_DATABASE_PATH") or os.getenv("DATABASE_PATH", "./data/collections.db")
+GOLDEN_DATABASE_PATH = os.getenv("GOLDEN_DATABASE_PATH", "./data/collections_golden.db")
 IMAGES_PATH = os.getenv("IMAGES_PATH", "./data/images")
+
+# Log deprecation warning if old var is used
+if os.getenv("DATABASE_PATH") and not os.getenv("PROD_DATABASE_PATH"):
+    print("⚠️  WARNING: DATABASE_PATH is deprecated. Use PROD_DATABASE_PATH instead.")
 
 # Allowed image MIME types
 ALLOWED_MIME_TYPES = {
@@ -59,19 +65,43 @@ ALLOWED_MIME_TYPES = {
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Startup and shutdown events."""
-    # Startup: initialize database
-    init_db()
+    # Import database_context for scoped DB access
+    from database import database_context
+
+    # Initialize production database
+    print("Initializing production database...")
+    with database_context(PROD_DATABASE_PATH):
+        init_db()
+
+    # Initialize golden database
+    print("Initializing golden database...")
+    with database_context(GOLDEN_DATABASE_PATH):
+        init_db()
+
     # Ensure images directory exists
     os.makedirs(IMAGES_PATH, exist_ok=True)
 
-    # Initialize search index if empty
-    status = get_search_status()
-    if status['doc_count'] == 0 and status['total_items'] > 0:
-        print(f"Building search index for {status['total_items']} items...")
-        stats = rebuild_search_index()
-        print(f"Search index built: {stats['num_documents']} documents indexed")
-    else:
-        print(f"Search index ready: {status['doc_count']} documents")
+    # Initialize search index for production DB
+    print("Checking production search index...")
+    with database_context(PROD_DATABASE_PATH):
+        status = get_search_status()
+        if status['doc_count'] == 0 and status['total_items'] > 0:
+            print(f"Building production search index ({status['total_items']} items)...")
+            stats = rebuild_search_index()
+            print(f"Production index built: {stats['num_documents']} documents")
+        else:
+            print(f"Production index ready: {status['doc_count']} documents")
+
+    # Initialize search index for golden DB
+    print("Checking golden search index...")
+    with database_context(GOLDEN_DATABASE_PATH):
+        status = get_search_status()
+        if status['doc_count'] == 0 and status['total_items'] > 0:
+            print(f"Building golden search index ({status['total_items']} items)...")
+            stats = rebuild_search_index()
+            print(f"Golden index built: {stats['num_documents']} documents")
+        else:
+            print(f"Golden index ready: {status['doc_count']} documents")
 
     yield
     # Shutdown: cleanup if needed
@@ -90,6 +120,15 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+)
+
+# Add database routing middleware
+from middleware import DatabaseRoutingMiddleware
+
+app.add_middleware(
+    DatabaseRoutingMiddleware,
+    prod_db_path=PROD_DATABASE_PATH,
+    golden_db_path=GOLDEN_DATABASE_PATH
 )
 
 # Mount static files
@@ -150,9 +189,31 @@ def _analysis_to_response(analysis: dict) -> AnalysisResponse:
 
 # Health Check
 @app.get("/health")
-async def health_check():
-    """Health check endpoint."""
-    return {"status": "healthy", "timestamp": datetime.utcnow().isoformat()}
+async def health_check(request: Request):
+    """Health check endpoint with database context info."""
+    from database import database_context
+
+    # Get active database from request state (set by middleware)
+    active_db = getattr(request.state, "active_database", "unknown")
+    db_path = getattr(request.state, "db_path", "unknown")
+
+    # Get item counts from both databases
+    with database_context(PROD_DATABASE_PATH):
+        prod_count = count_items()
+
+    with database_context(GOLDEN_DATABASE_PATH):
+        golden_count = count_items()
+
+    return {
+        "status": "healthy",
+        "timestamp": datetime.utcnow().isoformat(),
+        "active_database": active_db,
+        "active_db_path": db_path,
+        "database_stats": {
+            "production": {"items": prod_count},
+            "golden": {"items": golden_count}
+        }
+    }
 
 
 # Item Endpoints

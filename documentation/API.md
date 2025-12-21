@@ -15,6 +15,46 @@ This API allows you to:
 http://localhost:8000
 ```
 
+## Database Routing
+
+The API supports two databases via host-based routing:
+
+- **Production Database** (default): `http://localhost:8000`
+- **Golden Database** (evaluation subset): Access via subdomain or query parameter
+
+### Accessing the Golden Database
+
+**Option 1: Subdomain Routing (Recommended)**
+
+Add to `/etc/hosts`:
+```
+127.0.0.1    golden.localhost
+```
+
+Then use:
+```
+http://golden.localhost:8000
+```
+
+**Option 2: Query Parameter (Easy Testing)**
+
+Append `?_db=golden` to any endpoint:
+```
+http://localhost:8000/health?_db=golden
+http://localhost:8000/items?_db=golden
+```
+
+**Option 3: Host Header Override**
+
+Set the `Host` header in your HTTP client:
+```bash
+curl -H "Host: golden.localhost:8000" http://localhost:8000/health
+```
+
+All requests include an `X-Database-Context` response header indicating which database was used (`production` or `golden`).
+
+For complete details, see `documentation/database-routing.md`.
+
 ## Authentication
 
 No authentication required for local development.
@@ -25,7 +65,7 @@ No authentication required for local development.
 
 ### Health Check
 
-Verify that the API server is running and healthy.
+Verify that the API server is running and healthy. Also shows which database is active and statistics for both databases.
 
 **Endpoint:** `GET /health`
 
@@ -34,7 +74,17 @@ Verify that the API server is running and healthy.
 ```json
 {
   "status": "healthy",
-  "timestamp": "2025-11-30T12:00:00.000000"
+  "timestamp": "2025-11-30T12:00:00.000000",
+  "active_database": "production",
+  "active_db_path": "./data/collections.db",
+  "database_stats": {
+    "production": {
+      "items": 84
+    },
+    "golden": {
+      "items": 55
+    }
+  }
 }
 ```
 
@@ -42,6 +92,20 @@ Verify that the API server is running and healthy.
 |-------|------|-------------|
 | `status` | string | Health status, always "healthy" if responding |
 | `timestamp` | string | ISO 8601 timestamp of the response |
+| `active_database` | string | Which database this request is using (`"production"` or `"golden"`) |
+| `active_db_path` | string | File path of the active database |
+| `database_stats` | object | Item counts for both databases |
+
+**Response Headers:**
+
+All responses include:
+```
+X-Database-Context: production
+```
+or
+```
+X-Database-Context: golden
+```
 
 ---
 

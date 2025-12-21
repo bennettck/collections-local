@@ -2,7 +2,7 @@
   "info": {
     "_postman_id": "collections-local-api",
     "name": "Collections Local API",
-    "description": "API collection for the Collections App Local - a minimal local version that analyzes and categorizes screenshot images using AI.\n\n## Overview\n\nThis API allows you to:\n- Upload and manage image items\n- Trigger AI-powered analysis on images\n- Retrieve categorization, summaries, and extracted text\n- Access full LLM analysis response via raw_response field\n\n## Authentication\n\nNo authentication required for local development.\n\n## Base URL\n\n`http://localhost:8000`",
+    "description": "API collection for the Collections App Local - a minimal local version that analyzes and categorizes screenshot images using AI.\n\n## Overview\n\nThis API allows you to:\n- Upload and manage image items\n- Trigger AI-powered analysis on images\n- Retrieve categorization, summaries, and extracted text\n- Access full LLM analysis response via raw_response field\n\n## Database Routing\n\nThe API supports two databases via host-based routing:\n\n- **Production Database** (default): Use `{{base_url}}` (`http://localhost:8000`)\n- **Golden Database** (evaluation subset): Use `{{golden_base_url}}` (`http://golden.localhost:8000`) or append `?_db=golden` to any endpoint\n\nAll responses include an `X-Database-Context` header indicating which database was used.\n\nFor complete details, see `documentation/database-routing.md`.\n\n## Authentication\n\nNo authentication required for local development.\n\n## Base URL\n\n`http://localhost:8000`",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -16,15 +16,116 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/health",
-              "host": ["{{base_url}}"],
-              "path": ["health"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "health"
+              ]
             },
-            "description": "## Health Check\n\nVerify that the API server is running and healthy.\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"status\": \"healthy\",\n  \"timestamp\": \"2025-11-30T12:00:00.000000\"\n}\n```\n\n### Response Fields\n\n| Field | Type | Description |\n|-------|------|-------------|\n| `status` | string | Health status, always \"healthy\" if responding |\n| `timestamp` | string | ISO 8601 timestamp of the response |"
+            "description": "## Health Check\n\nVerify that the API server is running and healthy. Also shows which database is active and statistics for both databases.\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"status\": \"healthy\",\n  \"timestamp\": \"2025-11-30T12:00:00.000000\",\n  \"active_database\": \"production\",\n  \"active_db_path\": \"./data/collections.db\",\n  \"database_stats\": {\n    \"production\": {\n      \"items\": 84\n    },\n    \"golden\": {\n      \"items\": 55\n    }\n  }\n}\n```\n\n### Response Fields\n\n| Field | Type | Description |\n|-------|------|-------------|\n| `status` | string | Health status, always \"healthy\" if responding |\n| `timestamp` | string | ISO 8601 timestamp of the response |\n| `active_database` | string | Which database this request is using (\"production\" or \"golden\") |\n| `active_db_path` | string | File path of the active database |\n| `database_stats` | object | Item counts for both databases |\n\n### Response Headers\n\nAll responses include `X-Database-Context: production` or `X-Database-Context: golden`"
           },
           "response": []
         }
       ],
       "description": "Health check endpoints for monitoring API availability."
+    },
+    {
+      "name": "Database Routing",
+      "item": [
+        {
+          "name": "Health Check - Production DB",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "health"
+              ]
+            },
+            "description": "Health check using the production database (default).\n\nExpected response: `\"active_database\": \"production\"`"
+          },
+          "response": []
+        },
+        {
+          "name": "Health Check - Golden DB (Subdomain)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{golden_base_url}}/health",
+              "host": [
+                "{{golden_base_url}}"
+              ],
+              "path": [
+                "health"
+              ]
+            },
+            "description": "Health check using the golden database via subdomain routing.\n\nRequires adding `127.0.0.1 golden.localhost` to /etc/hosts.\n\nExpected response: `\"active_database\": \"golden\"`"
+          },
+          "response": []
+        },
+        {
+          "name": "Health Check - Golden DB (Query Param)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health?_db=golden",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "health"
+              ],
+              "query": [
+                {
+                  "key": "_db",
+                  "value": "golden",
+                  "description": "Route to golden database"
+                }
+              ]
+            },
+            "description": "Health check using the golden database via query parameter.\n\nNo /etc/hosts configuration required.\n\nExpected response: `\"active_database\": \"golden\"`"
+          },
+          "response": []
+        },
+        {
+          "name": "List Items - Golden DB",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/items?_db=golden&limit=10",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "items"
+              ],
+              "query": [
+                {
+                  "key": "_db",
+                  "value": "golden",
+                  "description": "Route to golden database"
+                },
+                {
+                  "key": "limit",
+                  "value": "10",
+                  "description": "Number of items to return"
+                }
+              ]
+            },
+            "description": "List items from the golden database (55 items total).\n\nUses query parameter routing for easy testing."
+          },
+          "response": []
+        }
+      ],
+      "description": "Examples of accessing the production and golden databases using different routing methods."
     },
     {
       "name": "Items",
@@ -62,8 +163,12 @@
             },
             "url": {
               "raw": "{{base_url}}/items",
-              "host": ["{{base_url}}"],
-              "path": ["items"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "items"
+              ]
             },
             "description": "## Upload Item\n\nUpload an image file to create a new item in the collection.\n\n### Request\n\n**Content-Type:** `multipart/form-data`\n\n| Field | Type | Required | Description |\n|-------|------|----------|-------------|\n| `file` | file | Yes | Image file (PNG, JPEG, WebP, or GIF) |\n\n### Supported File Types\n\n- `image/png`\n- `image/jpeg`\n- `image/webp`\n- `image/gif`\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"id\": \"uuid-string\",\n  \"filename\": \"uuid-string.png\",\n  \"original_filename\": \"screenshot.png\",\n  \"file_size\": 12345,\n  \"mime_type\": \"image/png\",\n  \"created_at\": \"2025-11-30T12:00:00.000000\",\n  \"updated_at\": \"2025-11-30T12:00:00.000000\",\n  \"latest_analysis\": null\n}\n```\n\n### Response Fields\n\n| Field | Type | Description |\n|-------|------|-------------|\n| `id` | string | Unique identifier (UUID) for the item |\n| `filename` | string | Stored filename (UUID-based) |\n| `original_filename` | string | Original uploaded filename |\n| `file_size` | integer | File size in bytes |\n| `mime_type` | string | MIME type of the file |\n| `created_at` | string | ISO 8601 creation timestamp |\n| `updated_at` | string | ISO 8601 last update timestamp |\n| `latest_analysis` | object/null | Latest analysis result (null if not analyzed) |\n\n### Error Responses\n\n**Status Code:** `400 Bad Request`\n\n```json\n{\n  \"detail\": \"Invalid file type. Allowed types: image/png, image/jpeg, image/webp, image/gif\"\n}\n```"
           },
@@ -76,8 +181,12 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/items?limit=50&offset=0",
-              "host": ["{{base_url}}"],
-              "path": ["items"],
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "items"
+              ],
               "query": [
                 {
                   "key": "category",
@@ -108,8 +217,13 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/items/{{item_id}}",
-              "host": ["{{base_url}}"],
-              "path": ["items", "{{item_id}}"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "items",
+                "{{item_id}}"
+              ]
             },
             "description": "## Get Item\n\nRetrieve a single item by its ID, including the latest analysis with full raw_response if available.\n\n### Path Parameters\n\n| Parameter | Type | Description |\n|-----------|------|-------------|\n| `item_id` | string | UUID of the item |\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"id\": \"uuid-string\",\n  \"filename\": \"uuid-string.png\",\n  \"original_filename\": \"screenshot.png\",\n  \"file_size\": 12345,\n  \"mime_type\": \"image/png\",\n  \"created_at\": \"2025-11-30T12:00:00.000000\",\n  \"updated_at\": \"2025-11-30T12:00:00.000000\",\n  \"latest_analysis\": {\n    \"id\": \"analysis-uuid\",\n    \"item_id\": \"uuid-string\",\n    \"version\": 1,\n    \"category\": \"Travel\",\n    \"summary\": \"A TikTok screenshot about Togoshi Ginza...\",\n    \"raw_response\": {\n      \"category\": \"Travel\",\n      \"subcategories\": [\"Japan\", \"Shopping\", \"Local Culture\"],\n      \"headline\": \"Togoshi Ginza: Tokyo's authentic 1.3km local shopping street\",\n      \"summary\": \"A TikTok screenshot about Togoshi Ginza...\",\n      \"media_metadata\": {\n        \"original_poster\": \"recommend_ndre\",\n        \"tagged_accounts\": [],\n        \"location_tags\": [\"Tokyo\"],\n        \"audio_source\": \"Apple Music - bloodline - Ariana Grande\",\n        \"hashtags\": [\"#japan\"]\n      },\n      \"image_details\": {\n        \"extracted_text\": [\"TOGOSHI GINZA\", \"With over 400 shops...\"],\n        \"objects\": [\"Japanese street scene\", \"Traditional shop signs\"],\n        \"themes\": [\"Authentic local experiences\", \"Japanese culture\"],\n        \"emotions\": [\"Curiosity\", \"Cultural appreciation\"],\n        \"vibes\": [\"Authentic\", \"Local\", \"Cultural immersion\"],\n        \"likely_source\": \"TikTok\",\n        \"key_interest\": \"Hidden local shopping district\",\n        \"visual_hierarchy\": [\"TOGOSHI GINZA title text\", \"Descriptive paragraph\"]\n      }\n    },\n    \"provider_used\": \"anthropic\",\n    \"model_used\": \"claude-sonnet-4-5\",\n    \"trace_id\": null,\n    \"created_at\": \"2025-11-30T12:05:00.000000\"\n  }\n}\n```\n\n### Error Responses\n\n**Status Code:** `404 Not Found`\n\n```json\n{\n  \"detail\": \"Item not found\"\n}\n```"
           },
@@ -122,8 +236,13 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/items/{{item_id}}",
-              "host": ["{{base_url}}"],
-              "path": ["items", "{{item_id}}"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "items",
+                "{{item_id}}"
+              ]
             },
             "description": "## Delete Item\n\nDelete an item and all associated data including:\n- The stored image file\n- All analysis records\n\n### Path Parameters\n\n| Parameter | Type | Description |\n|-----------|------|-------------|\n| `item_id` | string | UUID of the item to delete |\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"status\": \"deleted\",\n  \"id\": \"uuid-string\"\n}\n```\n\n### Error Responses\n\n**Status Code:** `404 Not Found`\n\n```json\n{\n  \"detail\": \"Item not found\"\n}\n```"
           },
@@ -166,8 +285,14 @@
             },
             "url": {
               "raw": "{{base_url}}/items/{{item_id}}/analyze",
-              "host": ["{{base_url}}"],
-              "path": ["items", "{{item_id}}", "analyze"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "items",
+                "{{item_id}}",
+                "analyze"
+              ]
             },
             "description": "## Analyze Item\n\nTrigger AI analysis on an uploaded image. The analysis uses AI vision capabilities (Anthropic Claude or OpenAI GPT-4o) to:\n- Categorize the image\n- Generate a summary and headline\n- Extract text content\n- Identify media metadata (poster, hashtags, etc.)\n- Analyze image details (objects, themes, emotions, vibes)\n\n### Path Parameters\n\n| Parameter | Type | Description |\n|-----------|------|-------------|\n| `item_id` | string | UUID of the item to analyze |\n\n### Request Body\n\n```json\n{\n  \"force_reanalyze\": false,\n  \"provider\": \"anthropic\",\n  \"model\": \"claude-sonnet-4-5\"\n}\n```\n\n| Field | Type | Default | Description |\n|-------|------|---------|-------------|\n| `force_reanalyze` | boolean | `false` | If true, creates new analysis even if one exists |\n| `provider` | string | `\"anthropic\"` | AI provider: `\"anthropic\"` or `\"openai\"` |\n| `model` | string | *(provider default)* | Model to use. Defaults to `\"claude-sonnet-4-5\"` for Anthropic or `\"gpt-4o\"` for OpenAI |\n\n### Provider Defaults\n\n| Provider | Default Model |\n|----------|---------------|\n| `anthropic` | `claude-sonnet-4-5` |\n| `openai` | `gpt-4o` |\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"id\": \"analysis-uuid\",\n  \"item_id\": \"uuid-string\",\n  \"version\": 1,\n  \"category\": \"Travel\",\n  \"summary\": \"A TikTok screenshot about Togoshi Ginza, a 1.3km local shopping street in Tokyo...\",\n  \"raw_response\": {\n    \"category\": \"Travel\",\n    \"subcategories\": [\"Japan\", \"Shopping\", \"Local Culture\"],\n    \"headline\": \"Togoshi Ginza: Tokyo's authentic 1.3km local shopping street\",\n    \"summary\": \"A TikTok screenshot about Togoshi Ginza...\",\n    \"media_metadata\": {\n      \"original_poster\": \"recommend_ndre\",\n      \"tagged_accounts\": [],\n      \"location_tags\": [\"Tokyo\"],\n      \"audio_source\": \"Apple Music - bloodline - Ariana Grande\",\n      \"hashtags\": [\"#japan\"]\n    },\n    \"image_details\": {\n      \"extracted_text\": [\"TOGOSHI GINZA\", \"With over 400 shops...\"],\n      \"objects\": [\"Japanese street scene\", \"Traditional shop signs\"],\n      \"themes\": [\"Authentic local experiences\", \"Japanese culture\"],\n      \"emotions\": [\"Curiosity\", \"Cultural appreciation\"],\n      \"vibes\": [\"Authentic\", \"Local\", \"Cultural immersion\"],\n      \"likely_source\": \"TikTok\",\n      \"key_interest\": \"Hidden local shopping district\",\n      \"visual_hierarchy\": [\"TOGOSHI GINZA title text\", \"Descriptive paragraph\"]\n    }\n  },\n  \"provider_used\": \"anthropic\",\n  \"model_used\": \"claude-sonnet-4-5\",\n  \"trace_id\": null,\n  \"created_at\": \"2025-11-30T12:05:00.000000\"\n}\n```\n\n### Response Fields\n\n| Field | Type | Description |\n|-------|------|-------------|\n| `id` | string | Unique identifier for this analysis |\n| `item_id` | string | ID of the analyzed item |\n| `version` | integer | Analysis version number (increments with each reanalysis) |\n| `category` | string/null | Primary category (extracted from raw_response) |\n| `summary` | string/null | Summary (extracted from raw_response) |\n| `raw_response` | object | Full LLM analysis response (see raw_response Schema) |\n| `provider_used` | string | AI provider used (`\"anthropic\"` or `\"openai\"`) |\n| `model_used` | string | AI model used for analysis |\n| `trace_id` | string/null | Langfuse trace ID for debugging |\n| `created_at` | string | ISO 8601 timestamp |\n\n### raw_response Schema\n\n| Field | Type | Description |\n|-------|------|-------------|\n| `category` | string | Primary category |\n| `subcategories` | array | 2-3 specific subcategories |\n| `headline` | string | 140 character headline |\n| `summary` | string | 2-3 sentence summary |\n| `media_metadata` | object | Social media metadata (poster, tags, location, audio, hashtags) |\n| `image_details` | object | Detailed analysis (text, objects, themes, emotions, vibes, source, etc.) |\n\n### Error Responses\n\n**Status Code:** `404 Not Found`\n\n```json\n{\n  \"detail\": \"Item not found\"\n}\n```\n\n**Status Code:** `500 Internal Server Error`\n\n```json\n{\n  \"detail\": \"Analysis failed: <error message>\"\n}\n```\n\n### Prerequisites\n\nBefore using this endpoint, ensure:\n1. Langfuse credentials are configured in `.env`\n2. A prompt named `collections/image-analysis` exists in Langfuse\n3. For OpenAI provider: `OPENAI_API_KEY` is configured in `.env`"
           },
@@ -180,8 +305,14 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/items/{{item_id}}/analyses",
-              "host": ["{{base_url}}"],
-              "path": ["items", "{{item_id}}", "analyses"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "items",
+                "{{item_id}}",
+                "analyses"
+              ]
             },
             "description": "## Get Item Analyses\n\nRetrieve all analysis versions for a specific item, ordered by version (newest first).\n\nThis is useful for:\n- Viewing analysis history\n- Comparing results across different models and providers\n- Tracking how categorization has changed\n\n### Path Parameters\n\n| Parameter | Type | Description |\n|-----------|------|-------------|\n| `item_id` | string | UUID of the item |\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n[\n  {\n    \"id\": \"analysis-uuid-2\",\n    \"item_id\": \"uuid-string\",\n    \"version\": 2,\n    \"category\": \"Travel\",\n    \"summary\": \"Updated analysis...\",\n    \"raw_response\": {\n      \"category\": \"Travel\",\n      \"subcategories\": [\"Japan\", \"Shopping\"],\n      \"headline\": \"...\",\n      \"summary\": \"Updated analysis...\",\n      \"media_metadata\": { ... },\n      \"image_details\": { ... }\n    },\n    \"provider_used\": \"openai\",\n    \"model_used\": \"gpt-4o\",\n    \"trace_id\": null,\n    \"created_at\": \"2025-11-30T14:00:00.000000\"\n  },\n  {\n    \"id\": \"analysis-uuid-1\",\n    \"item_id\": \"uuid-string\",\n    \"version\": 1,\n    \"category\": \"Travel\",\n    \"summary\": \"Original analysis...\",\n    \"raw_response\": {\n      \"category\": \"Travel\",\n      \"subcategories\": [\"Japan\", \"Local Culture\"],\n      \"headline\": \"...\",\n      \"summary\": \"Original analysis...\",\n      \"media_metadata\": { ... },\n      \"image_details\": { ... }\n    },\n    \"provider_used\": \"anthropic\",\n    \"model_used\": \"claude-sonnet-4-5\",\n    \"trace_id\": null,\n    \"created_at\": \"2025-11-30T12:05:00.000000\"\n  }\n]\n```\n\n### Error Responses\n\n**Status Code:** `404 Not Found`\n\n```json\n{\n  \"detail\": \"Item not found\"\n}\n```"
           },
@@ -194,8 +325,13 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/analyses/{{analysis_id}}",
-              "host": ["{{base_url}}"],
-              "path": ["analyses", "{{analysis_id}}"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "analyses",
+                "{{analysis_id}}"
+              ]
             },
             "description": "## Get Analysis\n\nRetrieve a specific analysis by its ID with full raw_response.\n\n### Path Parameters\n\n| Parameter | Type | Description |\n|-----------|------|-------------|\n| `analysis_id` | string | UUID of the analysis |\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"id\": \"analysis-uuid\",\n  \"item_id\": \"uuid-string\",\n  \"version\": 1,\n  \"category\": \"Travel\",\n  \"summary\": \"A TikTok screenshot about Togoshi Ginza...\",\n  \"raw_response\": {\n    \"category\": \"Travel\",\n    \"subcategories\": [\"Japan\", \"Shopping\", \"Local Culture\"],\n    \"headline\": \"Togoshi Ginza: Tokyo's authentic 1.3km local shopping street\",\n    \"summary\": \"A TikTok screenshot about Togoshi Ginza...\",\n    \"media_metadata\": {\n      \"original_poster\": \"recommend_ndre\",\n      \"tagged_accounts\": [],\n      \"location_tags\": [\"Tokyo\"],\n      \"audio_source\": \"Apple Music - bloodline - Ariana Grande\",\n      \"hashtags\": [\"#japan\"]\n    },\n    \"image_details\": {\n      \"extracted_text\": [\"TOGOSHI GINZA\", \"With over 400 shops...\"],\n      \"objects\": [\"Japanese street scene\", \"Traditional shop signs\"],\n      \"themes\": [\"Authentic local experiences\", \"Japanese culture\"],\n      \"emotions\": [\"Curiosity\", \"Cultural appreciation\"],\n      \"vibes\": [\"Authentic\", \"Local\", \"Cultural immersion\"],\n      \"likely_source\": \"TikTok\",\n      \"key_interest\": \"Hidden local shopping district\",\n      \"visual_hierarchy\": [\"TOGOSHI GINZA title text\", \"Descriptive paragraph\"]\n    }\n  },\n  \"provider_used\": \"anthropic\",\n  \"model_used\": \"claude-sonnet-4-5\",\n  \"trace_id\": null,\n  \"created_at\": \"2025-11-30T12:05:00.000000\"\n}\n```\n\n### Error Responses\n\n**Status Code:** `404 Not Found`\n\n```json\n{\n  \"detail\": \"Analysis not found\"\n}\n```"
           },
@@ -223,8 +359,12 @@
             },
             "url": {
               "raw": "{{base_url}}/search",
-              "host": ["{{base_url}}"],
-              "path": ["search"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "search"
+              ]
             },
             "description": "## Search Collection\n\nNatural language search and Q&A over the collection. Retrieves relevant items using BM25 full-text search and optionally generates an AI-powered answer.\n\n### Request Body\n\n```json\n{\n  \"query\": \"restaurants in Tokyo\",\n  \"top_k\": 5,\n  \"category_filter\": null,\n  \"include_answer\": true,\n  \"answer_model\": \"claude-sonnet-4-5\"\n}\n```\n\n| Field | Type | Default | Description |\n|-------|------|---------|-------------|\n| `query` | string | - | Search query or question |\n| `top_k` | integer | `5` | Number of results to return |\n| `category_filter` | string/null | `null` | Filter by category |\n| `include_answer` | boolean | `false` | Generate AI answer to query |\n| `answer_model` | string | `\"claude-sonnet-4-5\"` | Model for answer generation |\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"query\": \"restaurants in Tokyo\",\n  \"results\": [\n    {\n      \"item_id\": \"uuid-string\",\n      \"rank\": 1,\n      \"score\": 12.5,\n      \"category\": \"Food\",\n      \"headline\": \"Tofuya Ukai dining spot beneath Tokyo Tower\",\n      \"summary\": \"Beautiful restaurant beneath Tokyo Tower...\",\n      \"image_url\": \"/images/uuid.jpg\",\n      \"metadata\": { ... }\n    }\n  ],\n  \"total_results\": 3,\n  \"answer\": \"Based on your collection, here are some restaurants in Tokyo...\",\n  \"answer_confidence\": \"high\",\n  \"citations\": [1, 2],\n  \"retrieval_time_ms\": 15.2,\n  \"answer_time_ms\": 823.4\n}\n```"
           },
@@ -243,8 +383,13 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/index/rebuild",
-              "host": ["{{base_url}}"],
-              "path": ["index", "rebuild"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "index",
+                "rebuild"
+              ]
             },
             "description": "## Rebuild Search Index\n\nRebuild the FTS5 search index from current database. Useful after bulk analysis updates or if search results seem stale.\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"status\": \"success\",\n  \"num_documents\": 130,\n  \"build_time_seconds\": 1.23,\n  \"timestamp\": \"2025-12-13T12:00:00.000000\"\n}\n```"
           },
@@ -257,8 +402,13 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/index/status",
-              "host": ["{{base_url}}"],
-              "path": ["index", "status"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "index",
+                "status"
+              ]
             },
             "description": "## Get Index Status\n\nGet current search index status and statistics.\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"doc_count\": 130,\n  \"total_items\": 130,\n  \"index_coverage\": 100.0\n}\n```"
           },
@@ -277,8 +427,13 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/golden-dataset/items?review_mode=unreviewed&limit=1&offset=0",
-              "host": ["{{base_url}}"],
-              "path": ["golden-dataset", "items"],
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "golden-dataset",
+                "items"
+              ],
               "query": [
                 {
                   "key": "review_mode",
@@ -308,8 +463,14 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/golden-dataset/entry/{{item_id}}",
-              "host": ["{{base_url}}"],
-              "path": ["golden-dataset", "entry", "{{item_id}}"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "golden-dataset",
+                "entry",
+                "{{item_id}}"
+              ]
             },
             "description": "## Get Golden Entry\n\nRetrieve the existing golden dataset entry for a specific item. Used when reviewing items with existing golden records to pre-populate the form.\n\n### Path Parameters\n\n| Parameter | Type | Description |\n|-----------|------|-------------|\n| `item_id` | string | UUID of the item |\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"entry\": {\n    \"item_id\": \"uuid-string\",\n    \"original_filename\": \"IMG_7901 Large.jpeg\",\n    \"reviewed_at\": \"2025-12-13T22:36:04.959Z\",\n    \"source_analyses_count\": 4,\n    \"source_analysis_ids\": [\"analysis-1\", \"analysis-2\"],\n    \"category\": \"Travel\",\n    \"subcategories\": [\"Japan\", \"Shopping\"],\n    \"headline\": \"Curated headline\",\n    \"summary\": \"Curated summary\",\n    \"media_metadata\": {...},\n    \"image_details\": {...}\n  }\n}\n```\n\n**Response when no golden entry exists:**\n\n```json\n{\n  \"entry\": null\n}\n```"
           },
@@ -331,8 +492,13 @@
             },
             "url": {
               "raw": "{{base_url}}/golden-dataset/compare",
-              "host": ["{{base_url}}"],
-              "path": ["golden-dataset", "compare"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "golden-dataset",
+                "compare"
+              ]
             },
             "description": "## Compare Analyses\n\nCalculate similarity between analysis values from different models. Uses Levenshtein distance for extracted_text and TF-IDF cosine similarity for headlines and summaries.\n\n### Request Body\n\n```json\n{\n  \"field_type\": \"extracted_text\",\n  \"values\": [\n    [\"text1\", \"text2\"],\n    [\"text1\", \"text3\"]\n  ]\n}\n```\n\n| Field | Type | Description |\n|-------|------|-------------|\n| `field_type` | string | Type of field: `\"extracted_text\"`, `\"headline\"`, or `\"summary\"` |\n| `values` | array | Array of values to compare |\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"method\": \"levenshtein\",\n  \"similarity_matrix\": [[1.0, 0.85], [0.85, 1.0]],\n  \"highest_agreement\": 0.85\n}\n```"
           },
@@ -354,8 +520,13 @@
             },
             "url": {
               "raw": "{{base_url}}/golden-dataset/save",
-              "host": ["{{base_url}}"],
-              "path": ["golden-dataset", "save"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "golden-dataset",
+                "save"
+              ]
             },
             "description": "## Save Golden Entry\n\nSave or update a golden dataset entry with curated analysis values. The `original_filename` field is automatically populated from the database.\n\n### Request Body\n\n```json\n{\n  \"item_id\": \"uuid-string\",\n  \"reviewed_at\": \"2025-12-13T22:36:04.959Z\",\n  \"source_analyses_count\": 4,\n  \"source_analysis_ids\": [\"analysis-1\", \"analysis-2\"],\n  \"category\": \"Travel\",\n  \"subcategories\": [\"Japan\", \"Shopping\"],\n  \"headline\": \"Curated headline\",\n  \"summary\": \"Curated summary\",\n  \"media_metadata\": {\n    \"original_poster\": \"username\",\n    \"tagged_accounts\": [],\n    \"location_tags\": [\"Tokyo\"],\n    \"audio_source\": \"original sound\",\n    \"hashtags\": [\"#japan\"]\n  },\n  \"image_details\": {\n    \"extracted_text\": [\"Text 1\", \"Text 2\"],\n    \"objects\": [\"object1\"],\n    \"themes\": [\"theme1\"],\n    \"emotions\": [\"emotion1\"],\n    \"vibes\": [\"vibe1\"],\n    \"visual_hierarchy\": [\"element1\"],\n    \"key_interest\": \"Key point\",\n    \"likely_source\": \"TikTok\"\n  }\n}\n```\n\n**Note**: The `original_filename` field is automatically added by the backend from the database and does not need to be included in the request.\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"status\": \"success\",\n  \"item_id\": \"uuid-string\",\n  \"total_golden_count\": 30\n}\n```"
           },
@@ -368,8 +539,13 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/golden-dataset/status",
-              "host": ["{{base_url}}"],
-              "path": ["golden-dataset", "status"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "golden-dataset",
+                "status"
+              ]
             },
             "description": "## Get Golden Status\n\nGet golden dataset progress statistics.\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"total_items\": 87,\n  \"reviewed_items\": 30,\n  \"progress_percentage\": 34.5\n}\n```"
           },
@@ -382,8 +558,12 @@
             "header": [],
             "url": {
               "raw": "{{base_url}}/keepalive",
-              "host": ["{{base_url}}"],
-              "path": ["keepalive"]
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "keepalive"
+              ]
             },
             "description": "## Keepalive\n\nSession keepalive endpoint to prevent GitHub Codespace timeout during active use of the golden dataset tool. The frontend automatically sends keepalive pings based on user activity.\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"status\": \"alive\",\n  \"timestamp\": 1702473600.123\n}\n```\n\n### Response Fields\n\n| Field | Type | Description |\n|-------|------|-------------|\n| `status` | string | Always \"alive\" |\n| `timestamp` | float | Unix timestamp |\n\n### Usage\n\nThis endpoint is primarily used by the golden dataset web tool to maintain the Codespace session active. It writes a timestamp to a `.keepalive` file which signals activity to the Codespace environment."
           },

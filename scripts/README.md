@@ -187,7 +187,7 @@ The `evaluate_retrieval.py` script measures search quality using standard Inform
 ### Quick Start
 
 ```bash
-# Standard run against golden instance (must be running on port 8001)
+# Standard run against golden database (uses subdomain routing)
 python scripts/evaluate_retrieval.py
 
 # Verbose output with detailed progress
@@ -196,21 +196,24 @@ python scripts/evaluate_retrieval.py --verbose
 
 ### Prerequisites
 
-1. **Start the golden API** on port 8001:
+1. **Start the API server** on port 8000:
    ```bash
-   ./scripts/run_golden_api.sh
+   uvicorn main:app --port 8000
    ```
+
+   The evaluation script automatically uses golden.localhost subdomain routing to access the golden database.
 
 2. **Ensure you have the evaluation dataset**:
    - `data/eval/retrieval_evaluation_dataset.json` (50 test queries)
 
 ### How It Works
 
-1. **Validates API connection** - Finds running API server (tries 8001, 8000, 8080, 3000)
-2. **Verifies item count** - Ensures you're testing against the golden DB (55 items)
-3. **Runs all queries** - Executes 50 test queries against the search endpoint
-4. **Calculates metrics** - Computes Precision@K, Recall@K, MRR, NDCG@K
-5. **Generates reports** - Creates markdown and JSON reports with detailed results
+1. **Validates API connection** - Finds running API server (tries 8000, 8001, 8080, 3000)
+2. **Routes to golden database** - Uses golden.localhost subdomain routing (via Host header)
+3. **Verifies item count** - Ensures you're testing against the golden DB (55 items)
+4. **Runs all queries** - Executes 50 test queries against the search endpoint
+5. **Calculates metrics** - Computes Precision@K, Recall@K, MRR, NDCG@K
+6. **Generates reports** - Creates markdown and JSON reports with detailed results
 
 ### Metrics Calculated
 
@@ -227,27 +230,32 @@ For each K value (1, 3, 5, 10):
 python scripts/evaluate_retrieval.py [OPTIONS]
 
 Options:
-  --port PORT              API port (default: 8001)
-  --base-url URL          Full base URL (overrides port)
-  --dataset PATH          Evaluation dataset path
-  --output-dir PATH       Report output directory (default: data/eval/reports)
-  --top-k VALUES          K values for metrics (default: 1,3,5,10)
-  --expected-items N      Expected DB items (default: 55)
-  --skip-item-check       Skip item count validation
-  --verbose               Show detailed progress
+  --port PORT                API port (default: 8000)
+  --base-url URL            Full base URL (overrides port)
+  --use-golden-subdomain    Use golden.localhost routing (default: True)
+  --no-golden-subdomain     Disable golden routing (test against production)
+  --dataset PATH            Evaluation dataset path
+  --output-dir PATH         Report output directory (default: data/eval/reports)
+  --top-k VALUES            K values for metrics (default: 1,3,5,10)
+  --expected-items N        Expected DB items (default: 55)
+  --skip-item-check         Skip item count validation
+  --verbose                 Show detailed progress
 ```
 
 ### Examples
 
 ```bash
-# Run against production (skip item count check)
-python scripts/evaluate_retrieval.py --port 8000 --skip-item-check
+# Run against golden database (default)
+python scripts/evaluate_retrieval.py
+
+# Run against production database
+python scripts/evaluate_retrieval.py --no-golden-subdomain --skip-item-check
 
 # Custom K values
 python scripts/evaluate_retrieval.py --top-k 1,5,10,20
 
 # Remote server
-python scripts/evaluate_retrieval.py --base-url http://192.168.1.100:8001
+python scripts/evaluate_retrieval.py --base-url http://192.168.1.100:8000
 
 # Custom output location
 python scripts/evaluate_retrieval.py --output-dir ./my_reports
@@ -274,7 +282,7 @@ Creates two timestamped files in `data/eval/reports/`:
 ============================================================
 Retrieval Evaluation Script
 ============================================================
-✓ API endpoint: http://localhost:8001
+✓ API endpoint: http://localhost:8000
 ✓ Item count validated: 55 items
 
 Loaded dataset: 50 queries
@@ -296,11 +304,12 @@ Evaluation complete!
 
 The script prevents accidental evaluation against production:
 
+- **Golden subdomain routing** - Automatically routes to golden database by default
 - **Item count validation** - Checks that DB has exactly 55 items (golden dataset size)
 - **Port auto-discovery** - Tries common ports if default fails
 - **Clear warnings** - Shows warning if item count doesn't match expected
 
-Use `--skip-item-check` to run against production anyway.
+Use `--no-golden-subdomain --skip-item-check` to run against production instead.
 
 ---
 
@@ -329,13 +338,26 @@ python3 scripts/setup_golden_db.py --force
 
 ## Run Golden API
 
-Start the API server with the golden database on port 8001:
+**⚠️ DEPRECATED**: The dual-server approach has been replaced with host-based routing.
+
+Instead of running a separate server, access the golden database via subdomain routing:
 
 ```bash
-./scripts/run_golden_api.sh
+# Start single API server
+uvicorn main:app --port 8000
+
+# Access golden database
+curl http://golden.localhost:8000/health
+# Or use query parameter
+curl "http://localhost:8000/health?_db=golden"
 ```
 
-The golden API will run on `http://localhost:8001` while production runs on `http://localhost:8000`.
+The old script still works but is deprecated:
+```bash
+./scripts/run_golden_api.sh  # Deprecated - will show migration notice
+```
+
+See `documentation/database-routing.md` for details.
 
 ## Database Parameter
 

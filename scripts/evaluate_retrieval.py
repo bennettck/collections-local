@@ -21,7 +21,7 @@ class RetrievalEvaluator:
     """Evaluates retrieval quality for the Collections App search API."""
 
     RELEVANCE_SCORES = {"high": 3, "medium": 2, "low": 1}
-    DEFAULT_PORTS = [8001, 8000, 8080, 3000]
+    DEFAULT_PORTS = [8000, 8001, 8080, 3000]
 
     def __init__(self, args):
         self.args = args
@@ -31,6 +31,8 @@ class RetrievalEvaluator:
         self.verbose = args.verbose
         self.dataset = None
         self.results = []
+        # Use golden subdomain routing by default
+        self.use_golden_subdomain = getattr(args, 'use_golden_subdomain', True)
 
     def log(self, message: str, force: bool = False):
         """Print message if verbose mode is enabled or force is True."""
@@ -65,21 +67,39 @@ class RetrievalEvaluator:
         print("\nError: Could not find a running API server.")
         print("Tried ports:", [self.args.port] + self.DEFAULT_PORTS)
         print("\nPlease start the API server with:")
-        print("  DB_PATH=data/collections_golden.db uvicorn app.main:app --port 8001")
+        print("  uvicorn main:app --port 8000")
+        print("\nThe script will automatically route to the golden database via subdomain.")
         sys.exit(1)
 
     def _check_health(self, base_url: str) -> bool:
         """Check if the API health endpoint responds."""
         try:
-            response = requests.get(f"{base_url}/health", timeout=2)
+            headers = self._get_request_headers()
+            response = requests.get(f"{base_url}/health", headers=headers, timeout=2)
             return response.status_code == 200
         except requests.exceptions.RequestException:
             return False
 
+    def _get_request_headers(self) -> dict:
+        """Get headers for API requests, including golden subdomain routing."""
+        headers = {}
+        if self.use_golden_subdomain and not self.args.base_url:
+            # Extract port from base_url if available
+            if self.base_url:
+                # Parse port from base_url (e.g., "http://localhost:8000")
+                import re
+                port_match = re.search(r':(\d+)', self.base_url)
+                port = port_match.group(1) if port_match else "8000"
+            else:
+                port = str(self.args.port)
+            headers["Host"] = f"golden.localhost:{port}"
+        return headers
+
     def validate_item_count(self) -> Tuple[int, bool]:
         """Validate that the database has the expected number of items."""
         try:
-            response = requests.get(f"{self.base_url}/items", params={"limit": 1}, timeout=5)
+            headers = self._get_request_headers()
+            response = requests.get(f"{self.base_url}/items", params={"limit": 1}, headers=headers, timeout=5)
             response.raise_for_status()
             data = response.json()
             actual_count = data.get("total", 0)
@@ -117,9 +137,11 @@ class RetrievalEvaluator:
     def search(self, query_text: str) -> Dict:
         """Call the search API."""
         try:
+            headers = self._get_request_headers()
             response = requests.post(
                 f"{self.base_url}/search",
                 json={"query": query_text, "top_k": self.max_k, "include_answer": False},
+                headers=headers,
                 timeout=10,
             )
             response.raise_for_status()
@@ -570,7 +592,14 @@ class RetrievalEvaluator:
 
         # Find and validate API
         self.base_url = self.find_api_endpoint()
-        print(f"✓ API endpoint: {self.base_url}")
+
+        # Show which database is being used
+        if self.use_golden_subdomain and not self.args.base_url:
+            print(f"✓ API endpoint: {self.base_url}")
+            print(f"✓ Database routing: golden (via Host: golden.localhost subdomain)")
+        else:
+            print(f"✓ API endpoint: {self.base_url}")
+            print(f"✓ Database routing: production (default)")
 
         # Validate item count
         actual_item_count, item_count_valid = self.validate_item_count()
@@ -601,9 +630,21 @@ def main():
     )
 
     parser.add_argument(
-        "--port", type=int, default=8001, help="API port (default: 8001 for golden instance)"
+        "--port", type=int, default=8000, help="API port (default: 8000)"
     )
     parser.add_argument("--base-url", type=str, help="Full base URL (overrides port if provided)")
+    parser.add_argument(
+        "--use-golden-subdomain",
+        action="store_true",
+        default=True,
+        help="Use golden.localhost subdomain routing to access golden database (default: True)"
+    )
+    parser.add_argument(
+        "--no-golden-subdomain",
+        dest="use_golden_subdomain",
+        action="store_false",
+        help="Disable golden subdomain routing (for testing against production DB)"
+    )
     parser.add_argument(
         "--dataset",
         type=str,
