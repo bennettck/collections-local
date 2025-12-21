@@ -2,12 +2,12 @@
 
 import re
 from typing import List, Dict, Optional, Any
-from anthropic import Anthropic
-from openai import OpenAI
 
-# Initialize clients (reusing from llm.py pattern)
-anthropic_client = Anthropic()
-openai_client = OpenAI()
+# LangChain imports
+from langchain_anthropic import ChatAnthropic
+from langchain_openai import ChatOpenAI
+from langchain_core.prompts import ChatPromptTemplate
+from langsmith import traceable
 
 
 def format_results_for_llm(results: List[Dict[str, Any]]) -> str:
@@ -60,6 +60,7 @@ def _extract_citations(answer: str, num_results: int) -> List[str]:
     return sorted(list(citations))
 
 
+@traceable(name="generate_answer", run_type="chain")
 def generate_answer(
     query: str,
     results: List[Dict[str, Any]],
@@ -87,13 +88,27 @@ def generate_answer(
     # Format results for context
     formatted_results = format_results_for_llm(results)
 
-    # Create prompt
-    prompt = f"""You are answering questions about a personal image collection.
+    # Use Claude Sonnet 4.5 by default (or specified model)
+    resolved_model = model or "claude-sonnet-4-5"
 
-User Question: {query}
+    # Create LangChain LLM based on model
+    if resolved_model.startswith("gpt") or resolved_model.startswith("o1") or resolved_model.startswith("o3"):
+        # OpenAI models
+        if resolved_model.startswith("gpt-5") or resolved_model.startswith("o1") or resolved_model.startswith("o3"):
+            llm = ChatOpenAI(model=resolved_model, max_completion_tokens=4000)
+        else:
+            llm = ChatOpenAI(model=resolved_model, max_tokens=1024)
+    else:
+        # Anthropic models (default)
+        llm = ChatAnthropic(model=resolved_model, max_tokens=1024)
+
+    # Create prompt template
+    prompt = ChatPromptTemplate.from_messages([
+        ("system", "You are answering questions about a personal image collection."),
+        ("human", """User Question: {query}
 
 Retrieved Items from Collection:
-{formatted_results}
+{context}
 
 Provide a natural, conversational answer to the user's question based on the retrieved items above.
 
@@ -105,43 +120,22 @@ Guidelines:
 - Keep responses concise but informative (2-4 sentences for simple queries, more for complex)
 - Focus on answering the specific question asked
 
-Answer:"""
+Answer:""")
+    ])
 
-    # Use Claude Sonnet 4.5 by default (or specified model)
-    resolved_model = model or "claude-sonnet-4-5"
-
-    # Determine provider based on model name
-    if resolved_model.startswith("gpt") or resolved_model.startswith("o1") or resolved_model.startswith("o3"):
-        # Use OpenAI
-        if resolved_model.startswith("gpt-5") or resolved_model.startswith("o1") or resolved_model.startswith("o3"):
-            token_param = {"max_completion_tokens": 4000}
-        else:
-            token_param = {"max_tokens": 1024}
-
-        response = openai_client.chat.completions.create(
-            model=resolved_model,
-            **token_param,
-            messages=[
-                {
-                    "role": "user",
-                    "content": prompt
-                }
-            ]
-        )
-        answer = response.choices[0].message.content or ""
-    else:
-        # Use Anthropic (default)
-        response = anthropic_client.messages.create(
-            model=resolved_model,
-            max_tokens=1024,
-            messages=[
-                {
-                    "role": "user",
-                    "content": prompt
-                }
-            ]
-        )
-        answer = response.content[0].text
+    # Create chain and invoke
+    chain = prompt | llm
+    response = chain.invoke(
+        {"query": query, "context": formatted_results},
+        config={
+            "metadata": {
+                "num_results": len(results),
+                "model": resolved_model
+            },
+            "tags": ["answer-generation"]
+        }
+    )
+    answer = response.content
 
     # Extract citations
     citations = _extract_citations(answer, len(results))

@@ -8,9 +8,7 @@ class Settings(BaseSettings):
     """Application settings from environment variables."""
     anthropic_api_key: str
     openai_api_key: Optional[str] = None
-    langfuse_secret_key: str
-    langfuse_public_key: str
-    langfuse_host: str = "https://cloud.langfuse.com"
+    langsmith_prompt_name: str = "collections-app-initial"
     prod_database_path: str = "./data/collections.db"
     golden_database_path: str = "./data/collections_golden.db"
     images_path: str = "./data/images"

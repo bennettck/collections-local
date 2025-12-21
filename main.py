@@ -342,14 +342,25 @@ async def analyze_item_endpoint(
         model=request.model
     )
 
-    # Call LLM
+    # Prepare metadata for tracing
+    metadata = {
+        "item_id": item_id,
+        "filename": item.get("filename"),
+        "original_filename": item.get("original_filename"),
+        "provider": provider_used,
+        "model": model_used,
+    }
+
+    # Call LLM with resolved provider and model
     try:
-        result = analyze_image(file_path, provider=request.provider, model=request.model)
+        result, trace_id = analyze_image(
+            file_path,
+            provider=provider_used,
+            model=model_used,
+            metadata=metadata
+        )
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Analysis failed: {str(e)}")
-
-    # Get trace ID from Langfuse
-    trace_id = get_trace_id()
 
     # Store analysis result
     analysis_id = str(uuid.uuid4())

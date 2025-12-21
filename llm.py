@@ -1,6 +1,7 @@
 import os
 import base64
 import json
+import logging
 from typing import Literal, Optional
 from dotenv import load_dotenv
 
@@ -9,12 +10,17 @@ load_dotenv()
 
 from anthropic import Anthropic
 from openai import OpenAI
-from langfuse import Langfuse, observe, get_client
+from langchain_anthropic import ChatAnthropic
+from langchain_openai import ChatOpenAI
+from langchain_core.messages import HumanMessage, SystemMessage
+from langsmith import traceable, get_current_run_tree, Client as LangSmithClient
 
-# Initialize clients
-langfuse = Langfuse()
+# Initialize legacy clients (kept for backward compatibility if needed)
 anthropic_client = Anthropic()
 openai_client = OpenAI()
+
+# Setup logging
+logger = logging.getLogger(__name__)
 
 # Default models for each provider
 DEFAULT_MODELS = {
@@ -27,9 +33,56 @@ DEFAULT_PROVIDER = "anthropic"
 
 
 def get_prompt(name: str) -> str:
-    """Fetch prompt from Langfuse by name."""
-    prompt = langfuse.get_prompt(name, label="latest")
-    return prompt.compile()
+    """
+    Get system prompt for image analysis from LangSmith Hub.
+
+    Falls back to embedded prompt if LangSmith fetch fails.
+    Prompt name is configured via LANGSMITH_PROMPT_NAME environment variable.
+
+    Args:
+        name: Prompt identifier (currently unused, uses env var)
+
+    Returns:
+        System prompt string
+    """
+    # Get prompt name from environment
+    prompt_name = os.getenv("LANGSMITH_PROMPT_NAME", "collections-app-initial")
+
+    # Try to fetch from LangSmith Hub
+    try:
+        client = LangSmithClient()
+        prompt_template = client.pull_prompt(prompt_name)
+
+        # PromptTemplate has a .template attribute with the prompt text
+        if hasattr(prompt_template, 'template'):
+            logger.info(f"Successfully loaded prompt '{prompt_name}' from LangSmith Hub")
+            return prompt_template.template
+        else:
+            logger.warning(f"Prompt template missing 'template' attribute, using fallback")
+            raise AttributeError("No template attribute")
+
+    except Exception as e:
+        logger.warning(f"Failed to fetch prompt from LangSmith Hub: {e}. Using fallback prompt.")
+
+        # Fallback system prompt for image analysis
+        return """You are an AI assistant that analyzes images from a personal photo collection.
+
+Analyze the provided image and return a JSON object with the following structure:
+{
+  "category": "Primary category (e.g., Travel, Food, Beauty, etc.)",
+  "subcategories": ["list", "of", "relevant", "subcategories"],
+  "headline": "A brief, descriptive title for the image",
+  "summary": "A concise 2-3 sentence description of what's in the image",
+  "image_details": {
+    "extracted_text": "Any visible text in the image",
+    "objects": ["list", "of", "notable", "objects"],
+    "themes": ["list", "of", "themes"],
+    "emotions": ["list", "of", "emotions/vibes"],
+    "vibes": ["overall", "vibe", "keywords"]
+  }
+}
+
+Be specific and accurate. Focus on what's actually visible in the image."""
 
 
 def get_media_type(image_path: str) -> str:
@@ -45,89 +98,94 @@ def get_media_type(image_path: str) -> str:
         return "image/png"
 
 
-def _analyze_with_anthropic(image_data: str, media_type: str, model: str, system_prompt: str) -> str:
-    """Call Anthropic API for image analysis."""
-    response = anthropic_client.messages.create(
-        model=model,
-        max_tokens=1024,
-        system=system_prompt,
-        messages=[
-            {
-                "role": "user",
-                "content": [
-                    {
-                        "type": "image",
-                        "source": {
-                            "type": "base64",
-                            "media_type": media_type,
-                            "data": image_data,
-                        },
-                    },
-                    {
-                        "type": "text",
-                        "text": "Analyze this image and categorize it for my collection."
+def _analyze_with_anthropic(image_data: str, media_type: str, model: str, system_prompt: str, metadata: dict = None) -> str:
+    """Call Anthropic API for image analysis using LangChain (tracks tokens/cost)."""
+    # Log metadata if provided (for debugging)
+    if metadata:
+        logger.debug(f"Analyzing with Anthropic - metadata: {metadata}")
+
+    # Use LangChain's ChatAnthropic for automatic token tracking
+    llm = ChatAnthropic(model=model, max_tokens=1024)
+
+    # Create messages with system prompt and image
+    messages = [
+        SystemMessage(content=system_prompt),
+        HumanMessage(
+            content=[
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": f"data:{media_type};base64,{image_data}"
                     }
-                ],
-            }
-        ],
-    )
-    return response.content[0].text
+                },
+                {
+                    "type": "text",
+                    "text": "Analyze this image and categorize it for my collection."
+                }
+            ]
+        )
+    ]
+
+    # Invoke and get response
+    response = llm.invoke(messages)
+    return response.content
 
 
-def _analyze_with_openai(image_data: str, media_type: str, model: str, system_prompt: str) -> str:
-    """Call OpenAI API for image analysis."""
+def _analyze_with_openai(image_data: str, media_type: str, model: str, system_prompt: str, metadata: dict = None) -> str:
+    """Call OpenAI API for image analysis using LangChain (tracks tokens/cost)."""
+    # Log metadata if provided (for debugging)
+    if metadata:
+        logger.debug(f"Analyzing with OpenAI - metadata: {metadata}")
+
+    # Use LangChain's ChatOpenAI for automatic token tracking
     # GPT-5, o1, o3 are reasoning models that use max_completion_tokens
-    # They need higher limits because tokens are used for both reasoning and output
     if model.startswith("gpt-5") or model.startswith("o1") or model.startswith("o3"):
-        token_param = {"max_completion_tokens": 8000}  # Higher limit for reasoning + output
+        llm = ChatOpenAI(model=model, max_completion_tokens=8000)
     else:
-        token_param = {"max_tokens": 1024}
+        llm = ChatOpenAI(model=model, max_tokens=1024)
 
-    response = openai_client.chat.completions.create(
-        model=model,
-        **token_param,
-        messages=[
-            {
-                "role": "system",
-                "content": system_prompt
-            },
-            {
-                "role": "user",
-                "content": [
-                    {
-                        "type": "image_url",
-                        "image_url": {
-                            "url": f"data:{media_type};base64,{image_data}"
-                        }
-                    },
-                    {
-                        "type": "text",
-                        "text": "Analyze this image and categorize it for my collection."
+    # Create messages with system prompt and image
+    messages = [
+        SystemMessage(content=system_prompt),
+        HumanMessage(
+            content=[
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": f"data:{media_type};base64,{image_data}"
                     }
-                ],
-            }
-        ],
-    )
+                },
+                {
+                    "type": "text",
+                    "text": "Analyze this image and categorize it for my collection."
+                }
+            ]
+        )
+    ]
 
-    return response.choices[0].message.content or ""
+    # Invoke and get response
+    response = llm.invoke(messages)
+    return response.content
 
 
-@observe(name="analyze_image")
+@traceable(name="analyze_image", run_type="chain")
 def analyze_image(
     image_path: str,
     provider: Optional[str] = None,
-    model: Optional[str] = None
-) -> dict:
+    model: Optional[str] = None,
+    metadata: Optional[dict] = None
+) -> tuple[dict, Optional[str]]:
     """
-    Analyze an image using AI vision via Langfuse tracing.
+    Analyze an image using AI vision via LangSmith tracing.
 
     Args:
         image_path: Path to the image file
         provider: Provider to use ("anthropic" or "openai"). Defaults to "anthropic".
         model: Model to use. Defaults to provider's default model.
+        metadata: Additional metadata for tracing
 
     Returns:
-        dict with the full LLM analysis response
+        Tuple of (analysis result dict, trace_id)
     """
     # Resolve provider and model defaults
     resolved_provider = provider or DEFAULT_PROVIDER
@@ -140,14 +198,16 @@ def analyze_image(
     # Determine media type
     media_type = get_media_type(image_path)
 
-    # Get prompt from Langfuse
+    # Get prompt from LangSmith Hub
     system_prompt = get_prompt("collections/image-analysis")
 
     # Call appropriate provider
+    # Note: We keep direct API calls to ensure no regression in image handling
+    # The @traceable decorator ensures full tracing in LangSmith
     if resolved_provider == "openai":
-        result_text = _analyze_with_openai(image_data, media_type, resolved_model, system_prompt)
+        result_text = _analyze_with_openai(image_data, media_type, resolved_model, system_prompt, metadata)
     else:
-        result_text = _analyze_with_anthropic(image_data, media_type, resolved_model, system_prompt)
+        result_text = _analyze_with_anthropic(image_data, media_type, resolved_model, system_prompt, metadata)
 
     # Handle potential JSON wrapped in markdown code blocks
     if result_text and result_text.startswith("```"):
@@ -156,7 +216,15 @@ def analyze_image(
         # Remove first line (```json or ```) and last line (```)
         result_text = "\n".join(lines[1:-1])
 
-    return json.loads(result_text)
+    # Capture trace ID from within the traced context
+    trace_id = None
+    try:
+        run_tree = get_current_run_tree()
+        trace_id = str(run_tree.id) if run_tree else None
+    except Exception as e:
+        logger.debug(f"Could not get trace ID within analyze_image: {e}")
+
+    return json.loads(result_text), trace_id
 
 
 def get_resolved_provider_and_model(
@@ -175,11 +243,10 @@ def get_resolved_provider_and_model(
 
 
 def get_trace_id() -> str | None:
-    """Get the current Langfuse trace ID."""
+    """Get the current LangSmith trace/run ID."""
     try:
-        client = get_client()
-        # In Langfuse 3.x, trace ID is available from the current observation context
-        # This will return None if not in an observed context
-        return None  # Trace ID capture requires more complex setup in v3
-    except Exception:
+        run_tree = get_current_run_tree()
+        return str(run_tree.id) if run_tree else None
+    except Exception as e:
+        logger.debug(f"Could not get trace ID: {e}")
         return None

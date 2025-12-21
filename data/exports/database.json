@@ -1,5 +1,5 @@
 {
-  "exported_at": "2025-12-21T07:22:52.627566+00:00",
+  "exported_at": "2025-12-21T23:40:15.247606+00:00",
   "database_path": "./data/collections.db",
   "tables": {
     "items": [
@@ -852,6 +852,26 @@
         "mime_type": "image/jpeg",
         "created_at": "2025-12-21T06:10:02.633005",
         "updated_at": "2025-12-21T06:10:02.633005"
+      },
+      {
+        "id": "ff2998d2-782e-481e-ae07-9861ea0f8747",
+        "filename": "ff2998d2-782e-481e-ae07-9861ea0f8747.jpg",
+        "original_filename": "IMG_0204.jpg",
+        "file_path": "./data/images/ff2998d2-782e-481e-ae07-9861ea0f8747.jpg",
+        "file_size": 381259,
+        "mime_type": "image/jpeg",
+        "created_at": "2025-12-21T20:49:55.815281",
+        "updated_at": "2025-12-21T20:49:55.815281"
+      },
+      {
+        "id": "d11b0409-14ca-4cb7-9312-d7afa213eda6",
+        "filename": "d11b0409-14ca-4cb7-9312-d7afa213eda6.jpg",
+        "original_filename": "IMG_0202.jpg",
+        "file_path": "./data/images/d11b0409-14ca-4cb7-9312-d7afa213eda6.jpg",
+        "file_size": 503200,
+        "mime_type": "image/jpeg",
+        "created_at": "2025-12-21T20:57:21.721603",
+        "updated_at": "2025-12-21T20:57:21.721603"
       }
     ],
     "analyses": [
@@ -5053,6 +5073,162 @@
         "model_used": "claude-sonnet-4-5",
         "trace_id": null,
         "created_at": "2025-12-21T06:11:12.375874",
+        "provider_used": "anthropic"
+      },
+      {
+        "id": "9229e823-e71b-4f76-b88c-b816ac484538",
+        "item_id": "fe753c9b-37c8-4cd8-9a72-b5e604753b36",
+        "version": 2,
+        "category": "Entertainment",
+        "summary": "A TikTok video screenshot showing a ranked list of 10 highly-rated Korean dramas with scores ranging from 8.9/10 to 9.9/10. The content is from creator 'Kdrama Kenny' discussing perfect 10/10 K-dramas, featuring titles like Mouse, Alchemy of Souls, and Twinkling Watermelon.",
+        "raw_response": "{\"category\": \"Entertainment\", \"subcategories\": [\"Social Media\", \"Korean Drama\", \"TV Shows\", \"Recommendations\", \"Netflix\"], \"headline\": \"Top-Rated Korean Dramas Recommendation List on TikTok\", \"summary\": \"A TikTok video screenshot showing a ranked list of 10 highly-rated Korean dramas with scores ranging from 8.9/10 to 9.9/10. The content is from creator 'Kdrama Kenny' discussing perfect 10/10 K-dramas, featuring titles like Mouse, Alchemy of Souls, and Twinkling Watermelon.\", \"image_details\": {\"extracted_text\": \"The ONLY 10/10 Kdramas (Only Done it 9 Times), Mouse 9.9/10, Alchemy of souls 9.8/10, Twinkling Watermelon 9.8/10, My Mister 9.7/10, Twenty five Twenty One 9.4/10, Bloodhounds 9.4/10, Goblin 9.1/10, Mr Queen 9/10, Descendants of the Sun 9/10, Healer 8.9/10, Kdramas I've watched that were really good guys, Kdrama Kenny, These are the ONLY PERFECT Kdramas that exist!\", \"objects\": [\"smartphone screen\", \"Netflix logo\", \"TikTok interface\", \"profile picture\", \"silver chain necklace\", \"text overlay\", \"list\", \"ratings\"], \"themes\": [\"Korean entertainment\", \"TV show reviews\", \"ratings and rankings\", \"social media content\", \"pop culture\"], \"emotions\": [\"enthusiastic\", \"opinionated\", \"passionate\", \"excited\"], \"vibes\": [\"informative\", \"fandom\", \"recommendation\", \"entertainment-focused\", \"engaging\"]}}",
+        "model_used": "claude-sonnet-4-5",
+        "trace_id": null,
+        "created_at": "2025-12-21T19:54:41.800450",
+        "provider_used": "anthropic"
+      },
+      {
+        "id": "c30ec224-5d60-4250-9660-fac2d71bdedb",
+        "item_id": "fe0288ee-5bcf-46e5-8ce6-c1c65cae5395",
+        "version": 5,
+        "category": "Beauty",
+        "summary": "A TikTok video showcasing J-Scent, a Japanese perfume house, featuring tester bottles being held and displayed. The creator shares their excitement about discovering this affordable fragrance brand during their Japan trip, highlighting specific scents like Wood Flake, Hisui, and Sumo Wrestler.",
+        "raw_response": "{\"category\": \"Beauty\", \"subcategories\": [\"Perfume\", \"Shopping\", \"Japanese Beauty\", \"Product Review\", \"Travel Shopping\"], \"headline\": \"J-Scent Japanese Perfume House Discovery at Store\", \"summary\": \"A TikTok video showcasing J-Scent, a Japanese perfume house, featuring tester bottles being held and displayed. The creator shares their excitement about discovering this affordable fragrance brand during their Japan trip, highlighting specific scents like Wood Flake, Hisui, and Sumo Wrestler.\", \"image_details\": {\"extracted_text\": \"7:52, LIVE, For You, Explore, Following, Shop, J-Scent, TESTER, J-SCENT, finally had the chance to try this famous Japanese perfume house, J-Scent, and i must say... I'M IN LOVE WITH THE STORIES BEHIND EACH PERFUME, i even got to sniff their most famous perfume, Roasted Green Tea! it's beautiful but i passed on it since i already have something similar. PLUS, THEY'RE SO AFFORDABLE OMG LOVE. each bottle is only \\u20b14,950!!!, *picked up Wood Flake, Hisui & Sumo Wrestler \\u2764\\ufe0f\\u200d\\ud83d\\udd25*, 13.1K, 463, ceri is a perfume junkie, Photo, ME \\ud83d\\ude4f JAPAN J-Scent, 1.1M, I'm so glad to have discovered & smelled so many AMAZING perfumes during my trip to Japan!, 1,648, Contains: Harpy Hare - Yaelokre, Search \\u00b7 j scent perfume, Home, Discover, Inbox, Profile\", \"objects\": [\"perfume bottles\", \"tester bottles\", \"retail display\", \"smartphone screen\", \"shelving\", \"product packaging\", \"hand holding bottle\", \"store interior\"], \"themes\": [\"beauty shopping\", \"fragrance discovery\", \"Japanese beauty products\", \"affordable luxury\", \"product review\", \"travel shopping\"], \"emotions\": [\"excitement\", \"enthusiasm\", \"satisfaction\", \"discovery\", \"joy\"], \"vibes\": [\"enthusiastic\", \"informative\", \"shopping haul\", \"beauty enthusiast\", \"travel memories\", \"affordable luxury\"]}}",
+        "model_used": "claude-sonnet-4-5",
+        "trace_id": null,
+        "created_at": "2025-12-21T20:03:18.657883",
+        "provider_used": "anthropic"
+      },
+      {
+        "id": "1014f3c4-de08-413f-adc1-ee67a06186ca",
+        "item_id": "fe0288ee-5bcf-46e5-8ce6-c1c65cae5395",
+        "version": 6,
+        "category": "Beauty",
+        "summary": "A TikTok post showcasing J-Scent perfume testers at a Japanese perfume store. The video features close-up shots of clear perfume tester bottles with the J-Scent branding, along with a store display showing multiple perfume products. The creator is sharing their experience trying this Japanese perfume brand and discussing the affordable pricing.",
+        "raw_response": "{\"category\": \"Beauty\", \"subcategories\": [\"Perfume\", \"Shopping\", \"Japanese Products\", \"Retail\", \"Travel Shopping\"], \"headline\": \"J-Scent Japanese Perfume House Discovery at Retail Store\", \"summary\": \"A TikTok post showcasing J-Scent perfume testers at a Japanese perfume store. The video features close-up shots of clear perfume tester bottles with the J-Scent branding, along with a store display showing multiple perfume products. The creator is sharing their experience trying this Japanese perfume brand and discussing the affordable pricing.\", \"image_details\": {\"extracted_text\": \"J-Scent, TESTER, Wood Flake, Roasted Green Tea, Harpy Hare - Yaelokre, 7:52, LIVE, Explore, Following, Shop, For You, finally had the chance to try this famous Japanese perfume house, J-Scent, and i just say... I'M IN LOVE WITH THE STORIES BEHIND EACH PERFUME, i even got to sniff their most famous perfume, Roasted Green Tea! it's beautiful but i passed on it since i already have something similar. PLUS, THEY'RE SO AFFORDABLE OMG LOVE. each bottle is only \\u00a54,950!!!, *picked up Wood Flake, Hisui & Sumo Wrestler \\ud83e\\udd0d*, ceri is a perfume junkie, ME \\ud83d\\ude4f\\ud83c\\udffb JAPAN, J-Scent, I'm so glad to have discovered & smelled so many AMAZING perfumes during my trip to Japan!, Search \\u00b7 j scent perfume\", \"objects\": [\"perfume bottles\", \"tester bottles\", \"retail display\", \"product shelves\", \"smartphone screen\", \"black bottle caps\", \"clear glass bottles\", \"product labels\", \"store interior\"], \"themes\": [\"beauty shopping\", \"Japanese beauty\", \"perfume collecting\", \"product discovery\", \"retail therapy\", \"travel shopping\", \"affordable luxury\"], \"emotions\": [\"excitement\", \"enthusiasm\", \"satisfaction\", \"joy\", \"appreciation\"], \"vibes\": [\"aesthetic\", \"shopping haul\", \"beauty enthusiast\", \"discovery\", \"treat yourself\", \"Japanese minimalism\", \"informative\", \"relatable\"]}}",
+        "model_used": "claude-sonnet-4-5",
+        "trace_id": "019b4283-6408-7b40-83ec-bb2cbe9d0c02",
+        "created_at": "2025-12-21T20:04:43.209662",
+        "provider_used": "anthropic"
+      },
+      {
+        "id": "3bf7866b-0b17-4000-aab9-a7941ea007bd",
+        "item_id": "fe0288ee-5bcf-46e5-8ce6-c1c65cae5395",
+        "version": 7,
+        "category": "Beauty",
+        "summary": "A TikTok video showcasing J-Scent perfume products in what appears to be a Japanese retail store. The video features close-up shots of perfume testers, including views of the minimalist bottle design and product displays. The creator shares their experience discovering this affordable Japanese perfume brand.",
+        "raw_response": "{\"category\": \"Beauty\", \"subcategories\": [\"Perfume\", \"Shopping\", \"Japanese Beauty\", \"Product Review\", \"Retail\"], \"headline\": \"J-Scent Japanese Perfume House Shopping Experience\", \"summary\": \"A TikTok video showcasing J-Scent perfume products in what appears to be a Japanese retail store. The video features close-up shots of perfume testers, including views of the minimalist bottle design and product displays. The creator shares their experience discovering this affordable Japanese perfume brand.\", \"image_details\": {\"extracted_text\": \"7:52, LIVE, For You, Explore, Following, Shop, J-Scent, TESTER, J-SCENT, finally had the chance to try this famous Japanese perfume house, J-Scent, and i must say... I'M IN LOVE WITH THE STORIES BEHIND EACH PERFUME, Tea! it's beaUtiFul but i passed on it since i already have something similar, PLUS, THEY'RE SO AFFORDABLE OMG LOVE, each bottle is only \\u00a54,950!!!, *picked up Wood Flake, Hisui & Sumo Wrestler \\u2764\\ufe0f*, 13.1K, 163, ceri is a perfume junkie, Photo, 1.1.1K, ME \\ud83d\\ude4f JAPAN J-Scent, I'm so glad to have discovered & smelled so many AMAZING perfumes during my trip to Japan!, 1,648, Contains: Harpy Hare - Yaelokre, Search \\u00b7 j scent perfume, Home, Discover, Inbox, Profile\", \"objects\": [\"perfume bottles\", \"tester bottles\", \"retail display shelves\", \"smartphone screen\", \"product labels\", \"hand holding bottle\", \"store interior\"], \"themes\": [\"beauty shopping\", \"Japanese products\", \"perfume collection\", \"product discovery\", \"affordable luxury\", \"minimalist design\"], \"emotions\": [\"excitement\", \"enthusiasm\", \"appreciation\", \"joy\", \"satisfaction\"], \"vibes\": [\"aesthetic\", \"minimalist\", \"bougie-on-a-budget\", \"discovery\", \"experiential shopping\", \"beauty enthusiast\"]}}",
+        "model_used": "claude-sonnet-4-5",
+        "trace_id": "019b4284-3c27-7413-b6c5-bdeee9d6f517",
+        "created_at": "2025-12-21T20:05:38.735999",
+        "provider_used": "anthropic"
+      },
+      {
+        "id": "5b27b4b8-70e6-4a72-9622-de2a3b225844",
+        "item_id": "fe0288ee-5bcf-46e5-8ce6-c1c65cae5395",
+        "version": 8,
+        "category": "Beauty",
+        "summary": "A TikTok post documenting a visit to a J-Scent perfume store in Japan. The images show perfume testers being held and examined, along with a retail display of the minimalist Japanese fragrance brand. The creator shares their experience trying various scents and discusses the affordable pricing.",
+        "raw_response": "{\"category\": \"Beauty\", \"subcategories\": [\"Perfume\", \"Shopping\", \"Japanese Beauty\", \"Product Review\", \"Retail Experience\"], \"headline\": \"J-Scent Japanese Perfume Discovery at Store\", \"summary\": \"A TikTok post documenting a visit to a J-Scent perfume store in Japan. The images show perfume testers being held and examined, along with a retail display of the minimalist Japanese fragrance brand. The creator shares their experience trying various scents and discusses the affordable pricing.\", \"image_details\": {\"extracted_text\": \"7:52, LIVE, Explore, Following, Shop, For You, J-Scent, TESTER, J-SCENT, finally had the chance to try this famous Japanese perfume house, J-Scent, and i must say... I'M IN LOVE WITH THE STORIES BEHIND EACH PERFUME, i even got to sniff their most famous perfume, Roasted Green Tea! it's beautiful but i passed on it since i already have something similar. PLUS, THEY'RE SO AFFORDABLE OMG LOVE. each bottle is only \\u20b14,950!!!, *picked up Wood Flake, Hisui & Sumo Wrestler \\u2764\\ufe0f*, 13.1K, 63, ceri is a perfume junkie, Photo, 1.1M, ME \\ud83d\\ude4f JAPAN J-Scent, I'm so glad to have discovered & smelled so many AMAZING perfumes during my trip to Japan!, 1,648, Contains: Harpy Hare - Yaelokre, Search \\u00b7 j scent perfume, Home, Discover, Inbox, Profile\", \"objects\": [\"perfume bottles\", \"tester bottles\", \"retail display\", \"product shelving\", \"smartphone screen\", \"perfume packaging\", \"minimalist product design\"], \"themes\": [\"Japanese beauty products\", \"perfume shopping\", \"product discovery\", \"retail experience\", \"beauty haul\", \"travel shopping\", \"affordable luxury\"], \"emotions\": [\"excitement\", \"enthusiasm\", \"appreciation\", \"satisfaction\", \"curiosity\"], \"vibes\": [\"minimalist\", \"aesthetic\", \"discovery\", \"experiential\", \"educational\", \"enthusiastic\", \"beauty-focused\"]}}",
+        "model_used": "claude-sonnet-4-5",
+        "trace_id": "019b4284-997e-77f3-91ac-6365eb5435a0",
+        "created_at": "2025-12-21T20:06:02.957787",
+        "provider_used": "anthropic"
+      },
+      {
+        "id": "1e348176-c8bb-4d57-91ec-df0fa3d9e5b0",
+        "item_id": "fe0288ee-5bcf-46e5-8ce6-c1c65cae5395",
+        "version": 9,
+        "category": "Beauty",
+        "summary": "A TikTok video showcasing a visit to J-Scent, a Japanese perfume house. The creator displays tester bottles of various fragrances, expressing enthusiasm about discovering affordable Japanese perfumes during their trip to Japan, with bottles priced at \u00a54,950.",
+        "raw_response": "{\"category\": \"Beauty\", \"subcategories\": [\"Perfume\", \"Shopping\", \"Retail\", \"Japanese Products\", \"Travel Haul\"], \"headline\": \"J-Scent Japanese Perfume House Discovery\", \"summary\": \"A TikTok video showcasing a visit to J-Scent, a Japanese perfume house. The creator displays tester bottles of various fragrances, expressing enthusiasm about discovering affordable Japanese perfumes during their trip to Japan, with bottles priced at \\u00a54,950.\", \"image_details\": {\"extracted_text\": \"7:52, LIVE, Explore, Following, Shop, For You, J-Scent, TESTER, J-SCENT, finally had the chance to try this famous Japanese perfume house, J-Scent, and i must say... I'M IN LOVE WITH THE STORIES BEHIND EACH PERFUME, Roasted Green Tea, *picked up Wood Flake, Hisui & Sumo Wrestler, 13.1K, 1.1K, 1,648, ceri is a perfume junkie, Photo, ME JAPAN J-Scent, Roasted Green M, Contains: Harpy Hare - Yaelokre, Search \\u00b7 j scent perfume\", \"objects\": [\"perfume bottles\", \"tester bottles\", \"retail display\", \"smartphone screen\", \"product shelves\", \"perfume packaging\", \"black bottle caps\"], \"themes\": [\"beauty shopping\", \"Japanese fragrance\", \"product discovery\", \"retail experience\", \"travel haul\"], \"emotions\": [\"excitement\", \"enthusiasm\", \"satisfaction\", \"joy\", \"discovery\"], \"vibes\": [\"aesthetic\", \"shopping\", \"luxury-on-budget\", \"discovery\", \"enthusiastic\", \"informative\"]}}",
+        "model_used": "claude-sonnet-4-5",
+        "trace_id": "019b428a-ba43-7b10-945b-445f3a7fa54b",
+        "created_at": "2025-12-21T20:12:40.585080",
+        "provider_used": "anthropic"
+      },
+      {
+        "id": "098c4b80-d710-4e8b-99c8-8d60c772249c",
+        "item_id": "fe0288ee-5bcf-46e5-8ce6-c1c65cae5395",
+        "version": 10,
+        "category": "Beauty",
+        "summary": "J-Scent is a Japanese perfume house discovered during a Japan trip. Each bottle tells a story and costs only \u00a54,950. The creator tried their famous Roasted Green Tea scent but passed because they already own something similar. They purchased Wood Flake, Hisui, and Sumo Wrestler scents instead.",
+        "raw_response": "{\"category\": \"Beauty\", \"subcategories\": [\"Perfume\", \"Shopping\", \"Japan Travel\"], \"headline\": \"J-Scent Japanese perfume house offers affordable bottles at \\u00a54,950 with unique scent stories\", \"summary\": \"J-Scent is a Japanese perfume house discovered during a Japan trip. Each bottle tells a story and costs only \\u00a54,950. The creator tried their famous Roasted Green Tea scent but passed because they already own something similar. They purchased Wood Flake, Hisui, and Sumo Wrestler scents instead.\", \"media_metadata\": {\"original_poster\": \"@ceri is a perfume junkie\", \"tagged_accounts\": [], \"location_tags\": [\"JAPAN\"], \"audio_source\": \"Harpy Hare - Yaelokre\", \"hashtags\": []}, \"image_details\": {\"extracted_text\": [\"J-SCENT\", \"finally had the chance to try this famous Japanese perfume house, J-Scent, and i must say... I'M IN LOVE WITH THE STORIES BEHIND EACH PERFUME. i even got to sniff their most famous perfume, Roasted Green Tea! it's beautiful but i passed on it since i already have something similar. PLUS, THEY'RE SO AFFORDABLE OMG LOVE. each bottle is only \\u00a54,950!!!\", \"*picked up Wood Flake, Hisui & Sumo Wrestler \\u2764\\ufe0f*\", \"TESTER\", \"J-Scent\", \"ME \\ud83d\\ude4f JAPAN\", \"J-Scent\", \"I'm so glad to have discovered & smelled so many AMAZING perfumes during my trip to Japan! \\ud83d\\ude0d\\u2764\\ufe0f i might've gone a lil over my initial budget for perfume... more\", \"Contains: Harpy Hare - Yaelokre\", \"Search \\u00b7 j scent perfume\"], \"objects\": [\"perfume bottles\", \"tester bottles\", \"retail display\", \"product labels\", \"hands holding bottles\", \"store interior\"], \"themes\": [\"fragrance discovery\", \"Japanese beauty products\", \"affordable luxury\", \"travel shopping\", \"perfume collecting\"], \"emotions\": [\"excitement\", \"enthusiasm\", \"love\", \"satisfaction\"], \"vibes\": [\"discovery\", \"authentic\", \"enthusiastic\", \"informative\"], \"likely_source\": \"TikTok\", \"key_interest\": \"J-Scent perfume brand's affordable pricing (\\u00a54,950) and storytelling approach to fragrances\", \"visual_hierarchy\": [\"J-SCENT brand name in large white text\", \"TESTER bottle being held in hand\", \"Long white text overlay explaining the experience\", \"Store display with multiple perfume bottles\", \"Product labels and packaging details\"]}}",
+        "model_used": "claude-sonnet-4-5",
+        "trace_id": "019b4293-5e16-7a63-8915-22e07a7df0e8",
+        "created_at": "2025-12-21T20:22:12.039290",
+        "provider_used": "anthropic"
+      },
+      {
+        "id": "e33b4e8b-ccda-4cd7-9375-b574b0bb6200",
+        "item_id": "fe0288ee-5bcf-46e5-8ce6-c1c65cae5395",
+        "version": 11,
+        "category": "Beauty",
+        "summary": "J-Scent perfume house in Japan offers affordable fragrances at \u00a54,950 per bottle. The creator visited the store and purchased three scents: Wood Flake, Hisui, and Sumo Wrestler. While impressed with the famous Roasted Green Tea fragrance, they passed on it due to already owning a similar scent.",
+        "raw_response": "{\"category\": \"Beauty\", \"subcategories\": [\"Fragrance\", \"Shopping\", \"Travel\"], \"headline\": \"J-Scent Japanese perfume house visit - Wood Flake, Hisui & Sumo Wrestler scents at \\u00a54,950 per bottle\", \"summary\": \"J-Scent perfume house in Japan offers affordable fragrances at \\u00a54,950 per bottle. The creator visited the store and purchased three scents: Wood Flake, Hisui, and Sumo Wrestler. While impressed with the famous Roasted Green Tea fragrance, they passed on it due to already owning a similar scent.\", \"media_metadata\": {\"original_poster\": \"ceri is a perfume junkie\", \"tagged_accounts\": [], \"location_tags\": [\"JAPAN\", \"J-Scent\"], \"audio_source\": \"Harpy Hare - Yaelokre\", \"hashtags\": []}, \"image_details\": {\"extracted_text\": [\"J-SCENT\", \"finally had the chance to try this famous Japanese perfume house, J-Scent, and i must say... I'M IN LOVE WITH THE STORIES BEHIND EACH PERFUME. i even got to sniff their most famous perfume, Roasted Green Tea! it's beautiful but i passed on it since i already have something similar. PLUS, THEY'RE SO AFFORDABLE OMG LOVE. each bottle is only \\u00a54,950!!!\", \"*picked up Wood Flake, Hisui & Sumo Wrestler \\u2764\\ufe0f*\", \"TESTER\", \"J-Scent\", \"Wood Mustard\", \"ME \\ud83d\\ude4f JAPAN J-Scent\", \"I'm so glad to have discovered & smelled so many AMAZING perfumes during my trip to Japan! \\ud83e\\udd79\\u2764\\ufe0f i might've gone a lil over my initial budget for perfume... more\", \"Contains: Harpy Hare - Yaelokre\", \"Search \\u00b7 j scent perfume\"], \"objects\": [\"perfume bottles\", \"tester bottles\", \"retail display\", \"product shelving\", \"hand holding perfume\", \"store interior\", \"smartphone interface\"], \"themes\": [\"Japanese beauty products\", \"affordable luxury\", \"perfume discovery\", \"travel shopping\", \"beauty haul\"], \"emotions\": [\"excitement\", \"enthusiasm\", \"satisfaction\", \"love\"], \"vibes\": [\"authentic\", \"enthusiastic\", \"informative\", \"personal\"], \"likely_source\": \"TikTok\", \"key_interest\": \"Affordable Japanese perfumes at \\u00a54,950 with three specific scent names: Wood Flake, Hisui, and Sumo Wrestler\", \"visual_hierarchy\": [\"J-SCENT brand name\", \"Tester bottle with label held in hand\", \"Price point \\u00a54,950\", \"Three perfume names purchased\", \"Store display with multiple products\"]}}",
+        "model_used": "claude-sonnet-4-5",
+        "trace_id": "019b4294-297b-78e3-9f34-a188a2d932a4",
+        "created_at": "2025-12-21T20:23:05.825113",
+        "provider_used": "anthropic"
+      },
+      {
+        "id": "9e9d77a9-924f-4d67-93b9-0ebab818406f",
+        "item_id": "ff2998d2-782e-481e-ae07-9861ea0f8747",
+        "version": 1,
+        "category": "Consumer Protection",
+        "summary": "A user warns others not to get scammed when purchasing peptides online, specifically mentioning Modern/p3ptira and Cod3 Mitri as potentially fraudulent sources. The warning comes in response to another user who mentioned using these suppliers for three to four months. The discussion emphasizes there are \"definitely ALOT of scammers\" in the peptide space.",
+        "raw_response": "{\"category\": \"Consumer Protection\", \"subcategories\": [\"Scam Awareness\", \"Peptide Supplements\", \"Product Reviews\"], \"headline\": \"Warning about peptide supplement scams on social media platforms with specific product names to avoid\", \"summary\": \"A user warns others not to get scammed when purchasing peptides online, specifically mentioning Modern/p3ptira and Cod3 Mitri as potentially fraudulent sources. The warning comes in response to another user who mentioned using these suppliers for three to four months. The discussion emphasizes there are \\\"definitely ALOT of scammers\\\" in the peptide space.\", \"media_metadata\": {\"original_poster\": null, \"tagged_accounts\": [\"@brody.miller00\"], \"location_tags\": [], \"audio_source\": null, \"hashtags\": []}, \"image_details\": {\"extracted_text\": [\"DONT GET SCAMMED ON PEPS\", \"Modern/p3ptira Cod3 Mitri\", \"I've been using them for a good three to four months\", \"Pep talks w Mitri\", \"Replying to @brody.miller00 definitely ALOT of scammers.. don't fall for it\", \"Search \\u00b7 peptira review\"], \"objects\": [\"person lying down\", \"white pillow\", \"phone screen interface\", \"profile picture thumbnails\", \"engagement buttons\", \"text overlays\"], \"themes\": [\"consumer protection\", \"scam prevention\", \"peptide supplements\", \"online shopping safety\", \"community warnings\"], \"emotions\": [\"cautionary\", \"protective\", \"concerned\", \"informative\"], \"vibes\": [\"warning\", \"educational\", \"community-focused\", \"serious\"], \"likely_source\": \"TikTok\", \"key_interest\": \"Warning about specific peptide supplier scams with named sources to avoid\", \"visual_hierarchy\": [\"DONT GET SCAMMED ON PEPS (large white text overlay)\", \"Modern/p3ptira Cod3 Mitri (specific supplier names)\", \"Person's face in video frame\", \"Caption about scammers\", \"Search prompt for peptira review\"]}}",
+        "model_used": "claude-sonnet-4-5",
+        "trace_id": "019b42ad-a5d7-7a21-8a92-5298d6cd5570",
+        "created_at": "2025-12-21T20:50:49.366235",
+        "provider_used": "anthropic"
+      },
+      {
+        "id": "1a6a6515-73ca-4405-9471-7e70bc130a4d",
+        "item_id": "d11b0409-14ca-4cb7-9312-d7afa213eda6",
+        "version": 1,
+        "category": "Travel",
+        "summary": "DayUse app offers daytime hotel bookings for US$58 (17% discount). Featured booking shows a double room with parking access available 9AM-8PM, with free cancellation and payment at hotel option. Raimee recommends this as one of the most helpful travel planning apps for managing rest stops during trips.",
+        "raw_response": "{\"category\": \"Travel\", \"subcategories\": [\"Travel Planning\", \"Hotel Booking\", \"Budget Travel\"], \"headline\": \"DayUse hotel booking app for nap breaks during travel - US$58 double room with parking, 9AM-8PM\", \"summary\": \"DayUse app offers daytime hotel bookings for US$58 (17% discount). Featured booking shows a double room with parking access available 9AM-8PM, with free cancellation and payment at hotel option. Raimee recommends this as one of the most helpful travel planning apps for managing rest stops during trips.\", \"media_metadata\": {\"original_poster\": \"Raimee | Travel Tips\", \"tagged_accounts\": [], \"location_tags\": [], \"audio_source\": null, \"hashtags\": []}, \"image_details\": {\"extracted_text\": [\"#1) DayUse\", \"so you have some time to go take a nap\", \"9:00 AM - 8:00 PM\", \"Chambre Double \\u2022 Acc\\u00e8s Parking\", \"US$58\", \"-17%\", \"Reserve\", \"Pay later at the hotel\", \"Free cancellation\", \"Raimee | Travel Tips \\u2708\\ufe0f\", \"Some of the MOST helpful travel planning sites & apps I used this year! ... more\", \"Search \\u2022 travel tracker app\"], \"objects\": [\"smartphone screen\", \"hotel booking interface\", \"woman in striped pajamas\", \"coffee cup\", \"TikTok interface elements\"], \"themes\": [\"travel planning\", \"budget accommodation\", \"daytime hotel bookings\", \"travel hacks\", \"digital nomad tools\"], \"emotions\": [\"helpful\", \"practical\", \"informative\"], \"vibes\": [\"casual\", \"relatable\", \"educational\", \"money-saving\"], \"likely_source\": \"TikTok\", \"key_interest\": \"DayUse app for booking hotels by the hour for rest breaks at discounted rates\", \"visual_hierarchy\": [\"#1) DayUse (large white text overlay)\", \"Hotel booking screenshot showing US$58 price\", \"9:00 AM - 8:00 PM availability window\", \"Woman in pajamas with coffee suggesting nap time\", \"Reserve button and payment details\"]}}",
+        "model_used": "claude-sonnet-4-5",
+        "trace_id": "019b42b4-2d9c-7fa3-a236-1e496b4d8d43",
+        "created_at": "2025-12-21T20:57:58.566458",
+        "provider_used": "anthropic"
+      },
+      {
+        "id": "96bd4376-8dad-45a8-8b47-2f5e92f67bda",
+        "item_id": "fe0288ee-5bcf-46e5-8ce6-c1c65cae5395",
+        "version": 12,
+        "category": "Beauty",
+        "summary": "J-Scent perfume house offers affordable Japanese fragrances at \u00a54,950 (approximately $33 USD) per bottle. The reviewer tried multiple scents in-store, fell in love with the stories behind each perfume, and purchased three scents: Wood Flake, Hisui, and Sumo Wrestler. They particularly appreciated the famous Roasted Green Tea fragrance but passed due to owning similar scents.",
+        "raw_response": "{\"category\": \"Beauty\", \"subcategories\": [\"Perfume Discovery\", \"Japan Shopping\", \"Product Review\"], \"headline\": \"J-Scent Japanese perfume house at \\u00a54,950 per bottle - Wood Flake, Hisui, and Sumo Wrestler scents purchased\", \"summary\": \"J-Scent perfume house offers affordable Japanese fragrances at \\u00a54,950 (approximately $33 USD) per bottle. The reviewer tried multiple scents in-store, fell in love with the stories behind each perfume, and purchased three scents: Wood Flake, Hisui, and Sumo Wrestler. They particularly appreciated the famous Roasted Green Tea fragrance but passed due to owning similar scents.\", \"media_metadata\": {\"original_poster\": \"ceri is a perfume junkie\", \"tagged_accounts\": [], \"location_tags\": [\"JAPAN\", \"J-Scent\"], \"audio_source\": \"Harpy Hare - Yaelokre\", \"hashtags\": []}, \"image_details\": {\"extracted_text\": [\"J-SCENT\", \"finally had the chance to try this famous Japanese perfume house, J-Scent, and i must say... I'M IN LOVE WITH THE STORIES BEHIND EACH PERFUME. i even got to sniff their most famous perfume, Roasted Green Tea! it's beautiful but i passed on it since i already have something similar. PLUS, THEY'RE SO AFFORDABLE OMG LOVE. each bottle is only \\u00a54,950!!!\", \"*picked up Wood Flake, Hisui & Sumo Wrestler \\u2764\\ufe0f\\u200d\\ud83d\\udd25*\", \"ME \\ud83d\\ude4c\\ud83c\\udffb JAPAN J-Scent\", \"I'm so glad to have discovered & smelled so many AMAZING perfumes during my trip to Japan! \\ud83e\\udd29\\u2764\\ufe0f i might've gone a lil over my initial budget for perfume... more\", \"TESTER\", \"Contains: Harpy Hare - Yaelokre\", \"Search \\u00b7 j scent perfume\"], \"objects\": [\"perfume bottle\", \"tester bottle\", \"retail display\", \"hand holding bottle\", \"store shelves\", \"product packaging\"], \"themes\": [\"Japanese beauty products\", \"perfume shopping\", \"affordable luxury\", \"travel shopping\", \"product discovery\"], \"emotions\": [\"excitement\", \"enthusiasm\", \"satisfaction\", \"love\"], \"vibes\": [\"enthusiastic discovery\", \"budget-friendly luxury\", \"authentic travel experience\", \"curated shopping\"], \"likely_source\": \"TikTok\", \"key_interest\": \"Affordable Japanese perfume house J-Scent with bottles priced at \\u00a54,950\", \"visual_hierarchy\": [\"J-SCENT brand name overlaid prominently\", \"TESTER perfume bottle held in hand\", \"Caption text about pricing and shopping experience\", \"In-store retail display showing multiple products\", \"Username 'ceri is a perfume junkie'\"]}}",
+        "model_used": "claude-sonnet-4-5",
+        "trace_id": "019b42b9-b0df-77b1-b82c-7358ad2e2fe6",
+        "created_at": "2025-12-21T21:04:04.061414",
+        "provider_used": "anthropic"
+      },
+      {
+        "id": "63b8450f-7262-44c9-9043-c5b6b6db4955",
+        "item_id": "d11b0409-14ca-4cb7-9312-d7afa213eda6",
+        "version": 2,
+        "category": "Travel",
+        "summary": "DayUse app offers hotel booking for daytime use, showcasing a Chambre Double with parking included from 9:00 AM to 8:00 PM for US$58. The post features a travel tip by Raimee, highlighting useful travel planning apps and sites used this year.",
+        "raw_response": "{\"category\": \"Travel\", \"subcategories\": [\"Tips\", \"Apps\", \"Accommodations\"], \"headline\": \"Travel Tips: DayUse App for Hotel Booking\", \"summary\": \"DayUse app offers hotel booking for daytime use, showcasing a Chambre Double with parking included from 9:00 AM to 8:00 PM for US$58. The post features a travel tip by Raimee, highlighting useful travel planning apps and sites used this year.\", \"media_metadata\": {\"original_poster\": \"Raimee\", \"tagged_accounts\": [], \"location_tags\": [], \"audio_source\": null, \"hashtags\": []}, \"image_details\": {\"extracted_text\": [\"#1) DayUse\", \"Chambre Double + Acc\\u00e8s Parking\", \"9:00 AM - 8:00 PM\", \"US$58\", \"so you have some go take a nap\", \"Raimee | Travel Tips \\u2708\\ufe0f\", \"Some of the MOST helpful travel planning sites & apps I used this year!\", \"Search \\u00b7 travel tracker app\"], \"objects\": [\"Smartphone interface\", \"Travel app screen\", \"Text overlay\", \"Person\"], \"themes\": [\"Travel planning\", \"Hotel booking\", \"App usage\"], \"emotions\": [\"Informative\", \"Helpful\"], \"vibes\": [\"Practical\", \"Encouraging\"], \"likely_source\": \"TikTok\", \"key_interest\": \"DayUse app hotel offer for daytime booking\", \"visual_hierarchy\": [\"#1) DayUse\", \"Chambre Double + Acc\\u00e8s Parking\", \"9:00 AM - 8:00 PM\", \"US$58\", \"Raimee | Travel Tips \\u2708\\ufe0f\"]}}",
+        "model_used": "gpt-4o",
+        "trace_id": "019b42c0-e17b-7491-b041-dffd433dc692",
+        "created_at": "2025-12-21T21:11:46.627699",
+        "provider_used": "openai"
+      },
+      {
+        "id": "c0cdb6bb-1005-4df4-ae6e-2711d341257e",
+        "item_id": "d11b0409-14ca-4cb7-9312-d7afa213eda6",
+        "version": 3,
+        "category": "Travel",
+        "summary": "DayUse allows travelers to book hotel rooms for daytime hours rather than overnight stays. The featured booking shows a double room with parking access for US$58 (17% discount), available 9 AM - 8 PM with free cancellation and pay-at-hotel option. This is part of a travel planning tips series highlighting useful travel apps and booking platforms.",
+        "raw_response": "{\"category\": \"Travel\", \"subcategories\": [\"Travel Planning\", \"Budget Travel\", \"Digital Tools\"], \"headline\": \"#1 Day Use: Book hotel rooms by the hour for daytime use at US$58, includes parking and access during 9 AM - 8 PM\", \"summary\": \"DayUse allows travelers to book hotel rooms for daytime hours rather than overnight stays. The featured booking shows a double room with parking access for US$58 (17% discount), available 9 AM - 8 PM with free cancellation and pay-at-hotel option. This is part of a travel planning tips series highlighting useful travel apps and booking platforms.\", \"media_metadata\": {\"original_poster\": \"Raimee | Travel Tips \\u2708\\ufe0f\", \"tagged_accounts\": [], \"location_tags\": [], \"audio_source\": null, \"hashtags\": []}, \"image_details\": {\"extracted_text\": [\"#1) DayUse\", \"so you have some time to go take a nap\", \"9:00 AM - 8:00 PM\", \"Chambre Double \\u2022 Acc\\u00e8s Parking\", \"US$58\", \"Reserve\", \"-17%\", \"Pay later at the hotel\", \"Free cancellation\", \"Raimee | Travel Tips \\u2708\\ufe0f\", \"Some of the MOST helpful travel planning sites & apps I used this year! ... more\", \"Search \\u2022 travel tracker app\"], \"objects\": [\"smartphone screen showing hotel booking app\", \"woman in striped pajamas\", \"hotel room interior\", \"booking interface\", \"reserve button\", \"pricing information\"], \"themes\": [\"budget travel\", \"travel planning\", \"accommodation hacks\", \"day-use hotels\", \"travel apps\", \"cost-saving tips\"], \"emotions\": [\"helpful\", \"practical\", \"informative\", \"casual\"], \"vibes\": [\"relatable\", \"lifestyle content\", \"educational\", \"travel influencer\"], \"likely_source\": \"TikTok\", \"key_interest\": \"DayUse app showing affordable hourly hotel booking option with significant discount\", \"visual_hierarchy\": [\"#1) DayUse (large white text overlay)\", \"Hotel booking screenshot showing US$58 price\", \"9:00 AM - 8:00 PM availability window\", \"Content creator in casual attire\", \"Reserve button and payment details\"]}}",
+        "model_used": "claude-sonnet-4-5",
+        "trace_id": "019b42cb-3454-77c0-b635-50b70b58ad2f",
+        "created_at": "2025-12-21T21:23:08.902665",
         "provider_used": "anthropic"
       }
     ]
