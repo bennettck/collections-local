@@ -1198,6 +1198,592 @@ If migration fails or issues arise:
 
 ---
 
+## Development Tooling & Automation
+
+### Overview
+
+Comprehensive development scripts and Makefile to streamline AWS infrastructure management, deployment, testing, and data seeding.
+
+### Tooling Philosophy
+
+**Design Principles**:
+- ✅ Single entry point (Makefile) for all operations
+- ✅ Focus on dev environment initially (can expand to staging/prod later)
+- ✅ Leverage existing automation (evaluate_retrieval.py, export_db.py)
+- ✅ Fast iteration (quick Lambda updates without full CDK deploy)
+- ✅ Safety first (confirmations, dry-run modes, rollback support)
+
+**User Decisions**:
+- Dev environment only initially
+- Local scripts only (no CI/CD)
+- Scripted secrets population (from .env)
+- Extend existing `evaluate_retrieval.py` for AWS
+
+### Makefile - Primary Developer Interface
+
+**Key Make Targets**:
+
+```makefile
+# Infrastructure Management
+make infra-bootstrap       # CDK bootstrap AWS account
+make infra-deploy          # Deploy CDK stack
+make infra-diff            # Show infrastructure changes before deploy
+make infra-destroy         # Destroy stack (with safety confirmation)
+
+# Secrets Management
+make secrets-populate      # Push secrets from .env to Parameter Store
+make secrets-export        # Pull secrets from Parameter Store to local .env
+
+# Database Operations
+make db-connect            # Open psql connection to RDS
+make db-migrate            # Run schema migrations
+make db-seed-golden        # Seed golden dataset (55 items from existing golden DB)
+make db-seed-full          # Seed full production data
+make db-reset              # Drop and recreate schema (with confirmation)
+
+# Lambda Deployment
+make lambda-deploy-api     # Deploy API Lambda only (fast, 2-minute update)
+make lambda-deploy-all     # Deploy all Lambda functions
+make lambda-logs FUNC=api  # Tail CloudWatch logs for specific function
+
+# Cognito User Management
+make cognito-create-user   # Create single test user, save token
+make cognito-get-token     # Get fresh JWT token from existing user
+
+# S3 Image Management
+make s3-upload-images      # Upload local images to S3 with user_id prefix
+make s3-download-images    # Download S3 images locally
+
+# Testing & Validation
+make test-infra            # Run 10-step infrastructure validation
+make test-api              # Test all API endpoints with auth
+make test-e2e              # End-to-end workflow test
+make test-all              # Run all tests and generate report
+
+# Evaluation & Comparison
+make eval-aws              # Run retrieval evaluation against AWS API
+make eval-compare          # Compare local vs AWS evaluation metrics
+
+# Data Migration
+make migrate-db            # Migrate SQLite → PostgreSQL
+make migrate-images        # Migrate local images → S3
+make migrate-validate      # Verify migration data integrity
+
+# Utilities
+make status                # Show current AWS resources and their status
+make clean                 # Clean local build artifacts
+make help                  # Display all available commands
+```
+
+**Features**:
+- Color-coded output (green=success, red=error, yellow=warning)
+- Prerequisite checking (AWS CLI, CDK, psql, jq, python)
+- Safety confirmations for destructive operations
+- Auto-loads environment from CDK outputs
+
+### Scripts Organization
+
+```
+scripts/
+├── aws/                              # AWS-specific automation
+│   ├── infra/
+│   │   ├── deploy.sh                 # CDK deploy wrapper with safety checks
+│   │   ├── destroy.sh                # CDK destroy with confirmation
+│   │   ├── diff.sh                   # Show infrastructure changes
+│   │   └── bootstrap.sh              # CDK bootstrap
+│   │
+│   ├── lambda/
+│   │   ├── deploy-api.sh             # Deploy API Lambda only (fast)
+│   │   ├── deploy-all.sh             # Deploy all Lambda functions
+│   │   └── logs.sh                   # Tail CloudWatch logs
+│   │
+│   ├── db/
+│   │   ├── connect.sh                # psql connection helper
+│   │   ├── seed.sh                   # Seed test data (golden/full/schema)
+│   │   └── reset.sh                  # Drop + recreate schema
+│   │
+│   ├── cognito/
+│   │   ├── create-user.sh            # Create test user, get JWT token
+│   │   └── get-token.sh              # Get fresh JWT token
+│   │
+│   ├── s3/
+│   │   ├── upload-images.sh          # Upload local images to S3
+│   │   └── download-images.sh        # Download S3 images locally
+│   │
+│   ├── secrets/
+│   │   ├── populate.sh               # Push secrets to Parameter Store
+│   │   └── export.sh                 # Pull secrets to .env
+│   │
+│   └── test/
+│       ├── test-infrastructure.sh    # 10-step infrastructure validation
+│       ├── test-api.sh               # API endpoint tests with auth
+│       └── test-e2e.sh               # End-to-end workflow test
+│
+├── migrate/                          # Migration utilities
+│   ├── sqlite-to-postgres.py         # SQLite → PostgreSQL with transformations
+│   ├── images-to-s3.py               # Local filesystem → S3
+│   └── validate-migration.py         # Verify data integrity post-migration
+│
+└── [existing scripts remain]
+    ├── export_db.py                  # Keep existing
+    ├── import_db.py                  # Keep existing
+    ├── evaluate_retrieval.py         # Extend for AWS (see below)
+    └── setup_golden_db.py            # Keep existing
+```
+
+### Key Scripts Detailed
+
+#### 1. scripts/aws/infra/deploy.sh
+
+**Purpose**: Safe CDK deployment with validation
+
+```bash
+#!/bin/bash
+# Features:
+# - Check AWS credentials
+# - Show stack diff before deploy
+# - Confirm deployment
+# - Capture CDK outputs (RDS endpoint, API URL, bucket name)
+# - Save outputs to .aws-outputs.json for other scripts
+
+# Usage:
+./scripts/aws/infra/deploy.sh
+
+# Output example:
+# ✅ AWS credentials valid
+# 📋 Stack changes:
+# [CDK diff output]
+#
+# Deploy these changes? [y/N]: y
+# 🚀 Deploying stack...
+# ✅ Stack deployed successfully
+# 📝 Saved outputs to .aws-outputs.json
+```
+
+#### 2. scripts/aws/secrets/populate.sh
+
+**Purpose**: Populate Parameter Store from .env
+
+```bash
+#!/bin/bash
+# Features:
+# - Read secrets from .env file
+# - Create/update Parameter Store parameters
+# - Use SecureString encryption
+# - Safety: Check if parameters exist, confirm overwrite
+# - Support for dry-run mode
+
+# Secrets to populate:
+# - /collections/anthropic-api-key
+# - /collections/openai-api-key
+# - /collections/voyage-api-key
+# - /collections/langsmith-api-key
+# - /collections/database-url (auto-generated by RDS)
+
+# Usage:
+./scripts/aws/secrets/populate.sh            # Interactive mode
+./scripts/aws/secrets/populate.sh --dry-run  # Preview only
+./scripts/aws/secrets/populate.sh --force    # Overwrite existing
+```
+
+#### 3. scripts/aws/db/seed.sh
+
+**Purpose**: Seed RDS database with test data
+
+```bash
+#!/bin/bash
+# Options:
+# --schema-only   : Just create tables (empty database)
+# --golden        : Seed with 55-item golden dataset
+# --full          : Seed with all production data
+
+# Workflow:
+# 1. Connect to RDS (credentials from Parameter Store)
+# 2. Create test user in Cognito (if needed), get 'sub'
+# 3. Import data with user_id from Cognito sub
+# 4. Verify counts match source
+
+# Usage:
+./scripts/aws/db/seed.sh --golden
+
+# Output:
+# 🔑 Using Cognito user: testuser@example.com (sub: 12345678-...)
+# 📊 Importing 55 items from golden dataset...
+# ✅ Items imported: 55/55
+# ✅ Analyses imported: 55/55
+# ✅ Embeddings imported: 55/55
+# 🎉 Database seeded successfully!
+```
+
+#### 4. scripts/aws/cognito/create-user.sh
+
+**Purpose**: Create test user and obtain JWT token
+
+```bash
+#!/bin/bash
+# Features:
+# - Create user in Cognito
+# - Auto-confirm (admin operation)
+# - Fetch JWT token
+# - Save token to .test-user-token
+# - Save user_id (sub) to .test-user-id
+
+# Usage:
+./scripts/aws/cognito/create-user.sh \
+  --email testuser@example.com \
+  --password Test123!
+
+# Output:
+# ✅ User created: testuser@example.com
+# 👤 User ID (sub): 12345678-1234-1234-1234-123456789012
+# 🔑 JWT Token: eyJraWQiOiJ...
+#
+# Credentials saved:
+# - .test-user-token (for API requests)
+# - .test-user-id (for database operations)
+#
+# To use in API calls:
+# export TOKEN=$(cat .test-user-token)
+# curl -H "Authorization: Bearer $TOKEN" $API_URL/items
+```
+
+#### 5. scripts/aws/test/test-infrastructure.sh
+
+**Purpose**: Comprehensive 10-step infrastructure validation
+
+```bash
+#!/bin/bash
+# Tests:
+# 1. RDS connection (psql, create/drop test table, pgvector)
+# 2. Parameter Store (create/read/delete test parameter)
+# 3. Cognito (create user, get JWT, verify sub claim)
+# 4. S3 (upload/download file, check EventBridge config)
+# 5. Lambda invoke (basic hello world)
+# 6. Lambda→RDS connection
+# 7. Lambda→Parameter Store access
+# 8. API Gateway routing
+# 9. EventBridge→Lambda trigger (S3 upload)
+# 10. End-to-end authenticated API call
+
+# Usage:
+./scripts/aws/test/test-infrastructure.sh
+
+# Output:
+# 🔍 Testing AWS Infrastructure...
+#
+# ✅ 1/10 RDS connection test passed
+# ✅ 2/10 Parameter Store test passed
+# ✅ 3/10 Cognito JWT test passed
+# ✅ 4/10 S3 operations test passed
+# ✅ 5/10 Lambda invoke test passed
+# ✅ 6/10 Lambda→RDS test passed
+# ✅ 7/10 Lambda→Parameter Store test passed
+# ✅ 8/10 API Gateway test passed
+# ✅ 9/10 EventBridge workflow test passed
+# ✅ 10/10 Authenticated API test passed
+#
+# 🎉 All infrastructure tests passed!
+#
+# Test report: reports/infra-test-2025-12-22-143022.md
+```
+
+#### 6. scripts/migrate/sqlite-to-postgres.py
+
+**Purpose**: Migrate SQLite database to PostgreSQL
+
+```python
+# Workflow:
+# 1. Export SQLite to JSON (use existing export_db.py)
+# 2. Transform schema:
+#    - Add user_id column (from Cognito test user)
+#    - Convert TEXT→JSONB for raw_response, embedding_source
+#    - Convert sqlite-vec embeddings to pgvector format
+#    - Add user_id indexes
+# 3. Import to PostgreSQL
+# 4. Validate counts match
+
+# Usage:
+python scripts/migrate/sqlite-to-postgres.py \
+  --sqlite-db data/collections.db \
+  --postgres-url $DATABASE_URL \
+  --cognito-user-id $(cat .test-user-id) \
+  --dataset golden  # or 'full'
+
+# Output:
+# 📊 Exporting SQLite database...
+# ✅ Exported 55 items, 55 analyses, 55 embeddings
+#
+# 🔄 Transforming schema...
+# ✅ Added user_id columns
+# ✅ Converted TEXT→JSONB
+# ✅ Converted embeddings to pgvector format
+#
+# 📤 Importing to PostgreSQL...
+# ✅ Items: 55/55
+# ✅ Analyses: 55/55
+# ✅ Embeddings: 55/55
+#
+# ✅ Migration validation passed
+# 🎉 Migration complete!
+```
+
+#### 7. scripts/migrate/images-to-s3.py
+
+**Purpose**: Upload local images to S3 with user isolation
+
+```python
+# Workflow:
+# For each image in data/images/:
+#   - Upload to s3://bucket/{user_id}/images/{filename}
+#   - Update database file_path column
+#   - Optional: Generate thumbnail, upload to s3://.../thumbnails/
+
+# Usage:
+python scripts/migrate/images-to-s3.py \
+  --images-dir data/images \
+  --bucket-name $BUCKET_NAME \
+  --user-id $(cat .test-user-id) \
+  --generate-thumbnails  # Optional
+
+# Output:
+# 📁 Found 55 images in data/images/
+#
+# 📤 Uploading images...
+# [1/55] ✅ uploaded: 12345678-uuid.jpg → s3://bucket/user-id/images/
+# [2/55] ✅ uploaded: 87654321-uuid.png → s3://bucket/user-id/images/
+# ...
+# [55/55] ✅ uploaded: abcdef12-uuid.jpg → s3://bucket/user-id/images/
+#
+# 🖼️  Generating thumbnails...
+# [55/55] ✅ thumbnail created
+#
+# 🗄️  Updating database file_path columns...
+# ✅ Updated 55 records
+#
+# 🎉 Image migration complete!
+```
+
+### Extending Existing Scripts
+
+#### Modify: scripts/evaluate_retrieval.py
+
+**Changes to support AWS**:
+
+```python
+# 1. Add AWS API endpoint detection
+if os.path.exists('.aws-outputs.json'):
+    with open('.aws-outputs.json') as f:
+        outputs = json.load(f)
+        api_url = outputs.get('ApiUrl')
+        if api_url:
+            api_candidates.append(api_url)
+            print(f"🔍 Found AWS API: {api_url}")
+
+# 2. Add Cognito JWT authentication
+if os.path.exists('.test-user-token'):
+    with open('.test-user-token') as f:
+        token = f.read().strip()
+        headers['Authorization'] = f'Bearer {token}'
+        print(f"🔑 Using JWT authentication")
+
+# 3. Support remote image URLs (S3 pre-signed URLs)
+# No changes needed - existing code handles URLs
+
+# Usage remains the same:
+python scripts/evaluate_retrieval.py
+
+# Auto-detects:
+# - Local API (http://localhost:8000)
+# - AWS API (from .aws-outputs.json)
+# - Adds JWT auth automatically if .test-user-token exists
+```
+
+**New Make target for comparison**:
+
+```bash
+# make eval-compare
+# Runs evaluation against both local and AWS, compares metrics
+#
+# Output:
+# 📊 Running evaluation against local API...
+# ✅ Local evaluation complete: reports/eval_local_20251222_143022.md
+#
+# 📊 Running evaluation against AWS API...
+# ✅ AWS evaluation complete: reports/eval_aws_20251222_143145.md
+#
+# 📈 Comparison:
+# Metric              Local    AWS      Diff
+# ------------------------------------------
+# Precision@10        0.82     0.81     -0.01
+# Recall@10           0.75     0.74     -0.01
+# MRR                 0.88     0.87     -0.01
+# NDCG@10             0.85     0.84     -0.01
+# Avg Response Time   120ms    245ms    +125ms
+#
+# ⚠️  AWS is slightly slower (Lambda cold starts)
+# ✅ Retrieval quality is comparable
+```
+
+### Configuration Files
+
+#### .aws-outputs.json (Auto-generated by deploy.sh)
+
+```json
+{
+  "RdsEndpoint": "collections-dev.xxxxx.us-east-1.rds.amazonaws.com",
+  "ApiUrl": "https://xxxxxxxxxx.execute-api.us-east-1.amazonaws.com",
+  "CognitoUserPoolId": "us-east-1_XXXXXXXXX",
+  "CognitoClientId": "xxxxxxxxxxxxxxxxxxxxxxxxxx",
+  "BucketName": "collections-dev-images-xxxxx",
+  "DatabaseUrl": "postgresql://user:pass@host:5432/collections"
+}
+```
+
+#### .gitignore additions
+
+```gitignore
+# AWS outputs and credentials
+.aws-outputs.json
+.test-user-token
+.test-user-id
+
+# CDK
+infrastructure/cdk.out/
+infrastructure/.cdk.staging/
+
+# Environment configs with secrets
+config/.env.aws
+```
+
+### Typical Development Workflows
+
+#### Initial Setup (First Time)
+
+```bash
+# 1. Deploy infrastructure
+make infra-deploy
+
+# 2. Populate secrets from .env
+make secrets-populate
+
+# 3. Seed golden dataset
+make db-seed-golden
+
+# 4. Create test user
+make cognito-create-user
+
+# 5. Migrate images to S3
+make migrate-images
+
+# 6. Test everything
+make test-all
+
+# 7. Run evaluation
+make eval-aws
+```
+
+**Time**: ~15-20 minutes for complete setup
+
+#### Daily Development (Code Changes)
+
+```bash
+# 1. Make changes to Lambda code
+vim app/main.py
+
+# 2. Quick deploy (just Lambda, no CDK)
+make lambda-deploy-api
+
+# 3. Test API
+make test-api
+
+# 4. Check logs if needed
+make lambda-logs FUNC=api
+
+# 5. Run evaluation
+make eval-aws
+```
+
+**Time**: ~2-3 minutes for code update and test
+
+#### Testing After Infrastructure Changes
+
+```bash
+# 1. See what changed
+make infra-diff
+
+# 2. Deploy changes
+make infra-deploy
+
+# 3. Validate infrastructure
+make test-infra
+
+# 4. Test API
+make test-api
+```
+
+**Time**: ~5-10 minutes
+
+#### Comparing Local vs AWS
+
+```bash
+# Run evaluation on both and compare metrics
+make eval-compare
+
+# Shows side-by-side comparison of:
+# - Retrieval quality metrics (Precision, Recall, MRR, NDCG)
+# - Response times
+# - Any differences in search results
+```
+
+#### Clean Slate Reset
+
+```bash
+# 1. Destroy all AWS resources
+make infra-destroy
+
+# 2. Clean local artifacts
+make clean
+
+# 3. Start fresh
+make infra-deploy
+make db-seed-golden
+```
+
+### Success Metrics
+
+Good tooling enables:
+1. ✅ Deploy full stack in < 10 minutes
+2. ✅ Deploy Lambda code update in < 2 minutes
+3. ✅ Seed test data in < 5 minutes
+4. ✅ Run full test suite in < 3 minutes
+5. ✅ Zero manual AWS Console clicks for common tasks
+6. ✅ Easy comparison between local and AWS performance
+
+### Files to Create
+
+**Priority 1 - Essential** (Week 1):
+1. `Makefile` - Primary developer interface
+2. `scripts/aws/infra/deploy.sh` - CDK deployment wrapper
+3. `scripts/aws/secrets/populate.sh` - Secrets management
+4. `scripts/aws/db/seed.sh` - Database seeding
+5. `scripts/aws/cognito/create-user.sh` - User creation
+6. `scripts/aws/test/test-infrastructure.sh` - 10-step validation
+
+**Priority 2 - High Value** (Week 2):
+7. `scripts/migrate/sqlite-to-postgres.py` - Data migration
+8. `scripts/migrate/images-to-s3.py` - Image migration
+9. `scripts/aws/lambda/deploy-api.sh` - Fast Lambda updates
+10. `scripts/aws/test/test-api.sh` - API testing
+
+**Priority 3 - Quality of Life** (Week 3):
+11. `scripts/aws/lambda/logs.sh` - CloudWatch log tailing
+12. Extend `scripts/evaluate_retrieval.py` for AWS
+13. Add comparison tooling (`make eval-compare`)
+
+**Total**: ~1500 lines of new automation code
+
+---
+
 ## Next Steps
 
 1. ✅ Review this plan

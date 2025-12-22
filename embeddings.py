@@ -23,7 +23,7 @@ voyage_client = voyageai.Client(
 # Model configuration
 DEFAULT_EMBEDDING_MODEL = os.getenv("VOYAGE_EMBEDDING_MODEL", "voyage-3.5-lite")
 EMBEDDING_DIMENSIONS = {
-    "voyage-3.5-lite": 512,
+    "voyage-3.5-lite": 1024,  # Actual dimension returned by API (confirmed via testing)
     "voyage-3.5": 1024,
     "voyage-3-lite": 512,
     "voyage-3": 1024,
@@ -33,7 +33,7 @@ EMBEDDING_DIMENSIONS = {
 
 def get_embedding_dimensions(model: str) -> int:
     """Get embedding dimensions for a VoyageAI model."""
-    return EMBEDDING_DIMENSIONS.get(model, 512)  # Default to 512
+    return EMBEDDING_DIMENSIONS.get(model, 1024)  # Default to 1024
 
 
 def generate_embedding(
@@ -174,44 +174,36 @@ def generate_embeddings_batch(
 
 def _create_embedding_document(analysis_data: dict) -> str:
     """
-    Create a weighted text document for embedding generation.
-    Mirrors BM25 weighting strategy for consistency.
+    Create flat embedding document from analysis data (no field weighting).
+
+    This method concatenates all fields ONCE (no repetition).
+    Modern embedding models handle field importance implicitly.
     """
     parts = []
 
-    # Extract fields from analysis JSON
-    summary = analysis_data.get("summary", "")
-    headline = analysis_data.get("headline", "")
-    category = analysis_data.get("category", "")
-    subcategories = " ".join(analysis_data.get("subcategories", []))
+    # Extract all fields once (same order as search document)
+    parts.append(analysis_data.get("summary", ""))
+    parts.append(analysis_data.get("headline", ""))
+    parts.append(analysis_data.get("category", ""))
+    parts.append(" ".join(analysis_data.get("subcategories", [])))
 
+    # Image details
     image_details = analysis_data.get("image_details", {})
-    extracted_text = " ".join(image_details.get("extracted_text", []))
-    key_interest = image_details.get("key_interest", "")
-    themes = " ".join(image_details.get("themes", []))
-    objects = " ".join(image_details.get("objects", []))
-    emotions = " ".join(image_details.get("emotions", []))
-    vibes = " ".join(image_details.get("vibes", []))
+    if isinstance(image_details.get("extracted_text"), list):
+        parts.append(" ".join(image_details.get("extracted_text", [])))
+    else:
+        parts.append(image_details.get("extracted_text", ""))
 
+    parts.append(image_details.get("key_interest", ""))
+    parts.append(" ".join(image_details.get("themes", [])))
+    parts.append(" ".join(image_details.get("objects", [])))
+    parts.append(" ".join(image_details.get("emotions", [])))
+    parts.append(" ".join(image_details.get("vibes", [])))
+
+    # Media metadata
     media_metadata = analysis_data.get("media_metadata", {})
-    location_tags = " ".join(media_metadata.get("location_tags", []))
-    hashtags = " ".join(media_metadata.get("hashtags", []))
-
-    # High priority (3x): summary
-    parts.extend([summary] * 3)
-
-    # High priority (2x): headline, extracted_text
-    parts.extend([headline, extracted_text] * 2)
-
-    # Medium-high priority (1.5x): category, subcategories, key_interest
-    parts.extend([category, subcategories, key_interest])
-    parts.append(f"{category} {subcategories} {key_interest}")
-
-    # Medium priority (1x): themes, objects, location_tags
-    parts.extend([themes, objects, location_tags])
-
-    # Lower priority (0.5x): emotions, vibes, hashtags
-    parts.append(f"{emotions} {vibes} {hashtags}")
+    parts.append(" ".join(media_metadata.get("location_tags", [])))
+    parts.append(" ".join(media_metadata.get("hashtags", [])))
 
     # Combine and clean
     document = " ".join([p for p in parts if p and p.strip()])

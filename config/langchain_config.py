@@ -1,0 +1,94 @@
+"""
+Centralized LangChain configuration for Collections Local API.
+
+This module provides default configuration values for:
+- Embedding models and settings
+- Chroma vector store paths
+- BM25 retriever settings
+- Document chunking parameters
+"""
+
+import os
+
+# Default embedding model
+DEFAULT_EMBEDDING_MODEL = "voyage-3.5-lite"
+
+# LangChain configuration
+LANGCHAIN_CONFIG = {
+    # Embedding settings
+    "embeddings": {
+        "model": DEFAULT_EMBEDDING_MODEL,
+        "batch_size": 128,
+        "dimensions": 1024  # voyage-3.5-lite actual dimension
+    },
+
+    # Chroma vector store settings (dual database support)
+    "chroma": {
+        # Production database
+        "persist_directory_prod": os.getenv(
+            "CHROMA_PROD_PERSIST_DIRECTORY",
+            "./data/chroma_prod"
+        ),
+        "collection_name_prod": "collections_vectors_prod",
+
+        # Golden database
+        "persist_directory_golden": os.getenv(
+            "CHROMA_GOLDEN_PERSIST_DIRECTORY",
+            "./data/chroma_golden"
+        ),
+        "collection_name_golden": "collections_vectors_golden"
+    },
+
+    # BM25 retriever settings
+    "bm25": {
+        "k": 10,  # Default number of results
+        "preload": True  # Build index on startup
+    },
+
+    # Document chunking settings
+    "chunking": {
+        "enabled": os.getenv("ENABLE_DOCUMENT_CHUNKING", "true").lower() == "true",
+        "max_chunk_size": int(os.getenv("MAX_CHUNK_SIZE", "2000")),
+        "chunk_overlap": int(os.getenv("CHUNK_OVERLAP", "200")),
+        "use_json_splitter": os.getenv("USE_JSON_SPLITTER", "true").lower() == "true"
+    }
+}
+
+
+def get_chroma_config(database_type: str = "prod") -> dict:
+    """Get Chroma configuration for specific database.
+
+    Args:
+        database_type: Either "prod" or "golden"
+
+    Returns:
+        Dictionary with persist_directory and collection_name
+    """
+    if database_type == "golden":
+        return {
+            "persist_directory": LANGCHAIN_CONFIG["chroma"]["persist_directory_golden"],
+            "collection_name": LANGCHAIN_CONFIG["chroma"]["collection_name_golden"]
+        }
+    else:
+        return {
+            "persist_directory": LANGCHAIN_CONFIG["chroma"]["persist_directory_prod"],
+            "collection_name": LANGCHAIN_CONFIG["chroma"]["collection_name_prod"]
+        }
+
+
+def get_chunking_config() -> dict:
+    """Get document chunking configuration.
+
+    Returns:
+        Dictionary with chunking settings
+    """
+    return LANGCHAIN_CONFIG["chunking"]
+
+
+def get_embedding_config() -> dict:
+    """Get embedding configuration.
+
+    Returns:
+        Dictionary with embedding settings
+    """
+    return LANGCHAIN_CONFIG["embeddings"]

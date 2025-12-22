@@ -69,10 +69,11 @@ class SearchRequest(BaseModel):
         description="Natural language search query",
         examples=["What restaurants are in Tokyo?", "Show me beauty products", "perfume"]
     )
-    search_type: Literal["bm25", "vector", "bm25-lc", "vector-lc", "hybrid-lc"] = Field(
+    search_type: Literal["bm25", "vector", "bm25-lc", "vector-lc", "hybrid", "hybrid-lc"] = Field(
         "bm25",
         description="Search type: 'bm25' for full-text search, 'vector' for semantic search, "
-                    "'bm25-lc' for LangChain BM25 retriever, 'vector-lc' for LangChain vector retriever"
+                    "'bm25-lc' for LangChain BM25 retriever, 'vector-lc' for LangChain vector retriever, "
+                    "'hybrid' for native hybrid search with RRF, 'hybrid-lc' for LangChain hybrid with RRF"
     )
     top_k: int = Field(
         10,
@@ -160,9 +161,10 @@ class SearchResult(BaseModel):
 class SearchResponse(BaseModel):
     """Response model for search and Q&A."""
     query: str
-    search_type: Literal["bm25", "vector", "bm25-lc", "vector-lc", "hybrid-lc"] = Field(
+    search_type: Literal["bm25", "vector", "bm25-lc", "vector-lc", "hybrid", "hybrid-lc"] = Field(
         description="Search method used: 'bm25' for keyword search, 'vector' for semantic search, "
-                    "'bm25-lc' for LangChain BM25, 'vector-lc' for LangChain vector"
+                    "'bm25-lc' for LangChain BM25, 'vector-lc' for LangChain vector, "
+                    "'hybrid' for native hybrid RRF, 'hybrid-lc' for LangChain hybrid RRF"
     )
     results: list[SearchResult]
     total_results: int

@@ -453,7 +453,7 @@ class MultiSearchRetrievalEvaluator:
     """Coordinates evaluation across multiple search types."""
 
     DEFAULT_PORTS = [8000, 8001, 8080, 3000]
-    VALID_SEARCH_TYPES = ["bm25", "vector", "bm25-lc", "vector-lc", "hybrid-lc"]
+    VALID_SEARCH_TYPES = ["bm25", "vector", "bm25-lc", "vector-lc", "hybrid", "hybrid-lc"]
 
     def __init__(self, args):
         self.args = args
@@ -1339,8 +1339,10 @@ class MultiSearchRetrievalEvaluator:
             if "deduplication" in config:
                 lines.append(f"| **Deduplication** | {config['deduplication']} |")
 
-            # Field weighting
-            if "field_weighting" in config:
+            # Content field / field weighting
+            if "content_field" in config:
+                lines.append(f"| **Content Field** | {config['content_field']} |")
+            elif "field_weighting" in config:
                 field_weights = config["field_weighting"]
                 if isinstance(field_weights, dict):
                     lines.append(f"| **Field Weighting** | |")
@@ -1348,6 +1350,10 @@ class MultiSearchRetrievalEvaluator:
                         lines.append(f"| &nbsp;&nbsp;&nbsp;• {field} | {weight} |")
                 elif isinstance(field_weights, str):
                     lines.append(f"| **Field Weighting** | {field_weights} |")
+
+            # Tokenizer (for BM25 methods)
+            if "tokenizer" in config:
+                lines.append(f"| **Tokenizer** | {config['tokenizer']} |")
 
             lines.extend(["", ""])
 
@@ -1419,17 +1425,36 @@ class MultiSearchRetrievalEvaluator:
                 row_parts = [f"**@{k}**"]
 
                 # Get values for each search type
+                values = []
                 for search_type in self.search_types:
                     summary = results_by_search_type[search_type]["summary"]
                     val = summary[metric_name.lower()].get(f"@{k}", 0)
+                    values.append(val)
                     row_parts.append(f"{val:.3f}")
 
-                # Add comparison if available
-                if metric_key in comparison.get("metric_differences", {}):
+                # Calculate comparison metrics
+                if len(self.search_types) == 2 and metric_key in comparison.get("metric_differences", {}):
+                    # Use pre-calculated pairwise comparison
                     delta_info = comparison["metric_differences"][metric_key]
                     diff = delta_info.get("difference", 0)
                     pct = delta_info.get("percent_change", 0)
                     winner = delta_info.get("winner", "-")
+                    row_parts.extend([
+                        f"{diff:+.3f}",
+                        f"{pct:+.1f}%",
+                        winner.upper()
+                    ])
+                elif len(self.search_types) > 2:
+                    # Calculate on-the-fly for multi-search
+                    max_val = max(values)
+                    min_val = min(values)
+                    winner_idx = values.index(max_val)
+                    winner = self.search_types[winner_idx]
+
+                    # Delta: max - min
+                    diff = max_val - min_val
+                    pct = (diff / min_val * 100) if min_val > 0 else 0
+
                     row_parts.extend([
                         f"{diff:+.3f}",
                         f"{pct:+.1f}%",
@@ -1446,28 +1471,37 @@ class MultiSearchRetrievalEvaluator:
         lines.extend([
             "### Mean Reciprocal Rank (MRR)",
             "",
-            "| Search Type | MRR | Δ vs first | Winner |",
-            "|-------------|-----|------------|--------|",
+            "| Search Type | MRR | Δ vs best | Winner |",
+            "|-------------|-----|-----------|--------|",
         ])
 
+        # Collect all MRR values
+        mrr_values = []
+        for search_type in self.search_types:
+            summary = results_by_search_type[search_type]["summary"]
+            mrr_values.append(summary["mrr"])
+
+        # Find best MRR
+        best_mrr = max(mrr_values)
+        winner_idx = mrr_values.index(best_mrr)
+        winner_search_type = self.search_types[winner_idx]
+
+        # Generate rows
         for idx, search_type in enumerate(self.search_types):
             summary = results_by_search_type[search_type]["summary"]
             mrr = summary["mrr"]
 
-            if idx == 0:
-                delta_str = "-"
-            elif "mrr" in comparison.get("metric_differences", {}):
-                delta_info = comparison["metric_differences"]["mrr"]
-                diff = delta_info.get("difference", 0)
-                delta_str = f"{diff:+.3f}"
+            # Calculate delta from best
+            if len(self.search_types) >= 2:
+                delta = mrr - best_mrr
+                delta_str = f"{delta:+.3f}" if delta != 0 else "-"
             else:
                 delta_str = "-"
 
-            winner = ""
-            if "mrr" in comparison.get("metric_differences", {}):
-                winner = comparison["metric_differences"]["mrr"].get("winner", "").upper()
+            # Mark winner
+            winner_mark = "✓" if search_type == winner_search_type else ""
 
-            lines.append(f"| **{search_type}** | {mrr:.3f} | {delta_str} | {winner if idx == 1 else ''} |")
+            lines.append(f"| **{search_type}** | {mrr:.3f} | {delta_str} | {winner_mark} |")
 
         lines.extend(["", "---", ""])
 
@@ -1708,7 +1742,7 @@ def main():
         "--search-types",
         type=str,
         default="all",
-        help="Comma-separated search types to evaluate: 'bm25', 'vector', or 'all' (default: all)"
+        help="Comma-separated search types to evaluate: 'bm25', 'vector', 'bm25-lc', 'vector-lc', 'hybrid', 'hybrid-lc', or 'all' (default: all)"
     )
     parser.add_argument(
         "--parallel",

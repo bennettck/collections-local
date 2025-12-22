@@ -289,52 +289,36 @@ def get_item_analyses(item_id: str) -> list[dict]:
 
 def _create_search_document(raw_response: dict) -> str:
     """
-    Create weighted search document from analysis data.
+    Create flat search document from analysis data (no field weighting).
 
-    Fields are repeated according to their importance for search ranking.
-    All fields from raw_response are included to ensure everything is searchable.
+    This method concatenates all fields ONCE (no repetition).
+    Modern embedding models handle field importance implicitly.
     """
     parts = []
 
-    # High priority fields (3x weight)
-    summary = raw_response.get("summary", "")
-    parts.extend([summary] * 3)
+    # Extract all fields once (no weighting/repetition)
+    parts.append(raw_response.get("summary", ""))
+    parts.append(raw_response.get("headline", ""))
+    parts.append(raw_response.get("category", ""))
+    parts.append(" ".join(raw_response.get("subcategories", [])))
 
-    # High priority fields (2x weight)
-    headline = raw_response.get("headline", "")
+    # Image details
     image_details = raw_response.get("image_details", {})
-    extracted_text = " ".join(image_details.get("extracted_text", []))
-    parts.extend([headline, extracted_text] * 2)
+    if isinstance(image_details.get("extracted_text"), list):
+        parts.append(" ".join(image_details.get("extracted_text", [])))
+    else:
+        parts.append(image_details.get("extracted_text", ""))
 
-    # Medium-high priority (1.5x weight)
-    category = raw_response.get("category", "")
-    subcategories = " ".join(raw_response.get("subcategories", []))
-    key_interest = image_details.get("key_interest", "")
-    # Add 1.5x by repeating once, then adding 0.5 more
-    parts.extend([category, subcategories, key_interest])
-    parts.extend([category, subcategories, key_interest])
+    parts.append(image_details.get("key_interest", ""))
+    parts.append(" ".join(image_details.get("themes", [])))
+    parts.append(" ".join(image_details.get("objects", [])))
+    parts.append(" ".join(image_details.get("emotions", [])))
+    parts.append(" ".join(image_details.get("vibes", [])))
 
-    # Medium priority (1x weight)
-    themes = " ".join(image_details.get("themes", []))
-    objects = " ".join(image_details.get("objects", []))
+    # Media metadata
     media_metadata = raw_response.get("media_metadata", {})
-    location_tags = " ".join(media_metadata.get("location_tags", []))
-    parts.extend([themes, objects, location_tags])
-
-    # Low priority (0.5x weight)
-    emotions = " ".join(image_details.get("emotions", []))
-    vibes = " ".join(image_details.get("vibes", []))
-    hashtags = " ".join(media_metadata.get("hashtags", []))
-    parts.extend([emotions, vibes, hashtags])
-
-    # Minimal priority (0.3x weight) - add once
-    original_poster = media_metadata.get("original_poster", "")
-    tagged_accounts = " ".join(media_metadata.get("tagged_accounts", []))
-    audio_source = media_metadata.get("audio_source", "")
-    likely_source = image_details.get("likely_source", "")
-    visual_hierarchy = " ".join(image_details.get("visual_hierarchy", []))
-    minimal_fields = f"{original_poster} {tagged_accounts} {audio_source} {likely_source} {visual_hierarchy}"
-    parts.append(minimal_fields)
+    parts.append(" ".join(media_metadata.get("location_tags", [])))
+    parts.append(" ".join(media_metadata.get("hashtags", [])))
 
     # Join all parts, filtering out empty strings
     return " ".join([p for p in parts if p and p.strip()])
@@ -560,9 +544,10 @@ def create_embedding(
 
         # Store vector with metadata (sqlite-vec)
         # Serialize embedding for sqlite-vec
+        # Use INSERT OR REPLACE to handle cases where embedding already exists
         serialized_embedding = sqlite_vec.serialize_float32(embedding)
         conn.execute(
-            "INSERT INTO vec_items (item_id, embedding, category) VALUES (?, ?, ?)",
+            "INSERT OR REPLACE INTO vec_items (item_id, embedding, category) VALUES (?, ?, ?)",
             (item_id, serialized_embedding, category)
         )
 
@@ -684,13 +669,22 @@ def rebuild_vector_index(
     with get_db() as conn:
         cursor = conn.cursor()
 
-        # Get all items with analyses that need embeddings
+        # Get LATEST analysis for each item that needs embeddings
+        # Only one embedding per item_id since vec_items uses item_id as PRIMARY KEY
+        # INNER JOIN with items to exclude orphaned analyses (where item was deleted)
         cursor.execute("""
-            SELECT DISTINCT a.item_id, a.id as analysis_id, a.raw_response
+            SELECT a.item_id, a.id as analysis_id, a.raw_response
             FROM analyses a
+            INNER JOIN items i ON a.item_id = i.id
             LEFT JOIN embeddings e ON a.item_id = e.item_id
             WHERE a.raw_response IS NOT NULL
               AND e.id IS NULL
+              AND a.id = (
+                  SELECT id FROM analyses
+                  WHERE item_id = a.item_id
+                  ORDER BY version DESC
+                  LIMIT 1
+              )
             ORDER BY a.created_at DESC
         """)
 

@@ -44,7 +44,11 @@ from database import (
     create_embedding,
 )
 from llm import analyze_image, get_trace_id, get_resolved_provider_and_model
-from embeddings import generate_embedding, generate_query_embedding, _create_embedding_document, DEFAULT_EMBEDDING_MODEL
+from embeddings import generate_embedding, generate_query_embedding, _create_embedding_document, DEFAULT_EMBEDDING_MODEL, get_embedding_dimensions
+from retrieval.langchain_native_retrievers import LangChainNativeBM25Retriever
+from retrieval.chroma_manager import ChromaVectorStoreManager
+from config.langchain_config import get_chroma_config, DEFAULT_EMBEDDING_MODEL as LANGCHAIN_EMBEDDING_MODEL
+from config.retriever_config import get_bm25_config, get_voyage_config
 
 # Load environment variables
 load_dotenv()
@@ -68,6 +72,12 @@ ALLOWED_MIME_TYPES = {
     "image/webp",
     "image/gif",
 }
+
+# Global instances for LangChain retrievers (dual database support)
+prod_langchain_bm25 = None
+prod_chroma_manager = None
+golden_langchain_bm25 = None
+golden_chroma_manager = None
 
 
 @asynccontextmanager
@@ -111,6 +121,64 @@ async def lifespan(app: FastAPI):
         else:
             print(f"Golden index ready: {status['doc_count']} documents")
 
+    # Initialize LangChain retrievers for PRODUCTION database with optimized parameters
+    global prod_langchain_bm25, prod_chroma_manager
+    print("Initializing LangChain BM25 retriever (PROD)...")
+    try:
+        bm25_config = get_bm25_config("default")
+        prod_langchain_bm25 = LangChainNativeBM25Retriever(
+            database_path=PROD_DATABASE_PATH,
+            preload=True,
+            k1=bm25_config["k1"],
+            b=bm25_config["b"],
+            epsilon=bm25_config["epsilon"]
+        )
+        print(f"✓ LangChain BM25 retriever (PROD) initialized (k1={bm25_config['k1']}, b={bm25_config['b']})")
+    except Exception as e:
+        print(f"⚠️  Failed to initialize LangChain BM25 (PROD): {e}")
+
+    print("Initializing Chroma vector store (PROD)...")
+    try:
+        prod_chroma_config = get_chroma_config("prod")
+        prod_chroma_manager = ChromaVectorStoreManager(
+            database_path=PROD_DATABASE_PATH,
+            persist_directory=prod_chroma_config["persist_directory"],
+            collection_name=prod_chroma_config["collection_name"],
+            embedding_model=LANGCHAIN_EMBEDDING_MODEL
+        )
+        print(f"✓ Chroma vector store (PROD) initialized (distance=cosine)")
+    except Exception as e:
+        print(f"⚠️  Failed to initialize Chroma (PROD): {e}")
+
+    # Initialize LangChain retrievers for GOLDEN database with optimized parameters
+    global golden_langchain_bm25, golden_chroma_manager
+    print("Initializing LangChain BM25 retriever (GOLDEN)...")
+    try:
+        bm25_config = get_bm25_config("default")
+        golden_langchain_bm25 = LangChainNativeBM25Retriever(
+            database_path=GOLDEN_DATABASE_PATH,
+            preload=True,
+            k1=bm25_config["k1"],
+            b=bm25_config["b"],
+            epsilon=bm25_config["epsilon"]
+        )
+        print(f"✓ LangChain BM25 retriever (GOLDEN) initialized (k1={bm25_config['k1']}, b={bm25_config['b']})")
+    except Exception as e:
+        print(f"⚠️  Failed to initialize LangChain BM25 (GOLDEN): {e}")
+
+    print("Initializing Chroma vector store (GOLDEN)...")
+    try:
+        golden_chroma_config = get_chroma_config("golden")
+        golden_chroma_manager = ChromaVectorStoreManager(
+            database_path=GOLDEN_DATABASE_PATH,
+            persist_directory=golden_chroma_config["persist_directory"],
+            collection_name=golden_chroma_config["collection_name"],
+            embedding_model=LANGCHAIN_EMBEDDING_MODEL
+        )
+        print(f"✓ Chroma vector store (GOLDEN) initialized (distance=cosine)")
+    except Exception as e:
+        print(f"⚠️  Failed to initialize Chroma (GOLDEN): {e}")
+
     yield
     # Shutdown: cleanup if needed
 
@@ -141,6 +209,20 @@ app.add_middleware(
 
 # Mount static files
 app.mount("/static", StaticFiles(directory="static"), name="static")
+
+
+def get_current_langchain_retrievers(request: Request):
+    """Get retrievers for current database context.
+
+    Args:
+        request: FastAPI Request object with state.db_path set by middleware
+
+    Returns tuple of (bm25_retriever, chroma_manager) based on current database.
+    """
+    current_db = request.state.db_path
+    if current_db == GOLDEN_DATABASE_PATH:
+        return golden_langchain_bm25, golden_chroma_manager
+    return prod_langchain_bm25, prod_chroma_manager
 
 
 def _parse_datetime(dt_str: str) -> datetime:
@@ -427,7 +509,7 @@ async def get_analysis_endpoint(analysis_id: str):
 
 # Search Endpoints
 @app.post("/search", response_model=SearchResponse)
-async def search_collection(request: SearchRequest):
+async def search_collection(search_request: SearchRequest, request: Request):
     """
     Natural language search and Q&A over the collection.
 
@@ -436,63 +518,90 @@ async def search_collection(request: SearchRequest):
     retrieval_start = time.time()
 
     # Route to appropriate search method
-    if request.search_type == "bm25-lc":
-        # LangChain BM25 retrieval
-        from retrieval.langchain_retrievers import BM25LangChainRetriever
+    if search_request.search_type == "bm25-lc":
+        # TRUE LangChain BM25 (rank-bm25 library)
+        bm25_retriever, _ = get_current_langchain_retrievers(request)
 
-        retriever = BM25LangChainRetriever(
-            top_k=request.top_k,
-            category_filter=request.category_filter,
-            min_relevance_score=request.min_relevance_score
-        )
+        if not bm25_retriever:
+            raise HTTPException(
+                status_code=503,
+                detail="LangChain BM25 retriever not initialized"
+            )
 
-        documents = retriever.invoke(request.query)
+        # Execute retrieval
+        documents = bm25_retriever.invoke(search_request.query)
+
+        # Apply category filter (post-filter since BM25Retriever doesn't support filters)
+        if search_request.category_filter:
+            documents = [
+                d for d in documents
+                if d.metadata.get("category") == search_request.category_filter
+            ]
+
+        # Limit to top_k
+        documents = documents[:search_request.top_k]
 
         # Convert Documents to search_results format: List[(item_id, score)]
+        # Note: rank-bm25 doesn't expose scores directly, use rank as proxy
         search_results = [
-            (doc.metadata["item_id"], doc.metadata["score"])
-            for doc in documents
+            (doc.metadata["item_id"], 1.0 / (i + 1))  # Rank-based score
+            for i, doc in enumerate(documents)
         ]
         score_type = "bm25"
 
-    elif request.search_type == "vector-lc":
-        # LangChain Vector retrieval
-        from retrieval.langchain_retrievers import VectorLangChainRetriever
+    elif search_request.search_type == "vector-lc":
+        # TRUE LangChain Chroma vector store
+        _, chroma_manager = get_current_langchain_retrievers(request)
 
-        retriever = VectorLangChainRetriever(
-            top_k=request.top_k,
-            category_filter=request.category_filter,
-            min_similarity_score=request.min_similarity_score,
-            embedding_model=DEFAULT_EMBEDDING_MODEL
+        if not chroma_manager:
+            raise HTTPException(
+                status_code=503,
+                detail="Chroma vector store not initialized"
+            )
+
+        # Build filter dict if category_filter provided
+        filter_dict = (
+            {"category": search_request.category_filter}
+            if search_request.category_filter
+            else None
         )
 
-        documents = retriever.invoke(request.query)
+        # Execute similarity search with scores
+        results_with_scores = chroma_manager.similarity_search_with_score(
+            query=search_request.query,
+            k=search_request.top_k,
+            filter=filter_dict
+        )
 
-        # Convert Documents to search_results format: List[(item_id, score)]
-        search_results = [
-            (doc.metadata["item_id"], doc.metadata["score"])
-            for doc in documents
-        ]
+        # Convert distance to similarity and filter by threshold
+        # Chroma returns cosine distance (1 - cosine_similarity), convert to similarity
+        # This matches the native vector implementation (database.py:639)
+        search_results = []
+        for doc, distance in results_with_scores:
+            similarity = 1.0 - distance  # Direct conversion (same as native vector)
+            if similarity >= search_request.min_similarity_score:
+                search_results.append((doc.metadata["item_id"], similarity))
+
         score_type = "similarity"
 
-    elif request.search_type == "hybrid-lc":
-        # LangChain Hybrid retrieval (BM25 + Vector with RRF)
+    elif search_request.search_type == "hybrid":
+        # Native Hybrid retrieval (Native BM25 + Native Vector with RRF)
         from retrieval.langchain_retrievers import HybridLangChainRetriever
 
         retriever = HybridLangChainRetriever(
-            top_k=request.top_k,
-            bm25_top_k=request.top_k * 2,        # Fetch 2x for better fusion
-            vector_top_k=request.top_k * 2,
+            top_k=search_request.top_k,
+            bm25_top_k=search_request.top_k * 2,        # Fetch 2x for better fusion
+            vector_top_k=search_request.top_k * 2,
             bm25_weight=0.3,                     # Reduced BM25 influence
             vector_weight=0.7,                   # Favor vector search
             rrf_c=15,                            # Lower c = more rank sensitivity
-            category_filter=request.category_filter,
-            min_relevance_score=request.min_relevance_score,
-            min_similarity_score=request.min_similarity_score,
+            category_filter=search_request.category_filter,
+            min_relevance_score=search_request.min_relevance_score,
+            min_similarity_score=search_request.min_similarity_score,
             embedding_model=DEFAULT_EMBEDDING_MODEL
         )
 
-        documents = retriever.invoke(request.query)
+        documents = retriever.invoke(search_request.query)
 
         # Convert Documents to search_results format
         search_results = [
@@ -501,17 +610,54 @@ async def search_collection(request: SearchRequest):
         ]
         score_type = "hybrid_rrf"
 
-    elif request.search_type == "vector":
+    elif search_request.search_type == "hybrid-lc":
+        # TRUE LangChain Hybrid retrieval (rank-bm25 + Chroma with RRF)
+        from retrieval.langchain_native_retrievers import TrueLangChainHybridRetriever
+
+        # Get LangChain retrievers for current database
+        bm25_retriever, chroma_manager = get_current_langchain_retrievers(request)
+
+        if not bm25_retriever or not chroma_manager:
+            raise HTTPException(
+                status_code=503,
+                detail="LangChain retrievers not initialized"
+            )
+
+        # Create hybrid retriever
+        retriever = TrueLangChainHybridRetriever(
+            bm25_retriever=bm25_retriever,
+            chroma_manager=chroma_manager,
+            top_k=search_request.top_k,
+            bm25_top_k=search_request.top_k * 2,
+            vector_top_k=search_request.top_k * 2,
+            bm25_weight=0.3,
+            vector_weight=0.7,
+            rrf_c=15,
+            category_filter=search_request.category_filter,
+            min_similarity_score=search_request.min_similarity_score
+        )
+
+        # Execute retrieval
+        documents = retriever.invoke(search_request.query)
+
+        # Convert Documents to search_results format
+        search_results = [
+            (doc.metadata["item_id"], doc.metadata.get("rrf_score", doc.metadata.get("score", 0)))
+            for doc in documents
+        ]
+        score_type = "hybrid_rrf"
+
+    elif search_request.search_type == "vector":
         # Vector search
         # Generate query embedding
-        query_embedding = generate_query_embedding(request.query)
+        query_embedding = generate_query_embedding(search_request.query)
 
         # Search using vector similarity
         search_results = vector_search_items(
             query_embedding=query_embedding,
-            top_k=request.top_k,
-            category_filter=request.category_filter,
-            min_similarity_score=request.min_similarity_score
+            top_k=search_request.top_k,
+            category_filter=search_request.category_filter,
+            min_similarity_score=search_request.min_similarity_score
         )
 
         score_type = "similarity"
@@ -519,10 +665,10 @@ async def search_collection(request: SearchRequest):
     else:  # BM25 (default)
         # Existing BM25 search
         search_results = search_items(
-            query=request.query,
-            top_k=request.top_k,
-            category_filter=request.category_filter,
-            min_relevance_score=request.min_relevance_score
+            query=search_request.query,
+            top_k=search_request.top_k,
+            category_filter=search_request.category_filter,
+            min_relevance_score=search_request.min_relevance_score
         )
 
         score_type = "bm25"
@@ -561,14 +707,14 @@ async def search_collection(request: SearchRequest):
     citations = None
     confidence = None
 
-    if request.include_answer and results:
+    if search_request.include_answer and results:
         answer_start = time.time()
 
         from retrieval.answer_generator import generate_answer
         answer_data = generate_answer(
-            query=request.query,
+            query=search_request.query,
             results=[r.model_dump() for r in results],
-            model=request.answer_model
+            model=search_request.answer_model
         )
 
         answer = answer_data["answer"]
@@ -577,8 +723,8 @@ async def search_collection(request: SearchRequest):
         answer_time = (time.time() - answer_start) * 1000
 
     return SearchResponse(
-        query=request.query,
-        search_type=request.search_type,
+        query=search_request.query,
+        search_type=search_request.search_type,
         results=results,
         total_results=len(results),
         answer=answer,
@@ -595,88 +741,69 @@ async def get_search_config():
     Get current search configuration for all search types.
 
     Returns the actual parameters being used for each search method,
-    including field weighting, RRF parameters, embedding models, etc.
+    including content fields, RRF parameters, embedding models, etc.
+
+    IMPORTANT: This endpoint queries the actual runtime configuration from
+    the data stores, not hardcoded values. This ensures evaluation reports
+    accurately reflect what distance metrics and parameters are actually in use.
     """
+    # Get actual distance metric from Chroma collections
+    chroma_distance_metric_prod = "unknown"
+    chroma_distance_metric_golden = "unknown"
+
+    if prod_chroma_manager:
+        chroma_distance_metric_prod = prod_chroma_manager.get_distance_metric()
+    if golden_chroma_manager:
+        chroma_distance_metric_golden = golden_chroma_manager.get_distance_metric()
+
+    # For multi-database setups, report both if they differ
+    chroma_distance_metric = chroma_distance_metric_prod
+    if chroma_distance_metric_prod != chroma_distance_metric_golden:
+        chroma_distance_metric = f"prod={chroma_distance_metric_prod}, golden={chroma_distance_metric_golden}"
+
+    # Convert Chroma distance metric to human-readable form
+    distance_metric_map = {
+        "cosine": "Cosine similarity",
+        "l2": "L2 (Euclidean) distance",
+        "ip": "Inner product",
+        "unknown": "Unknown (Chroma not initialized)"
+    }
+    chroma_algorithm = distance_metric_map.get(chroma_distance_metric, chroma_distance_metric)
+
     config = {
         "bm25": {
             "algorithm": "SQLite FTS5 BM25",
             "implementation": "Native",
-            "field_weighting": {
-                "summary": "3x",
-                "headline": "2x",
-                "extracted_text": "2x",
-                "category": "1.5x",
-                "subcategories": "1.5x",
-                "key_interest": "1.5x",
-                "themes": "1x",
-                "objects": "1x",
-                "location_tags": "1x",
-                "emotions": "0.5x",
-                "vibes": "0.5x",
-                "hashtags": "0.5x"
-            }
+            "content_field": "Unified content field (no field weighting)",
+            "tokenizer": "unicode61 with diacritics removal"
         },
         "vector": {
-            "algorithm": "Cosine similarity",
+            "algorithm": "Cosine similarity",  # Defined in database.py:497
             "implementation": "Native sqlite-vec",
             "embedding_model": DEFAULT_EMBEDDING_MODEL,
-            "dimensions": 512 if "lite" in DEFAULT_EMBEDDING_MODEL else 1024,
-            "field_weighting": {
-                "summary": "3x",
-                "headline": "2x",
-                "extracted_text": "2x",
-                "category": "1.5x",
-                "subcategories": "1.5x",
-                "key_interest": "1.5x",
-                "themes": "1x",
-                "objects": "1x",
-                "location_tags": "1x",
-                "emotions": "0.5x",
-                "vibes": "0.5x",
-                "hashtags": "0.5x"
-            }
+            "dimensions": get_embedding_dimensions(DEFAULT_EMBEDDING_MODEL),
+            "content_field": "Unified content field (no field weighting)",
+            "distance_metric": "cosine"  # sqlite-vec configuration
         },
         "bm25-lc": {
-            "algorithm": "SQLite FTS5 BM25",
-            "implementation": "LangChain wrapper",
-            "field_weighting": {
-                "summary": "3x",
-                "headline": "2x",
-                "extracted_text": "2x",
-                "category": "1.5x",
-                "subcategories": "1.5x",
-                "key_interest": "1.5x",
-                "themes": "1x",
-                "objects": "1x",
-                "location_tags": "1x",
-                "emotions": "0.5x",
-                "vibes": "0.5x",
-                "hashtags": "0.5x"
-            }
+            "algorithm": "BM25 (rank-bm25 library)",
+            "implementation": "TRUE LangChain BM25Retriever",
+            "content_field": "Unified content field (no field weighting)",
+            "in_memory": True,
+            "library": "rank-bm25"
         },
         "vector-lc": {
-            "algorithm": "Cosine similarity",
-            "implementation": "LangChain wrapper",
-            "embedding_model": DEFAULT_EMBEDDING_MODEL,
-            "dimensions": 512 if "lite" in DEFAULT_EMBEDDING_MODEL else 1024,
-            "field_weighting": {
-                "summary": "3x",
-                "headline": "2x",
-                "extracted_text": "2x",
-                "category": "1.5x",
-                "subcategories": "1.5x",
-                "key_interest": "1.5x",
-                "themes": "1x",
-                "objects": "1x",
-                "location_tags": "1x",
-                "emotions": "0.5x",
-                "vibes": "0.5x",
-                "hashtags": "0.5x"
-            }
+            "algorithm": chroma_algorithm,  # ACTUAL distance metric from Chroma
+            "implementation": "TRUE LangChain Chroma vector store",
+            "embedding_model": LANGCHAIN_EMBEDDING_MODEL,
+            "dimensions": 1024,
+            "content_field": "Unified content field (no field weighting)",
+            "vector_store": "Chroma",
+            "distance_metric": chroma_distance_metric  # ACTUAL metric from collection metadata
         },
-        "hybrid-lc": {
-            "algorithm": "RRF Ensemble (BM25 + Vector)",
-            "implementation": "LangChain EnsembleRetriever",
+        "hybrid": {
+            "algorithm": "RRF Ensemble (Native BM25 + Native Vector)",
+            "implementation": "Native implementations with LangChain EnsembleRetriever",
             "rrf_constant_c": 15,
             "weights": {
                 "bm25": 0.3,
@@ -685,7 +812,28 @@ async def get_search_config():
             "fetch_multiplier": "2x top_k from each retriever",
             "embedding_model": DEFAULT_EMBEDDING_MODEL,
             "deduplication": "by item_id",
-            "field_weighting": "Inherits from BM25 and Vector (see above)"
+            "content_field": "Unified content field (no field weighting)",
+            "components": {
+                "bm25": "SQLite FTS5 (native)",
+                "vector": "sqlite-vec (native, cosine)"
+            }
+        },
+        "hybrid-lc": {
+            "algorithm": f"RRF Ensemble (rank-bm25 + Chroma {chroma_distance_metric})",
+            "implementation": "TRUE LangChain components with EnsembleRetriever",
+            "rrf_constant_c": 15,
+            "weights": {
+                "bm25": 0.3,
+                "vector": 0.7
+            },
+            "fetch_multiplier": "2x top_k from each retriever",
+            "embedding_model": LANGCHAIN_EMBEDDING_MODEL,
+            "deduplication": "by item_id",
+            "content_field": "Unified content field (no field weighting)",
+            "components": {
+                "bm25": "rank-bm25 library (LangChain BM25Retriever)",
+                "vector": f"Chroma vector store ({chroma_distance_metric}, LangChain VoyageAIEmbeddings)"
+            }
         }
     }
 
@@ -741,6 +889,113 @@ async def vector_index_status():
     """Get vector index statistics."""
     from database import get_vector_index_status
     return get_vector_index_status()
+
+
+# LangChain Index Management Endpoints
+
+@app.post("/langchain-index/rebuild-bm25")
+async def rebuild_langchain_bm25(database: str = Query("prod", description="Database type: prod or golden")):
+    """Rebuild LangChain BM25 index for specified database."""
+    global prod_langchain_bm25, golden_langchain_bm25
+
+    try:
+        if database == "golden":
+            golden_langchain_bm25 = LangChainNativeBM25Retriever(
+                database_path=GOLDEN_DATABASE_PATH,
+                preload=True
+            )
+            return {
+                "status": "success",
+                "database": "golden",
+                "type": "bm25_langchain",
+                "message": "BM25 index rebuilt successfully"
+            }
+        else:
+            prod_langchain_bm25 = LangChainNativeBM25Retriever(
+                database_path=PROD_DATABASE_PATH,
+                preload=True
+            )
+            return {
+                "status": "success",
+                "database": "prod",
+                "type": "bm25_langchain",
+                "message": "BM25 index rebuilt successfully"
+            }
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to rebuild BM25 index: {str(e)}"
+        )
+
+
+@app.post("/langchain-index/rebuild-chroma")
+async def rebuild_chroma_index(database: str = Query("prod", description="Database type: prod or golden")):
+    """Rebuild Chroma vector index for specified database."""
+    global prod_chroma_manager, golden_chroma_manager
+
+    try:
+        if database == "golden":
+            chroma_config = get_chroma_config("golden")
+            golden_chroma_manager = ChromaVectorStoreManager(
+                database_path=GOLDEN_DATABASE_PATH,
+                persist_directory=chroma_config["persist_directory"],
+                collection_name=chroma_config["collection_name"],
+                embedding_model=LANGCHAIN_EMBEDDING_MODEL
+            )
+            golden_chroma_manager.delete_collection()
+            num_docs = golden_chroma_manager.build_index(batch_size=128)
+            return {
+                "status": "success",
+                "database": "golden",
+                "num_documents": num_docs,
+                "message": "Chroma index rebuilt successfully"
+            }
+        else:
+            chroma_config = get_chroma_config("prod")
+            prod_chroma_manager = ChromaVectorStoreManager(
+                database_path=PROD_DATABASE_PATH,
+                persist_directory=chroma_config["persist_directory"],
+                collection_name=chroma_config["collection_name"],
+                embedding_model=LANGCHAIN_EMBEDDING_MODEL
+            )
+            prod_chroma_manager.delete_collection()
+            num_docs = prod_chroma_manager.build_index(batch_size=128)
+            return {
+                "status": "success",
+                "database": "prod",
+                "num_documents": num_docs,
+                "message": "Chroma index rebuilt successfully"
+            }
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to rebuild Chroma index: {str(e)}"
+        )
+
+
+@app.get("/langchain-index/status")
+async def langchain_index_status():
+    """Get status of LangChain indexes for both databases."""
+    return {
+        "prod": {
+            "bm25": {
+                "status": "loaded" if prod_langchain_bm25 else "not_loaded"
+            },
+            "chroma": {
+                "status": "loaded" if prod_chroma_manager else "not_loaded",
+                "stats": prod_chroma_manager.get_collection_stats() if prod_chroma_manager else None
+            }
+        },
+        "golden": {
+            "bm25": {
+                "status": "loaded" if golden_langchain_bm25 else "not_loaded"
+            },
+            "chroma": {
+                "status": "loaded" if golden_chroma_manager else "not_loaded",
+                "stats": golden_chroma_manager.get_collection_stats() if golden_chroma_manager else None
+            }
+        }
+    }
 
 
 # Image Serving
