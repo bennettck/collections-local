@@ -436,7 +436,72 @@ async def search_collection(request: SearchRequest):
     retrieval_start = time.time()
 
     # Route to appropriate search method
-    if request.search_type == "vector":
+    if request.search_type == "bm25-lc":
+        # LangChain BM25 retrieval
+        from retrieval.langchain_retrievers import BM25LangChainRetriever
+
+        retriever = BM25LangChainRetriever(
+            top_k=request.top_k,
+            category_filter=request.category_filter,
+            min_relevance_score=request.min_relevance_score
+        )
+
+        documents = retriever.invoke(request.query)
+
+        # Convert Documents to search_results format: List[(item_id, score)]
+        search_results = [
+            (doc.metadata["item_id"], doc.metadata["score"])
+            for doc in documents
+        ]
+        score_type = "bm25"
+
+    elif request.search_type == "vector-lc":
+        # LangChain Vector retrieval
+        from retrieval.langchain_retrievers import VectorLangChainRetriever
+
+        retriever = VectorLangChainRetriever(
+            top_k=request.top_k,
+            category_filter=request.category_filter,
+            min_similarity_score=request.min_similarity_score,
+            embedding_model=DEFAULT_EMBEDDING_MODEL
+        )
+
+        documents = retriever.invoke(request.query)
+
+        # Convert Documents to search_results format: List[(item_id, score)]
+        search_results = [
+            (doc.metadata["item_id"], doc.metadata["score"])
+            for doc in documents
+        ]
+        score_type = "similarity"
+
+    elif request.search_type == "hybrid-lc":
+        # LangChain Hybrid retrieval (BM25 + Vector with RRF)
+        from retrieval.langchain_retrievers import HybridLangChainRetriever
+
+        retriever = HybridLangChainRetriever(
+            top_k=request.top_k,
+            bm25_top_k=request.top_k * 2,        # Fetch 2x for better fusion
+            vector_top_k=request.top_k * 2,
+            bm25_weight=0.3,                     # Reduced BM25 influence
+            vector_weight=0.7,                   # Favor vector search
+            rrf_c=15,                            # Lower c = more rank sensitivity
+            category_filter=request.category_filter,
+            min_relevance_score=request.min_relevance_score,
+            min_similarity_score=request.min_similarity_score,
+            embedding_model=DEFAULT_EMBEDDING_MODEL
+        )
+
+        documents = retriever.invoke(request.query)
+
+        # Convert Documents to search_results format
+        search_results = [
+            (doc.metadata["item_id"], doc.metadata.get("rrf_score", doc.metadata.get("score", 0)))
+            for doc in documents
+        ]
+        score_type = "hybrid_rrf"
+
+    elif request.search_type == "vector":
         # Vector search
         # Generate query embedding
         query_embedding = generate_query_embedding(request.query)
@@ -522,6 +587,109 @@ async def search_collection(request: SearchRequest):
         retrieval_time_ms=retrieval_time,
         answer_time_ms=answer_time
     )
+
+
+@app.get("/search/config")
+async def get_search_config():
+    """
+    Get current search configuration for all search types.
+
+    Returns the actual parameters being used for each search method,
+    including field weighting, RRF parameters, embedding models, etc.
+    """
+    config = {
+        "bm25": {
+            "algorithm": "SQLite FTS5 BM25",
+            "implementation": "Native",
+            "field_weighting": {
+                "summary": "3x",
+                "headline": "2x",
+                "extracted_text": "2x",
+                "category": "1.5x",
+                "subcategories": "1.5x",
+                "key_interest": "1.5x",
+                "themes": "1x",
+                "objects": "1x",
+                "location_tags": "1x",
+                "emotions": "0.5x",
+                "vibes": "0.5x",
+                "hashtags": "0.5x"
+            }
+        },
+        "vector": {
+            "algorithm": "Cosine similarity",
+            "implementation": "Native sqlite-vec",
+            "embedding_model": DEFAULT_EMBEDDING_MODEL,
+            "dimensions": 512 if "lite" in DEFAULT_EMBEDDING_MODEL else 1024,
+            "field_weighting": {
+                "summary": "3x",
+                "headline": "2x",
+                "extracted_text": "2x",
+                "category": "1.5x",
+                "subcategories": "1.5x",
+                "key_interest": "1.5x",
+                "themes": "1x",
+                "objects": "1x",
+                "location_tags": "1x",
+                "emotions": "0.5x",
+                "vibes": "0.5x",
+                "hashtags": "0.5x"
+            }
+        },
+        "bm25-lc": {
+            "algorithm": "SQLite FTS5 BM25",
+            "implementation": "LangChain wrapper",
+            "field_weighting": {
+                "summary": "3x",
+                "headline": "2x",
+                "extracted_text": "2x",
+                "category": "1.5x",
+                "subcategories": "1.5x",
+                "key_interest": "1.5x",
+                "themes": "1x",
+                "objects": "1x",
+                "location_tags": "1x",
+                "emotions": "0.5x",
+                "vibes": "0.5x",
+                "hashtags": "0.5x"
+            }
+        },
+        "vector-lc": {
+            "algorithm": "Cosine similarity",
+            "implementation": "LangChain wrapper",
+            "embedding_model": DEFAULT_EMBEDDING_MODEL,
+            "dimensions": 512 if "lite" in DEFAULT_EMBEDDING_MODEL else 1024,
+            "field_weighting": {
+                "summary": "3x",
+                "headline": "2x",
+                "extracted_text": "2x",
+                "category": "1.5x",
+                "subcategories": "1.5x",
+                "key_interest": "1.5x",
+                "themes": "1x",
+                "objects": "1x",
+                "location_tags": "1x",
+                "emotions": "0.5x",
+                "vibes": "0.5x",
+                "hashtags": "0.5x"
+            }
+        },
+        "hybrid-lc": {
+            "algorithm": "RRF Ensemble (BM25 + Vector)",
+            "implementation": "LangChain EnsembleRetriever",
+            "rrf_constant_c": 15,
+            "weights": {
+                "bm25": 0.3,
+                "vector": 0.7
+            },
+            "fetch_multiplier": "2x top_k from each retriever",
+            "embedding_model": DEFAULT_EMBEDDING_MODEL,
+            "deduplication": "by item_id",
+            "field_weighting": "Inherits from BM25 and Vector (see above)"
+        }
+    }
+
+    return config
 
 
 # Index Management Endpoints

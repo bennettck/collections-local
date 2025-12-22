@@ -453,7 +453,7 @@ class MultiSearchRetrievalEvaluator:
     """Coordinates evaluation across multiple search types."""
 
     DEFAULT_PORTS = [8000, 8001, 8080, 3000]
-    VALID_SEARCH_TYPES = ["bm25", "vector"]
+    VALID_SEARCH_TYPES = ["bm25", "vector", "bm25-lc", "vector-lc", "hybrid-lc"]
 
     def __init__(self, args):
         self.args = args
@@ -467,6 +467,9 @@ class MultiSearchRetrievalEvaluator:
 
         # Evaluators for each search type
         self.evaluators: Dict[str, SearchTypeEvaluator] = {}
+
+        # Search configuration (fetched from API)
+        self.search_config = {}
 
     def log(self, message: str, force: bool = False):
         """Print message if verbose mode is enabled or force is True."""
@@ -598,6 +601,20 @@ class MultiSearchRetrievalEvaluator:
             self.dataset = json.load(f)
 
         self.log(f"Loaded dataset: {len(self.dataset['queries'])} queries", force=True)
+
+    def fetch_search_config(self):
+        """Fetch runtime search configuration from the API."""
+        try:
+            headers = self._get_request_headers()
+            url = f"{self.base_url}/search/config"
+            response = requests.get(url, headers=headers, timeout=10)
+            response.raise_for_status()
+            self.search_config = response.json()
+            self.log(f"✓ Fetched search configuration for {len(self.search_config)} search type(s)", force=True)
+        except requests.exceptions.RequestException as e:
+            self.log(f"⚠ Warning: Could not fetch search configuration: {e}", force=True)
+            self.log(f"  Continuing without runtime configuration details", force=True)
+            self.search_config = {}
 
     def run_evaluation(self):
         """Run evaluation on all queries across all search types."""
@@ -936,6 +953,7 @@ class MultiSearchRetrievalEvaluator:
                 "target_item_count": self.args.expected_items,
                 "actual_item_count": actual_item_count,
             },
+            "search_configuration": self.search_config,  # Runtime configuration
             "results_by_search_type": results_by_search_type,
             "comparison": comparison,
         }
@@ -1178,6 +1196,164 @@ class MultiSearchRetrievalEvaluator:
 
         return "\n".join(lines)
 
+    def _generate_detailed_query_results(self, results_by_search_type: Dict) -> List[str]:
+        """Generate detailed per-query comparison across search types."""
+        lines = [
+            "## Detailed Query Results",
+            "",
+            "Per-query breakdown comparing all search types. Shows top-3 results, metrics, and status for each search method.",
+            "",
+        ]
+
+        # Get all queries from first search type
+        first_search_type = self.search_types[0]
+        all_queries = results_by_search_type[first_search_type]["query_results"]
+
+        for query_result in all_queries:
+            query_id = query_result["query_id"]
+            query_text = query_result["query_text"]
+            query_type = query_result["query_type"]
+
+            lines.extend([
+                f"### Query: {query_id} - \"{query_text}\"",
+                f"- **Type**: {query_type}",
+            ])
+
+            # Show expected items (from first search type as reference)
+            expected_items = query_result.get("expected_items", [])
+            if expected_items:
+                expected_relevance = query_result.get("expected_relevance", {})
+                expected_str = ", ".join([
+                    f"{item_id[:8]}... ({expected_relevance.get(item_id, 'unknown')})"
+                    for item_id in expected_items[:3]
+                ])
+                if len(expected_items) > 3:
+                    expected_str += f" (+{len(expected_items) - 3} more)"
+                lines.append(f"- **Expected**: {expected_str}")
+
+            lines.append("")
+
+            # Show results for each search type
+            for search_type in self.search_types:
+                # Find corresponding query result for this search type
+                st_results = results_by_search_type[search_type]["query_results"]
+                st_query = next((r for r in st_results if r["query_id"] == query_id), None)
+
+                if not st_query:
+                    continue
+
+                status = st_query.get("status", "unknown")
+                status_symbol = self._get_status_symbol(status)
+
+                lines.append(f"**{search_type}** {status_symbol}:")
+
+                # Show error if present
+                if "error" in st_query:
+                    lines.append(f"  - Error: {st_query['error']}")
+                    lines.append("")
+                    continue
+
+                # Top-3 results
+                retrieved_metadata = st_query.get("retrieved_metadata", [])
+                expected_set = set(expected_items)
+
+                if retrieved_metadata:
+                    lines.append("  - Top-3 Results:")
+                    for i, item in enumerate(retrieved_metadata[:3], 1):
+                        item_id = item["item_id"]
+                        score = item["score"]
+                        category = item.get("category", "Unknown")
+                        headline = item.get("headline", "No headline")[:40]
+
+                        # Check if expected
+                        is_expected = "✓" if item_id in expected_set else ""
+                        relevance = query_result.get("expected_relevance", {}).get(item_id, "")
+                        expected_str = f" [Expected: {relevance}]" if is_expected else ""
+
+                        lines.append(f"    {i}. {item_id[:8]}... (score: {score:.2f}) {is_expected}{expected_str} - {category}: \"{headline}...\"")
+
+                    if len(retrieved_metadata) > 3:
+                        lines.append(f"    ... (+{len(retrieved_metadata) - 3} more)")
+                else:
+                    lines.append("  - No results retrieved")
+
+                # Metrics
+                metrics = st_query.get("metrics", {})
+                p5 = metrics.get("precision", {}).get("@5", 0)
+                r5 = metrics.get("recall", {}).get("@5", 0)
+                rr = metrics.get("reciprocal_rank", 0)
+                lines.append(f"  - Metrics: P@5: {p5:.2f} | R@5: {r5:.2f} | RR: {rr:.2f}")
+
+                # Retrieval time
+                time_ms = st_query.get("retrieval_time_ms", 0)
+                lines.append(f"  - Time: {time_ms:.1f}ms")
+                lines.append("")
+
+            lines.append("")  # Extra spacing between queries
+
+        return lines
+
+    def _format_config_table(self) -> List[str]:
+        """Format search configuration as a markdown table (Option 2 format)."""
+        if not self.search_config:
+            return []
+
+        lines = [
+            "## Search Configuration",
+            "",
+            "Runtime configuration captured at evaluation time:",
+            "",
+        ]
+
+        # Create table for each configured search type
+        for search_type in self.search_types:
+            config = self.search_config.get(search_type, {})
+            if not config:
+                continue
+
+            lines.extend([
+                f"### {search_type}",
+                "",
+                "| Parameter | Value |",
+                "|-----------|-------|",
+            ])
+
+            # Algorithm and implementation
+            if "algorithm" in config:
+                lines.append(f"| **Algorithm** | {config['algorithm']} |")
+            if "implementation" in config:
+                lines.append(f"| **Implementation** | {config['implementation']} |")
+            if "embedding_model" in config:
+                lines.append(f"| **Embedding Model** | {config['embedding_model']} |")
+
+            # RRF-specific parameters
+            if "rrf_constant_c" in config:
+                lines.append(f"| **RRF Constant (c)** | {config['rrf_constant_c']} |")
+            if "weights" in config:
+                weights = config["weights"]
+                if isinstance(weights, dict):
+                    weight_str = ", ".join([f"{k}={v}" for k, v in weights.items()])
+                    lines.append(f"| **Weights** | {weight_str} |")
+            if "fetch_multiplier" in config:
+                lines.append(f"| **Fetch Strategy** | {config['fetch_multiplier']} |")
+            if "deduplication" in config:
+                lines.append(f"| **Deduplication** | {config['deduplication']} |")
+
+            # Field weighting
+            if "field_weighting" in config:
+                field_weights = config["field_weighting"]
+                if isinstance(field_weights, dict):
+                    lines.append(f"| **Field Weighting** | |")
+                    for field, weight in field_weights.items():
+                        lines.append(f"| &nbsp;&nbsp;&nbsp;• {field} | {weight} |")
+                elif isinstance(field_weights, str):
+                    lines.append(f"| **Field Weighting** | {field_weights} |")
+
+            lines.extend(["", ""])
+
+        lines.extend(["---", ""])
+        return lines
+
     def _generate_multi_markdown_report(
         self, run_id: str, results_by_search_type: Dict, comparison: Dict,
         actual_item_count: int, item_count_valid: bool
@@ -1199,6 +1375,11 @@ class MultiSearchRetrievalEvaluator:
             "---",
             "",
         ]
+
+        # Add search configuration section if available
+        config_lines = self._format_config_table()
+        if config_lines:
+            lines.extend(config_lines)
 
         # Performance comparison
         if "performance" in comparison and comparison["performance"]:
@@ -1420,6 +1601,13 @@ class MultiSearchRetrievalEvaluator:
 
             lines.extend(["", ""])
 
+        # Detailed query results (if not skipped)
+        if not self.args.skip_details:
+            detailed_lines = self._generate_detailed_query_results(results_by_search_type)
+            if detailed_lines:
+                lines.extend(["---", ""])
+                lines.extend(detailed_lines)
+
         return "\n".join(lines)
 
     def run(self):
@@ -1451,6 +1639,9 @@ class MultiSearchRetrievalEvaluator:
 
         # Load dataset
         self.load_dataset()
+
+        # Fetch search configuration
+        self.fetch_search_config()
 
         # Run evaluation
         total_time = self.run_evaluation()
@@ -1530,6 +1721,12 @@ def main():
         dest="parallel",
         action="store_false",
         help="Disable parallel execution (run search types sequentially)"
+    )
+    parser.add_argument(
+        "--skip-details",
+        action="store_true",
+        default=False,
+        help="Skip detailed per-query results in reports (default: include details)"
     )
 
     args = parser.parse_args()

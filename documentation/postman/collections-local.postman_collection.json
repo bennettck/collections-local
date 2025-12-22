@@ -2,7 +2,7 @@
   "info": {
     "_postman_id": "collections-local-api",
     "name": "Collections Local API",
-    "description": "API collection for the Collections App Local - a minimal local version that analyzes and categorizes screenshot images using AI.\n\n## Overview\n\nThis API allows you to:\n- Upload and manage image items\n- Trigger AI-powered analysis on images\n- Retrieve categorization, summaries, and extracted text\n- Access full LLM analysis response via raw_response field\n- Search collection using BM25 keyword search or vector semantic search\n- Generate AI-powered answers to questions about your collection\n\n## Search Capabilities\n\n- **BM25 Search**: Fast keyword-based full-text search using SQLite FTS5\n- **Vector Search**: Semantic similarity search using VoyageAI embeddings (voyage-3.5, 1024 dimensions)\n- Both search types support category filtering, Q&A generation, and answer citations\n\n## Database Routing\n\nThe API supports two databases via host-based routing:\n\n- **Production Database** (default): Use `{{base_url}}` (`http://localhost:8000`)\n- **Golden Database** (evaluation subset): Use `{{golden_base_url}}` (`http://golden.localhost:8000`) or append `?_db=golden` to any endpoint\n\nAll responses include an `X-Database-Context` header indicating which database was used.\n\nFor complete details, see `documentation/database-routing.md`.\n\n## Authentication\n\nNo authentication required for local development.\n\n## Base URL\n\n`http://localhost:8000`",
+    "description": "API collection for the Collections App Local - a minimal local version that analyzes and categorizes screenshot images using AI.\n\n## Overview\n\nThis API allows you to:\n- Upload and manage image items\n- Trigger AI-powered analysis on images\n- Retrieve categorization, summaries, and extracted text\n- Access full LLM analysis response via raw_response field\n- Search collection using BM25 keyword search, vector semantic search, or hybrid RRF fusion\n- Use LangChain-compatible retrievers for evaluation and integration\n- Generate AI-powered answers to questions about your collection\n\n## Search Capabilities\n\n- **BM25 Search** (`bm25`): Fast keyword-based full-text search using SQLite FTS5\n- **Vector Search** (`vector`): Semantic similarity search using VoyageAI embeddings (voyage-3.5-lite, 512 dimensions)\n- **LangChain BM25** (`bm25-lc`): LangChain-compatible BM25 retriever wrapping native FTS5 search\n- **LangChain Vector** (`vector-lc`): LangChain-compatible vector retriever wrapping native sqlite-vec search\n- **Hybrid Search** (`hybrid-lc`): LangChain EnsembleRetriever combining BM25 + Vector with Reciprocal Rank Fusion (RRF) - **recommended for production**\n- All search types support category filtering, Q&A generation, and answer citations\n\n**Note:** The `-lc` variants conform to LangChain's BaseRetriever interface, making them compatible with LangChain evaluation tools. The `hybrid-lc` type combines both keyword and semantic search for optimal results."\n\n## Database Routing\n\nThe API supports two databases via host-based routing:\n\n- **Production Database** (default): Use `{{base_url}}` (`http://localhost:8000`)\n- **Golden Database** (evaluation subset): Use `{{golden_base_url}}` (`http://golden.localhost:8000`) or append `?_db=golden` to any endpoint\n\nAll responses include an `X-Database-Context` header indicating which database was used.\n\nFor complete details, see `documentation/database-routing.md`.\n\n## Authentication\n\nNo authentication required for local development.\n\n## Base URL\n\n`http://localhost:8000`",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -366,7 +366,7 @@
                 "search"
               ]
             },
-            "description": "## Search Collection (BM25)\n\nNatural language search and Q&A over the collection using BM25 keyword-based full-text search. For semantic search, use `search_type: \"vector\"`.\n\n### Request Body\n\n```json\n{\n  \"query\": \"restaurants in Tokyo\",\n  \"search_type\": \"bm25\",\n  \"top_k\": 5,\n  \"category_filter\": null,\n  \"min_relevance_score\": -1.0,\n  \"min_similarity_score\": 0.0,\n  \"include_answer\": true,\n  \"answer_model\": \"claude-sonnet-4-5\"\n}\n```\n\n| Field | Type | Default | Description |\n|-------|------|---------|-------------|\n| `query` | string | - | Search query or question |\n| `search_type` | string | `\"bm25\"` | Search method: `\"bm25\"` (keyword) or `\"vector\"` (semantic) |\n| `top_k` | integer | `5` | Number of results to return |\n| `category_filter` | string/null | `null` | Filter by category |\n| `min_relevance_score` | float | `-1.0` | Minimum BM25 score (only for BM25 search) |\n| `min_similarity_score` | float | `0.0` | Minimum similarity score (only for vector search) |\n| `include_answer` | boolean | `false` | Generate AI answer to query |\n| `answer_model` | string | `\"claude-sonnet-4-5\"` | Model for answer generation |\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"query\": \"restaurants in Tokyo\",\n  \"results\": [\n    {\n      \"item_id\": \"uuid-string\",\n      \"rank\": 1,\n      \"score\": -2.5,\n      \"score_type\": \"bm25\",\n      \"category\": \"Food\",\n      \"headline\": \"Tofuya Ukai dining spot beneath Tokyo Tower\",\n      \"summary\": \"Beautiful restaurant beneath Tokyo Tower...\",\n      \"image_url\": \"/images/uuid.jpg\",\n      \"metadata\": { ... }\n    }\n  ],\n  \"total_results\": 3,\n  \"answer\": \"Based on your collection, here are some restaurants in Tokyo...\",\n  \"answer_confidence\": \"high\",\n  \"citations\": [1, 2],\n  \"retrieval_time_ms\": 15.2,\n  \"answer_time_ms\": 823.4\n}\n```\n\n### Score Interpretation\n\n| Search Type | Score Range | Interpretation |\n|-------------|-------------|----------------|\n| BM25 | Negative values (e.g., -2.5) | More negative = less relevant |\n| Vector | 0.0 to 1.0 | Higher = more similar (cosine similarity) |"
+            "description": "## Search Collection\n\nNatural language search and Q&A over the collection. Supports five search types:\n\n- **`bm25`**: Native BM25 keyword search (SQLite FTS5)\n- **`vector`**: Native vector semantic search (sqlite-vec)\n- **`bm25-lc`**: LangChain BM25 retriever (wraps native BM25)\n- **`vector-lc`**: LangChain vector retriever (wraps native vector)\n- **`hybrid-lc`**: LangChain hybrid retriever (combines BM25 + Vector with RRF) - **recommended**\n\n### Request Body\n\n```json\n{\n  \"query\": \"restaurants in Tokyo\",\n  \"search_type\": \"bm25\",\n  \"top_k\": 5,\n  \"category_filter\": null,\n  \"min_relevance_score\": -1.0,\n  \"min_similarity_score\": 0.0,\n  \"include_answer\": true,\n  \"answer_model\": \"claude-sonnet-4-5\"\n}\n```\n\n### Parameters\n\n| Field | Type | Default | Description |\n|-------|------|---------|-------------|\n| `query` | string | *required* | Search query or question |\n| `search_type` | string | `\"bm25\"` | Search method: `\"bm25\"`, `\"vector\"`, `\"bm25-lc\"`, `\"vector-lc\"`, or `\"hybrid-lc\"` |\n| `top_k` | integer | `10` | Number of results to return (1-50) |\n| `category_filter` | string/null | `null` | Filter by category |\n| `min_relevance_score` | float | `-1.0` | **BM25/BM25-LC only**: Minimum BM25 score threshold |\n| `min_similarity_score` | float | `0.0` | **Vector/Vector-LC only**: Minimum similarity score (0-1) |\n| `include_answer` | boolean | `true` | Generate AI answer to query |\n| `answer_model` | string | `null` | Model for answer generation (defaults to `claude-sonnet-4-5`) |\n\n### Search Type Values\n\n| Value | Description | Use Case |\n|-------|-------------|----------|\n| `bm25` | Native BM25 keyword search | Fast exact/keyword matching |\n| `vector` | Native vector semantic search | Semantic/conceptual queries |\n| `bm25-lc` | LangChain BM25 wrapper | Evaluation with LangChain tools |\n| `vector-lc` | LangChain vector wrapper | Evaluation with LangChain tools |\n| `hybrid-lc` | LangChain RRF ensemble (BM25+Vector) | Best overall results - recommended |\n\n**Note:** LangChain variants (`-lc`) conform to LangChain's BaseRetriever interface. The `hybrid-lc` type combines both keyword and semantic search for optimal results.\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"query\": \"restaurants in Tokyo\",\n  \"search_type\": \"bm25\",\n  \"results\": [\n    {\n      \"item_id\": \"uuid-string\",\n      \"rank\": 1,\n      \"score\": -2.5,\n      \"score_type\": \"bm25\",\n      \"category\": \"Food\",\n      \"headline\": \"Tofuya Ukai dining spot beneath Tokyo Tower\",\n      \"summary\": \"Beautiful restaurant beneath Tokyo Tower...\",\n      \"image_url\": \"/images/uuid.jpg\",\n      \"metadata\": { ... }\n    }\n  ],\n  \"total_results\": 3,\n  \"answer\": \"Based on your collection, here are some restaurants in Tokyo...\",\n  \"answer_confidence\": 0.85,\n  \"citations\": [\"1\", \"2\"],\n  \"retrieval_time_ms\": 15.2,\n  \"answer_time_ms\": 823.4\n}\n```\n\n### Score Interpretation\n\n| Score Type | Score Range | Interpretation |\n|------------|-------------|----------------|\n| `bm25` | Negative values (e.g., -2.5) | More negative = better match |\n| `similarity` | 0.0 to 1.0 | Higher = more similar |\n| `hybrid_rrf` | 0.0 to 1.0 | Reciprocal Rank Fusion score - higher = better combined ranking |"
           },
           "response": []
         },
@@ -450,9 +450,109 @@
             "description": "## Vector Search - with Category Filter\n\nCombine semantic search with category filtering to find relevant items within a specific category.\n\n### Request Body\n\n```json\n{\n  \"query\": \"delicious food and dining experiences\",\n  \"search_type\": \"vector\",\n  \"top_k\": 5,\n  \"category_filter\": \"Food\",\n  \"include_answer\": true\n}\n```\n\n| Field | Type | Description |\n|-------|------|-------------|\n| `category_filter` | string | Only search within this category |\n\n### Use Cases\n\n- Search for \"relaxing experience\" within \"Travel\" category\n- Find \"affordable options\" in \"Shopping\" category\n- Discover \"family-friendly\" items in \"Entertainment\" category\n\n### Response\n\nReturns only items in the specified category, ranked by semantic similarity to the query."
           },
           "response": []
+        },
+        {
+          "name": "LangChain BM25 Search",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"Tokyo restaurants\",\n  \"search_type\": \"bm25-lc\",\n  \"top_k\": 5,\n  \"include_answer\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/search",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "search"
+              ]
+            },
+            "description": "## LangChain BM25 Search\n\nLangChain-compatible BM25 retriever that wraps the native SQLite FTS5 search. Provides the same results as `search_type: \"bm25\"` but conforms to LangChain's BaseRetriever interface for evaluation and integration with LangChain tools.\n\n### Request Body\n\n```json\n{\n  \"query\": \"Tokyo restaurants\",\n  \"search_type\": \"bm25-lc\",\n  \"top_k\": 5,\n  \"include_answer\": true\n}\n```\n\n### Supported Parameters\n\n| Parameter | Type | Description |\n|-----------|------|-------------|\n| `search_type` | string | Must be `\"bm25-lc\"` |\n| `top_k` | integer | Number of results (1-50) |\n| `category_filter` | string | Filter by category |\n| `min_relevance_score` | float | BM25 score threshold |\n| `include_answer` | boolean | Generate AI answer |\n| `answer_model` | string | Model for answers |\n\n### Benefits\n\n- Compatible with LangChain evaluation frameworks\n- Same performance as native BM25 search\n- Returns LangChain Document objects internally\n- Supports all BM25 parameters (top_k, category_filter, min_relevance_score)"
+          },
+          "response": []
+        },
+        {
+          "name": "LangChain Vector Search",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"Japanese beauty products and perfume\",\n  \"search_type\": \"vector-lc\",\n  \"top_k\": 5,\n  \"min_similarity_score\": 0.6,\n  \"include_answer\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/search",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "search"
+              ]
+            },
+            "description": "## LangChain Vector Search\n\nLangChain-compatible vector retriever that wraps the native sqlite-vec search. Provides the same results as `search_type: \"vector\"` but conforms to LangChain's BaseRetriever interface for evaluation and integration with LangChain tools.\n\n### Request Body\n\n```json\n{\n  \"query\": \"Japanese beauty products and perfume\",\n  \"search_type\": \"vector-lc\",\n  \"top_k\": 5,\n  \"min_similarity_score\": 0.6,\n  \"include_answer\": true\n}\n```\n\n### Supported Parameters\n\n| Parameter | Type | Description |\n|-----------|------|-------------|  \n| `search_type` | string | Must be `\"vector-lc\"` |\n| `top_k` | integer | Number of results (1-50) |\n| `category_filter` | string | Filter by category |\n| `min_similarity_score` | float | Similarity threshold (0-1) |\n| `include_answer` | boolean | Generate AI answer |\n| `answer_model` | string | Model for answers |\n\n### Benefits\n\n- Compatible with LangChain evaluation frameworks\n- Same semantic search quality as native vector search\n- Returns LangChain Document objects internally\n- Supports all vector search parameters (top_k, category_filter, min_similarity_score)\n- Uses VoyageAI embeddings (voyage-3.5-lite, 1024 dimensions)"
+          },
+          "response": []
+        },
+        {
+          "name": "Hybrid Search (Recommended)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"authentic local food experiences\",\n  \"search_type\": \"hybrid-lc\",\n  \"top_k\": 10,\n  \"include_answer\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/search",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "search"
+              ]
+            },
+            "description": "## Hybrid Search with RRF (Recommended)\n\nLangChain EnsembleRetriever combining BM25 keyword search and Vector semantic search using Reciprocal Rank Fusion (RRF). Provides the best overall retrieval performance across different query types.\n\n### Request Body\n\n```json\n{\n  \"query\": \"authentic local food experiences\",\n  \"search_type\": \"hybrid-lc\",\n  \"top_k\": 10,\n  \"include_answer\": true\n}\n```\n\n### Configuration\n\n- **Algorithm**: RRF Ensemble (BM25 + Vector)\n- **BM25 Weight**: 0.3 (30%)\n- **Vector Weight**: 0.7 (70%)\n- **RRF Constant**: 15 (rank-sensitive fusion)\n- **Fetch Strategy**: 2x top_k from each retriever before fusion\n- **Embedding Model**: voyage-3.5-lite (512 dimensions)\n\n### Supported Parameters\n\n| Parameter | Type | Description |\n|-----------|------|-------------|\n| `search_type` | string | Must be `\"hybrid-lc\"` |\n| `top_k` | integer | Number of final results (1-50) |\n| `category_filter` | string | Filter by category |\n| `include_answer` | boolean | Generate AI answer |\n| `answer_model` | string | Model for answers |\n\n### Benefits\n\n- **Best overall performance**: Combines keyword precision with semantic understanding\n- **Handles diverse queries**: Works well for exact matches AND conceptual searches\n- **Optimized weights**: 30% BM25 + 70% Vector tuned for this dataset\n- **Rank-sensitive fusion**: RRF constant c=15 for better ranking quality\n- **LangChain compatible**: Conforms to BaseRetriever interface\n\n### Response\n\nReturns results with `score_type: \"hybrid_rrf\"` and RRF scores from 0.0 to 1.0 (higher = better).\n\n### When to Use\n\n- **Production use**: Recommended for all natural language queries\n- **Multi-faceted queries**: e.g., \"Tokyo restaurants with traditional vibes\"\n- **Unknown query types**: When you're not sure if keyword or semantic is better\n- **Best overall recall**: Achieves ~88% Recall@5 vs ~90% for pure vector"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Search Configuration",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/search/config",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "search",
+                "config"
+              ]
+            },
+            "description": "## Get Search Configuration\n\nGet the runtime search configuration for all search types, including algorithm details, field weighting, and RRF parameters.\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"bm25\": {\n    \"algorithm\": \"SQLite FTS5 BM25\",\n    \"implementation\": \"Native\",\n    \"field_weighting\": {\n      \"summary\": \"3x\",\n      \"headline\": \"2x\",\n      \"extracted_text\": \"2x\",\n      \"category\": \"1.5x\",\n      \"subcategories\": \"1.5x\",\n      \"key_interest\": \"1.5x\",\n      \"themes\": \"1x\",\n      \"objects\": \"1x\",\n      \"location_tags\": \"1x\",\n      \"emotions\": \"0.5x\",\n      \"vibes\": \"0.5x\",\n      \"hashtags\": \"0.5x\"\n    }\n  },\n  \"vector\": {\n    \"algorithm\": \"Cosine similarity\",\n    \"implementation\": \"Native sqlite-vec\",\n    \"embedding_model\": \"voyage-3.5-lite\",\n    \"dimensions\": 512,\n    \"field_weighting\": { ... }\n  },\n  \"hybrid-lc\": {\n    \"algorithm\": \"RRF Ensemble (BM25 + Vector)\",\n    \"implementation\": \"LangChain EnsembleRetriever\",\n    \"rrf_constant_c\": 15,\n    \"weights\": {\n      \"bm25\": 0.3,\n      \"vector\": 0.7\n    },\n    \"fetch_multiplier\": \"2x top_k from each retriever\",\n    \"embedding_model\": \"voyage-3.5-lite\",\n    \"deduplication\": \"by item_id\",\n    \"field_weighting\": \"Inherits from BM25 and Vector (see above)\"\n  }\n}\n```\n\n### Use Cases\n\n- Documenting evaluation methodology\n- Understanding search behavior and ranking\n- Debugging retrieval issues\n- Comparing configurations across environments\n- Validating runtime parameters match expectations"
+          },
+          "response": []
         }
       ],
-      "description": "Natural language search and Q&A endpoints supporting both BM25 keyword search and vector semantic search."
+      "description": "Natural language search and Q&A endpoints supporting BM25 keyword search, vector semantic search, hybrid RRF fusion (recommended), and LangChain-compatible retrievers."
     },
     {
       "name": "Index Management",
