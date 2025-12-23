@@ -453,7 +453,7 @@ class MultiSearchRetrievalEvaluator:
     """Coordinates evaluation across multiple search types."""
 
     DEFAULT_PORTS = [8000, 8001, 8080, 3000]
-    VALID_SEARCH_TYPES = ["bm25", "vector", "bm25-lc", "vector-lc", "hybrid", "hybrid-lc"]
+    VALID_SEARCH_TYPES = ["bm25-lc", "vector-lc", "hybrid-lc"]
 
     def __init__(self, args):
         self.args = args

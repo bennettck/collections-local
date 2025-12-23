@@ -69,11 +69,11 @@ class SearchRequest(BaseModel):
         description="Natural language search query",
         examples=["What restaurants are in Tokyo?", "Show me beauty products", "perfume"]
     )
-    search_type: Literal["bm25", "vector", "bm25-lc", "vector-lc", "hybrid", "hybrid-lc"] = Field(
-        "bm25",
-        description="Search type: 'bm25' for full-text search, 'vector' for semantic search, "
-                    "'bm25-lc' for LangChain BM25 retriever, 'vector-lc' for LangChain vector retriever, "
-                    "'hybrid' for native hybrid search with RRF, 'hybrid-lc' for LangChain hybrid with RRF"
+    search_type: Literal["bm25-lc", "vector-lc", "hybrid-lc"] = Field(
+        "bm25-lc",
+        description="Search type: 'bm25-lc' for LangChain BM25 full-text search, "
+                    "'vector-lc' for LangChain semantic search, "
+                    "'hybrid-lc' for LangChain hybrid search with RRF (Recommended)"
     )
     top_k: int = Field(
         10,
@@ -110,7 +110,7 @@ class SearchRequest(BaseModel):
             "examples": [
                 {
                     "query": "What restaurants are in Tokyo?",
-                    "search_type": "bm25",
+                    "search_type": "bm25-lc",
                     "top_k": 10,
                     "category_filter": None,
                     "min_relevance_score": -1.0,
@@ -120,7 +120,7 @@ class SearchRequest(BaseModel):
                 },
                 {
                     "query": "Japanese beauty products and perfume",
-                    "search_type": "vector",
+                    "search_type": "vector-lc",
                     "top_k": 5,
                     "category_filter": None,
                     "min_relevance_score": -1.0,
@@ -130,7 +130,7 @@ class SearchRequest(BaseModel):
                 },
                 {
                     "query": "traditional architecture",
-                    "search_type": "vector",
+                    "search_type": "hybrid-lc",
                     "top_k": 10,
                     "category_filter": "Travel",
                     "min_relevance_score": -1.0,
