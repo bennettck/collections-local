@@ -40,6 +40,7 @@ Build a minimal local version of the Collections App that analyzes and categoriz
 | Database | SQLite + sqlite3 | Item metadata storage |
 | File Storage | Local filesystem | Image storage |
 | LLM | Anthropic SDK (direct) | Image analysis |
+| Retrieval | LangChain | BM25, vector, and hybrid retrievers |
 | Observability | Langfuse | Prompt management + tracing |
 | Validation | Pydantic | Request/response models |
 

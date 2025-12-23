@@ -110,13 +110,13 @@ File: `data/eval/retrieval_evaluation_dataset.json`
       "query_text": "peaceful nature escapes",
       "query_type": "semantic",
       "expected_items_by_search_type": {
-        "bm25": [
+        "bm25-lc": [
           {
             "item_id": "f509d013-83c6-4e77-b71f-0afbd9999c09",
             "relevance": "high"
           }
         ],
-        "vector": [
+        "vector-lc": [
           {
             "item_id": "f509d013-83c6-4e77-b71f-0afbd9999c09",
             "relevance": "high"
@@ -301,7 +301,7 @@ Optional:
 
 Multi-Search Type Options:
   --search-types TYPES    Comma-separated search types to evaluate:
-                          'bm25', 'vector', or 'all' (default: all)
+                          'bm25-lc', 'vector-lc', 'hybrid-lc', or 'all' (default: all)
   --parallel              Run search types in parallel per query
                           for faster evaluation (default: enabled)
   --no-parallel           Disable parallel execution
@@ -327,18 +327,21 @@ python scripts/evaluate_retrieval.py --verbose
 
 # This will:
 # - Route to golden database via golden.localhost subdomain
-# - Evaluate both BM25 and vector search in parallel
+# - Evaluate both BM25-LC and vector-LC search in parallel
 # - Generate comparison reports
 ```
 
 #### 2. Evaluate Single Search Type
 
 ```bash
-# Evaluate BM25 only
-python scripts/evaluate_retrieval.py --search-types bm25
+# Evaluate BM25-LC only
+python scripts/evaluate_retrieval.py --search-types bm25-lc
 
-# Evaluate vector search only
-python scripts/evaluate_retrieval.py --search-types vector
+# Evaluate vector-LC search only
+python scripts/evaluate_retrieval.py --search-types vector-lc
+
+# Evaluate hybrid-LC search only
+python scripts/evaluate_retrieval.py --search-types hybrid-lc
 ```
 
 #### 3. Sequential vs Parallel Execution
@@ -410,7 +413,7 @@ Each evaluation run generates two timestamped files:
 **Run ID**: eval_20241214_153022
 **Timestamp**: 2024-12-14T15:30:22Z
 **API Endpoint**: http://localhost:8000
-**Search Type**: bm25
+**Search Type**: bm25-lc
 **Dataset**: retrieval_evaluation_dataset.json (50 queries)
 **Target Items**: 55 | **Actual Items**: 55 ✓
 
@@ -460,7 +463,7 @@ When evaluating multiple search types, the report includes side-by-side comparis
 **Timestamp**: 2025-12-21T06:43:25Z
 **API Endpoint**: http://localhost:8000
 **Dataset**: retrieval_evaluation_dataset.json (50 queries)
-**Search Types**: bm25, vector
+**Search Types**: bm25-lc, vector-lc
 **Parallel Execution**: Yes
 **Target Items**: 55 | **Actual Items**: 55 ✓
 
@@ -468,10 +471,10 @@ When evaluating multiple search types, the report includes side-by-side comparis
 
 ## Performance Comparison
 
-| Search Type | Avg Time (ms) | Min (ms) | Max (ms) |
-|-------------|---------------|----------|----------|
-| **bm25**    | 1.0           | 0.7      | 3.1      |
-| **vector**  | 103.6         | 80.5     | 406.4    |
+| Search Type    | Avg Time (ms) | Min (ms) | Max (ms) |
+|----------------|---------------|----------|----------|
+| **bm25-lc**    | 1.0           | 0.7      | 3.1      |
+| **vector-lc**  | 103.6         | 80.5     | 406.4    |
 
 ---
 
@@ -479,31 +482,31 @@ When evaluating multiple search types, the report includes side-by-side comparis
 
 ### Precision
 
-| Metric | **bm25** | **vector** | Δ (abs) | Δ (%)  | Winner |
-|--------|----------|------------|---------|--------|--------|
-| **@1** | 0.881    | 0.976      | +0.095  | +10.8% | VECTOR |
-| **@5** | 0.376    | 0.414      | +0.038  | +10.1% | VECTOR |
+| Metric | **bm25-lc** | **vector-lc** | Δ (abs) | Δ (%)  | Winner     |
+|--------|-------------|---------------|---------|--------|------------|
+| **@1** | 0.881       | 0.976         | +0.095  | +10.8% | VECTOR-LC  |
+| **@5** | 0.376       | 0.414         | +0.038  | +10.1% | VECTOR-LC  |
 
 ### Recall
 
-| Metric | **bm25** | **vector** | Δ (abs) | Δ (%)  | Winner |
-|--------|----------|------------|---------|--------|--------|
-| **@1** | 0.546    | 0.578      | +0.033  | +6.0%  | VECTOR |
-| **@5** | 0.846    | 0.901      | +0.055  | +6.4%  | VECTOR |
+| Metric | **bm25-lc** | **vector-lc** | Δ (abs) | Δ (%)  | Winner     |
+|--------|-------------|---------------|---------|--------|------------|
+| **@1** | 0.546       | 0.578         | +0.033  | +6.0%  | VECTOR-LC  |
+| **@5** | 0.846       | 0.901         | +0.055  | +6.4%  | VECTOR-LC  |
 
 ### NDCG
 
-| Metric | **bm25** | **vector** | Δ (abs) | Δ (%)  | Winner |
-|--------|----------|------------|---------|--------|--------|
-| **@1** | 0.865    | 0.976      | +0.111  | +12.8% | VECTOR |
-| **@5** | 0.836    | 0.910      | +0.074  | +8.9%  | VECTOR |
+| Metric | **bm25-lc** | **vector-lc** | Δ (abs) | Δ (%)  | Winner     |
+|--------|-------------|---------------|---------|--------|------------|
+| **@1** | 0.865       | 0.976         | +0.111  | +12.8% | VECTOR-LC  |
+| **@5** | 0.836       | 0.910         | +0.074  | +8.9%  | VECTOR-LC  |
 
 ### Mean Reciprocal Rank (MRR)
 
-| Search Type | MRR   | Δ vs first | Winner |
-|-------------|-------|------------|--------|
-| **bm25**    | 0.902 | -          |        |
-| **vector**  | 0.976 | +0.075     | VECTOR |
+| Search Type    | MRR   | Δ vs first | Winner     |
+|----------------|-------|------------|------------|
+| **bm25-lc**    | 0.902 | -          |            |
+| **vector-lc**  | 0.976 | +0.075     | VECTOR-LC  |
 
 ---
 
@@ -523,19 +526,19 @@ When evaluating multiple search types, the report includes side-by-side comparis
 
 ### multi-item-recall
 
-| Metric | **bm25** | **vector** | Winner |
-|--------|----------|------------|--------|
-| P@5    | 0.59     | 0.63       | VECTOR |
-| R@5    | 0.86     | 0.91       | VECTOR |
-| MRR    | 0.90     | 1.00       | VECTOR |
+| Metric | **bm25-lc** | **vector-lc** | Winner     |
+|--------|-------------|---------------|------------|
+| P@5    | 0.59        | 0.63          | VECTOR-LC  |
+| R@5    | 0.86        | 0.91          | VECTOR-LC  |
+| MRR    | 0.90        | 1.00          | VECTOR-LC  |
 
 ### semantic
 
-| Metric | **bm25** | **vector** | Winner |
-|--------|----------|------------|--------|
-| P@5    | 0.33     | 0.45       | VECTOR |
-| R@5    | 0.64     | 0.74       | VECTOR |
-| MRR    | 0.78     | 0.81       | VECTOR |
+| Metric | **bm25-lc** | **vector-lc** | Winner     |
+|--------|-------------|---------------|------------|
+| P@5    | 0.33        | 0.45          | VECTOR-LC  |
+| R@5    | 0.64        | 0.74          | VECTOR-LC  |
+| MRR    | 0.78        | 0.81          | VECTOR-LC  |
 
 [... other query types ...]
 ```

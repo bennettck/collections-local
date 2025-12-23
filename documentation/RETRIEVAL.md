@@ -2,12 +2,13 @@
 
 ## Overview
 
-This document describes the retrieval system for natural language Q&A over the Collections Local image collection. The system supports two search modes:
+This document describes the retrieval system for natural language Q&A over the Collections Local image collection. The system supports multiple search modes, all implemented using LangChain retrievers for consistency:
 
-- **BM25 Full-Text Search**: Keyword-based retrieval using SQLite FTS5 with BM25 ranking
-- **Vector Semantic Search**: Embedding-based semantic retrieval using VoyageAI and sqlite-vec
+- **BM25 Full-Text Search (bm25-lc)**: Keyword-based retrieval using SQLite FTS5 with BM25 ranking
+- **Vector Semantic Search (vector-lc)**: Embedding-based semantic retrieval using VoyageAI and sqlite-vec
+- **Hybrid Search (hybrid-lc)**: Combines BM25 and vector search using Reciprocal Rank Fusion (RRF)
 
-Both modes enable users to search their collection using natural language queries and receive AI-generated answers with citations.
+All retrievers use LangChain's retriever interface, providing a consistent API and enabling advanced features like hybrid search and ensemble retrieval. Users can search their collection using natural language queries and receive AI-generated answers with citations.
 
 ## Architecture
 
@@ -21,8 +22,14 @@ Both modes enable users to search their collection using natural language querie
                      │
                      ▼
 ┌─────────────────────────────────────────────────────────┐
-│              SQLite FTS5 Search Engine                   │
-│           (Built-in BM25 Ranking)                        │
+│              LangChain Retrievers Layer                  │
+│    (BM25-LC, Vector-LC, Hybrid-LC with RRF)             │
+└────────────────────┬────────────────────────────────────┘
+                     │
+                     ▼
+┌─────────────────────────────────────────────────────────┐
+│         Search Engines (SQLite FTS5 / sqlite-vec)        │
+│           BM25 Ranking & Vector Similarity               │
 └────────────────────┬────────────────────────────────────┘
                      │
                      ▼
@@ -44,7 +51,10 @@ Both modes enable users to search their collection using natural language querie
 
 ### Key Technologies
 
+- **LangChain**: Unified retriever interface for all search modes
 - **SQLite FTS5**: Full-text search with built-in BM25 ranking
+- **sqlite-vec**: Vector similarity search with VoyageAI embeddings
+- **Reciprocal Rank Fusion (RRF)**: Hybrid search result merging
 - **unicode61 Tokenizer**: Unicode-aware tokenization with diacritics removal
 - **Claude Sonnet 4.5**: Default model for answer generation
 - **FastAPI**: REST API endpoints
@@ -862,7 +872,7 @@ Search the collection using BM25 or vector search.
 ```json
 {
   "query": "Tokyo restaurants",
-  "search_type": "bm25",
+  "search_type": "bm25-lc",
   "top_k": 10,
   "category_filter": null,
   "min_relevance_score": -1.0,
@@ -877,7 +887,7 @@ Search the collection using BM25 or vector search.
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
 | `query` | string | required | Natural language search query |
-| `search_type` | string | `"bm25"` | Search type: `"bm25"` or `"vector"` |
+| `search_type` | string | `"bm25-lc"` | Search type: `"bm25-lc"`, `"vector-lc"`, or `"hybrid-lc"` |
 | `top_k` | integer | `10` | Number of results to return (1-50) |
 | `category_filter` | string | `null` | Filter by category (e.g., "Food", "Beauty") |
 | `min_relevance_score` | float | `-1.0` | BM25 minimum score threshold (more negative = stricter) |
@@ -889,7 +899,7 @@ Search the collection using BM25 or vector search.
 ```json
 {
   "query": "Tokyo restaurants",
-  "search_type": "bm25",
+  "search_type": "bm25-lc",
   "results": [...],
   "total_results": 2,
   "answer": "Based on your collection...",
@@ -905,7 +915,7 @@ Search the collection using BM25 or vector search.
 | Field | Type | Description |
 |-------|------|-------------|
 | `query` | string | Original query |
-| `search_type` | string | Search type used (`"bm25"` or `"vector"`) |
+| `search_type` | string | Search type used (`"bm25-lc"`, `"vector-lc"`, or `"hybrid-lc"`) |
 | `results` | array | Search results with metadata |
 | `total_results` | integer | Number of results returned |
 | `answer` | string | AI-generated answer (if `include_answer=true`) |
@@ -1074,7 +1084,7 @@ coverage = (total_embeddings / total_analyzed_items) * 100
 ```bash
 curl -X POST http://localhost:8000/search \
   -H "Content-Type: application/json" \
-  -d '{"query": "Tokyo", "top_k": 5, "include_answer": false}'
+  -d '{"query": "Tokyo", "search_type": "bm25-lc", "top_k": 5, "include_answer": false}'
 ```
 
 **Matches:**
@@ -1087,7 +1097,7 @@ curl -X POST http://localhost:8000/search \
 ```bash
 curl -X POST http://localhost:8000/search \
   -H "Content-Type: application/json" \
-  -d '{"query": "What restaurants are in my collection?", "include_answer": true}'
+  -d '{"query": "What restaurants are in my collection?", "search_type": "bm25-lc", "include_answer": true}'
 ```
 
 **Query Processing:**
@@ -1105,7 +1115,7 @@ curl -X POST http://localhost:8000/search \
 ```bash
 curl -X POST http://localhost:8000/search \
   -H "Content-Type: application/json" \
-  -d '{"query": "perfume", "category_filter": "Beauty", "top_k": 10}'
+  -d '{"query": "perfume", "search_type": "bm25-lc", "category_filter": "Beauty", "top_k": 10}'
 ```
 
 **Benefits:**
@@ -1118,7 +1128,7 @@ curl -X POST http://localhost:8000/search \
 ```bash
 curl -X POST http://localhost:8000/search \
   -H "Content-Type: application/json" \
-  -d '{"query": "Japanese food Tokyo shopping", "top_k": 10}'
+  -d '{"query": "Japanese food Tokyo shopping", "search_type": "bm25-lc", "top_k": 10}'
 ```
 
 **Behavior:**
@@ -1132,17 +1142,17 @@ curl -X POST http://localhost:8000/search \
 # Default behavior - no filtering
 curl -X POST http://localhost:8000/search \
   -H "Content-Type: application/json" \
-  -d '{"query": "perfume", "top_k": 10, "min_relevance_score": -1.0}'
+  -d '{"query": "perfume", "search_type": "bm25-lc", "top_k": 10, "min_relevance_score": -1.0}'
 
 # Strict filtering - only very strong matches (scores < -5.0)
 curl -X POST http://localhost:8000/search \
   -H "Content-Type: application/json" \
-  -d '{"query": "perfume", "top_k": 10, "min_relevance_score": -5.0}'
+  -d '{"query": "perfume", "search_type": "bm25-lc", "top_k": 10, "min_relevance_score": -5.0}'
 
 # Moderate filtering - filter weak tail results (scores < -2.0)
 curl -X POST http://localhost:8000/search \
   -H "Content-Type: application/json" \
-  -d '{"query": "perfume", "top_k": 10, "min_relevance_score": -2.0}'
+  -d '{"query": "perfume", "search_type": "bm25-lc", "top_k": 10, "min_relevance_score": -2.0}'
 ```
 
 **Use Cases:**
@@ -1157,7 +1167,7 @@ curl -X POST http://localhost:8000/search \
 ```bash
 curl -X POST http://localhost:8000/search \
   -H "Content-Type: application/json" \
-  -d '{"query": "Japanese capital", "search_type": "vector", "top_k": 5}'
+  -d '{"query": "Japanese capital", "search_type": "vector-lc", "top_k": 5}'
 ```
 
 **Behavior:**
@@ -1176,7 +1186,7 @@ curl -X POST http://localhost:8000/search \
 ```bash
 curl -X POST http://localhost:8000/search \
   -H "Content-Type: application/json" \
-  -d '{"query": "cosmetics", "search_type": "vector", "category_filter": "Beauty", "top_k": 10}'
+  -d '{"query": "cosmetics", "search_type": "vector-lc", "category_filter": "Beauty", "top_k": 10}'
 ```
 
 **Benefits:**
@@ -1190,7 +1200,7 @@ curl -X POST http://localhost:8000/search \
 # Only return high-quality semantic matches
 curl -X POST http://localhost:8000/search \
   -H "Content-Type: application/json" \
-  -d '{"query": "perfume", "search_type": "vector", "min_similarity_score": 0.7, "top_k": 10}'
+  -d '{"query": "perfume", "search_type": "vector-lc", "min_similarity_score": 0.7, "top_k": 10}'
 ```
 
 **Filtering:**
@@ -1202,11 +1212,11 @@ curl -X POST http://localhost:8000/search \
 ```bash
 # BM25 threshold (more negative = stricter)
 curl -X POST http://localhost:8000/search \
-  -d '{"query": "perfume", "search_type": "bm25", "min_relevance_score": -5.0}'
+  -d '{"query": "perfume", "search_type": "bm25-lc", "min_relevance_score": -5.0}'
 
 # Vector threshold (higher = stricter)
 curl -X POST http://localhost:8000/search \
-  -d '{"query": "perfume", "search_type": "vector", "min_similarity_score": 0.7}'
+  -d '{"query": "perfume", "search_type": "vector-lc", "min_similarity_score": 0.7}'
 ```
 
 #### Exploratory Search
@@ -1214,7 +1224,7 @@ curl -X POST http://localhost:8000/search \
 ```bash
 curl -X POST http://localhost:8000/search \
   -H "Content-Type: application/json" \
-  -d '{"query": "outdoor activities", "search_type": "vector", "top_k": 20}'
+  -d '{"query": "outdoor activities", "search_type": "vector-lc", "top_k": 20}'
 ```
 
 **Use case:**
@@ -1236,12 +1246,12 @@ curl -X POST http://localhost:8000/search \
 # BM25 search
 curl -X POST http://localhost:8000/search \
   -H "Content-Type: application/json" \
-  -d '{"query": "ramen noodles", "search_type": "bm25", "include_answer": false}'
+  -d '{"query": "ramen noodles", "search_type": "bm25-lc", "include_answer": false}'
 
 # Vector search (same query)
 curl -X POST http://localhost:8000/search \
   -H "Content-Type: application/json" \
-  -d '{"query": "ramen noodles", "search_type": "vector", "include_answer": false}'
+  -d '{"query": "ramen noodles", "search_type": "vector-lc", "include_answer": false}'
 ```
 
 **Expected differences:**
@@ -1270,7 +1280,7 @@ curl -X POST http://localhost:8000/search \
    - BM25 is keyword-based only
    - Doesn't understand synonyms or paraphrases
    - Example: "Tokyo" won't match "Japan's capital" in BM25
-   - **Solution**: Use `search_type="vector"` for semantic queries
+   - **Solution**: Use `search_type="vector-lc"` for semantic queries
 
 2. **No Stopword Filtering (BM25)**
    - All words preserved in BM25 queries (including "a", "the", "in", etc.)
@@ -1313,31 +1323,25 @@ curl -X POST http://localhost:8000/search \
    - **Workaround**: Call `/index/rebuild` and `/vector-index/rebuild` after bulk analysis
 
 8. **No Multi-Modal Search**
-   - Text-only search for both modes
+   - Text-only search for all modes
    - Can't search by image similarity or visual features
    - Would require vision embeddings (CLIP, etc.)
    - **Future**: Could add image vector search
 
-9. **No Hybrid Search**
-   - Can't combine BM25 + vector in single query
-   - Must choose one search type
-   - Would benefit from re-ranking combined results
-   - **Future**: Implement hybrid retrieval with fusion
-
 ### Addressing Limitations
 
 **Available Now:**
-- **Semantic Search**: Use `search_type="vector"` for conceptual queries
-- **Keyword Search**: Use `search_type="bm25"` for exact matches
-- **Combined Strategy**: Run both search types for different use cases
+- **Semantic Search**: Use `search_type="vector-lc"` for conceptual queries
+- **Keyword Search**: Use `search_type="bm25-lc"` for exact matches
+- **Hybrid Search**: Use `search_type="hybrid-lc"` to combine BM25 and vector search using Reciprocal Rank Fusion (RRF)
+- **LangChain Integration**: All retrievers use LangChain for consistent interface and advanced features
 
 **Future Enhancements:**
 
-1. **Hybrid Search** (BM25 + Vector Fusion)
-   - Combine keyword and semantic search in single query
-   - Re-rank with cross-encoder
-   - Best of both worlds - precision + recall
+1. **Enhanced Hybrid Search**
+   - Re-rank with cross-encoder for even better results
    - Automatic search type selection based on query
+   - Configurable fusion weights and strategies
 
 2. **Smarter Query Preprocessing**
    - Optional stopword removal for very long queries
@@ -1385,12 +1389,12 @@ curl -X POST http://localhost:8000/index/rebuild
 # 3. Test BM25 search without answer
 curl -X POST http://localhost:8000/search \
   -H "Content-Type: application/json" \
-  -d '{"query": "test", "search_type": "bm25", "include_answer": false}'
+  -d '{"query": "test", "search_type": "bm25-lc", "include_answer": false}'
 
 # 4. Test BM25 search with answer
 curl -X POST http://localhost:8000/search \
   -H "Content-Type: application/json" \
-  -d '{"query": "test", "search_type": "bm25", "include_answer": true}'
+  -d '{"query": "test", "search_type": "bm25-lc", "include_answer": true}'
 ```
 
 **Vector Search Testing:**
@@ -1405,35 +1409,50 @@ curl -X POST http://localhost:8000/vector-index/rebuild
 # 3. Test vector search without answer
 curl -X POST http://localhost:8000/search \
   -H "Content-Type: application/json" \
-  -d '{"query": "test", "search_type": "vector", "include_answer": false}'
+  -d '{"query": "test", "search_type": "vector-lc", "include_answer": false}'
 
 # 4. Test vector search with answer
 curl -X POST http://localhost:8000/search \
   -H "Content-Type: application/json" \
-  -d '{"query": "test", "search_type": "vector", "include_answer": true}'
+  -d '{"query": "test", "search_type": "vector-lc", "include_answer": true}'
 
 # 5. Test semantic query (should find conceptually similar items)
 curl -X POST http://localhost:8000/search \
   -H "Content-Type: application/json" \
-  -d '{"query": "Japanese capital", "search_type": "vector", "top_k": 5}'
+  -d '{"query": "Japanese capital", "search_type": "vector-lc", "top_k": 5}'
 ```
 
-**Compare Both Search Types:**
+**Hybrid Search Testing:**
 
 ```bash
-# Run same query with both search types
+# Test hybrid search combining BM25 and vector
+curl -X POST http://localhost:8000/search \
+  -H "Content-Type: application/json" \
+  -d '{"query": "Japanese capital", "search_type": "hybrid-lc", "top_k": 5}'
+```
+
+**Compare All Search Types:**
+
+```bash
+# Run same query with all search types
 QUERY="ramen noodles"
 
 # BM25 results
 curl -X POST http://localhost:8000/search \
   -H "Content-Type: application/json" \
-  -d "{\"query\": \"$QUERY\", \"search_type\": \"bm25\", \"include_answer\": false}" \
+  -d "{\"query\": \"$QUERY\", \"search_type\": \"bm25-lc\", \"include_answer\": false}" \
   | jq '.results[] | {rank, score, headline}'
 
 # Vector results
 curl -X POST http://localhost:8000/search \
   -H "Content-Type: application/json" \
-  -d "{\"query\": \"$QUERY\", \"search_type\": \"vector\", \"include_answer\": false}" \
+  -d "{\"query\": \"$QUERY\", \"search_type\": \"vector-lc\", \"include_answer\": false}" \
+  | jq '.results[] | {rank, score, headline}'
+
+# Hybrid results
+curl -X POST http://localhost:8000/search \
+  -H "Content-Type: application/json" \
+  -d "{\"query\": \"$QUERY\", \"search_type\": \"hybrid-lc\", \"include_answer\": false}" \
   | jq '.results[] | {rank, score, headline}'
 ```
 
@@ -1483,11 +1502,11 @@ curl -X POST http://localhost:8000/index/rebuild
 
 # Try simpler query
 curl -X POST http://localhost:8000/search \
-  -d '{"query": "tokyo", "include_answer": false}'
+  -d '{"query": "tokyo", "search_type": "bm25-lc", "include_answer": false}'
 
 # Disable relevance filtering to see all results
 curl -X POST http://localhost:8000/search \
-  -d '{"query": "tokyo", "min_relevance_score": 0.0, "include_answer": false}'
+  -d '{"query": "tokyo", "search_type": "bm25-lc", "min_relevance_score": 0.0, "include_answer": false}'
 
 # Use specific, descriptive terms
 # Good: "tokyo restaurants"
@@ -1522,11 +1541,11 @@ curl -X POST http://localhost:8000/search \
 ```bash
 # Too strict - filters out good results
 curl -X POST http://localhost:8000/search \
-  -d '{"query": "perfume", "min_relevance_score": -10.0}'  # Returns 0
+  -d '{"query": "perfume", "search_type": "bm25-lc", "min_relevance_score": -10.0}'  # Returns 0
 
 # More permissive - allows decent matches
 curl -X POST http://localhost:8000/search \
-  -d '{"query": "perfume", "min_relevance_score": -2.0}'   # Returns 3
+  -d '{"query": "perfume", "search_type": "bm25-lc", "min_relevance_score": -2.0}'   # Returns 3
 ```
 
 ### Low Relevance Scores
@@ -1584,12 +1603,12 @@ curl -X POST http://localhost:8000/vector-index/rebuild
 # 3. Test with simple query
 curl -X POST http://localhost:8000/search \
   -H "Content-Type: application/json" \
-  -d '{"query": "test", "search_type": "vector", "include_answer": false}'
+  -d '{"query": "test", "search_type": "vector-lc", "include_answer": false}'
 
 # 4. Disable similarity filtering
 curl -X POST http://localhost:8000/search \
   -H "Content-Type: application/json" \
-  -d '{"query": "test", "search_type": "vector", "min_similarity_score": 0.0}'
+  -d '{"query": "test", "search_type": "vector-lc", "min_similarity_score": 0.0}'
 
 # 5. Check environment variables
 echo $VOYAGE_API_KEY  # Should not be empty
@@ -1618,7 +1637,7 @@ echo $VOYAGE_API_KEY  # Should not be empty
 ```bash
 # Use lower top_k for faster results
 curl -X POST http://localhost:8000/search \
-  -d '{"query": "test", "search_type": "vector", "top_k": 5}'
+  -d '{"query": "test", "search_type": "vector-lc", "top_k": 5}'
 
 # Consider switching to voyage-3.5-lite (512 dims)
 export VOYAGE_EMBEDDING_MODEL=voyage-3.5-lite
@@ -1650,15 +1669,15 @@ export VOYAGE_EMBEDDING_MODEL=voyage-3.5-lite
 # Good: "Japanese cuisine and dining experiences"
 
 curl -X POST http://localhost:8000/search \
-  -d '{"query": "Japanese cuisine and dining experiences", "search_type": "vector"}'
+  -d '{"query": "Japanese cuisine and dining experiences", "search_type": "vector-lc"}'
 
 # Compare with BM25 to verify semantic difference
 curl -X POST http://localhost:8000/search \
-  -d '{"query": "Japanese capital", "search_type": "bm25"}' | jq '.total_results'
+  -d '{"query": "Japanese capital", "search_type": "bm25-lc"}' | jq '.total_results'
 # Should return fewer results
 
 curl -X POST http://localhost:8000/search \
-  -d '{"query": "Japanese capital", "search_type": "vector"}' | jq '.total_results'
+  -d '{"query": "Japanese capital", "search_type": "vector-lc"}' | jq '.total_results'
 # Should find "Tokyo" items even without keyword
 ```
 
@@ -1786,6 +1805,7 @@ curl -X POST http://localhost:8000/vector-index/rebuild
 ├── main.py                     # API endpoints
 ├── retrieval/
 │   ├── __init__.py
+│   ├── langchain_retrievers.py # LangChain retriever implementations
 │   └── answer_generator.py     # LLM answer generation
 ├── scripts/
 │   ├── backfill_embeddings.py  # Generate embeddings for existing items
@@ -1808,6 +1828,7 @@ curl -X POST http://localhost:8000/vector-index/rebuild
 | `embeddings.py` | VoyageAI client, embedding generation, batch processing | 219 |
 | `main.py` | FastAPI endpoints for search, index management | ~600 |
 | `models.py` | Pydantic models for API requests/responses | ~150 |
+| `retrieval/langchain_retrievers.py` | LangChain BM25, vector, and hybrid retrievers | ~300 |
 | `retrieval/answer_generator.py` | LLM answer generation, citation extraction | ~100 |
 
 ### Adding New Features

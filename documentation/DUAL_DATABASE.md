@@ -381,7 +381,9 @@ Both databases use identical schema:
 
 ### Search Index
 
-- Uses SQLite FTS5 with BM25 ranking
+- Uses SQLite FTS5 with BM25 ranking via LangChain retrievers (bm25-lc)
+- Vector embeddings for semantic search (vector-lc)
+- Hybrid search combining BM25 and vector with RRF (hybrid-lc)
 - Weighted fields (summary 3x, headline 2x, etc.)
 - Rebuilt separately for each database
 - Index coverage should be 100% (all items have analyses)

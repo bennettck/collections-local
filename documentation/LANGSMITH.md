@@ -255,7 +255,7 @@ python evaluation/langsmith_dataset.py
 python evaluation/run_langsmith_eval.py --type analysis
 
 # Run retrieval evaluation
-python evaluation/run_langsmith_eval.py --type retrieval --search-type bm25
+python evaluation/run_langsmith_eval.py --type retrieval --search-type bm25-lc
 
 # Compare search types
 python evaluation/run_langsmith_eval.py --type compare
