@@ -1,0 +1,1099 @@
+{
+  "original_lc": {
+    "mrr": 0.7188888888888889,
+    "p5": 0.28,
+    "r5": 0.6376190476190476
+  },
+  "improved_lc": {
+    "mrr": 0.7633333333333333,
+    "p5": 0.308,
+    "r5": 0.6992857142857143
+  },
+  "native": {
+    "mrr": 0.7323333333333334,
+    "p5": 0.33399999999999996,
+    "r5": 0.6636190476190477
+  },
+  "improvement": 0.0444444444444444,
+  "improvement_pct": 6.182380216383301,
+  "gap_closed": 0.0444444444444444,
+  "gap_closed_pct": 330.578512396693,
+  "query_comparisons": [
+    {
+      "query_id": "q001",
+      "query_text": "TeamLab digital art museum Fukuoka",
+      "original_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "improved_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "native": {
+        "mrr": 1.0,
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      }
+    },
+    {
+      "query_id": "q002",
+      "query_text": "Attack on Titan museum Japan",
+      "original_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "improved_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "native": {
+        "mrr": 1.0,
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      }
+    },
+    {
+      "query_id": "q003",
+      "query_text": "Squid Game immersive experience Seoul",
+      "original_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "improved_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "native": {
+        "mrr": 1.0,
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      }
+    },
+    {
+      "query_id": "q004",
+      "query_text": "Ichiran ramen headquarters",
+      "original_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "improved_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "native": {
+        "mrr": 1.0,
+        "precision_at_5": 0.5,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      }
+    },
+    {
+      "query_id": "q005",
+      "query_text": "Lotte World Tower sky bridge observation",
+      "original_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "improved_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "native": {
+        "mrr": 1.0,
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      }
+    },
+    {
+      "query_id": "q006",
+      "query_text": "Luggage storage in Japan",
+      "original_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "improved_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "native": {
+        "mrr": 1.0,
+        "precision_at_5": 1.0,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      }
+    },
+    {
+      "query_id": "q007",
+      "query_text": "Bukhansan hiking trails Seoul",
+      "original_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "improved_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "native": {
+        "mrr": 1.0,
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      }
+    },
+    {
+      "query_id": "q008",
+      "query_text": "wooden chopstick carving workshop",
+      "original_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "improved_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "native": {
+        "mrr": 1.0,
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      }
+    },
+    {
+      "query_id": "q009",
+      "query_text": "Nakano Broadway anime shopping",
+      "original_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "improved_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "native": {
+        "mrr": 1.0,
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      }
+    },
+    {
+      "query_id": "q010",
+      "query_text": "DIY perfume making Seoul",
+      "original_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "improved_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "native": {
+        "mrr": 1.0,
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      }
+    },
+    {
+      "query_id": "q011",
+      "query_text": "manga drawing class Tokyo",
+      "original_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "improved_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "native": {
+        "mrr": 1.0,
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      }
+    },
+    {
+      "query_id": "q012",
+      "query_text": "sushi making class Asakusa",
+      "original_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "improved_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "native": {
+        "mrr": 1.0,
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      }
+    },
+    {
+      "query_id": "q013",
+      "query_text": "Kuoe Kyoto bronze watch",
+      "original_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "improved_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "native": {
+        "mrr": 1.0,
+        "precision_at_5": 0.25,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      }
+    },
+    {
+      "query_id": "q014",
+      "query_text": "J-Scent Japanese perfume",
+      "original_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "improved_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "native": {
+        "mrr": 1.0,
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      }
+    },
+    {
+      "query_id": "q015",
+      "query_text": "Kanpachi Ichiroku sightseeing train",
+      "original_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "improved_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "native": {
+        "mrr": 1.0,
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      }
+    },
+    {
+      "query_id": "q016",
+      "query_text": "onsen hot spring accommodations Japan",
+      "original_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.4,
+        "recall_at_5": 0.5,
+        "first_rank": 1
+      },
+      "improved_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.6,
+        "recall_at_5": 0.75,
+        "first_rank": 1
+      },
+      "native": {
+        "mrr": 1.0,
+        "precision_at_5": 0.8,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      }
+    },
+    {
+      "query_id": "q017",
+      "query_text": "AI coding tools for developers",
+      "original_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.8,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "improved_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.8,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "native": {
+        "mrr": 1.0,
+        "precision_at_5": 0.8,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      }
+    },
+    {
+      "query_id": "q018",
+      "query_text": "hidden gem restaurants Japan",
+      "original_lc": {
+        "mrr": 0.1111111111111111,
+        "precision_at_5": 0.0,
+        "recall_at_5": 0.0,
+        "first_rank": 9
+      },
+      "improved_lc": {
+        "mrr": 0.3333333333333333,
+        "precision_at_5": 0.4,
+        "recall_at_5": 1.0,
+        "first_rank": 3
+      },
+      "native": {
+        "mrr": 0.0,
+        "precision_at_5": 0.0,
+        "recall_at_5": 0.0,
+        "first_rank": null
+      }
+    },
+    {
+      "query_id": "q019",
+      "query_text": "Hokkaido nature photography spots",
+      "original_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 1.0,
+        "recall_at_5": 0.7142857142857143,
+        "first_rank": 1
+      },
+      "improved_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 1.0,
+        "recall_at_5": 0.7142857142857143,
+        "first_rank": 1
+      },
+      "native": {
+        "mrr": 1.0,
+        "precision_at_5": 1.0,
+        "recall_at_5": 0.7142857142857143,
+        "first_rank": 1
+      }
+    },
+    {
+      "query_id": "q020",
+      "query_text": "Tokyo art museums and exhibitions",
+      "original_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.2,
+        "recall_at_5": 0.5,
+        "first_rank": 1
+      },
+      "improved_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.4,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "native": {
+        "mrr": 1.0,
+        "precision_at_5": 0.4,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      }
+    },
+    {
+      "query_id": "q021",
+      "query_text": "ryokan traditional Japanese accommodation",
+      "original_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.6,
+        "recall_at_5": 0.75,
+        "first_rank": 1
+      },
+      "improved_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.6,
+        "recall_at_5": 0.75,
+        "first_rank": 1
+      },
+      "native": {
+        "mrr": 1.0,
+        "precision_at_5": 0.6,
+        "recall_at_5": 0.75,
+        "first_rank": 1
+      }
+    },
+    {
+      "query_id": "q022",
+      "query_text": "hands-on workshop experiences Japan",
+      "original_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.8,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "improved_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.8,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "native": {
+        "mrr": 1.0,
+        "precision_at_5": 0.8,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      }
+    },
+    {
+      "query_id": "q023",
+      "query_text": "scenic viewpoints sunset photography",
+      "original_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.8,
+        "recall_at_5": 0.8,
+        "first_rank": 1
+      },
+      "improved_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.8,
+        "recall_at_5": 0.8,
+        "first_rank": 1
+      },
+      "native": {
+        "mrr": 1.0,
+        "precision_at_5": 0.8,
+        "recall_at_5": 0.8,
+        "first_rank": 1
+      }
+    },
+    {
+      "query_id": "q024",
+      "query_text": "Fukuoka travel itinerary food",
+      "original_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.6,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "improved_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.6,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "native": {
+        "mrr": 1.0,
+        "precision_at_5": 0.6,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      }
+    },
+    {
+      "query_id": "q025",
+      "query_text": "Tokyo neighborhood guide local culture",
+      "original_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.6,
+        "recall_at_5": 0.75,
+        "first_rank": 1
+      },
+      "improved_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.6,
+        "recall_at_5": 0.75,
+        "first_rank": 1
+      },
+      "native": {
+        "mrr": 1.0,
+        "precision_at_5": 0.4,
+        "recall_at_5": 0.5,
+        "first_rank": 1
+      }
+    },
+    {
+      "query_id": "q026",
+      "query_text": "anime otaku culture Japan travel",
+      "original_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.6,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "improved_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.6,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "native": {
+        "mrr": 1.0,
+        "precision_at_5": 0.6,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      }
+    },
+    {
+      "query_id": "q027",
+      "query_text": "luxury travel experiences Japan",
+      "original_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.2,
+        "recall_at_5": 0.2,
+        "first_rank": 1
+      },
+      "improved_lc": {
+        "mrr": 0.5,
+        "precision_at_5": 0.2,
+        "recall_at_5": 0.2,
+        "first_rank": 2
+      },
+      "native": {
+        "mrr": 0.16666666666666666,
+        "precision_at_5": 0.0,
+        "recall_at_5": 0.0,
+        "first_rank": 6
+      }
+    },
+    {
+      "query_id": "q028",
+      "query_text": "day trip ideas from Tokyo",
+      "original_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.4,
+        "recall_at_5": 0.6666666666666666,
+        "first_rank": 1
+      },
+      "improved_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.4,
+        "recall_at_5": 0.6666666666666666,
+        "first_rank": 1
+      },
+      "native": {
+        "mrr": 1.0,
+        "precision_at_5": 0.4,
+        "recall_at_5": 0.6666666666666666,
+        "first_rank": 1
+      }
+    },
+    {
+      "query_id": "q029",
+      "query_text": "cafes and brunch spots",
+      "original_lc": {
+        "mrr": 0.0,
+        "precision_at_5": 0.0,
+        "recall_at_5": 0.0,
+        "first_rank": null
+      },
+      "improved_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.4,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "native": {
+        "mrr": 0.2,
+        "precision_at_5": 0.2,
+        "recall_at_5": 0.5,
+        "first_rank": 5
+      }
+    },
+    {
+      "query_id": "q030",
+      "query_text": "fragrance perfume shopping Asia",
+      "original_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.4,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "improved_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.4,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "native": {
+        "mrr": 1.0,
+        "precision_at_5": 0.4,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      }
+    },
+    {
+      "query_id": "q031",
+      "query_text": "where can I relax in a hot spring with mountain views",
+      "original_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.4,
+        "recall_at_5": 0.5,
+        "first_rank": 1
+      },
+      "improved_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.4,
+        "recall_at_5": 0.5,
+        "first_rank": 1
+      },
+      "native": {
+        "mrr": 1.0,
+        "precision_at_5": 0.4,
+        "recall_at_5": 0.5,
+        "first_rank": 1
+      }
+    },
+    {
+      "query_id": "q032",
+      "query_text": "cool things to do at night in Seoul",
+      "original_lc": {
+        "mrr": 0.3333333333333333,
+        "precision_at_5": 0.4,
+        "recall_at_5": 0.6666666666666666,
+        "first_rank": 3
+      },
+      "improved_lc": {
+        "mrr": 0.3333333333333333,
+        "precision_at_5": 0.4,
+        "recall_at_5": 0.6666666666666666,
+        "first_rank": 3
+      },
+      "native": {
+        "mrr": 0.25,
+        "precision_at_5": 0.2,
+        "recall_at_5": 0.3333333333333333,
+        "first_rank": 4
+      }
+    },
+    {
+      "query_id": "q033",
+      "query_text": "I want to learn something creative while in Japan",
+      "original_lc": {
+        "mrr": 0.0,
+        "precision_at_5": 0.0,
+        "recall_at_5": 0.0,
+        "first_rank": null
+      },
+      "improved_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.2,
+        "recall_at_5": 0.3333333333333333,
+        "first_rank": 1
+      },
+      "native": {
+        "mrr": 1.0,
+        "precision_at_5": 0.2,
+        "recall_at_5": 0.3333333333333333,
+        "first_rank": 1
+      }
+    },
+    {
+      "query_id": "q034",
+      "query_text": "trendy coffee shops Tokyo",
+      "original_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.4,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "improved_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.4,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "native": {
+        "mrr": 1.0,
+        "precision_at_5": 0.4,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      }
+    },
+    {
+      "query_id": "q035",
+      "query_text": "breathtaking flower fields to photograph",
+      "original_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.6,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "improved_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.6,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "native": {
+        "mrr": 1.0,
+        "precision_at_5": 0.75,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      }
+    },
+    {
+      "query_id": "q036",
+      "query_text": "Luggage storage in Japan",
+      "original_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "improved_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.2,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "native": {
+        "mrr": 1.0,
+        "precision_at_5": 1.0,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      }
+    },
+    {
+      "query_id": "q037",
+      "query_text": "romantic sunset spots",
+      "original_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.4,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "improved_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.4,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "native": {
+        "mrr": 1.0,
+        "precision_at_5": 0.4,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      }
+    },
+    {
+      "query_id": "q038",
+      "query_text": "authentic local food experiences off the tourist trail",
+      "original_lc": {
+        "mrr": 0.5,
+        "precision_at_5": 0.2,
+        "recall_at_5": 0.3333333333333333,
+        "first_rank": 2
+      },
+      "improved_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.2,
+        "recall_at_5": 0.3333333333333333,
+        "first_rank": 1
+      },
+      "native": {
+        "mrr": 1.0,
+        "precision_at_5": 0.2,
+        "recall_at_5": 0.3333333333333333,
+        "first_rank": 1
+      }
+    },
+    {
+      "query_id": "q039",
+      "query_text": "what coding tools use AI to help build websites",
+      "original_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.6,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "improved_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.6,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      },
+      "native": {
+        "mrr": 1.0,
+        "precision_at_5": 0.6,
+        "recall_at_5": 1.0,
+        "first_rank": 1
+      }
+    },
+    {
+      "query_id": "q040",
+      "query_text": "peaceful nature escapes near Tokyo",
+      "original_lc": {
+        "mrr": 0.0,
+        "precision_at_5": 0.0,
+        "recall_at_5": 0.0,
+        "first_rank": null
+      },
+      "improved_lc": {
+        "mrr": 0.0,
+        "precision_at_5": 0.0,
+        "recall_at_5": 0.0,
+        "first_rank": null
+      },
+      "native": {
+        "mrr": 0.0,
+        "precision_at_5": 0.0,
+        "recall_at_5": 0.0,
+        "first_rank": null
+      }
+    },
+    {
+      "query_id": "q041",
+      "query_text": "unique souvenirs to bring home from Japan",
+      "original_lc": {
+        "mrr": 0.0,
+        "precision_at_5": 0.0,
+        "recall_at_5": 0.0,
+        "first_rank": null
+      },
+      "improved_lc": {
+        "mrr": 0.0,
+        "precision_at_5": 0.0,
+        "recall_at_5": 0.0,
+        "first_rank": null
+      },
+      "native": {
+        "mrr": 0.0,
+        "precision_at_5": 0.0,
+        "recall_at_5": 0.0,
+        "first_rank": null
+      }
+    },
+    {
+      "query_id": "q042",
+      "query_text": "best views in Hokkaido for Instagram",
+      "original_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.4,
+        "recall_at_5": 0.5,
+        "first_rank": 1
+      },
+      "improved_lc": {
+        "mrr": 1.0,
+        "precision_at_5": 0.4,
+        "recall_at_5": 0.5,
+        "first_rank": 1
+      },
+      "native": {
+        "mrr": 1.0,
+        "precision_at_5": 0.6,
+        "recall_at_5": 0.75,
+        "first_rank": 1
+      }
+    },
+    {
+      "query_id": "q043",
+      "query_text": "things to do in Paris",
+      "original_lc": {
+        "mrr": 0.0,
+        "precision_at_5": 0.0,
+        "recall_at_5": 0.0
+      },
+      "improved_lc": {
+        "mrr": 0.0,
+        "precision_at_5": 0.0,
+        "recall_at_5": 0.0
+      },
+      "native": {
+        "mrr": 0.0,
+        "precision_at_5": 0.0,
+        "recall_at_5": 0.0
+      }
+    },
+    {
+      "query_id": "q044",
+      "query_text": "best beaches in Thailand",
+      "original_lc": {
+        "mrr": 0.0,
+        "precision_at_5": 0.0,
+        "recall_at_5": 0.0
+      },
+      "improved_lc": {
+        "mrr": 0.0,
+        "precision_at_5": 0.0,
+        "recall_at_5": 0.0
+      },
+      "native": {
+        "mrr": 0.0,
+        "precision_at_5": 0.0,
+        "recall_at_5": 0.0
+      }
+    },
+    {
+      "query_id": "q045",
+      "query_text": "Mexican food restaurants",
+      "original_lc": {
+        "mrr": 0.0,
+        "precision_at_5": 0.0,
+        "recall_at_5": 0.0
+      },
+      "improved_lc": {
+        "mrr": 0.0,
+        "precision_at_5": 0.0,
+        "recall_at_5": 0.0
+      },
+      "native": {
+        "mrr": 0.0,
+        "precision_at_5": 0.0,
+        "recall_at_5": 0.0
+      }
+    },
+    {
+      "query_id": "q046",
+      "query_text": "ski resorts Japan",
+      "original_lc": {
+        "mrr": 0.0,
+        "precision_at_5": 0.0,
+        "recall_at_5": 0.0
+      },
+      "improved_lc": {
+        "mrr": 0.0,
+        "precision_at_5": 0.0,
+        "recall_at_5": 0.0
+      },
+      "native": {
+        "mrr": 0.0,
+        "precision_at_5": 0.0,
+        "recall_at_5": 0.0
+      }
+    },
+    {
+      "query_id": "q047",
+      "query_text": "budget hotels Tokyo",
+      "original_lc": {
+        "mrr": 0.0,
+        "precision_at_5": 0.0,
+        "recall_at_5": 0.0
+      },
+      "improved_lc": {
+        "mrr": 0.0,
+        "precision_at_5": 0.0,
+        "recall_at_5": 0.0
+      },
+      "native": {
+        "mrr": 0.0,
+        "precision_at_5": 0.0,
+        "recall_at_5": 0.0
+      }
+    },
+    {
+      "query_id": "q048",
+      "query_text": "nightclub recommendations Seoul",
+      "original_lc": {
+        "mrr": 0.0,
+        "precision_at_5": 0.0,
+        "recall_at_5": 0.0
+      },
+      "improved_lc": {
+        "mrr": 0.0,
+        "precision_at_5": 0.0,
+        "recall_at_5": 0.0
+      },
+      "native": {
+        "mrr": 0.0,
+        "precision_at_5": 0.0,
+        "recall_at_5": 0.0
+      }
+    },
+    {
+      "query_id": "q049",
+      "query_text": "children's activities Japan",
+      "original_lc": {
+        "mrr": 0.0,
+        "precision_at_5": 0.0,
+        "recall_at_5": 0.0
+      },
+      "improved_lc": {
+        "mrr": 0.0,
+        "precision_at_5": 0.0,
+        "recall_at_5": 0.0
+      },
+      "native": {
+        "mrr": 0.0,
+        "precision_at_5": 0.0,
+        "recall_at_5": 0.0
+      }
+    },
+    {
+      "query_id": "q050",
+      "query_text": "cryptocurrency investment tips",
+      "original_lc": {
+        "mrr": 0.0,
+        "precision_at_5": 0.0,
+        "recall_at_5": 0.0
+      },
+      "improved_lc": {
+        "mrr": 0.0,
+        "precision_at_5": 0.0,
+        "recall_at_5": 0.0
+      },
+      "native": {
+        "mrr": 0.0,
+        "precision_at_5": 0.0,
+        "recall_at_5": 0.0
+      }
+    }
+  ]
+}

@@ -176,6 +176,49 @@ class ChromaVectorStoreManager:
         logger.info(f"Chroma index built with {total_docs} documents")
         return total_docs
 
+    def add_document(
+        self,
+        item_id: str,
+        raw_response: dict,
+        filename: str
+    ) -> bool:
+        """Add or update a single document in Chroma.
+
+        Args:
+            item_id: Item identifier
+            raw_response: Analysis data dictionary
+            filename: Image filename
+
+        Returns:
+            True if successful, False otherwise
+        """
+        try:
+            # Create flat document (same as batch indexing)
+            content = self._create_flat_document(raw_response)
+
+            # Create Document with metadata
+            doc = Document(
+                page_content=content,
+                metadata={
+                    "item_id": item_id,
+                    "category": raw_response.get("category"),
+                    "headline": raw_response.get("headline"),
+                    "summary": raw_response.get("summary"),
+                    "image_url": f"/images/{filename}",
+                    "filename": filename,
+                    "raw_response": json.dumps(raw_response)
+                }
+            )
+
+            # Add to Chroma (uses upsert internally)
+            self.vectorstore.add_documents([doc], ids=[item_id])
+            logger.info(f"Added document to Chroma: {item_id}")
+            return True
+
+        except Exception as e:
+            logger.error(f"Failed to add document to Chroma: {item_id}, error: {e}")
+            return False
+
     def _create_flat_document(self, raw_response: dict) -> str:
         """Create flat document (no field weighting) - matches BM25 approach.
 

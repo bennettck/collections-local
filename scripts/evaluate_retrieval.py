@@ -453,7 +453,7 @@ class MultiSearchRetrievalEvaluator:
     """Coordinates evaluation across multiple search types."""
 
     DEFAULT_PORTS = [8000, 8001, 8080, 3000]
-    VALID_SEARCH_TYPES = ["bm25-lc", "vector-lc", "hybrid-lc"]
+    VALID_SEARCH_TYPES = ["bm25-lc", "vector-lc", "hybrid-lc", "agentic"]
 
     def __init__(self, args):
         self.args = args
@@ -1742,7 +1742,7 @@ def main():
         "--search-types",
         type=str,
         default="all",
-        help="Comma-separated search types to evaluate: 'bm25', 'vector', 'bm25-lc', 'vector-lc', 'hybrid', 'hybrid-lc', or 'all' (default: all)"
+        help="Comma-separated search types to evaluate: 'bm25-lc', 'vector-lc', 'hybrid-lc', 'agentic', or 'all' (default: all)"
     )
     parser.add_argument(
         "--parallel",

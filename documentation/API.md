@@ -731,7 +731,7 @@ Perform natural language search over your collection using keyword-based BM25 or
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `query` | string | *required* | Natural language search query (min 3 characters) |
-| `search_type` | string | `"bm25-lc"` | Search method: `"bm25-lc"` (keyword), `"vector-lc"` (semantic), or `"hybrid-lc"` (hybrid search with RRF) |
+| `search_type` | string | `"bm25-lc"` | Search method: `"bm25-lc"` (keyword), `"vector-lc"` (semantic), `"hybrid-lc"` (hybrid with RRF), or `"agentic"` (intelligent agent-based search) |
 | `top_k` | integer | `10` | Number of results to return (1-50) |
 | `category_filter` | string | `null` | Filter results by category |
 | `min_relevance_score` | float | `-1.0` | **BM25 only**: Minimum BM25 relevance score threshold. Results with scores > this value will be filtered out. Default `-1.0` effectively disables filtering since most results score lower (more negative = better match). |
@@ -741,11 +741,12 @@ Perform natural language search over your collection using keyword-based BM25 or
 
 **Search Type Values:**
 
-| Value | Description | Implementation |
-|-------|-------------|----------------|
-| `"bm25-lc"` | Fast keyword-based full-text search | LangChain BM25Retriever (default) |
-| `"vector-lc"` | Semantic similarity search | LangChain Chroma with VoyageAI embeddings |
-| `"hybrid-lc"` | Hybrid search with RRF fusion | LangChain EnsembleRetriever combining BM25 + Vector with Reciprocal Rank Fusion |
+| Value | Description | Implementation | Typical Time |
+|-------|-------------|----------------|--------------|
+| `"bm25-lc"` | Fast keyword-based full-text search | LangChain BM25Retriever (default) | 2-10ms |
+| `"vector-lc"` | Semantic similarity search | LangChain Chroma with VoyageAI embeddings | 80-100ms |
+| `"hybrid-lc"` | Hybrid search with RRF fusion | LangChain EnsembleRetriever combining BM25 + Vector with Reciprocal Rank Fusion | 110-140ms |
+| `"agentic"` | Intelligent agent-based search with iterative refinement | LangChain ReAct Agent with search tools, can call hybrid search multiple times | 2-8 seconds |
 
 **Example (curl):**
 
@@ -789,6 +790,11 @@ curl -X POST http://localhost:8000/search \
 curl -X POST http://localhost:8000/search \
   -H "Content-Type: application/json" \
   -d '{"query": "authentic local food experiences", "search_type": "hybrid-lc", "top_k": 10}'
+
+# Agentic search with intelligent refinement (best for complex queries)
+curl -X POST http://localhost:8000/search \
+  -H "Content-Type: application/json" \
+  -d '{"query": "Find affordable Japanese perfumes or beauty products", "search_type": "agentic", "top_k": 10}'
 ```
 
 **Response:** `200 OK`
@@ -881,15 +887,54 @@ curl -X POST http://localhost:8000/search \
 }
 ```
 
+**Agentic Search Response Example:**
+```json
+{
+  "query": "Find affordable Japanese perfumes or beauty products",
+  "search_type": "agentic",
+  "results": [
+    {
+      "item_id": "fe0288ee-5bcf-46e5-8ce6-c1c65cae5395",
+      "rank": 1,
+      "score": 0.0625,
+      "score_type": "hybrid_rrf",
+      "category": "Beauty",
+      "headline": "J-Scent fragrance review with picks: Wood Flake, Hisui, Sumo",
+      "summary": "J-Scent perfume house offers affordable Japanese-inspired fragrances...",
+      "image_url": "/images/fe0288ee-5bcf-46e5-8ce6-c1c65cae5395.jpg",
+      "metadata": { ... }
+    }
+  ],
+  "total_results": 5,
+  "answer": "I found several affordable Japanese beauty products in your collection, with a focus on perfumes as you requested. The standout is **J-Scent** [Item 1], a Japanese perfume house that offers budget-friendly fragrances around ¥4,950 (~$33). The collection includes unique scents like Wood Flake, Hisui, and Sumo Wrestler, all inspired by Japanese culture and nature.",
+  "answer_confidence": 0.85,
+  "citations": ["1"],
+  "agent_reasoning": "I interpreted 'affordable' as budget-conscious pricing and 'Japanese beauty products' with emphasis on 'perfumes'. Initial search for 'affordable Japanese perfume' returned excellent matches. The J-Scent items clearly met all criteria (Japanese brand, perfume category, explicit pricing indicating affordability at ¥4,950). No refinement needed as results directly answered the query with high confidence.",
+  "tools_used": [
+    {
+      "tool": "search_collections",
+      "query": "affordable Japanese perfume beauty products",
+      "top_k": 10,
+      "category_filter": null,
+      "results_count": 5
+    }
+  ],
+  "retrieval_time_ms": 125.3,
+  "answer_time_ms": 3241.7
+}
+```
+
 | Field | Type | Description |
 |-------|------|-------------|
 | `query` | string | The search query that was executed |
-| `search_type` | string | The search method used: `"bm25"`, `"vector"`, `"bm25-lc"`, `"vector-lc"`, or `"hybrid-lc"` |
+| `search_type` | string | The search method used: `"bm25"`, `"vector"`, `"bm25-lc"`, `"vector-lc"`, `"hybrid-lc"`, or `"agentic"` |
 | `results` | array | List of search results ordered by relevance |
 | `total_results` | integer | Total number of results returned |
 | `answer` | string/null | AI-generated answer (null if `include_answer` is false) |
 | `answer_confidence` | float/null | Confidence score 0-1 based on result relevance |
 | `citations` | array/null | List of item numbers cited in the answer |
+| `agent_reasoning` | string/null | **Agentic only**: Explanation of the agent's search strategy and decision-making process |
+| `tools_used` | array/null | **Agentic only**: List of tool calls made by the agent with parameters and result counts |
 | `retrieval_time_ms` | float | Time taken for search in milliseconds |
 | `answer_time_ms` | float/null | Time taken for answer generation in milliseconds |
 
@@ -941,16 +986,34 @@ curl -X POST http://localhost:8000/search \
 - Typical retrieval time: ~110-140ms
 - See `/search/config` endpoint for current runtime configuration
 
+**Agentic Search (`search_type: "agentic"`):**
+- Intelligent agent-based search using LangChain ReAct agents with Claude Sonnet 4.5
+- Agent can iteratively refine searches based on result quality
+- Best for complex, ambiguous, or multi-part queries
+- Uses hybrid search as underlying tool with eager first search optimization
+- Agent reasons about search strategy and adjusts approach with semantic awareness
+- Returns `agent_reasoning` explaining search decisions
+- Returns `tools_used` showing all search iterations
+- Typical time: **2-4 seconds** (optimized, down from 8-12s) - includes multiple LLM calls for reasoning
+- Maximum **3 iterations** to prevent runaway searches (optimized from 5)
+- Optimized for performance: eager first search, reduced verbosity, batch DB queries, semantic prompt guidance
+- See `documentation/AGENTIC_SEARCH.md` for complete guide
+- See `documentation/AGENTIC_SEARCH_OPTIMIZATION.md` for optimization details (65-75% performance improvement)
+
 **Common Features:**
 - **Natural Language Queries**: Ask questions like "Show me Tokyo restaurants" or "beauty products"
 - **AI Answer Generation**: Optional LLM-powered answers with citations to specific items
-- **Category Filtering**: Narrow results to specific categories (works with both search types)
-- **Answer generation**: ~4-5 seconds (when enabled, works with both search types)
+- **Category Filtering**: Narrow results to specific categories (works with all search types)
+- **Answer generation**: ~4-5 seconds for standard search, ~2-8 seconds for agentic search
 
 **Which Search Type to Use:**
 
 | Use Case | Recommended Type | Example Query |
 |----------|------------------|---------------|
+| Complex multi-part queries | Agentic | "Find affordable Japanese perfumes or compare Tokyo vs Kyoto food" |
+| Ambiguous/exploratory queries | Agentic | "luxury items" (agent tries Beauty, Fashion, Travel) |
+| Queries requiring refinement | Agentic | "perfume" → agent tries "Japanese perfume", "affordable perfume" |
+| Comparative searches | Agentic | "Compare Tokyo and Kyoto restaurants" |
 | Best overall results | Hybrid-LC | "authentic local food experiences" |
 | Multi-faceted queries | Hybrid-LC | "Tokyo restaurants with traditional vibes" |
 | Exact keyword match | BM25-LC | "Tokyo Tower restaurant" |
@@ -959,7 +1022,9 @@ curl -X POST http://localhost:8000/search \
 | Related concepts | Vector-LC | "Japanese culture" (finds travel, food, traditions) |
 | Mixed keywords | Hybrid-LC or BM25-LC | "perfume shopping Tokyo" |
 | Vague descriptions | Vector-LC or Hybrid-LC | "authentic local vibes" |
-| Production use (recommended) | Hybrid-LC | Any natural language query |
+| Fast/high-volume queries | Hybrid-LC or BM25-LC | Any query with strict latency requirements |
+| Standard production use | Hybrid-LC | Any natural language query |
+| Exploratory/conversational use | Agentic | Complex natural language questions |
 
 **Error Response:** `500 Internal Server Error`
 
@@ -1725,7 +1790,7 @@ Request model for search and Q&A endpoint.
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `query` | string | *required* | Natural language search query (min 3 characters) |
-| `search_type` | string | `"bm25-lc"` | Search method: `"bm25-lc"`, `"vector-lc"`, or `"hybrid-lc"` |
+| `search_type` | string | `"bm25-lc"` | Search method: `"bm25-lc"`, `"vector-lc"`, `"hybrid-lc"`, or `"agentic"` |
 | `top_k` | integer | `10` | Number of results to return (1-50) |
 | `category_filter` | string | `null` | Filter results by category |
 | `min_relevance_score` | float | `-1.0` | **BM25-LC only**: Minimum BM25 relevance score threshold. Results with scores > this value will be filtered out. Default `-1.0` effectively disables filtering since most results score lower (more negative = better match). |
@@ -1755,12 +1820,15 @@ Response model for search and Q&A endpoint.
 | Field | Type | Description |
 |-------|------|-------------|
 | `query` | string | The search query that was executed |
-| `search_type` | string | The search method used: `"bm25"`, `"vector"`, `"bm25-lc"`, `"vector-lc"`, or `"hybrid-lc"` |
+| `search_type` | string | The search method used: `"bm25"`, `"vector"`, `"bm25-lc"`, `"vector-lc"`, `"hybrid-lc"`, or `"agentic"` |
 | `results` | array[SearchResult] | List of search results ordered by relevance |
 | `total_results` | integer | Total number of results returned |
 | `answer` | string/null | AI-generated answer (null if `include_answer` is false) |
 | `answer_confidence` | float/null | Confidence score 0-1 based on result relevance |
 | `citations` | array[string]/null | List of item numbers cited in the answer |
+| `agent_reasoning` | string/null | (Agentic only) Agent's explanation of search strategy and decisions |
+| `tools_used` | array/null | (Agentic only) List of search tool invocations with inputs/outputs |
+| `iterations` | integer/null | (Agentic only) Number of search iterations performed |
 | `retrieval_time_ms` | float | Time taken for search in milliseconds |
 | `answer_time_ms` | float/null | Time taken for answer generation in milliseconds |
 

@@ -5,10 +5,15 @@
 This document describes the retrieval system for natural language Q&A over the Collections Local image collection. The system supports multiple search modes, all implemented using LangChain retrievers for consistency:
 
 - **BM25 Full-Text Search (bm25-lc)**: Keyword-based retrieval using SQLite FTS5 with BM25 ranking
-- **Vector Semantic Search (vector-lc)**: Embedding-based semantic retrieval using VoyageAI and sqlite-vec
+- **Vector Semantic Search (vector-lc)**: Embedding-based semantic retrieval using VoyageAI and Chroma
 - **Hybrid Search (hybrid-lc)**: Combines BM25 and vector search using Reciprocal Rank Fusion (RRF)
+- **Agentic Search (agentic)**: Advanced AI-powered search using LangChain agents with Claude Sonnet 4.5 that can autonomously refine queries and synthesize results
 
 All retrievers use LangChain's retriever interface, providing a consistent API and enabling advanced features like hybrid search and ensemble retrieval. Users can search their collection using natural language queries and receive AI-generated answers with citations.
+
+**For detailed information about agentic search**, see:
+- [AGENTIC_SEARCH.md](./AGENTIC_SEARCH.md) - Comprehensive guide to agentic search
+- [AGENTIC_SEARCH_OPTIMIZATION.md](./AGENTIC_SEARCH_OPTIMIZATION.md) - Performance optimization details
 
 ## Architecture
 
@@ -661,10 +666,14 @@ if similarity >= min_similarity_score:
 | Concept search (e.g., "Japanese capital") | **Vector** | Semantic understanding |
 | Multi-word phrases | **BM25** | Better term co-occurrence |
 | Synonym matching | **Vector** | Embeddings capture synonyms |
-| Ambiguous queries | **Vector** | Context-aware matching |
+| Ambiguous queries | **Hybrid** or **Agentic** | Combines keyword + semantic; agentic for complex cases |
 | Category + keyword | **BM25** | Faster with category filter |
 | Exploratory search | **Vector** | Discovers related content |
 | Precise product lookup | **BM25** | Exact name/SKU matching |
+| General purpose search | **Hybrid** | Best balance of precision and recall |
+| Complex multi-part queries | **Agentic** | Can decompose and refine queries autonomously |
+| Comparative queries (e.g., "Compare X and Y") | **Agentic** | Can search separately and synthesize |
+| Queries requiring refinement | **Agentic** | Self-corrects based on result quality |
 
 #### Score Comparison
 
@@ -749,6 +758,436 @@ if similarity >= min_similarity_score:
 ```
 
 **Recommendation:** Use BM25 when category filtering is primary
+
+## 4. Agentic Search
+
+### Overview
+
+Agentic search represents an advanced retrieval paradigm that combines LangChain agents with search tools to enable iterative, intelligent search refinement. Unlike traditional single-pass retrieval methods (BM25, Vector, or Hybrid), agentic search uses an LLM-powered agent that can reason about search results, refine queries, and orchestrate multiple search calls to better satisfy complex user information needs.
+
+**Key Concept:** The agent acts as an intelligent intermediary between the user's query and the search system, capable of understanding intent, evaluating result quality, and adjusting search strategies dynamically.
+
+### How It Works
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                   User Query Input                       │
+│           "Find affordable Japanese perfumes"            │
+└────────────────────┬────────────────────────────────────┘
+                     │
+                     ▼
+┌─────────────────────────────────────────────────────────┐
+│              LangChain Agent (Claude Sonnet 4.5)         │
+│         • Analyzes intent and context                    │
+│         • Plans search strategy                          │
+│         • Evaluates result quality                       │
+└────────────────────┬────────────────────────────────────┘
+                     │
+                     ▼
+        ┌────────────┴────────────┐
+        │                         │
+        ▼                         ▼
+┌──────────────┐         ┌──────────────┐
+│  Tool Call 1 │         │  Tool Call 2 │  (if needed)
+│ search(...) │────────▶│ search(...) │
+└──────┬───────┘         └──────┬───────┘
+       │                        │
+       ▼                        ▼
+┌─────────────────────────────────────────────────────────┐
+│           Hybrid Search Engine (BM25 + Vector)           │
+│               Returns ranked results                     │
+└────────────────────┬────────────────────────────────────┘
+                     │
+                     ▼
+┌─────────────────────────────────────────────────────────┐
+│              Agent Reasoning & Synthesis                 │
+│         • Evaluates if results answer query             │
+│         • Decides whether to refine search              │
+│         • Synthesizes final answer                      │
+└────────────────────┬────────────────────────────────────┘
+                     │
+                     ▼
+┌─────────────────────────────────────────────────────────┐
+│       Natural Language Answer with Reasoning             │
+│         + Citations + Search Actions Taken              │
+└─────────────────────────────────────────────────────────┘
+```
+
+**Search Flow:**
+
+1. **Query Understanding**: Agent analyzes the user's natural language query to extract:
+   - Core search intent (e.g., "find products", "list locations", "compare items")
+   - Key concepts and entities (e.g., "affordable", "Japanese", "perfumes")
+   - Implicit constraints (price sensitivity, geographic preferences)
+   - Expected result characteristics
+
+2. **Initial Search**: Agent formulates an optimal search query and calls `search_collections` tool:
+   - Selects search parameters (top_k, category_filter)
+   - Chooses query formulation strategy
+   - Executes hybrid search (BM25 + Vector)
+
+3. **Result Evaluation**: Agent examines returned results:
+   - Assesses relevance to original query
+   - Identifies gaps or mismatches
+   - Determines if refinement is needed
+
+4. **Iterative Refinement** (if necessary):
+   - Reformulates query with different keywords or focus
+   - Adjusts search parameters (broaden/narrow scope)
+   - Tries alternative search strategies
+   - Limited to max 5 iterations (configurable)
+
+5. **Answer Synthesis**: Agent generates comprehensive response:
+   - Summarizes findings with context
+   - Cites specific items with reasoning
+   - Explains search strategy if relevant
+   - Acknowledges limitations if results are incomplete
+
+### Key Features
+
+**Intelligent Query Refinement**
+- Automatically rephrases queries that produce poor results
+- Expands or narrows search scope based on result quality
+- Tries synonyms and alternative formulations
+- Example: "cheap perfume" → "affordable fragrance" → "budget-friendly scents"
+
+**Multi-Step Reasoning**
+- Breaks complex queries into sub-searches
+- Example: "Compare Tokyo and Kyoto food options" → Search Tokyo → Search Kyoto → Compare
+- Combines results across multiple search calls
+- Maintains context across search iterations
+
+**Adaptive Search Strategy**
+- Learns from result quality what works
+- Adjusts category filters dynamically
+- Balances precision vs recall based on query type
+- Example: Starts broad, narrows if too many results
+
+**Transparent Reasoning**
+- Returns `agent_reasoning` field explaining search decisions
+- Shows which tools were called and why
+- Useful for debugging and understanding agent behavior
+- Builds user trust through explainability
+
+**Fallback Handling**
+- Gracefully handles zero results with alternative strategies
+- Suggests query modifications to user
+- Provides partial answers when complete match unavailable
+- Never fails silently
+
+### When to Use Agentic Search
+
+**Best Use Cases:**
+
+| Scenario | Why Agentic Search Excels |
+|----------|---------------------------|
+| **Complex multi-part queries** | Can break down "Find Japanese restaurants in Tokyo with traditional vibes" into components |
+| **Ambiguous or exploratory queries** | Tries multiple interpretations: "luxury items" → searches Beauty, Fashion, Travel |
+| **Iterative refinement needs** | User query "perfume" too broad → Agent tries "Japanese perfume", "affordable perfume", etc. |
+| **Comparative searches** | "Compare X and Y" requires multiple searches and synthesis |
+| **Conversational search** | Follow-up queries maintain context and refine previous results |
+| **Low-confidence results** | When initial search fails, agent tries alternative approaches automatically |
+
+**When NOT to Use:**
+
+| Scenario | Use Instead | Reason |
+|----------|-------------|--------|
+| **Simple keyword lookup** | BM25-LC | Faster, no reasoning overhead needed |
+| **Known exact match** | BM25-LC | Direct retrieval more efficient |
+| **High-volume API usage** | Hybrid-LC | Agentic search uses more LLM tokens |
+| **Strict latency requirements** | Hybrid-LC | Agent reasoning adds 2-5 seconds |
+| **Batch processing** | Vector-LC or Hybrid-LC | Agent iteration unsuitable for batch |
+
+**Decision Flow:**
+
+```
+Is query complex OR ambiguous OR exploratory?
+├─ YES → Use Agentic Search
+└─ NO → Is it a concept/semantic query?
+          ├─ YES → Use Hybrid-LC or Vector-LC
+          └─ NO → Use BM25-LC (fastest)
+```
+
+### Performance Characteristics
+
+**Timing Breakdown:**
+
+| Component | Time Range | Notes |
+|-----------|------------|-------|
+| Agent initialization | 50-100ms | One-time per search request |
+| Query understanding | 500-1000ms | LLM call to analyze intent |
+| First search tool call | 100-150ms | Hybrid search execution |
+| Result evaluation | 500-1500ms | LLM analyzes results |
+| Refinement search (if needed) | 100-150ms | Additional hybrid search |
+| Final synthesis | 1000-2000ms | LLM generates answer |
+| **Total (no refinement)** | **2-4 seconds** | Single search iteration |
+| **Total (with refinement)** | **4-8 seconds** | Multiple search iterations |
+
+**Factors Affecting Speed:**
+
+- **Agent iterations**: More refinement = longer time
+- **LLM response time**: Anthropic API latency (typically 1-2s per call)
+- **Search complexity**: Category filters add overhead
+- **Result set size**: Larger top_k for agent to evaluate
+- **Max iterations**: Configured limit prevents runaway searches
+
+**Comparison with Other Search Types:**
+
+| Search Type | Typical Time | LLM Calls | Best For |
+|-------------|--------------|-----------|----------|
+| BM25-LC | 2-10ms | 0 | Exact keyword match |
+| Vector-LC | 80-100ms | 0 | Semantic similarity |
+| Hybrid-LC | 110-140ms | 0 | Balanced keyword + semantic |
+| **Agentic** | **2000-4000ms** | **2-3** | **Complex, ambiguous, multi-step queries** |
+
+**Performance Note:** Agentic search has been optimized (see [AGENTIC_SEARCH_OPTIMIZATION.md](./AGENTIC_SEARCH_OPTIMIZATION.md)) to reduce response time from 8-12s to 2-4s (65-75% improvement).
+
+**Token Usage:**
+
+- System prompt: ~400 tokens (includes semantic search guidance)
+- Eager first search results: ~200-300 tokens
+- Query analysis: ~200-300 tokens per iteration (reduced from 300-500)
+- Result evaluation: ~300-500 tokens per search (reduced from 500-1000)
+- Answer synthesis: ~500-800 tokens
+- **Typical total**: 1500-2500 tokens per agentic search (40% reduction from pre-optimization)
+
+### Example Request/Response
+
+**Request:**
+
+```bash
+curl -X POST http://localhost:8000/search \
+  -H "Content-Type: application/json" \
+  -d '{
+    "query": "Find affordable Japanese beauty products, especially perfumes",
+    "search_type": "agentic",
+    "top_k": 10,
+    "include_answer": true
+  }'
+```
+
+**Response:**
+
+```json
+{
+  "query": "Find affordable Japanese beauty products, especially perfumes",
+  "search_type": "agentic",
+  "results": [
+    {
+      "item_id": "fe0288ee-5bcf-46e5-8ce6-c1c65cae5395",
+      "rank": 1,
+      "score": 0.0625,
+      "score_type": "hybrid_rrf",
+      "category": "Beauty",
+      "headline": "J-Scent fragrance review with picks: Wood Flake, Hisui, Sumo",
+      "summary": "J-Scent perfume house offers affordable Japanese-inspired fragrances...",
+      "image_url": "/images/fe0288ee-5bcf-46e5-8ce6-c1c65cae5395.jpg",
+      "metadata": { ... }
+    }
+  ],
+  "total_results": 5,
+  "answer": "I found several affordable Japanese beauty products in your collection, with a focus on perfumes as you requested. The standout is **J-Scent** [Item 1], a Japanese perfume house that offers budget-friendly fragrances around ¥4,950 (~$33). The collection includes unique scents like Wood Flake, Hisui, and Sumo Wrestler, all inspired by Japanese culture and nature. This represents excellent value for niche Japanese fragrances.",
+  "answer_confidence": 0.85,
+  "citations": ["1"],
+  "agent_reasoning": "I interpreted 'affordable' as budget-conscious pricing and 'Japanese beauty products' with emphasis on 'perfumes'. Initial search for 'affordable Japanese perfume' returned excellent matches. The J-Scent items clearly met all criteria (Japanese brand, perfume category, explicit pricing indicating affordability at ¥4,950). No refinement needed as results directly answered the query with high confidence.",
+  "tools_used": [
+    {
+      "tool": "search_collections",
+      "query": "affordable Japanese perfume beauty products",
+      "top_k": 10,
+      "category_filter": null,
+      "results_count": 5
+    }
+  ],
+  "retrieval_time_ms": 125.3,
+  "answer_time_ms": 3241.7
+}
+```
+
+**Key Response Fields:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `agent_reasoning` | string | Explains the agent's search strategy and decision-making process |
+| `tools_used` | array | List of tool calls made by the agent, including parameters and results |
+| `tools_used[].tool` | string | Tool name (typically `"search_collections"`) |
+| `tools_used[].query` | string | The query formulated by the agent for this search |
+| `tools_used[].results_count` | integer | Number of results returned by this tool call |
+
+**Example with Refinement:**
+
+```json
+{
+  "query": "luxury items from France",
+  "search_type": "agentic",
+  "agent_reasoning": "Initial search for 'luxury France' returned mixed results across categories. Refined to focus on traditional luxury categories: fashion, beauty, and accessories. Second search with 'French luxury perfume fashion' yielded higher quality matches. Combined results to provide comprehensive answer about French luxury items in collection.",
+  "tools_used": [
+    {
+      "tool": "search_collections",
+      "query": "luxury items France",
+      "results_count": 3
+    },
+    {
+      "tool": "search_collections",
+      "query": "French luxury perfume fashion beauty",
+      "results_count": 5
+    }
+  ],
+  "total_results": 6,
+  "retrieval_time_ms": 245.8,
+  "answer_time_ms": 5632.1
+}
+```
+
+### Implementation Details
+
+**Architecture:**
+
+Agentic search is built on LangChain's agent framework:
+
+```python
+from langchain.agents import AgentExecutor, create_react_agent
+from langchain_anthropic import ChatAnthropic
+from langchain.tools import Tool
+
+# Agent uses Claude Sonnet 4.5 for reasoning
+llm = ChatAnthropic(
+    model="claude-sonnet-4-5",
+    temperature=0.0,  # Deterministic for consistent search
+    max_tokens=2048
+)
+
+# Search tool wrapper
+search_tool = Tool(
+    name="search_collections",
+    description="Search the image collection using hybrid search",
+    func=lambda query, top_k=10, category_filter=None:
+        hybrid_search(query, top_k, category_filter)
+)
+
+# Create ReAct agent (Reasoning + Acting)
+agent = create_react_agent(
+    llm=llm,
+    tools=[search_tool],
+    prompt=agent_prompt_template
+)
+
+# Executor manages iteration and tool calls
+agent_executor = AgentExecutor(
+    agent=agent,
+    tools=[search_tool],
+    max_iterations=5,  # Limit refinement cycles
+    early_stopping_method="generate",  # Return answer on max iterations
+    return_intermediate_steps=True,  # Track tool calls for transparency
+    verbose=True  # Log reasoning for debugging
+)
+```
+
+**Configuration (`config/agent_config.py`):**
+
+```python
+# Agent model
+AGENT_MODEL = "claude-sonnet-4-5"
+AGENT_TEMPERATURE = 0.0  # Deterministic
+AGENT_MAX_TOKENS = 2048
+
+# Iteration control
+AGENT_MAX_ITERATIONS = 5  # Maximum tool calls
+AGENT_EARLY_STOPPING_METHOD = "generate"  # Graceful stopping
+
+# System prompt for agent
+AGENT_SYSTEM_MESSAGE = """You are a specialized search assistant...
+1. Understand the user's search intent
+2. Use search_collections tool to find relevant items
+3. Analyze results to determine if they answer the query
+4. Refine search if results are insufficient
+"""
+```
+
+**Search Tool Integration:**
+
+The agent has access to a single tool: `search_collections`
+
+```python
+def search_collections(
+    query: str,
+    top_k: int = 10,
+    category_filter: Optional[str] = None
+) -> dict:
+    """
+    Execute hybrid search and return results to agent.
+
+    Returns structured data the agent can reason about:
+    - List of items with metadata
+    - Relevance scores
+    - Categories and summaries
+    """
+    # Uses hybrid-lc retriever under the hood
+    retriever = HybridLangChainRetriever(top_k=top_k)
+    results = retriever.get_relevant_documents(query)
+
+    return {
+        "results": [format_result_for_agent(r) for r in results],
+        "count": len(results),
+        "search_params": {
+            "query": query,
+            "top_k": top_k,
+            "category_filter": category_filter
+        }
+    }
+```
+
+**ReAct Pattern:**
+
+The agent uses the ReAct (Reasoning + Acting) pattern:
+
+1. **Thought**: Agent reasons about the current state
+   - Example: "The user wants affordable perfumes. I should search for 'affordable perfume' with Beauty category filter."
+
+2. **Action**: Agent decides to call a tool
+   - Example: `search_collections(query="affordable perfume", category_filter="Beauty")`
+
+3. **Observation**: Agent sees tool results
+   - Example: "Found 3 items, all Japanese perfumes priced around ¥5000"
+
+4. **Repeat** or **Final Answer**: Based on observation:
+   - If results good → Generate final answer
+   - If results poor → Reformulate (new Thought → Action)
+
+**Iteration Control:**
+
+```python
+# Max iterations prevents infinite loops
+max_iterations = 5
+
+# Iteration count includes:
+# - Initial search: 1 iteration
+# - Each refinement: +1 iteration
+# - Final answer: Uses remaining iteration budget
+
+# Example iteration flow:
+# Iteration 1: Thought → Search "luxury France" → 2 weak results
+# Iteration 2: Thought → Search "French perfume luxury" → 5 strong results
+# Iteration 3: Final Answer synthesis
+```
+
+**Error Handling:**
+
+- **No results**: Agent tries alternative queries or reports inability to find matches
+- **Max iterations**: Returns best available answer with caveat
+- **Tool failures**: Agent explains the issue and provides partial answer
+- **API errors**: Graceful fallback to direct hybrid search
+
+**Observability:**
+
+All agent actions are logged to LangSmith for debugging:
+- Reasoning traces (Thoughts)
+- Tool calls with parameters
+- Search results returned
+- Token usage per step
+- Total execution time
+
+Access traces at: https://smith.langchain.com
 
 ### 2. Answer Generation (`retrieval/answer_generator.py`)
 
@@ -887,7 +1326,7 @@ Search the collection using BM25 or vector search.
 | Parameter | Type | Default | Description |
 |-----------|------|---------|-------------|
 | `query` | string | required | Natural language search query |
-| `search_type` | string | `"bm25-lc"` | Search type: `"bm25-lc"`, `"vector-lc"`, or `"hybrid-lc"` |
+| `search_type` | string | `"bm25-lc"` | Search type: `"bm25-lc"`, `"vector-lc"`, `"hybrid-lc"`, or `"agentic"` |
 | `top_k` | integer | `10` | Number of results to return (1-50) |
 | `category_filter` | string | `null` | Filter by category (e.g., "Food", "Beauty") |
 | `min_relevance_score` | float | `-1.0` | BM25 minimum score threshold (more negative = stricter) |
@@ -915,8 +1354,11 @@ Search the collection using BM25 or vector search.
 | Field | Type | Description |
 |-------|------|-------------|
 | `query` | string | Original query |
-| `search_type` | string | Search type used (`"bm25-lc"`, `"vector-lc"`, or `"hybrid-lc"`) |
+| `search_type` | string | Search type used (`"bm25-lc"`, `"vector-lc"`, `"hybrid-lc"`, or `"agentic"`) |
 | `results` | array | Search results with metadata |
+| `agent_reasoning` | string | (Agentic only) Agent's explanation of search strategy |
+| `tools_used` | array | (Agentic only) List of search tool invocations |
+| `iterations` | integer | (Agentic only) Number of search iterations performed |
 | `total_results` | integer | Number of results returned |
 | `answer` | string | AI-generated answer (if `include_answer=true`) |
 | `answer_confidence` | float | Confidence score (0-1) |

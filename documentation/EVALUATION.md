@@ -135,7 +135,8 @@ File: `data/eval/retrieval_evaluation_dataset.json`
 **Expected Items Resolution**:
 - If `expected_items_by_search_type` exists for the current search type → use it
 - Else if `expected_items` exists → use it (backward compatible)
-- This allows different expected results for BM25 vs vector search
+- This allows different expected results for BM25 vs vector vs hybrid vs agentic search
+- Supported search types: `bm25-lc`, `vector-lc`, `hybrid-lc`, `agentic`
 
 **Query Types**:
 
@@ -301,7 +302,8 @@ Optional:
 
 Multi-Search Type Options:
   --search-types TYPES    Comma-separated search types to evaluate:
-                          'bm25-lc', 'vector-lc', 'hybrid-lc', or 'all' (default: all)
+                          'bm25-lc', 'vector-lc', 'hybrid-lc', 'agentic', or 'all' (default: all)
+                          Note: 'agentic' can take 2-4s per query (optimized)
   --parallel              Run search types in parallel per query
                           for faster evaluation (default: enabled)
   --no-parallel           Disable parallel execution
@@ -342,6 +344,9 @@ python scripts/evaluate_retrieval.py --search-types vector-lc
 
 # Evaluate hybrid-LC search only
 python scripts/evaluate_retrieval.py --search-types hybrid-lc
+
+# Evaluate agentic search only (slower but intelligent)
+python scripts/evaluate_retrieval.py --search-types agentic
 ```
 
 #### 3. Sequential vs Parallel Execution

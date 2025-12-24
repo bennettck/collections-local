@@ -499,7 +499,38 @@ async def search_collection(search_request: SearchRequest, request: Request):
     retrieval_start = time.time()
 
     # Route to appropriate search method
-    if search_request.search_type == "hybrid-lc":
+    if search_request.search_type == "agentic":
+        # Agentic search with LangChain agent
+        from retrieval.agentic_search import AgenticSearchOrchestrator
+
+        chroma_mgr = get_current_chroma_manager(request)
+
+        # Create orchestrator
+        orchestrator = AgenticSearchOrchestrator(
+            chroma_manager=chroma_mgr,
+            top_k=search_request.top_k,
+            category_filter=search_request.category_filter,
+            min_relevance_score=search_request.min_relevance_score,
+            min_similarity_score=search_request.min_similarity_score
+        )
+
+        # Execute agentic search
+        agentic_result = orchestrator.search(search_request.query)
+
+        # Extract documents and metadata
+        documents = agentic_result["documents"]
+        agent_reasoning = agentic_result["reasoning"]
+        tools_used = agentic_result["tools_used"]
+        agent_answer = agentic_result["final_answer"]
+
+        # Convert Documents to search_results format
+        search_results = [
+            (doc.metadata["item_id"], doc.metadata.get("rrf_score", doc.metadata.get("score", 0)))
+            for doc in documents
+        ]
+        score_type = "hybrid_rrf"
+
+    elif search_request.search_type == "hybrid-lc":
         # Hybrid retrieval with RRF (LangChain BM25 + Chroma Vector)
         from retrieval.langchain_retrievers import HybridLangChainRetriever
 
@@ -605,8 +636,20 @@ async def search_collection(search_request: SearchRequest, request: Request):
     answer_time = None
     citations = None
     confidence = None
+    reasoning = None
+    tools = None
 
-    if search_request.include_answer and results:
+    # For agentic search, use agent's answer and metadata
+    if search_request.search_type == "agentic":
+        answer = agent_answer
+        reasoning = agent_reasoning
+        tools = tools_used
+        # Set answer_time to 0 since it's included in retrieval_time
+        answer_time = 0
+        # Calculate simple confidence based on number of results
+        confidence = min(1.0, len(results) / 5.0) if results else 0.0
+
+    elif search_request.include_answer and results:
         answer_start = time.time()
 
         from retrieval.answer_generator import generate_answer
@@ -630,7 +673,9 @@ async def search_collection(search_request: SearchRequest, request: Request):
         answer_confidence=confidence,
         citations=citations,
         retrieval_time_ms=retrieval_time,
-        answer_time_ms=answer_time
+        answer_time_ms=answer_time,
+        agent_reasoning=reasoning,
+        tools_used=tools
     )
 
 

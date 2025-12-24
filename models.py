@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field
 from pydantic_settings import BaseSettings
 from datetime import datetime
-from typing import Optional, Literal, List, Any
+from typing import Optional, Literal, List, Any, Dict
 
 
 class Settings(BaseSettings):
@@ -69,11 +69,12 @@ class SearchRequest(BaseModel):
         description="Natural language search query",
         examples=["What restaurants are in Tokyo?", "Show me beauty products", "perfume"]
     )
-    search_type: Literal["bm25-lc", "vector-lc", "hybrid-lc"] = Field(
+    search_type: Literal["bm25-lc", "vector-lc", "hybrid-lc", "agentic"] = Field(
         "bm25-lc",
         description="Search type: 'bm25-lc' for LangChain BM25 full-text search, "
                     "'vector-lc' for LangChain semantic search, "
-                    "'hybrid-lc' for LangChain hybrid search with RRF (Recommended)"
+                    "'hybrid-lc' for LangChain hybrid search with RRF (Recommended), "
+                    "'agentic' for AI agent-driven iterative search with reasoning"
     )
     top_k: int = Field(
         10,
@@ -161,10 +162,11 @@ class SearchResult(BaseModel):
 class SearchResponse(BaseModel):
     """Response model for search and Q&A."""
     query: str
-    search_type: Literal["bm25", "vector", "bm25-lc", "vector-lc", "hybrid", "hybrid-lc"] = Field(
+    search_type: Literal["bm25", "vector", "bm25-lc", "vector-lc", "hybrid", "hybrid-lc", "agentic"] = Field(
         description="Search method used: 'bm25' for keyword search, 'vector' for semantic search, "
                     "'bm25-lc' for LangChain BM25, 'vector-lc' for LangChain vector, "
-                    "'hybrid' for native hybrid RRF, 'hybrid-lc' for LangChain hybrid RRF"
+                    "'hybrid' for native hybrid RRF, 'hybrid-lc' for LangChain hybrid RRF, "
+                    "'agentic' for AI agent-driven iterative search"
     )
     results: list[SearchResult]
     total_results: int
@@ -173,6 +175,15 @@ class SearchResponse(BaseModel):
     citations: Optional[list[str]] = None
     retrieval_time_ms: float
     answer_time_ms: Optional[float] = None
+    # Agentic search specific fields
+    agent_reasoning: Optional[List[str]] = Field(
+        None,
+        description="Agent's reasoning steps (only for agentic search)"
+    )
+    tools_used: Optional[List[Dict[str, Any]]] = Field(
+        None,
+        description="Tools invoked by agent with inputs/outputs (only for agentic search)"
+    )
 
 
 class GoldenAnalysisEntry(BaseModel):
