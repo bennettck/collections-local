@@ -12,6 +12,7 @@ from langchain_core.retrievers import BaseRetriever
 from langchain_core.documents import Document
 from langchain_core.callbacks import CallbackManagerForRetrieverRun
 from langchain_classic.retrievers.ensemble import EnsembleRetriever
+from langsmith import traceable
 
 import database
 import embeddings
@@ -26,6 +27,7 @@ class BM25LangChainRetriever(BaseRetriever):
     category_filter: Optional[str] = None
     min_relevance_score: float = -1.0
 
+    @traceable(name="bm25_retrieval", run_type="retriever")
     def _get_relevant_documents(
         self,
         query: str,
@@ -34,7 +36,7 @@ class BM25LangChainRetriever(BaseRetriever):
     ) -> List[Document]:
         """Execute BM25 search and return as LangChain Documents."""
         try:
-            # Call native database search
+            # Call native database search (returns item_ids and scores)
             search_results = database.search_items(
                 query=query,
                 top_k=self.top_k,
@@ -42,16 +44,27 @@ class BM25LangChainRetriever(BaseRetriever):
                 min_relevance_score=self.min_relevance_score
             )
 
-            # Convert to Documents
+            if not search_results:
+                return []
+
+            # Extract item IDs
+            item_ids = [item_id for item_id, _ in search_results]
+
+            # OPTIMIZED: Batch fetch all items with their analyses in a single query
+            items_data = database.batch_get_items_with_analyses(item_ids)
+
+            # Convert to Documents, preserving the search result order
             documents = []
             for item_id, bm25_score in search_results:
-                doc = self._create_document_from_item(
-                    item_id=item_id,
-                    score=bm25_score,
-                    score_type="bm25"
-                )
-                if doc:
-                    documents.append(doc)
+                item_data = items_data.get(item_id)
+                if item_data and item_data.get('analysis'):
+                    doc = self._create_document_from_data(
+                        item_data=item_data,
+                        score=bm25_score,
+                        score_type="bm25"
+                    )
+                    if doc:
+                        documents.append(doc)
 
             return documents
 
@@ -59,23 +72,17 @@ class BM25LangChainRetriever(BaseRetriever):
             logger.error(f"BM25 retrieval failed: {e}")
             return []
 
-    def _create_document_from_item(
+    def _create_document_from_data(
         self,
-        item_id: str,
+        item_data: dict,
         score: float,
         score_type: str
     ) -> Optional[Document]:
-        """Convert item to LangChain Document."""
+        """Convert item data (from batch query) to LangChain Document."""
         try:
-            # Fetch item and analysis
-            item = database.get_item(item_id)
-            if not item:
-                logger.warning(f"Item not found: {item_id}")
-                return None
-
-            analysis = database.get_latest_analysis(item_id)
+            analysis = item_data.get('analysis')
             if not analysis:
-                logger.warning(f"No analysis for item: {item_id}")
+                logger.warning(f"No analysis for item: {item_data['id']}")
                 return None
 
             # Extract raw_response data
@@ -84,14 +91,14 @@ class BM25LangChainRetriever(BaseRetriever):
 
             # Construct metadata
             metadata = {
-                "item_id": item_id,
+                "item_id": item_data['id'],
                 "score": score,
                 "score_type": score_type,
                 "category": raw_response.get("category"),
                 "headline": raw_response.get("headline"),
                 "summary": summary,
-                "image_url": f"/images/{item['filename']}",
-                "filename": item["filename"],
+                "image_url": f"/images/{item_data['filename']}",
+                "filename": item_data["filename"],
                 "raw_response": raw_response,
             }
 
@@ -102,102 +109,60 @@ class BM25LangChainRetriever(BaseRetriever):
             )
 
         except Exception as e:
-            logger.error(f"Failed to create document for {item_id}: {e}")
+            logger.error(f"Failed to create document for {item_data.get('id')}: {e}")
             return None
 
 
 class VectorLangChainRetriever(BaseRetriever):
-    """LangChain retriever wrapping sqlite-vec vector search."""
+    """LangChain retriever using Chroma vector store."""
 
     top_k: int = 10
     category_filter: Optional[str] = None
     min_similarity_score: float = 0.0
-    embedding_model: str = "voyage-3.5-lite"
+    chroma_manager: Optional[object] = None  # ChromaVectorStoreManager instance
 
+    @traceable(name="vector_retrieval", run_type="retriever")
     def _get_relevant_documents(
         self,
         query: str,
         *,
         run_manager: Optional[CallbackManagerForRetrieverRun] = None
     ) -> List[Document]:
-        """Execute vector search and return as LangChain Documents."""
+        """Execute vector search using Chroma and return as LangChain Documents."""
         try:
-            # Generate query embedding
-            query_embedding = embeddings.generate_query_embedding(
-                query=query,
-                model=self.embedding_model
+            if not self.chroma_manager:
+                logger.error("Chroma manager not provided to VectorLangChainRetriever")
+                return []
+
+            # Build filter dict for category filtering
+            filter_dict = None
+            if self.category_filter:
+                filter_dict = {"category": self.category_filter}
+
+            # Use Chroma's similarity_search_with_score for threshold filtering
+            results = self.chroma_manager.vectorstore.similarity_search_with_score(
+                query,
+                k=self.top_k,
+                filter=filter_dict
             )
 
-            # Call native database vector search
-            search_results = database.vector_search_items(
-                query_embedding=query_embedding,
-                top_k=self.top_k,
-                category_filter=self.category_filter,
-                min_similarity_score=self.min_similarity_score
-            )
-
-            # Convert to Documents
+            # Filter by similarity threshold and add scores to metadata
             documents = []
-            for item_id, similarity in search_results:
-                doc = self._create_document_from_item(
-                    item_id=item_id,
-                    score=similarity,
-                    score_type="similarity"
-                )
-                if doc:
+            for doc, distance in results:
+                # Convert distance to similarity (Chroma returns cosine distance)
+                similarity = 1.0 - distance
+
+                if similarity >= self.min_similarity_score:
+                    # Add similarity score to metadata
+                    doc.metadata["score"] = similarity
+                    doc.metadata["score_type"] = "similarity"
                     documents.append(doc)
 
             return documents
 
         except Exception as e:
-            logger.error(f"Vector retrieval failed: {e}")
+            logger.error(f"Chroma vector retrieval failed: {e}")
             return []
-
-    def _create_document_from_item(
-        self,
-        item_id: str,
-        score: float,
-        score_type: str
-    ) -> Optional[Document]:
-        """Convert item to LangChain Document."""
-        try:
-            # Fetch item and analysis
-            item = database.get_item(item_id)
-            if not item:
-                logger.warning(f"Item not found: {item_id}")
-                return None
-
-            analysis = database.get_latest_analysis(item_id)
-            if not analysis:
-                logger.warning(f"No analysis for item: {item_id}")
-                return None
-
-            # Extract raw_response data
-            raw_response = analysis.get("raw_response", {})
-            summary = raw_response.get("summary", "")
-
-            # Construct metadata
-            metadata = {
-                "item_id": item_id,
-                "score": score,
-                "score_type": score_type,
-                "category": raw_response.get("category"),
-                "headline": raw_response.get("headline"),
-                "summary": summary,
-                "image_url": f"/images/{item['filename']}",
-                "filename": item["filename"],
-                "raw_response": raw_response,
-            }
-
-            # Create Document
-            return Document(
-                page_content=summary,
-                metadata=metadata
-            )
-
-        except Exception as e:
-            logger.error(f"Failed to create document for {item_id}: {e}")
-            return None
 
 class HybridLangChainRetriever(BaseRetriever):
     """LangChain hybrid retriever combining BM25 and Vector search with RRF.
@@ -214,9 +179,10 @@ class HybridLangChainRetriever(BaseRetriever):
     category_filter: Optional[str] = None
     min_relevance_score: float = -1.0        # For BM25
     min_similarity_score: float = 0.0        # For vector
-    embedding_model: str = "voyage-3.5-lite"
+    chroma_manager: Optional[object] = None  # ChromaVectorStoreManager instance
     rrf_c: int = 15                          # RRF constant (optimized for sensitivity)
 
+    @traceable(name="hybrid_retrieval", run_type="retriever")
     def _get_relevant_documents(
         self, query: str, *, run_manager: Optional[CallbackManagerForRetrieverRun] = None
     ) -> List[Document]:
@@ -229,12 +195,12 @@ class HybridLangChainRetriever(BaseRetriever):
             min_relevance_score=self.min_relevance_score
         )
 
-        # Create vector retriever
+        # Create vector retriever with Chroma
         vector_retriever = VectorLangChainRetriever(
             top_k=self.vector_top_k,
             category_filter=self.category_filter,
             min_similarity_score=self.min_similarity_score,
-            embedding_model=self.embedding_model
+            chroma_manager=self.chroma_manager
         )
 
         # Create ensemble retriever with RRF
