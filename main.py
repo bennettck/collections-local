@@ -25,6 +25,11 @@ from models import (
     GoldenAnalysisEntry,
     CompareRequest,
     CompareResponse,
+    ChatRequest,
+    ChatMessage,
+    ChatResponse,
+    ChatHistoryResponse,
+    ChatSessionInfo,
 )
 from database import (
     init_db,
@@ -74,6 +79,9 @@ ALLOWED_MIME_TYPES = {
 # Global instances for Chroma vector stores (dual database support)
 prod_chroma_manager = None
 golden_chroma_manager = None
+
+# Global conversation manager for multi-turn chat
+conversation_manager = None
 
 
 @asynccontextmanager
@@ -148,6 +156,26 @@ async def lifespan(app: FastAPI):
         print(f"✓ Chroma vector store (GOLDEN) initialized (distance=cosine)")
     except Exception as e:
         print(f"⚠️  Failed to initialize Chroma (GOLDEN): {e}")
+
+    # Initialize conversation manager for multi-turn chat
+    global conversation_manager
+
+    print("Initializing conversation manager...")
+    try:
+        from chat.conversation_manager import ConversationManager
+        from config.chat_config import CONVERSATION_DB_PATH, CLEANUP_ON_STARTUP, CONVERSATION_TTL_HOURS
+
+        conversation_manager = ConversationManager(db_path=CONVERSATION_DB_PATH)
+
+        # Cleanup expired sessions on startup
+        if CLEANUP_ON_STARTUP:
+            expired = conversation_manager.cleanup_expired_sessions(ttl_hours=CONVERSATION_TTL_HOURS)
+            if expired > 0:
+                print(f"  Cleaned up {expired} expired chat sessions")
+
+        print(f"✓ Conversation manager initialized")
+    except Exception as e:
+        print(f"⚠️  Failed to initialize conversation manager: {e}")
 
     yield
     # Shutdown: cleanup if needed
@@ -726,6 +754,184 @@ async def get_search_config():
     }
 
     return config
+
+
+# Chat Endpoints (Multi-Turn Agentic Chat)
+
+@app.post("/chat", response_model=ChatResponse)
+async def chat_endpoint(chat_request: ChatRequest, request: Request):
+    """
+    Multi-turn conversational search and Q&A.
+
+    Send messages with a session_id to maintain conversation context.
+    The agent remembers previous exchanges and can handle follow-up questions
+    like "show me more", "filter those by category", etc.
+
+    The session_id should be a client-generated UUID that persists for the
+    duration of the conversation (e.g., stored in sessionStorage).
+    """
+    if conversation_manager is None:
+        raise HTTPException(
+            status_code=503,
+            detail="Conversation manager not initialized"
+        )
+
+    from chat.agentic_chat import AgenticChatOrchestrator
+    from datetime import datetime
+
+    chroma_mgr = get_current_chroma_manager(request)
+
+    # Create orchestrator with conversation manager
+    orchestrator = AgenticChatOrchestrator(
+        chroma_manager=chroma_mgr,
+        conversation_manager=conversation_manager,
+        top_k=chat_request.top_k,
+        category_filter=chat_request.category_filter,
+        min_similarity_score=chat_request.min_similarity_score
+    )
+
+    # Execute chat
+    result = orchestrator.chat(
+        message=chat_request.message,
+        session_id=chat_request.session_id
+    )
+
+    # Convert documents to SearchResult format
+    search_results = None
+    if result["documents"]:
+        search_results = []
+        for rank, doc in enumerate(result["documents"], start=1):
+            metadata = doc.metadata
+            item = get_item(metadata.get("item_id"))
+            if item:
+                search_results.append(SearchResult(
+                    item_id=metadata.get("item_id"),
+                    rank=rank,
+                    score=metadata.get("rrf_score", metadata.get("score", 0)),
+                    score_type="hybrid_rrf",
+                    category=metadata.get("category"),
+                    headline=metadata.get("headline"),
+                    summary=metadata.get("summary"),
+                    image_url=f"/images/{item['filename']}",
+                    metadata=metadata
+                ))
+
+    # Build response
+    return ChatResponse(
+        session_id=result["session_id"],
+        message=ChatMessage(
+            role="assistant",
+            content=result["response"],
+            timestamp=datetime.utcnow(),
+            search_results=search_results,
+            tools_used=result["tools_used"]
+        ),
+        conversation_turn=result["conversation_turn"],
+        search_results=search_results,
+        agent_reasoning=result["reasoning"],
+        tools_used=result["tools_used"],
+        response_time_ms=result["response_time_ms"]
+    )
+
+
+@app.get("/chat/{session_id}/history", response_model=ChatHistoryResponse)
+async def get_chat_history(session_id: str, request: Request):
+    """
+    Get conversation history for a session.
+
+    Returns all messages exchanged in this conversation session.
+    """
+    if conversation_manager is None:
+        raise HTTPException(
+            status_code=503,
+            detail="Conversation manager not initialized"
+        )
+
+    from chat.agentic_chat import AgenticChatOrchestrator
+    from datetime import datetime
+
+    chroma_mgr = get_current_chroma_manager(request)
+
+    orchestrator = AgenticChatOrchestrator(
+        chroma_manager=chroma_mgr,
+        conversation_manager=conversation_manager
+    )
+
+    # Get session info
+    session_info = conversation_manager.get_session_info(session_id)
+    if not session_info:
+        raise HTTPException(status_code=404, detail="Session not found")
+
+    # Get conversation history
+    history = orchestrator.get_conversation_history(session_id)
+
+    messages = [
+        ChatMessage(
+            role=msg["role"],
+            content=msg["content"],
+            timestamp=datetime.fromisoformat(msg["timestamp"]) if msg.get("timestamp") else datetime.utcnow()
+        )
+        for msg in history
+    ]
+
+    return ChatHistoryResponse(
+        session_id=session_id,
+        messages=messages,
+        created_at=datetime.fromisoformat(session_info["created_at"]) if session_info.get("created_at") else None,
+        last_activity=datetime.fromisoformat(session_info["last_activity"]) if session_info.get("last_activity") else None,
+        message_count=session_info.get("message_count", 0)
+    )
+
+
+@app.delete("/chat/{session_id}")
+async def clear_chat_session(session_id: str):
+    """
+    Clear a chat session and its history.
+
+    This permanently deletes the conversation state for this session.
+    """
+    if conversation_manager is None:
+        raise HTTPException(
+            status_code=503,
+            detail="Conversation manager not initialized"
+        )
+
+    deleted = conversation_manager.delete_session(session_id)
+
+    if not deleted:
+        raise HTTPException(status_code=404, detail="Session not found")
+
+    return {"status": "deleted", "session_id": session_id}
+
+
+@app.get("/chat/sessions")
+async def list_chat_sessions(limit: int = Query(50, le=100)):
+    """
+    List active chat sessions (dev/debug endpoint).
+
+    Returns session metadata for debugging and monitoring.
+    """
+    if conversation_manager is None:
+        raise HTTPException(
+            status_code=503,
+            detail="Conversation manager not initialized"
+        )
+
+    sessions = conversation_manager.list_sessions(limit=limit)
+    stats = conversation_manager.get_stats()
+
+    return {
+        "sessions": [
+            ChatSessionInfo(
+                session_id=s["session_id"],
+                created_at=datetime.fromisoformat(s["created_at"]),
+                last_activity=datetime.fromisoformat(s["last_activity"]),
+                message_count=s["message_count"]
+            ).model_dump()
+            for s in sessions
+        ],
+        "stats": stats
+    }
 
 
 # Index Management Endpoints

@@ -215,3 +215,74 @@ class CompareResponse(BaseModel):
     method: Literal["levenshtein", "tfidf"]
 
 
+# Chat Models for Multi-Turn Agentic Chat
+
+class ChatRequest(BaseModel):
+    """Request model for chat endpoint."""
+    message: str = Field(
+        ...,
+        min_length=1,
+        description="User message"
+    )
+    session_id: str = Field(
+        ...,
+        min_length=1,
+        description="Client-generated session UUID for conversation continuity"
+    )
+    top_k: int = Field(
+        10,
+        ge=1,
+        le=50,
+        description="Number of search results to return"
+    )
+    category_filter: Optional[str] = Field(
+        None,
+        description="Filter search results by category"
+    )
+    min_similarity_score: float = Field(
+        0.0,
+        ge=0.0,
+        le=1.0,
+        description="Minimum similarity score for vector search"
+    )
+
+
+class ChatMessage(BaseModel):
+    """A single message in the conversation."""
+    role: Literal["user", "assistant"]
+    content: str
+    timestamp: datetime
+    search_results: Optional[List[SearchResult]] = None
+    tools_used: Optional[List[Dict[str, Any]]] = None
+
+
+class ChatResponse(BaseModel):
+    """Response model for chat endpoint."""
+    session_id: str
+    message: ChatMessage
+    conversation_turn: int = Field(
+        description="Current turn number in the conversation"
+    )
+    search_results: Optional[List[SearchResult]] = None
+    agent_reasoning: Optional[List[str]] = None
+    tools_used: Optional[List[Dict[str, Any]]] = None
+    response_time_ms: float
+
+
+class ChatHistoryResponse(BaseModel):
+    """Response model for chat history."""
+    session_id: str
+    messages: List[ChatMessage]
+    created_at: Optional[datetime] = None
+    last_activity: Optional[datetime] = None
+    message_count: int
+
+
+class ChatSessionInfo(BaseModel):
+    """Info about a chat session."""
+    session_id: str
+    created_at: datetime
+    last_activity: datetime
+    message_count: int
+
+
