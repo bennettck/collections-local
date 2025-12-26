@@ -2,11 +2,14 @@
 """
 Separate images into golden dataset and non-golden dataset groups.
 
-Uses SHA256 content hashing to match images regardless of filename.
-This handles cases where image names differ from those in the golden dataset.
+Supports two matching modes:
+1. SHA256 (default): Hashes entire file bytes including metadata
+2. Visual (--visual): Uses perceptual hashing to compare only visual content,
+   ignoring metadata like EXIF, download dates, etc.
 
 Usage:
     python scripts/separate_golden_images.py --source /path/to/your/images
+    python scripts/separate_golden_images.py --source /path/to/images --visual
     python scripts/separate_golden_images.py --source /path/to/images --output ./separated
     python scripts/separate_golden_images.py --source /path/to/images --dry-run
 """
@@ -15,7 +18,15 @@ import argparse
 import hashlib
 import shutil
 from pathlib import Path
-from typing import Dict, Set, Tuple
+from typing import Dict, Tuple, Callable, Any
+
+# Optional imports for visual hashing
+try:
+    from PIL import Image
+    import imagehash
+    VISUAL_HASH_AVAILABLE = True
+except ImportError:
+    VISUAL_HASH_AVAILABLE = False
 
 # Image extensions to process
 IMAGE_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.webp', '.gif', '.heic', '.heif'}
@@ -27,12 +38,35 @@ DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "data" / "eval" / "separated_images"
 
 
 def compute_file_hash(file_path: Path) -> str:
-    """Compute SHA256 hash of file contents."""
+    """Compute SHA256 hash of file contents (includes metadata)."""
     sha256_hash = hashlib.sha256()
     with open(file_path, "rb") as f:
         for chunk in iter(lambda: f.read(8192), b""):
             sha256_hash.update(chunk)
     return sha256_hash.hexdigest()
+
+
+def compute_visual_hash(file_path: Path) -> str:
+    """
+    Compute perceptual hash of image visual content only.
+
+    Uses average hash (aHash) which is fast and ignores:
+    - EXIF metadata
+    - Download dates
+    - File timestamps
+    - Color profile differences
+
+    Only compares the actual visual appearance of the image.
+    """
+    if not VISUAL_HASH_AVAILABLE:
+        raise RuntimeError("Visual hashing requires 'Pillow' and 'imagehash' packages. "
+                          "Install with: pip install Pillow imagehash")
+
+    with Image.open(file_path) as img:
+        # Use average hash - good balance of speed and accuracy
+        # Hash size 16 gives 256 bits for better discrimination
+        ahash = imagehash.average_hash(img, hash_size=16)
+        return str(ahash)
 
 
 def get_image_files(directory: Path) -> list[Path]:
@@ -59,16 +93,25 @@ def get_image_files_recursive(directory: Path) -> list[Path]:
     return sorted(image_files)
 
 
-def build_golden_hash_set(golden_dir: Path) -> Dict[str, Path]:
+def build_golden_hash_set(
+    golden_dir: Path,
+    hash_func: Callable[[Path], str] = compute_file_hash
+) -> Dict[str, Path]:
     """Build a set of hashes for all golden dataset images."""
     print(f"\n📂 Building hash index from golden dataset: {golden_dir}")
 
     golden_images = get_image_files(golden_dir)
     hash_to_path: Dict[str, Path] = {}
 
-    for img_path in golden_images:
-        file_hash = compute_file_hash(img_path)
-        hash_to_path[file_hash] = img_path
+    for i, img_path in enumerate(golden_images, 1):
+        try:
+            file_hash = hash_func(img_path)
+            hash_to_path[file_hash] = img_path
+        except Exception as e:
+            print(f"   ⚠️  Warning: Could not hash {img_path.name}: {e}")
+
+        if i % 10 == 0:
+            print(f"   Indexed {i}/{len(golden_images)} golden images...")
 
     print(f"   Found {len(hash_to_path)} images in golden dataset")
     return hash_to_path
@@ -78,6 +121,7 @@ def separate_images(
     source_dir: Path,
     golden_hashes: Dict[str, Path],
     output_dir: Path,
+    hash_func: Callable[[Path], str] = compute_file_hash,
     recursive: bool = False,
     dry_run: bool = False,
     copy_mode: bool = True  # True = copy, False = move
@@ -110,7 +154,12 @@ def separate_images(
 
     print(f"\n🔍 Processing images...")
     for i, img_path in enumerate(source_images, 1):
-        file_hash = compute_file_hash(img_path)
+        try:
+            file_hash = hash_func(img_path)
+        except Exception as e:
+            print(f"   ⚠️  Warning: Could not hash {img_path.name}: {e}")
+            non_golden_matches.append(img_path)
+            continue
 
         if file_hash in golden_hashes:
             golden_matches.append((img_path, golden_hashes[file_hash]))
@@ -195,6 +244,9 @@ Examples:
   # Dry run to see what would happen
   python scripts/separate_golden_images.py --source ./my_images --dry-run
 
+  # Use visual hashing (ignores metadata, compares pixels only)
+  python scripts/separate_golden_images.py --source ./my_images --visual --dry-run
+
   # Actually separate images (copies them)
   python scripts/separate_golden_images.py --source ./my_images
 
@@ -248,6 +300,13 @@ Examples:
         help="Show what would be done without actually copying/moving files"
     )
 
+    parser.add_argument(
+        "--visual", "-v",
+        action="store_true",
+        help="Use visual/perceptual hashing (ignores metadata, compares only pixel content). "
+             "Requires: pip install Pillow imagehash"
+    )
+
     args = parser.parse_args()
 
     # Validate paths
@@ -259,11 +318,24 @@ Examples:
         print(f"❌ Error: Golden dataset directory not found: {args.golden_dir}")
         return 1
 
+    # Select hash function
+    if args.visual:
+        if not VISUAL_HASH_AVAILABLE:
+            print("❌ Error: Visual hashing requires 'Pillow' and 'imagehash' packages.")
+            print("   Install with: pip install Pillow imagehash")
+            return 1
+        hash_func = compute_visual_hash
+        hash_mode = "VISUAL (perceptual hash - ignores metadata)"
+    else:
+        hash_func = compute_file_hash
+        hash_mode = "SHA256 (includes metadata)"
+
     print("🖼️  Image Separator: Golden Dataset vs Non-Golden")
     print("=" * 60)
+    print(f"   Hash mode: {hash_mode}")
 
     # Build golden hash index
-    golden_hashes = build_golden_hash_set(args.golden_dir)
+    golden_hashes = build_golden_hash_set(args.golden_dir, hash_func=hash_func)
 
     if not golden_hashes:
         print("❌ Error: No images found in golden dataset directory")
@@ -274,6 +346,7 @@ Examples:
         source_dir=args.source,
         golden_hashes=golden_hashes,
         output_dir=args.output,
+        hash_func=hash_func,
         recursive=args.recursive,
         dry_run=args.dry_run,
         copy_mode=not args.move
