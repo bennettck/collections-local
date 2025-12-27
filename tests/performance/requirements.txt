@@ -1,0 +1,27 @@
+# Performance Testing Suite Requirements
+# Install with: pip install -r tests/performance/requirements.txt
+
+# Core testing framework
+pytest>=7.4.0
+pytest-cov>=4.1.0
+
+# HTTP testing
+requests>=2.31.0
+
+# AWS SDK
+boto3>=1.34.0
+botocore>=1.34.0
+
+# Database
+psycopg2-binary>=2.9.9
+sqlalchemy>=2.0.23
+
+# Optional but recommended
+pytest-xdist>=3.5.0      # Parallel test execution
+pytest-timeout>=2.2.0    # Timeout for slow tests
+pytest-html>=4.1.1       # HTML reports
+pytest-json-report>=1.5.0  # JSON reports
+
+# Development tools (optional)
+pytest-sugar>=0.9.7      # Better test output
+pytest-picked>=0.5.0     # Run tests related to unstaged changes

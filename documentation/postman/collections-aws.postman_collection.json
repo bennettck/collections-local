@@ -1,0 +1,501 @@
+{
+  "info": {
+    "_postman_id": "collections-aws-api",
+    "name": "Collections API (AWS)",
+    "description": "API collection for Collections App deployed on AWS - analyzes and categorizes images using AI with serverless architecture.\n\n## Overview\n\nThis API allows you to:\n- Upload and manage image items\n- Trigger AI-powered analysis on images\n- Retrieve categorization, summaries, and extracted text\n- Search your collection using natural language\n- Have multi-turn conversations about your items\n\n## Authentication\n\nAll endpoints require AWS Cognito JWT authentication. Include your ID token in the Authorization header.\n\n## Multi-Tenancy\n\nAll data is isolated by user. Your user_id is extracted from the JWT token and all operations are scoped to your account.\n\n## Base URL\n\n`https://ttuvnh7u33.execute-api.us-east-1.amazonaws.com`\n\n## Getting Started\n\n1. Set the `id_token` environment variable with your JWT token\n2. All requests will automatically include the Authorization header\n3. Test with the Health Check endpoint\n\n## Test Credentials\n\n- testuser1@example.com / Collections2025!\n- testuser2@example.com / Collections2025!\n- demo@example.com / Collections2025!",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{id_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Get JWT Token (via AWS CLI)",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "# This is a reference for getting a token via AWS CLI\n# Run this command in your terminal, not in Postman:\n\naws cognito-idp initiate-auth \\\n  --auth-flow USER_PASSWORD_AUTH \\\n  --client-id {{cognito_client_id}} \\\n  --auth-parameters USERNAME=testuser1@example.com,PASSWORD=Collections2025! \\\n  --region us-east-1\n\n# Extract the IdToken from the response and set it as the id_token environment variable"
+            },
+            "url": {
+              "raw": "",
+              "host": []
+            },
+            "description": "## Get JWT Token\n\nAuthenticate with AWS Cognito to get a JWT token.\n\n**Note:** This request cannot be executed in Postman directly. Use the AWS CLI command shown in the body.\n\n### Command\n\n```bash\naws cognito-idp initiate-auth \\\n  --auth-flow USER_PASSWORD_AUTH \\\n  --client-id 1tce0ddbsbm254e9r9p4jar1em \\\n  --auth-parameters USERNAME=testuser1@example.com,PASSWORD=Collections2025! \\\n  --region us-east-1\n```\n\n### Response\n\n```json\n{\n  \"AuthenticationResult\": {\n    \"IdToken\": \"eyJra...\",\n    \"AccessToken\": \"eyJra...\",\n    \"RefreshToken\": \"eyJra...\",\n    \"TokenType\": \"Bearer\",\n    \"ExpiresIn\": 3600\n  }\n}\n```\n\n### Setup\n\n1. Copy the `IdToken` value\n2. Set it as the `id_token` variable in your Postman environment\n3. All subsequent requests will use this token automatically\n\n### Token Expiration\n\n- Tokens expire after 1 hour\n- Use the RefreshToken to get new tokens without re-authenticating"
+          },
+          "response": []
+        }
+      ],
+      "description": "Authentication with AWS Cognito to obtain JWT tokens."
+    },
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "health"
+              ]
+            },
+            "description": "## Health Check\n\nVerify that the API server is running and healthy.\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"status\": \"healthy\",\n  \"timestamp\": \"2025-12-27T12:00:00.000000\",\n  \"environment\": \"dev\",\n  \"region\": \"us-east-1\"\n}\n```\n\n### Response Fields\n\n| Field | Type | Description |\n|-------|------|-------------|\n| `status` | string | Health status, always \"healthy\" if responding |\n| `timestamp` | string | ISO 8601 timestamp of the response |\n| `environment` | string | Deployment environment (dev, test, prod) |\n| `region` | string | AWS region |"
+          },
+          "response": []
+        }
+      ],
+      "description": "Health check endpoint for monitoring API availability."
+    },
+    {
+      "name": "Items",
+      "item": [
+        {
+          "name": "Upload Item",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set('item_id', jsonData.id);",
+                  "    console.log('Saved item_id:', jsonData.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "src": "",
+                  "description": "Image file to upload (PNG, JPEG, WebP, or GIF)"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/items",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "items"
+              ]
+            },
+            "description": "## Upload Item\n\nUpload an image file to create a new item in your collection.\n\n### Request\n\n**Content-Type:** `multipart/form-data`\n\n| Field | Type | Required | Description |\n|-------|------|----------|-------------|\n| `file` | file | Yes | Image file (PNG, JPEG, WebP, or GIF) |\n\n### Supported File Types\n\n- `image/png`\n- `image/jpeg`\n- `image/webp`\n- `image/gif`\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"id\": \"uuid-string\",\n  \"filename\": \"uuid-string.png\",\n  \"original_filename\": \"screenshot.png\",\n  \"file_size\": 12345,\n  \"mime_type\": \"image/png\",\n  \"s3_key\": \"user_id/uuid-string.png\",\n  \"created_at\": \"2025-12-27T12:00:00.000000\",\n  \"updated_at\": \"2025-12-27T12:00:00.000000\",\n  \"latest_analysis\": null\n}\n```\n\n### Notes\n\n- Image is uploaded to S3 in your user-specific folder\n- Triggers event-driven processing pipeline (resize → analyze → embed)\n- Automatically saved to your item_id environment variable for testing"
+          },
+          "response": []
+        },
+        {
+          "name": "List Items",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/items?limit=50&offset=0",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "items"
+              ],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "Travel",
+                  "description": "Filter by category",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "50",
+                  "description": "Maximum number of items to return (max 100)"
+                },
+                {
+                  "key": "offset",
+                  "value": "0",
+                  "description": "Number of items to skip for pagination"
+                }
+              ]
+            },
+            "description": "## List Items\n\nRetrieve a paginated list of all your items (filtered by your user_id).\n\n### Query Parameters\n\n| Parameter | Type | Default | Description |\n|-----------|------|---------|-------------|\n| `category` | string | - | Filter by analysis category |\n| `limit` | integer | 50 | Maximum items to return (max 100) |\n| `offset` | integer | 0 | Items to skip for pagination |\n\n### Multi-Tenancy\n\nResults are automatically filtered by your user_id. You can only see your own items."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Item",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/items/{{item_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "items",
+                "{{item_id}}"
+              ]
+            },
+            "description": "## Get Item\n\nRetrieve a single item by its ID, including the latest analysis with full raw_response if available.\n\n### Path Parameters\n\n| Parameter | Type | Description |\n|-----------|------|-------------|\n| `item_id` | string | UUID of the item |\n\n### Multi-Tenancy\n\nYou can only access items that belong to your user account. Returns 404 if the item doesn't exist or belongs to another user."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Item",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/items/{{item_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "items",
+                "{{item_id}}"
+              ]
+            },
+            "description": "## Delete Item\n\nDelete an item and all associated data including:\n- The stored image file (from S3)\n- All analysis records\n- All embeddings\n\n### Path Parameters\n\n| Parameter | Type | Description |\n|-----------|------|-------------|\n| `item_id` | string | UUID of the item to delete |\n\n### Multi-Tenancy\n\nYou can only delete your own items."
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for managing collection items (images). All operations are scoped to your user account."
+    },
+    {
+      "name": "Analysis",
+      "item": [
+        {
+          "name": "Analyze Item",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.environment.set('analysis_id', jsonData.id);",
+                  "    console.log('Saved analysis_id:', jsonData.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"force_reanalyze\": false,\n  \"provider\": \"anthropic\",\n  \"model\": \"claude-sonnet-4-5\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/items/{{item_id}}/analyze",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "items",
+                "{{item_id}}",
+                "analyze"
+              ]
+            },
+            "description": "## Analyze Item\n\nTrigger AI analysis on an uploaded image using Anthropic Claude or OpenAI GPT-4o.\n\n### Event-Driven Processing\n\nTriggering analysis starts an event-driven pipeline:\n1. Analyzer Lambda processes the image\n2. Emits \"AnalysisComplete\" event\n3. Embedder Lambda generates vector embeddings\n4. Stores in pgvector for search\n\n### Request Body\n\n```json\n{\n  \"force_reanalyze\": false,\n  \"provider\": \"anthropic\",\n  \"model\": \"claude-sonnet-4-5\"\n}\n```\n\n### Providers\n\n| Provider | Default Model |\n|----------|---------------|\n| `anthropic` | `claude-sonnet-4-5` |\n| `openai` | `gpt-4o` |"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Item Analyses",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/items/{{item_id}}/analyses",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "items",
+                "{{item_id}}",
+                "analyses"
+              ]
+            },
+            "description": "## Get Item Analyses\n\nRetrieve all analysis versions for a specific item, ordered by version (newest first).\n\nUseful for comparing results across different models and providers."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Analysis",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/analyses/{{analysis_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "analyses",
+                "{{analysis_id}}"
+              ]
+            },
+            "description": "## Get Analysis\n\nRetrieve a specific analysis by its ID with full raw_response."
+          },
+          "response": []
+        }
+      ],
+      "description": "Endpoints for AI-powered image analysis with event-driven processing."
+    },
+    {
+      "name": "Search",
+      "item": [
+        {
+          "name": "Hybrid Search (Recommended)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"Tokyo restaurants\",\n  \"search_type\": \"hybrid-lc\",\n  \"top_k\": 5,\n  \"include_answer\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/search",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "search"
+              ]
+            },
+            "description": "## Hybrid Search (Recommended)\n\nCombines BM25 keyword search and vector semantic search using Reciprocal Rank Fusion (RRF).\n\n### Benefits\n\n- Best overall performance across different query types\n- Handles both exact matches AND conceptual searches\n- Optimized weights: 30% BM25 + 70% Vector\n- RRF constant c=15 for better ranking quality\n\n### Multi-Tenancy\n\nSearches are automatically filtered by your user_id. You can only search your own items."
+          },
+          "response": []
+        },
+        {
+          "name": "Vector Search",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"Japanese beauty products and perfume\",\n  \"search_type\": \"vector-lc\",\n  \"top_k\": 5,\n  \"min_similarity_score\": 0.6,\n  \"include_answer\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/search",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "search"
+              ]
+            },
+            "description": "## Vector Search\n\nSemantic similarity search using VoyageAI embeddings and pgvector.\n\n### Benefits\n\n- Finds semantically similar items\n- Handles synonyms and related concepts\n- Best for conceptual queries\n- Returns similarity scores 0-1"
+          },
+          "response": []
+        },
+        {
+          "name": "BM25 Search",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"Tokyo Tower restaurant\",\n  \"search_type\": \"bm25-lc\",\n  \"top_k\": 5,\n  \"include_answer\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/search",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "search"
+              ]
+            },
+            "description": "## BM25 Search\n\nKeyword-based full-text search using PostgreSQL tsvector.\n\n### Benefits\n\n- Fast keyword matching\n- Best for exact term searches\n- Works well with abbreviations and OCR text"
+          },
+          "response": []
+        },
+        {
+          "name": "Agentic Search",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"Find affordable Japanese perfumes or beauty products\",\n  \"search_type\": \"agentic\",\n  \"top_k\": 10,\n  \"include_answer\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/search",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "search"
+              ]
+            },
+            "description": "## Agentic Search\n\nIntelligent agent-based search using LangChain ReAct agents.\n\n### Benefits\n\n- Best for complex, multi-part queries\n- Agent reasons about search strategy\n- Can iteratively refine searches\n- Returns explanation of reasoning\n\n### Performance\n\n- Typical time: 2-4 seconds\n- Maximum 3 iterations\n- Uses hybrid search as underlying tool"
+          },
+          "response": []
+        }
+      ],
+      "description": "Natural language search endpoints. All searches are automatically filtered by your user_id."
+    },
+    {
+      "name": "Chat",
+      "item": [
+        {
+          "name": "Send Chat Message",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"message\": \"What items do I have about Tokyo?\",\n  \"session_id\": \"my-session-1\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/chat",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "chat"
+              ]
+            },
+            "description": "## Send Chat Message\n\nHave a multi-turn conversation about your collection using LangGraph.\n\n### Request Body\n\n```json\n{\n  \"message\": \"What items do I have about Tokyo?\",\n  \"session_id\": \"my-session-1\"\n}\n```\n\n### Session Management\n\n- Sessions are stored in DynamoDB\n- Isolated by user_id\n- Automatic TTL cleanup after 4 hours of inactivity\n- Thread ID format: `{user_id}#{session_id}`"
+          },
+          "response": []
+        },
+        {
+          "name": "List Chat Sessions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/chat/sessions",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "chat",
+                "sessions"
+              ]
+            },
+            "description": "## List Chat Sessions\n\nGet all your chat sessions.\n\n### Multi-Tenancy\n\nOnly returns sessions belonging to your user account."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Chat Session",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/chat/sessions/{{session_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "chat",
+                "sessions",
+                "{{session_id}}"
+              ]
+            },
+            "description": "## Delete Chat Session\n\nDelete a chat session and all its history.\n\n### Multi-Tenancy\n\nYou can only delete your own sessions."
+          },
+          "response": []
+        }
+      ],
+      "description": "Multi-turn conversational search with LangGraph. Sessions are isolated by user."
+    },
+    {
+      "name": "Images",
+      "item": [
+        {
+          "name": "Get Image Pre-signed URL",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/images/{{filename}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "images",
+                "{{filename}}"
+              ]
+            },
+            "description": "## Get Image Pre-signed URL\n\nGet a pre-signed URL to access an image file from S3.\n\n### Response\n\n```json\n{\n  \"url\": \"https://s3.amazonaws.com/bucket/key?X-Amz-Security-Token=...\",\n  \"expires_in\": 3600\n}\n```\n\n### Notes\n\n- Pre-signed URL is valid for 1 hour\n- You can only access your own images\n- Images are stored in S3 with user-specific folders"
+          },
+          "response": []
+        }
+      ],
+      "description": "Image access endpoints using S3 pre-signed URLs."
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://ttuvnh7u33.execute-api.us-east-1.amazonaws.com",
+      "type": "default"
+    }
+  ]
+}

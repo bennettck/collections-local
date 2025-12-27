@@ -65,3 +65,4 @@ htmlcov/
 .aws-outputs-*.json
 cdk.out/
 reports/
+.api-tokens.json

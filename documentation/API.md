@@ -1,5 +1,7 @@
 # Collections Local API Documentation
 
+> **Note:** This documentation is for the **local development version** of the Collections API. For the **AWS deployment** documentation, see [API_AWS.md](./API_AWS.md).
+
 API documentation for the Collections App Local - a minimal local version that analyzes and categorizes screenshot images using AI.
 
 ## Overview
