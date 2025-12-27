@@ -558,11 +558,20 @@ def get_search_status() -> dict:
         # Get total items for comparison
         total_items = conn.execute("SELECT COUNT(*) as count FROM items").fetchone()["count"]
 
+        # Count items with analysis (these are indexable)
+        items_with_analysis = conn.execute("""
+            SELECT COUNT(DISTINCT i.id) as count
+            FROM items i
+            INNER JOIN analyses a ON i.id = a.item_id
+        """).fetchone()["count"]
+
         return {
             "doc_count": doc_count,
             "total_items": total_items,
+            "items_with_analysis": items_with_analysis,
+            "items_without_analysis": total_items - items_with_analysis,
             "is_loaded": doc_count > 0,
-            "index_coverage": doc_count / total_items if total_items > 0 else 0.0
+            "index_coverage": doc_count / items_with_analysis if items_with_analysis > 0 else 0.0
         }
 
 

@@ -11,6 +11,7 @@ from langchain_core.documents import Document
 from langchain_core.messages import HumanMessage, AIMessage, BaseMessage
 from langgraph.prebuilt import create_react_agent
 from langsmith import traceable
+from langchain_community.tools.tavily_search import TavilySearchResults
 
 from chat.conversation_manager import ConversationManager
 from retrieval.langchain_retrievers import HybridLangChainRetriever
@@ -84,6 +85,9 @@ class AgenticChatOrchestrator:
         # Create search tool
         self.search_tool = self._create_search_tool()
 
+        # Create Tavily search tool
+        self.tavily_tool = self._create_tavily_tool()
+
         # Create agent with checkpointer for memory
         self.agent = self._create_agent()
 
@@ -133,13 +137,81 @@ class AgenticChatOrchestrator:
 
         return search_collections
 
+    def _create_tavily_tool(self):
+        """Create the Tavily web search tool."""
+        try:
+            from config.chat_config import (
+                TAVILY_MAX_RESULTS,
+                TAVILY_SEARCH_DEPTH,
+                TAVILY_INCLUDE_DOMAINS,
+                TAVILY_EXCLUDE_DOMAINS,
+            )
+            import os
+
+            # Validate API key exists
+            if not os.getenv("TAVILY_API_KEY"):
+                logger.error("TAVILY_API_KEY not found in environment variables")
+                return None
+
+            # Parse domain lists
+            include_domains = [d.strip() for d in TAVILY_INCLUDE_DOMAINS.split(",") if d.strip()]
+            exclude_domains = [d.strip() for d in TAVILY_EXCLUDE_DOMAINS.split(",") if d.strip()]
+
+            # Create Tavily search tool with optional domain filtering
+            tavily_kwargs = {
+                "max_results": TAVILY_MAX_RESULTS,
+                "search_depth": TAVILY_SEARCH_DEPTH,
+                "include_answer": True,  # Get AI-generated answer summary
+                "include_raw_content": False,  # Don't need full page content
+            }
+
+            # Only add domain filters if they have values
+            if include_domains:
+                tavily_kwargs["include_domains"] = include_domains
+            if exclude_domains:
+                tavily_kwargs["exclude_domains"] = exclude_domains
+
+            tavily = TavilySearchResults(**tavily_kwargs)
+
+            # Customize the tool description for agent guidance
+            tavily.name = "search_web"
+            tavily.description = """Search the web for current information, facts, or external knowledge.
+
+Use this tool when:
+- The query asks about current events, recent information, or breaking news
+- The query requires general knowledge not in the image collection
+- The user explicitly asks to "search the web" or "look online"
+- The query is about facts, definitions, or public information
+
+Args:
+    query: The search query string
+
+Returns:
+    List of web search results with titles, URLs, and content snippets.
+"""
+
+            return tavily
+
+        except Exception as e:
+            logger.error(f"Failed to create Tavily tool: {e}")
+            logger.warning("Tavily search will not be available. Check TAVILY_API_KEY in .env")
+            return None
+
     def _create_agent(self):
         """Create the LangGraph agent with checkpointer."""
         checkpointer = self.conversation_manager.get_checkpointer()
 
+        # Build tools list - include Tavily if available
+        tools = [self.search_tool]
+        if self.tavily_tool is not None:
+            tools.append(self.tavily_tool)
+            logger.info("Tavily web search enabled")
+        else:
+            logger.info("Running without Tavily web search")
+
         agent = create_react_agent(
             model=self.llm,
-            tools=[self.search_tool],
+            tools=tools,
             checkpointer=checkpointer,
             prompt=CHAT_SYSTEM_MESSAGE
         )

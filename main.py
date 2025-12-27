@@ -46,6 +46,8 @@ from database import (
     search_items,
     get_search_status,
     create_embedding,
+    get_db,
+    _create_search_document,
 )
 from llm import analyze_image, get_trace_id, get_resolved_provider_and_model
 from embeddings import generate_embedding, _create_embedding_document, DEFAULT_EMBEDDING_MODEL, get_embedding_dimensions
@@ -472,6 +474,22 @@ async def analyze_item_endpoint(
             category=category
         )
 
+        # Real-time FTS5 index sync
+        try:
+            search_doc = _create_search_document(result)
+            with get_db() as conn:
+                # Delete existing entry if present (for re-analysis)
+                conn.execute("DELETE FROM items_fts WHERE item_id = ?", (item_id,))
+                # Insert new entry
+                conn.execute(
+                    "INSERT INTO items_fts(item_id, content) VALUES (?, ?)",
+                    (item_id, search_doc)
+                )
+            logger.info(f"Successfully synced FTS5 index for {item_id}")
+        except Exception as fts_error:
+            # Log but don't fail analysis if FTS5 sync fails
+            logger.error(f"Failed to sync FTS5 index for {item_id}: {fts_error}")
+
         # Real-time Chroma sync
         try:
             chroma_mgr = get_current_chroma_manager(request)
@@ -482,9 +500,12 @@ async def analyze_item_endpoint(
                     raw_response=result,
                     filename=item["filename"]
                 )
+                logger.info(f"Successfully synced Chroma vector store for {item_id}")
+            else:
+                logger.error(f"Cannot sync to Chroma: item {item_id} not found")
         except Exception as chroma_error:
             # Log but don't fail analysis if Chroma sync fails
-            logger.warning(f"Failed to sync to Chroma for {item_id}: {chroma_error}")
+            logger.error(f"Failed to sync to Chroma for {item_id}: {chroma_error}", exc_info=True)
 
     except Exception as e:
         # Log error but don't fail the analysis
