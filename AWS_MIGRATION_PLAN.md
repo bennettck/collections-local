@@ -44,7 +44,7 @@ This plan uses a **pragmatic, simplified approach** for a small-scale applicatio
 
 ---
 
-## What's New Since v2.0 (December 2024)
+## What's New Since v2.0 (December 2025)
 
 **Important**: This migration plan was originally created several days ago. Since then, significant new features have been implemented that impact the migration strategy:
 

@@ -1,85 +1,75 @@
 """Conversation manager for multi-turn agentic chat.
 
-Handles SQLite checkpointing, session lifecycle, and cleanup.
+Handles DynamoDB checkpointing for serverless deployment with multi-tenancy support.
 """
 
 import os
 import logging
-import sqlite3
-from datetime import datetime, timedelta
-from typing import Optional, List, Dict, Any
-from pathlib import Path
+from typing import Optional, Dict, Any
+from datetime import datetime
 
-from langgraph.checkpoint.sqlite import SqliteSaver
+from chat.checkpointers.dynamodb_saver import DynamoDBSaver
 
 from config.chat_config import (
-    CONVERSATION_DB_PATH,
     CONVERSATION_TTL_HOURS,
-    MAX_CONVERSATIONS,
 )
 
 logger = logging.getLogger(__name__)
 
 
 class ConversationManager:
-    """Manages conversation state persistence using SQLite.
+    """Manages conversation state persistence using DynamoDB.
 
-    Uses LangGraph's SqliteSaver for checkpointing agent state,
-    with additional session management and cleanup capabilities.
+    Uses LangGraph's DynamoDBSaver for checkpointing agent state,
+    with multi-tenant support via {user_id}#{session_id} thread IDs.
     """
 
-    def __init__(self, db_path: Optional[str] = None):
+    def __init__(
+        self,
+        table_name: Optional[str] = None,
+        ttl_hours: Optional[int] = None,
+        region_name: Optional[str] = None,
+        user_id: str = "default"
+    ):
         """Initialize the conversation manager.
 
         Args:
-            db_path: Path to SQLite database. Defaults to CONVERSATION_DB_PATH.
+            table_name: DynamoDB table name (defaults to env var DYNAMODB_CHECKPOINT_TABLE)
+            ttl_hours: Hours until checkpoint expires (defaults to CONVERSATION_TTL_HOURS)
+            region_name: AWS region name (defaults to env var AWS_REGION)
+            user_id: User ID for multi-tenancy (default: "default")
         """
-        self.db_path = db_path or CONVERSATION_DB_PATH
-
-        # Ensure directory exists
-        Path(self.db_path).parent.mkdir(parents=True, exist_ok=True)
-
-        # Initialize SQLite connection with WAL mode for better concurrency
-        self._init_database()
+        self.table_name = table_name or os.getenv("DYNAMODB_CHECKPOINT_TABLE", "langgraph-checkpoints")
+        self.ttl_hours = ttl_hours or CONVERSATION_TTL_HOURS
+        self.region_name = region_name or os.getenv("AWS_REGION")
+        self.user_id = user_id
 
         # Create checkpointer
         self._checkpointer = None
 
-    def _init_database(self):
-        """Initialize database with WAL mode and session tracking table."""
-        conn = sqlite3.connect(self.db_path)
-        try:
-            # Enable WAL mode for better concurrent access
-            conn.execute("PRAGMA journal_mode=WAL")
+        logger.info(
+            f"Initialized ConversationManager with table={self.table_name}, "
+            f"ttl_hours={self.ttl_hours}, user_id={self.user_id}"
+        )
 
-            # Create session tracking table (separate from LangGraph's tables)
-            conn.execute("""
-                CREATE TABLE IF NOT EXISTS chat_sessions (
-                    session_id TEXT PRIMARY KEY,
-                    created_at TEXT NOT NULL,
-                    last_activity TEXT NOT NULL,
-                    message_count INTEGER DEFAULT 0
-                )
-            """)
-            conn.commit()
-        finally:
-            conn.close()
-
-    def get_checkpointer(self) -> SqliteSaver:
-        """Get or create the SqliteSaver checkpointer.
+    def get_checkpointer(self) -> DynamoDBSaver:
+        """Get or create the DynamoDBSaver checkpointer.
 
         Returns:
-            SqliteSaver instance for LangGraph agent persistence.
+            DynamoDBSaver instance for LangGraph agent persistence.
         """
         if self._checkpointer is None:
-            # Use connection string with WAL mode
-            conn = sqlite3.connect(self.db_path, check_same_thread=False)
-            conn.execute("PRAGMA journal_mode=WAL")
-            self._checkpointer = SqliteSaver(conn)
+            self._checkpointer = DynamoDBSaver(
+                table_name=self.table_name,
+                ttl_hours=self.ttl_hours,
+                region_name=self.region_name
+            )
         return self._checkpointer
 
     def get_thread_config(self, session_id: str) -> Dict[str, Any]:
         """Get LangGraph config for a conversation thread.
+
+        Creates a multi-tenant thread ID: {user_id}#{session_id}
 
         Args:
             session_id: Client-provided session identifier.
@@ -87,10 +77,8 @@ class ConversationManager:
         Returns:
             Config dict for LangGraph invoke() with thread_id.
         """
-        thread_id = f"session_{session_id}"
-
-        # Update session tracking
-        self._touch_session(session_id)
+        # Multi-tenant thread ID format
+        thread_id = f"{self.user_id}#{session_id}"
 
         return {
             "configurable": {
@@ -98,76 +86,62 @@ class ConversationManager:
             }
         }
 
-    def _touch_session(self, session_id: str):
-        """Update session last_activity timestamp, create if not exists."""
-        now = datetime.utcnow().isoformat()
-        conn = sqlite3.connect(self.db_path)
-        try:
-            cursor = conn.cursor()
-            # Try to update existing session
-            cursor.execute("""
-                UPDATE chat_sessions
-                SET last_activity = ?, message_count = message_count + 1
-                WHERE session_id = ?
-            """, (now, session_id))
-
-            if cursor.rowcount == 0:
-                # Session doesn't exist, create it
-                cursor.execute("""
-                    INSERT INTO chat_sessions (session_id, created_at, last_activity, message_count)
-                    VALUES (?, ?, ?, 1)
-                """, (session_id, now, now))
-
-            conn.commit()
-        finally:
-            conn.close()
-
     def get_session_info(self, session_id: str) -> Optional[Dict[str, Any]]:
         """Get session metadata.
+
+        Note: With DynamoDB, session metadata is stored in checkpoints themselves.
+        This method provides compatibility with the SQLite interface but returns
+        minimal information.
 
         Args:
             session_id: Session identifier.
 
         Returns:
-            Dict with session info or None if not found.
+            Dict with basic session info or None if not found.
         """
-        conn = sqlite3.connect(self.db_path)
-        conn.row_factory = sqlite3.Row
         try:
-            cursor = conn.cursor()
-            cursor.execute("""
-                SELECT session_id, created_at, last_activity, message_count
-                FROM chat_sessions WHERE session_id = ?
-            """, (session_id,))
-            row = cursor.fetchone()
-            if row:
-                return dict(row)
-            return None
-        finally:
-            conn.close()
+            config = self.get_thread_config(session_id)
+            checkpointer = self.get_checkpointer()
 
-    def list_sessions(self, limit: int = 50) -> List[Dict[str, Any]]:
-        """List active sessions ordered by last activity.
+            # Try to get the latest checkpoint
+            checkpoint_tuple = checkpointer.get_tuple(config)
+
+            if checkpoint_tuple:
+                # Count messages in checkpoint state
+                state = checkpoint_tuple.checkpoint.get("channel_values", {})
+                messages = state.get("messages", [])
+
+                return {
+                    "session_id": session_id,
+                    "message_count": len(messages),
+                    "last_activity": datetime.utcnow().isoformat(),
+                    "created_at": checkpoint_tuple.checkpoint.get("ts"),
+                }
+
+            return None
+
+        except Exception as e:
+            logger.error(f"Failed to get session info: {e}")
+            return None
+
+    def list_sessions(self, limit: int = 50) -> list:
+        """List active sessions.
+
+        Note: With DynamoDB, listing sessions requires scanning the table which
+        is expensive. This method is provided for compatibility but returns an
+        empty list. Use CloudWatch or DynamoDB streams for monitoring instead.
 
         Args:
-            limit: Maximum number of sessions to return.
+            limit: Maximum number of sessions to return (ignored).
 
         Returns:
-            List of session info dicts.
+            Empty list (not implemented for DynamoDB).
         """
-        conn = sqlite3.connect(self.db_path)
-        conn.row_factory = sqlite3.Row
-        try:
-            cursor = conn.cursor()
-            cursor.execute("""
-                SELECT session_id, created_at, last_activity, message_count
-                FROM chat_sessions
-                ORDER BY last_activity DESC
-                LIMIT ?
-            """, (limit,))
-            return [dict(row) for row in cursor.fetchall()]
-        finally:
-            conn.close()
+        logger.warning(
+            "list_sessions() not implemented for DynamoDB. "
+            "Use CloudWatch metrics or DynamoDB streams for monitoring."
+        )
+        return []
 
     def delete_session(self, session_id: str) -> bool:
         """Delete a session and its checkpoints.
@@ -178,136 +152,68 @@ class ConversationManager:
         Returns:
             True if session was deleted, False if not found.
         """
-        thread_id = f"session_{session_id}"
-        conn = sqlite3.connect(self.db_path)
         try:
-            cursor = conn.cursor()
+            thread_id = f"{self.user_id}#{session_id}"
+            checkpointer = self.get_checkpointer()
 
-            # Delete from session tracking
-            cursor.execute("DELETE FROM chat_sessions WHERE session_id = ?", (session_id,))
-            deleted = cursor.rowcount > 0
+            # Delete all checkpoints for this thread
+            checkpointer.delete_thread(thread_id)
 
-            # Delete checkpoints (LangGraph tables)
-            # Note: Table names depend on LangGraph version
-            for table in ["checkpoints", "checkpoint_writes", "checkpoint_blobs"]:
-                try:
-                    cursor.execute(f"DELETE FROM {table} WHERE thread_id = ?", (thread_id,))
-                except sqlite3.OperationalError:
-                    # Table might not exist yet
-                    pass
+            logger.info(f"Deleted session {session_id} for user {self.user_id}")
+            return True
 
-            conn.commit()
-            return deleted
-        finally:
-            conn.close()
+        except Exception as e:
+            logger.error(f"Failed to delete session: {e}")
+            return False
 
     def cleanup_expired_sessions(self, ttl_hours: Optional[int] = None) -> int:
         """Remove sessions older than TTL.
 
+        Note: With DynamoDB, TTL is handled automatically by the DynamoDB TTL
+        feature. This method is provided for compatibility but does nothing.
+
         Args:
-            ttl_hours: Hours after which sessions expire. Defaults to CONVERSATION_TTL_HOURS.
+            ttl_hours: Hours after which sessions expire (ignored).
 
         Returns:
-            Number of sessions cleaned up.
+            0 (TTL handled automatically by DynamoDB)
         """
-        ttl = ttl_hours or CONVERSATION_TTL_HOURS
-        cutoff = (datetime.utcnow() - timedelta(hours=ttl)).isoformat()
-
-        conn = sqlite3.connect(self.db_path)
-        try:
-            cursor = conn.cursor()
-
-            # Find expired sessions
-            cursor.execute("""
-                SELECT session_id FROM chat_sessions WHERE last_activity < ?
-            """, (cutoff,))
-            expired_sessions = [row[0] for row in cursor.fetchall()]
-
-            if not expired_sessions:
-                return 0
-
-            # Delete session tracking entries
-            cursor.execute("""
-                DELETE FROM chat_sessions WHERE last_activity < ?
-            """, (cutoff,))
-
-            # Delete associated checkpoints
-            for session_id in expired_sessions:
-                thread_id = f"session_{session_id}"
-                for table in ["checkpoints", "checkpoint_writes", "checkpoint_blobs"]:
-                    try:
-                        cursor.execute(f"DELETE FROM {table} WHERE thread_id = ?", (thread_id,))
-                    except sqlite3.OperationalError:
-                        pass
-
-            conn.commit()
-
-            logger.info(f"Cleaned up {len(expired_sessions)} expired sessions")
-            return len(expired_sessions)
-        finally:
-            conn.close()
+        logger.info(
+            "cleanup_expired_sessions() not needed for DynamoDB. "
+            "TTL is handled automatically by DynamoDB's TTL feature."
+        )
+        return 0
 
     def enforce_max_sessions(self) -> int:
-        """Remove oldest sessions if count exceeds MAX_CONVERSATIONS.
+        """Remove oldest sessions if count exceeds maximum.
+
+        Note: With DynamoDB, session limits should be enforced at the application
+        level or via API Gateway throttling. This method is provided for
+        compatibility but does nothing.
 
         Returns:
-            Number of sessions removed.
+            0 (not implemented for DynamoDB)
         """
-        conn = sqlite3.connect(self.db_path)
-        try:
-            cursor = conn.cursor()
-
-            # Get current count
-            cursor.execute("SELECT COUNT(*) FROM chat_sessions")
-            count = cursor.fetchone()[0]
-
-            if count <= MAX_CONVERSATIONS:
-                return 0
-
-            # Find oldest sessions to remove
-            excess = count - MAX_CONVERSATIONS
-            cursor.execute("""
-                SELECT session_id FROM chat_sessions
-                ORDER BY last_activity ASC
-                LIMIT ?
-            """, (excess,))
-            to_remove = [row[0] for row in cursor.fetchall()]
-
-            # Delete them
-            for session_id in to_remove:
-                self.delete_session(session_id)
-
-            logger.info(f"Removed {len(to_remove)} sessions to enforce max limit")
-            return len(to_remove)
-        finally:
-            conn.close()
+        logger.warning(
+            "enforce_max_sessions() not implemented for DynamoDB. "
+            "Enforce limits at the application level or via API Gateway."
+        )
+        return 0
 
     def get_stats(self) -> Dict[str, Any]:
         """Get conversation manager statistics.
 
+        Note: With DynamoDB, detailed statistics require CloudWatch metrics.
+        This method provides basic information.
+
         Returns:
-            Dict with session counts and database info.
+            Dict with basic configuration info.
         """
-        conn = sqlite3.connect(self.db_path)
-        try:
-            cursor = conn.cursor()
-
-            cursor.execute("SELECT COUNT(*) FROM chat_sessions")
-            total_sessions = cursor.fetchone()[0]
-
-            cursor.execute("SELECT SUM(message_count) FROM chat_sessions")
-            total_messages = cursor.fetchone()[0] or 0
-
-            # Get database file size
-            db_size = os.path.getsize(self.db_path) if os.path.exists(self.db_path) else 0
-
-            return {
-                "total_sessions": total_sessions,
-                "total_messages": total_messages,
-                "database_size_bytes": db_size,
-                "database_path": self.db_path,
-                "ttl_hours": CONVERSATION_TTL_HOURS,
-                "max_sessions": MAX_CONVERSATIONS,
-            }
-        finally:
-            conn.close()
+        return {
+            "backend": "dynamodb",
+            "table_name": self.table_name,
+            "ttl_hours": self.ttl_hours,
+            "region": self.region_name,
+            "user_id": self.user_id,
+            "note": "Use CloudWatch metrics for detailed statistics"
+        }

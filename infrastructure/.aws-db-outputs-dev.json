@@ -1,0 +1,68 @@
+[
+    {
+        "OutputKey": "ExportsOutputRefDBCredentialsCBF39AE96FE42413",
+        "OutputValue": "arn:aws:secretsmanager:us-east-1:443370675683:secret:collections-db-dev-IFWT2C",
+        "ExportName": "CollectionsDB-dev:ExportsOutputRefDBCredentialsCBF39AE96FE42413"
+    },
+    {
+        "OutputKey": "RDSEndpoint",
+        "OutputValue": "collectionsdb-dev-postgresqlinstanced9ad3cf0-kxbb6jk93mam.cjc0i0sksmi3.us-east-1.rds.amazonaws.com",
+        "Description": "RDS PostgreSQL endpoint",
+        "ExportName": "collections-dev-rds-endpoint"
+    },
+    {
+        "OutputKey": "RDSPort",
+        "OutputValue": "5432",
+        "Description": "RDS PostgreSQL port",
+        "ExportName": "collections-dev-rds-port"
+    },
+    {
+        "OutputKey": "DatabaseSecretArn",
+        "OutputValue": "arn:aws:secretsmanager:us-east-1:443370675683:secret:collections-db-dev-IFWT2C",
+        "Description": "Database credentials secret ARN",
+        "ExportName": "collections-dev-db-secret-arn"
+    },
+    {
+        "OutputKey": "CheckpointTableName",
+        "OutputValue": "collections-checkpoints-dev",
+        "Description": "DynamoDB checkpoint table name",
+        "ExportName": "collections-dev-checkpoint-table"
+    },
+    {
+        "OutputKey": "ExportsOutputFnGetAttPostgreSQLInstanceD9AD3CF0EndpointAddress7B16B077",
+        "OutputValue": "collectionsdb-dev-postgresqlinstanced9ad3cf0-kxbb6jk93mam.cjc0i0sksmi3.us-east-1.rds.amazonaws.com",
+        "ExportName": "CollectionsDB-dev:ExportsOutputFnGetAttPostgreSQLInstanceD9AD3CF0EndpointAddress7B16B077"
+    },
+    {
+        "OutputKey": "DatabaseName",
+        "OutputValue": "collections",
+        "Description": "Database name",
+        "ExportName": "collections-dev-db-name"
+    },
+    {
+        "OutputKey": "ExportsOutputFnGetAttPostgreSQLInstanceD9AD3CF0EndpointPort2FC40234",
+        "OutputValue": "5432",
+        "ExportName": "CollectionsDB-dev:ExportsOutputFnGetAttPostgreSQLInstanceD9AD3CF0EndpointPort2FC40234"
+    },
+    {
+        "OutputKey": "CheckpointTableArn",
+        "OutputValue": "arn:aws:dynamodb:us-east-1:443370675683:table/collections-checkpoints-dev",
+        "Description": "DynamoDB checkpoint table ARN",
+        "ExportName": "collections-dev-checkpoint-table-arn"
+    },
+    {
+        "OutputKey": "ExportsOutputRefPostgreSQLInstanceD9AD3CF098D2E69C",
+        "OutputValue": "collectionsdb-dev-postgresqlinstanced9ad3cf0-kxbb6jk93mam",
+        "ExportName": "CollectionsDB-dev:ExportsOutputRefPostgreSQLInstanceD9AD3CF098D2E69C"
+    },
+    {
+        "OutputKey": "ExportsOutputFnGetAttCheckpointTableBFD208F9Arn937803C0",
+        "OutputValue": "arn:aws:dynamodb:us-east-1:443370675683:table/collections-checkpoints-dev",
+        "ExportName": "CollectionsDB-dev:ExportsOutputFnGetAttCheckpointTableBFD208F9Arn937803C0"
+    },
+    {
+        "OutputKey": "ExportsOutputRefCheckpointTableBFD208F9B79D314A",
+        "OutputValue": "collections-checkpoints-dev",
+        "ExportName": "CollectionsDB-dev:ExportsOutputRefCheckpointTableBFD208F9B79D314A"
+    }
+]

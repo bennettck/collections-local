@@ -12,6 +12,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from dotenv import load_dotenv
+from mangum import Mangum
 
 from models import (
     ItemResponse,
@@ -1299,3 +1300,36 @@ async def get_golden_entry_endpoint(item_id: str):
     """
     entry = get_golden_entry(item_id)
     return {"entry": entry}
+
+
+# ============================================================================
+# AWS Lambda Handler (Mangum Adapter)
+# ============================================================================
+
+# Optional Cognito authentication middleware
+# Only enabled when COGNITO_USER_POOL_ID is set (AWS environment)
+cognito_user_pool_id = os.getenv("COGNITO_USER_POOL_ID")
+cognito_enabled = cognito_user_pool_id and cognito_user_pool_id != "WILL_BE_SET_BY_CDK"
+
+if cognito_enabled:
+    from app.middleware.auth import CognitoAuthMiddleware
+
+    # Get Cognito configuration
+    cognito_region = os.getenv("COGNITO_REGION", os.getenv("AWS_REGION", "us-east-1"))
+    cognito_client_id = os.getenv("COGNITO_CLIENT_ID")
+
+    # Add Cognito auth middleware
+    app.add_middleware(
+        CognitoAuthMiddleware,
+        user_pool_id=cognito_user_pool_id,
+        region=cognito_region,
+        client_id=cognito_client_id,
+        enabled=True,
+    )
+    logger.info(f"Cognito authentication enabled for User Pool: {cognito_user_pool_id}")
+else:
+    logger.info("Cognito authentication disabled (local development mode)")
+
+# Mangum handler for AWS Lambda
+# This wraps the FastAPI app to handle Lambda events
+handler = Mangum(app, lifespan="off")  # Use "off" to avoid lifespan issues in Lambda

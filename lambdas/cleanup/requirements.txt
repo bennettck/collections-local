@@ -1,0 +1,4 @@
+# Cleanup Lambda dependencies
+# boto3 is included in Lambda runtime by default, but specified here for local development
+
+boto3>=1.34.0
