@@ -33,8 +33,8 @@ from models import (
     ChatSessionInfo,
 )
 
-# Database API - routes to SQLite or PostgreSQL based on environment
-from database.api import (
+# Database API - PostgreSQL via SQLAlchemy
+from database_sqlalchemy import (
     init_db,
     create_item,
     get_item,
@@ -45,12 +45,7 @@ from database.api import (
     get_analysis,
     get_latest_analysis,
     get_item_analyses,
-    rebuild_search_index,
     search_items,
-    get_search_status,
-    get_db,
-    _create_search_document,
-    use_postgres,
 )
 
 from llm import analyze_image, get_trace_id, get_resolved_provider_and_model
@@ -87,14 +82,8 @@ def get_user_id_from_request(request: Request) -> str:
     return os.getenv("DEFAULT_USER_ID", "default")
 
 
-# Get settings - support both new and old env var names (backwards compatibility)
-PROD_DATABASE_PATH = os.getenv("PROD_DATABASE_PATH") or os.getenv("DATABASE_PATH", "./data/collections.db")
-GOLDEN_DATABASE_PATH = os.getenv("GOLDEN_DATABASE_PATH", "./data/collections_golden.db")
+# Image storage path
 IMAGES_PATH = os.getenv("IMAGES_PATH", "./data/images")
-
-# Log deprecation warning if old var is used
-if os.getenv("DATABASE_PATH") and not os.getenv("PROD_DATABASE_PATH"):
-    logger.warning("DATABASE_PATH is deprecated. Use PROD_DATABASE_PATH instead.")
 
 # Allowed image MIME types
 ALLOWED_MIME_TYPES = {
@@ -115,67 +104,46 @@ conversation_manager = None
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Startup and shutdown events."""
-    # Skip SQLite initialization in Lambda (use PostgreSQL instead)
     is_lambda = bool(os.getenv("DB_SECRET_ARN") or os.getenv("AWS_LAMBDA_FUNCTION_NAME"))
 
+    # Ensure images directory exists (local development)
     if not is_lambda:
-        # Local development only: Initialize SQLite databases
-        from database_sqlite import database_context
-
-        # Initialize production database
-        with database_context(PROD_DATABASE_PATH):
-            init_db()
-
-        # Initialize golden database
-        with database_context(GOLDEN_DATABASE_PATH):
-            init_db()
-
-        # Ensure images directory exists
         os.makedirs(IMAGES_PATH, exist_ok=True)
 
-        # Initialize search index for production DB
-        with database_context(PROD_DATABASE_PATH):
-            status = get_search_status()
-            if status['doc_count'] == 0 and status['total_items'] > 0:
-                rebuild_search_index()
+    # Initialize PostgreSQL database schema
+    try:
+        init_db()
+    except Exception as e:
+        logger.error(f"Failed to initialize database: {e}")
 
-        # Initialize search index for golden DB
-        with database_context(GOLDEN_DATABASE_PATH):
-            status = get_search_status()
-            if status['doc_count'] == 0 and status['total_items'] > 0:
-                rebuild_search_index()
+    # Initialize PGVector stores
+    global prod_vector_store, golden_vector_store
 
-    # Initialize PGVector store for PRODUCTION database
-    global prod_vector_store
-
-    # Skip PGVector initialization in Lambda for now (lazy load on first use)
+    # Skip initialization in Lambda (lazy load on first use)
     if not is_lambda:
         try:
             prod_vector_config = get_vector_store_config("prod")
             prod_vector_store = PGVectorStoreManager(
                 collection_name=prod_vector_config["collection_name"],
                 embedding_model=LANGCHAIN_EMBEDDING_MODEL,
-                use_parameter_store=False,  # Use database connection from environment
+                use_parameter_store=False,
                 parameter_name=None
             )
         except Exception as e:
             logger.error(f"Failed to initialize PGVector (PROD): {e}")
-
-        # Initialize PGVector store for GOLDEN database
-        global golden_vector_store
 
         try:
             golden_vector_config = get_vector_store_config("golden")
             golden_vector_store = PGVectorStoreManager(
                 collection_name=golden_vector_config["collection_name"] + "_golden",
                 embedding_model=LANGCHAIN_EMBEDDING_MODEL,
-                use_parameter_store=False,  # Use database connection from environment
+                use_parameter_store=False,
                 parameter_name=None
             )
         except Exception as e:
             logger.error(f"Failed to initialize PGVector (GOLDEN): {e}")
 
-    # Initialize conversation manager for multi-turn chat (local development only)
+    # Initialize conversation manager for multi-turn chat
     global conversation_manager
 
     if not is_lambda:
@@ -183,12 +151,9 @@ async def lifespan(app: FastAPI):
             from chat.conversation_manager import ConversationManager
             from config.chat_config import CONVERSATION_TTL_HOURS
 
-            # Initialize ConversationManager with DynamoDB settings
-            # Note: user_id is set per-request in chat endpoints for multi-tenancy
             conversation_manager = ConversationManager(
                 ttl_hours=CONVERSATION_TTL_HOURS
             )
-            # DynamoDB TTL handles session cleanup automatically
         except Exception as e:
             logger.error(f"Failed to initialize conversation manager: {e}")
 
@@ -211,15 +176,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Add database routing middleware
-from middleware import DatabaseRoutingMiddleware
-
-app.add_middleware(
-    DatabaseRoutingMiddleware,
-    prod_db_path=PROD_DATABASE_PATH,
-    golden_db_path=GOLDEN_DATABASE_PATH
-)
-
 # Mount static files (only if directory exists - not needed in Lambda)
 if os.path.exists("static"):
     app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -235,11 +191,10 @@ def get_current_vector_store(request: Request) -> PGVectorStoreManager:
 
 
 def _parse_datetime(dt_value) -> datetime:
-    """Parse datetime value (string from SQLite or datetime from PostgreSQL)."""
+    """Parse datetime value from PostgreSQL."""
     if isinstance(dt_value, datetime):
-        # Already a datetime object (PostgreSQL)
         return dt_value
-    # String that needs parsing (SQLite)
+    # Handle ISO format string if needed
     return datetime.fromisoformat(dt_value)
 
 
@@ -247,9 +202,8 @@ def _item_to_response(item: dict, include_analysis: bool = True, user_id: Option
     """Convert database item dict to ItemResponse."""
     latest_analysis = None
     if include_analysis:
-        # For PostgreSQL, user_id is required; for SQLite, it's ignored
-        if use_postgres() and not user_id:
-            # Extract from item if available (multi-tenancy)
+        # user_id required for multi-tenancy
+        if not user_id:
             user_id = item.get("user_id", "default")
 
         analysis_data = get_latest_analysis(item["id"], user_id=user_id)
@@ -298,32 +252,21 @@ def _analysis_to_response(analysis: dict) -> AnalysisResponse:
 # Health Check
 @app.get("/health")
 async def health_check(request: Request):
-    """Health check endpoint with database context info."""
-    # Get active database from request state (set by middleware)
-    active_db = getattr(request.state, "active_database", "unknown")
-    db_path = getattr(request.state, "db_path", "unknown")
+    """Health check endpoint."""
+    user_id = get_user_id_from_request(request)
 
-    # Try to get item counts from databases (may fail in Lambda environment)
+    # Get database stats
     database_stats = None
     try:
-        from database_sqlite import database_context
-        with database_context(PROD_DATABASE_PATH):
-            prod_count = count_items()
-        with database_context(GOLDEN_DATABASE_PATH):
-            golden_count = count_items()
-        database_stats = {
-            "production": {"items": prod_count},
-            "golden": {"items": golden_count}
-        }
+        item_count = count_items(user_id=user_id)
+        database_stats = {"items": item_count}
     except Exception as e:
-        # Database access not available (e.g., in Lambda) - skip stats
         logger.debug(f"Database stats unavailable: {e}")
 
     response = {
         "status": "healthy",
         "timestamp": datetime.utcnow().isoformat(),
-        "active_database": active_db,
-        "active_db_path": db_path,
+        "database": "postgresql",
     }
 
     if database_stats:
@@ -500,45 +443,23 @@ async def analyze_item_endpoint(
         user_id=user_id,
     )
 
-    # Sync to search indexes (non-blocking)
+    # Sync to vector store (PostgreSQL tsvector is updated via trigger)
     try:
-        # Real-time FTS5 index sync (SQLite for backwards compatibility)
-        try:
-            search_doc = _create_search_document(result)
-            with get_db() as conn:
-                # Delete existing entry if present (for re-analysis)
-                conn.execute("DELETE FROM items_fts WHERE item_id = ?", (item_id,))
-                # Insert new entry
-                conn.execute(
-                    "INSERT INTO items_fts(item_id, content) VALUES (?, ?)",
-                    (item_id, search_doc)
-                )
-            logger.info(f"Successfully synced FTS5 index for {item_id}")
-        except Exception as fts_error:
-            # Log but don't fail analysis if FTS5 sync fails
-            logger.error(f"Failed to sync FTS5 index for {item_id}: {fts_error}")
-
-        # Real-time vector store sync (langchain-postgres - single source of truth)
-        try:
-            vector_mgr = get_current_vector_store(http_request)
-            item = get_item(item_id, user_id=user_id)
-            if item:
-                vector_mgr.add_document(
-                    item_id=item_id,
-                    raw_response=result,
-                    filename=item["filename"],
-                    user_id=user_id
-                )
-                logger.info(f"Successfully synced vector store for {item_id}")
-            else:
-                logger.error(f"Cannot sync to vector store: item {item_id} not found")
-        except Exception as vector_error:
-            # Log but don't fail analysis if vector store sync fails
-            logger.error(f"Failed to sync to vector store for {item_id}: {vector_error}", exc_info=True)
-
+        vector_mgr = get_current_vector_store(http_request)
+        item = get_item(item_id, user_id=user_id)
+        if item:
+            vector_mgr.add_document(
+                item_id=item_id,
+                raw_response=result,
+                filename=item["filename"],
+                user_id=user_id
+            )
+            logger.info(f"Successfully synced vector store for {item_id}")
+        else:
+            logger.error(f"Cannot sync to vector store: item {item_id} not found")
     except Exception as e:
-        # Log error but don't fail the analysis
-        logger.warning(f"Failed to generate embedding for {item_id}: {e}")
+        # Log but don't fail analysis if vector store sync fails
+        logger.error(f"Failed to sync to vector store for {item_id}: {e}", exc_info=True)
 
     return _analysis_to_response(analysis)
 
@@ -789,22 +710,22 @@ async def get_search_config():
     """
     config = {
         "bm25": {
-            "algorithm": "SQLite FTS5 BM25",
-            "implementation": "Native",
-            "content_field": "Unified content field (no field weighting)",
-            "tokenizer": "unicode61 with diacritics removal"
+            "algorithm": "PostgreSQL Full-Text Search (tsvector/tsquery)",
+            "implementation": "PostgresBM25Retriever",
+            "scoring": "ts_rank with normalization",
+            "content_field": "Unified content field (no field weighting)"
         },
         "vector": {
-            "algorithm": "Cosine similarity",  # Defined in database.py:497
-            "implementation": "Native sqlite-vec",
+            "algorithm": "Cosine similarity",
+            "implementation": "PGVector (langchain-postgres)",
             "embedding_model": DEFAULT_EMBEDDING_MODEL,
             "dimensions": get_embedding_dimensions(DEFAULT_EMBEDDING_MODEL),
             "content_field": "Unified content field (no field weighting)",
-            "distance_metric": "cosine"  # sqlite-vec configuration
+            "distance_metric": "cosine"
         },
         "hybrid": {
-            "algorithm": "RRF Ensemble (Native BM25 + Native Vector)",
-            "implementation": "Native implementations with LangChain EnsembleRetriever",
+            "algorithm": "RRF Ensemble (PostgreSQL BM25 + PGVector)",
+            "implementation": "PostgresHybridRetriever with LangChain EnsembleRetriever",
             "rrf_constant_c": 15,
             "weights": {
                 "bm25": 0.3,
@@ -815,8 +736,8 @@ async def get_search_config():
             "deduplication": "by item_id",
             "content_field": "Unified content field (no field weighting)",
             "components": {
-                "bm25": "SQLite FTS5 (native, wrapper-based)",
-                "vector": "sqlite-vec (native, wrapper-based, cosine)"
+                "bm25": "PostgreSQL tsvector/tsquery with ts_rank",
+                "vector": "PGVector (pgvector extension, cosine distance)"
             }
         }
     }
@@ -1005,53 +926,10 @@ async def list_chat_sessions(limit: int = Query(50, le=100)):
     }
 
 
-# Index Management Endpoints
-@app.post("/index/rebuild")
-async def rebuild_index():
-    """
-    Rebuild the FTS5 search index from current database.
-
-    Useful after bulk analysis updates or if search results seem stale.
-    """
-    start_time = time.time()
-
-    try:
-        stats = rebuild_search_index()
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Index rebuild failed: {str(e)}")
-
-    build_time = time.time() - start_time
-
-    return {
-        "status": "success",
-        "num_documents": stats["num_documents"],
-        "build_time_seconds": round(build_time, 2),
-        "timestamp": stats["timestamp"]
-    }
-
-
-@app.get("/index/status")
-async def get_index_status_endpoint():
-    """Get current search index status and statistics."""
-    try:
-        status = get_search_status()
-        return status
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to get index status: {str(e)}")
-
-
 # Vector Index Management Endpoints
-@app.get("/vector-index/status")
-async def vector_index_status():
-    """Get vector index statistics."""
-    from database_sqlite import get_vector_index_status
-    return get_vector_index_status()
 
-
-# LangChain Index Management Endpoints
-
-@app.post("/langchain-index/rebuild-chroma")
-async def rebuild_chroma_index(database: str = Query("prod", description="Database type: prod or golden")):
+@app.post("/vector-index/rebuild")
+async def rebuild_vector_index(database: str = Query("prod", description="Database type: prod or golden")):
     """Rebuild PGVector index for specified database."""
     global prod_vector_store, golden_vector_store
 
@@ -1095,9 +973,9 @@ async def rebuild_chroma_index(database: str = Query("prod", description="Databa
         )
 
 
-@app.get("/langchain-index/status")
-async def langchain_index_status():
-    """Get status of LangChain indexes for both databases."""
+@app.get("/vector-index/status")
+async def vector_index_status():
+    """Get status of PGVector indexes for both databases."""
     return {
         "prod": {
             "vector_store": {
@@ -1167,70 +1045,54 @@ async def get_items_for_review(
     Returns:
         Dict with items list, total count, and reviewed count
     """
-    from database_sqlite import get_db
+    # Golden dataset uses default user (single-tenant for evaluation)
+    user_id = "default"
 
-    with get_db() as conn:
-        # Get items with pagination
-        cursor = conn.cursor()
+    # Get all items and golden data
+    golden_data = load_golden_dataset()
+    reviewed_ids = {entry["item_id"] for entry in golden_data.get("golden_analyses", [])}
 
-        # Get all item IDs and golden data
-        golden_data = load_golden_dataset()
-        reviewed_ids = {entry["item_id"] for entry in golden_data.get("golden_analyses", [])}
+    # Get all items from PostgreSQL
+    all_items = list_items(limit=10000, offset=0, user_id=user_id)
+    all_item_ids = [item['id'] for item in all_items]
 
-        all_items_rows = cursor.execute(
-            "SELECT id FROM items ORDER BY created_at"
-        ).fetchall()
+    # Filter based on review_mode
+    if review_mode == "unreviewed":
+        filtered_item_ids = [id for id in all_item_ids if id not in reviewed_ids]
+    elif review_mode == "reviewed":
+        filtered_item_ids = [id for id in all_item_ids if id in reviewed_ids]
+    else:  # review_mode == "all"
+        filtered_item_ids = all_item_ids
 
-        # Filter based on review_mode
-        if review_mode == "unreviewed":
-            # Show only items without golden data
-            filtered_item_ids = [
-                row['id'] for row in all_items_rows
-                if row['id'] not in reviewed_ids
-            ]
-        elif review_mode == "reviewed":
-            # Show only items with golden data
-            filtered_item_ids = [
-                row['id'] for row in all_items_rows
-                if row['id'] in reviewed_ids
-            ]
-        else:  # review_mode == "all"
-            # Show all items
-            filtered_item_ids = [row['id'] for row in all_items_rows]
+    # Apply pagination
+    paginated_ids = filtered_item_ids[offset:offset + limit]
 
-        # Apply pagination
-        paginated_ids = filtered_item_ids[offset:offset + limit]
+    # Build response for each item
+    items = []
+    for item_id in paginated_ids:
+        item = get_item(item_id, user_id=user_id)
+        if not item:
+            continue
 
-        # Build response for each item
-        # Extract user_id for multi-tenancy (golden dataset uses default user)
-        user_id = "default"  # Golden dataset is single-tenant
+        analyses = get_item_analyses(item_id, user_id=user_id)
 
-        items = []
-        for item_id in paginated_ids:
-            item = get_item(item_id, user_id=user_id)
-            if not item:
-                continue
+        items.append({
+            "item_id": item_id,
+            "filename": item['filename'],
+            "original_filename": item.get('original_filename'),
+            "analyses": analyses,
+            "has_golden": has_golden_entry(item_id)
+        })
 
-            analyses = get_item_analyses(item_id, user_id=user_id)
+    # Count totals
+    total_count = count_items(user_id=user_id)
+    reviewed_count = len(golden_data.get('golden_analyses', []))
 
-            items.append({
-                "item_id": item_id,
-                "filename": item['filename'],
-                "original_filename": item.get('original_filename'),
-                "analyses": analyses,
-                "has_golden": has_golden_entry(item_id)
-            })
-
-        # Count totals
-        total_count = cursor.execute("SELECT COUNT(*) FROM items").fetchone()[0]
-        golden_data = load_golden_dataset()
-        reviewed_count = len(golden_data.get('golden_analyses', []))
-
-        return {
-            "items": items,
-            "total": total_count,
-            "reviewed_count": reviewed_count
-        }
+    return {
+        "items": items,
+        "total": total_count,
+        "reviewed_count": reviewed_count
+    }
 
 
 @app.post("/golden-dataset/compare", response_model=CompareResponse)
@@ -1301,11 +1163,10 @@ async def get_golden_status():
     Returns:
         Dict with total items, reviewed items, and progress percentage
     """
-    from database_sqlite import get_db
-
     try:
-        with get_db() as conn:
-            total_items = conn.execute("SELECT COUNT(*) FROM items").fetchone()[0]
+        # Golden dataset uses default user (single-tenant for evaluation)
+        user_id = "default"
+        total_items = count_items(user_id=user_id)
 
         golden_data = load_golden_dataset()
         reviewed_count = len(golden_data.get('golden_analyses', []))

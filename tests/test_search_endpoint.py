@@ -20,30 +20,21 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 @pytest.fixture
-def mock_db_context():
-    """Mock database context manager."""
-    with patch('database.database_context') as mock:
-        yield mock
-
-
-@pytest.fixture
-def mock_chroma_manager():
-    """Mock ChromaVectorStoreManager."""
+def mock_vector_store():
+    """Mock PGVectorStoreManager."""
     mock = MagicMock()
     mock.get_collection_stats.return_value = {"count": 10}
     return mock
 
 
 @pytest.fixture
-def client(mock_db_context, mock_chroma_manager):
+def client(mock_vector_store):
     """Create test client with mocked dependencies."""
-    # Mock the database and Chroma initialization
-    with patch('main.prod_chroma_manager', mock_chroma_manager):
-        with patch('main.golden_chroma_manager', mock_chroma_manager):
+    with patch('main.prod_vector_store', mock_vector_store):
+        with patch('main.golden_vector_store', mock_vector_store):
             with patch('main.init_db'):
-                with patch('main.get_search_status', return_value={'doc_count': 10, 'total_items': 10}):
-                    from main import app
-                    return TestClient(app)
+                from main import app
+                return TestClient(app)
 
 
 class TestSearchEndpointBasics:
@@ -93,7 +84,7 @@ class TestSearchTypeRouting:
         mock_get_item.return_value = None
         mock_analysis.return_value = None
 
-        with patch('retrieval.langchain_retrievers.BM25LangChainRetriever') as mock_retriever:
+        with patch('retrieval.postgres_bm25.PostgresBM25Retriever') as mock_retriever:
             mock_instance = MagicMock()
             mock_instance.invoke.return_value = []
             mock_retriever.return_value = mock_instance
@@ -102,25 +93,25 @@ class TestSearchTypeRouting:
                 "/search",
                 json={
                     "query": "test query",
-                    "search_type": "bm25-lc",
+                    "search_type": "bm25",
                     "include_answer": False
                 }
             )
 
             assert response.status_code == 200
             data = response.json()
-            assert data["search_type"] == "bm25-lc"
+            assert data["search_type"] == "bm25"
 
     @patch('main.get_item')
     @patch('main.get_latest_analysis')
-    @patch('main.get_current_chroma_manager')
-    def test_vector_search_type(self, mock_chroma, mock_analysis, mock_get_item, client):
+    @patch('main.get_current_vector_store')
+    def test_vector_search_type(self, mock_vector_store, mock_analysis, mock_get_item, client):
         """Test that vector-lc search type is routed correctly."""
         mock_get_item.return_value = None
         mock_analysis.return_value = None
-        mock_chroma.return_value = MagicMock()
+        mock_vector_store.return_value = MagicMock()
 
-        with patch('retrieval.langchain_retrievers.VectorLangChainRetriever') as mock_retriever:
+        with patch('retrieval.hybrid_retriever.VectorOnlyRetriever') as mock_retriever:
             mock_instance = MagicMock()
             mock_instance.invoke.return_value = []
             mock_retriever.return_value = mock_instance
@@ -129,25 +120,25 @@ class TestSearchTypeRouting:
                 "/search",
                 json={
                     "query": "test query",
-                    "search_type": "vector-lc",
+                    "search_type": "vector",
                     "include_answer": False
                 }
             )
 
             assert response.status_code == 200
             data = response.json()
-            assert data["search_type"] == "vector-lc"
+            assert data["search_type"] == "vector"
 
     @patch('main.get_item')
     @patch('main.get_latest_analysis')
-    @patch('main.get_current_chroma_manager')
-    def test_hybrid_search_type(self, mock_chroma, mock_analysis, mock_get_item, client):
+    @patch('main.get_current_vector_store')
+    def test_hybrid_search_type(self, mock_vector_store, mock_analysis, mock_get_item, client):
         """Test that hybrid-lc search type is routed correctly."""
         mock_get_item.return_value = None
         mock_analysis.return_value = None
-        mock_chroma.return_value = MagicMock()
+        mock_vector_store.return_value = MagicMock()
 
-        with patch('retrieval.langchain_retrievers.HybridLangChainRetriever') as mock_retriever:
+        with patch('retrieval.hybrid_retriever.PostgresHybridRetriever') as mock_retriever:
             mock_instance = MagicMock()
             mock_instance.invoke.return_value = []
             mock_retriever.return_value = mock_instance
@@ -156,14 +147,14 @@ class TestSearchTypeRouting:
                 "/search",
                 json={
                     "query": "test query",
-                    "search_type": "hybrid-lc",
+                    "search_type": "hybrid",
                     "include_answer": False
                 }
             )
 
             assert response.status_code == 200
             data = response.json()
-            assert data["search_type"] == "hybrid-lc"
+            assert data["search_type"] == "hybrid"
 
 
 class TestAgenticSearchEndpoint:
@@ -171,12 +162,12 @@ class TestAgenticSearchEndpoint:
 
     @patch('main.get_item')
     @patch('main.get_latest_analysis')
-    @patch('main.get_current_chroma_manager')
-    def test_agentic_search_type_accepted(self, mock_chroma, mock_analysis, mock_get_item, client):
+    @patch('main.get_current_vector_store')
+    def test_agentic_search_type_accepted(self, mock_vector_store, mock_analysis, mock_get_item, client):
         """Test that 'agentic' is accepted as a valid search type."""
         mock_get_item.return_value = None
         mock_analysis.return_value = None
-        mock_chroma.return_value = MagicMock()
+        mock_vector_store.return_value = MagicMock()
 
         # Will fail until implementation is complete, but should not be validation error
         response = client.post(
@@ -194,8 +185,8 @@ class TestAgenticSearchEndpoint:
 
     @patch('main.get_item')
     @patch('main.get_latest_analysis')
-    @patch('main.get_current_chroma_manager')
-    def test_agentic_search_response_format(self, mock_chroma, mock_analysis, mock_get_item, client):
+    @patch('main.get_current_vector_store')
+    def test_agentic_search_response_format(self, mock_vector_store, mock_analysis, mock_get_item, client):
         """Test that agentic search returns expected response format."""
         # Setup mocks
         mock_item = {
@@ -216,7 +207,7 @@ class TestAgenticSearchEndpoint:
 
         mock_get_item.return_value = mock_item
         mock_analysis.return_value = mock_analysis_data
-        mock_chroma.return_value = MagicMock()
+        mock_vector_store.return_value = MagicMock()
 
         # Mock the agentic orchestrator (when implemented)
         with patch('retrieval.agentic_search.AgenticSearchOrchestrator') as mock_orchestrator:
@@ -256,8 +247,8 @@ class TestAgenticSearchEndpoint:
 
     @patch('main.get_item')
     @patch('main.get_latest_analysis')
-    @patch('main.get_current_chroma_manager')
-    def test_agentic_search_with_answer_generation(self, mock_chroma, mock_analysis, mock_get_item, client):
+    @patch('main.get_current_vector_store')
+    def test_agentic_search_with_answer_generation(self, mock_vector_store, mock_analysis, mock_get_item, client):
         """Test agentic search with answer generation enabled."""
         mock_item = {
             "id": "test-item-1",
@@ -277,7 +268,7 @@ class TestAgenticSearchEndpoint:
 
         mock_get_item.return_value = mock_item
         mock_analysis.return_value = mock_analysis_data
-        mock_chroma.return_value = MagicMock()
+        mock_vector_store.return_value = MagicMock()
 
         with patch('retrieval.agentic_search.AgenticSearchOrchestrator') as mock_orchestrator:
             with patch('retrieval.answer_generator.generate_answer') as mock_answer_gen:
@@ -320,7 +311,7 @@ class TestDatabaseRouting:
         mock_get_item.return_value = None
         mock_analysis.return_value = None
 
-        with patch('retrieval.langchain_retrievers.BM25LangChainRetriever') as mock_retriever:
+        with patch('retrieval.postgres_bm25.PostgresBM25Retriever') as mock_retriever:
             mock_instance = MagicMock()
             mock_instance.invoke.return_value = []
             mock_retriever.return_value = mock_instance
@@ -329,7 +320,7 @@ class TestDatabaseRouting:
                 "/search",
                 json={
                     "query": "test query",
-                    "search_type": "bm25-lc",
+                    "search_type": "bm25",
                     "include_answer": False
                 }
             )
@@ -338,14 +329,14 @@ class TestDatabaseRouting:
 
     @patch('main.get_item')
     @patch('main.get_latest_analysis')
-    @patch('main.get_current_chroma_manager')
-    def test_golden_database_via_subdomain(self, mock_chroma, mock_analysis, mock_get_item, client):
+    @patch('main.get_current_vector_store')
+    def test_golden_database_via_subdomain(self, mock_vector_store, mock_analysis, mock_get_item, client):
         """Test that golden database is used when subdomain is specified."""
         mock_get_item.return_value = None
         mock_analysis.return_value = None
-        mock_chroma.return_value = MagicMock()
+        mock_vector_store.return_value = MagicMock()
 
-        with patch('retrieval.langchain_retrievers.BM25LangChainRetriever') as mock_retriever:
+        with patch('retrieval.postgres_bm25.PostgresBM25Retriever') as mock_retriever:
             mock_instance = MagicMock()
             mock_instance.invoke.return_value = []
             mock_retriever.return_value = mock_instance
@@ -354,7 +345,7 @@ class TestDatabaseRouting:
                 "/search",
                 json={
                     "query": "test query",
-                    "search_type": "bm25-lc",
+                    "search_type": "bm25",
                     "include_answer": False
                 },
                 headers={"Host": "golden.localhost:8000"}
@@ -373,7 +364,7 @@ class TestSearchResponseFormat:
         mock_get_item.return_value = None
         mock_analysis.return_value = None
 
-        with patch('retrieval.langchain_retrievers.BM25LangChainRetriever') as mock_retriever:
+        with patch('retrieval.postgres_bm25.PostgresBM25Retriever') as mock_retriever:
             mock_instance = MagicMock()
             mock_instance.invoke.return_value = []
             mock_retriever.return_value = mock_instance
@@ -382,7 +373,7 @@ class TestSearchResponseFormat:
                 "/search",
                 json={
                     "query": "test query",
-                    "search_type": "bm25-lc",
+                    "search_type": "bm25",
                     "include_answer": False
                 }
             )
@@ -420,7 +411,7 @@ class TestSearchResponseFormat:
         mock_get_item.return_value = mock_item
         mock_analysis.return_value = mock_analysis_data
 
-        with patch('retrieval.langchain_retrievers.BM25LangChainRetriever') as mock_retriever:
+        with patch('retrieval.postgres_bm25.PostgresBM25Retriever') as mock_retriever:
             mock_instance = MagicMock()
             mock_doc = MagicMock()
             mock_doc.metadata = {"item_id": "test-item-1", "score": 0.85}
@@ -431,7 +422,7 @@ class TestSearchResponseFormat:
                 "/search",
                 json={
                     "query": "test query",
-                    "search_type": "bm25-lc",
+                    "search_type": "bm25",
                     "include_answer": False
                 }
             )

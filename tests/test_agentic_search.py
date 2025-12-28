@@ -151,39 +151,6 @@ class TestAgenticSearchOrchestrator:
 class TestAgenticSearchIntegration:
     """Integration tests for agentic search with mocked retrievers."""
 
-    @patch('retrieval.langchain_retrievers.VectorLangChainRetriever')
-    @patch('retrieval.langchain_retrievers.BM25LangChainRetriever')
-    @patch('retrieval.langchain_retrievers.HybridLangChainRetriever')
-    def test_orchestrator_uses_correct_retriever(
-        self,
-        mock_hybrid,
-        mock_bm25,
-        mock_vector
-    ):
-        """Test that orchestrator invokes the correct retriever based on strategy."""
-        # Setup mocks
-        mock_vector_instance = MagicMock()
-        mock_vector_instance.invoke.return_value = [
-            MagicMock(metadata={"item_id": "vec-1", "score": 0.9})
-        ]
-        mock_vector.return_value = mock_vector_instance
-
-        mock_bm25_instance = MagicMock()
-        mock_bm25_instance.invoke.return_value = [
-            MagicMock(metadata={"item_id": "bm25-1", "score": 0.8})
-        ]
-        mock_bm25.return_value = mock_bm25_instance
-
-        mock_hybrid_instance = MagicMock()
-        mock_hybrid_instance.invoke.return_value = [
-            MagicMock(metadata={"item_id": "hybrid-1", "score": 0.95, "rrf_score": 0.95})
-        ]
-        mock_hybrid.return_value = mock_hybrid_instance
-
-        # Test would verify correct retriever is called
-        # (Actual implementation test would go here)
-        assert True  # Placeholder for actual implementation
-
     def test_orchestrator_handles_empty_results(self):
         """Test that orchestrator handles case when no results are found."""
         orch = MockAgenticSearchOrchestrator(top_k=10)

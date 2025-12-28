@@ -2,8 +2,7 @@
 
 import os
 
-# Conversation persistence
-CONVERSATION_DB_PATH = os.getenv("CONVERSATION_DB_PATH", "./data/conversations.db")
+# Conversation persistence (PostgreSQL via langgraph-checkpoint-postgres)
 CONVERSATION_TTL_HOURS = int(os.getenv("CONVERSATION_TTL_HOURS", "4"))
 MAX_CONVERSATIONS = int(os.getenv("MAX_CONVERSATIONS", "100"))
 CLEANUP_ON_STARTUP = os.getenv("CLEANUP_ON_STARTUP", "true").lower() == "true"

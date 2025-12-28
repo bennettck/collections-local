@@ -503,15 +503,3 @@ def _analysis_to_dict(analysis: Optional[Analysis]) -> Optional[dict]:
 
 
 # Note: _embedding_to_dict removed - embeddings now handled by langchain-postgres
-
-
-# Thread-local context compatibility (not needed for SQLAlchemy but kept for API compatibility)
-@contextmanager
-def database_context(db_path: str):
-    """
-    Compatibility wrapper for database_context.
-
-    In SQLAlchemy version, this is a no-op since we use DATABASE_URL instead.
-    """
-    # This is just for API compatibility with the old database.py
-    yield

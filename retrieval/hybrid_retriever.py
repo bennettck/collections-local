@@ -11,7 +11,7 @@ from typing import List, Optional
 from langchain_core.retrievers import BaseRetriever
 from langchain_core.documents import Document
 from langchain_core.callbacks import CallbackManagerForRetrieverRun
-from langchain_classic.retrievers.ensemble import EnsembleRetriever
+from langchain.retrievers.ensemble import EnsembleRetriever
 from langsmith import traceable
 
 from retrieval.postgres_bm25 import PostgresBM25Retriever

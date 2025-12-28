@@ -34,9 +34,8 @@ This is the `collections-local` project - an AI-powered image analysis and seman
 
 ### Database & Storage
 - **Production Database**: PostgreSQL (AWS RDS) with pgvector extension
-- **Local Development**: SQLite (deprecated, for compatibility only)
-- **Vector Store**: PGVector (PostgreSQL extension, replaces ChromaDB)
-- **Conversation State**: DynamoDB checkpointer (current), langgraph-checkpoint-postgres (planned)
+- **Vector Store**: PGVector (PostgreSQL extension)
+- **Conversation State**: langgraph-checkpoint-postgres (PostgreSQL)
 - **Image Storage**: AWS S3
 
 ### Search & Retrieval
@@ -47,22 +46,20 @@ This is the `collections-local` project - an AI-powered image analysis and seman
 
 ### AI & LLM
 - **Analysis**: Anthropic Claude Sonnet 4.5
-- **Embeddings**: Voyage AI (voyage-3.5-lite, 512 dimensions)
+- **Embeddings**: Voyage AI (voyage-3.5-lite, 1024 dimensions)
 - **Chat**: LangGraph with ReAct agent
 - **Observability**: LangSmith tracing
 
 ## Development Practices
 
 ### Database Development
-- Use PostgreSQL for production-like testing
-- SQLite is deprecated (compatibility mode only)
+- Use PostgreSQL for all development and testing
 - Custom retrievers are PostgreSQL-native (not LangChain defaults)
 - Always test with user_id filtering for multi-tenancy
 
 ### Custom Code
 - Custom retrievers required for PostgreSQL BM25 + PGVector integration
 - LangChain's default retrievers don't support our RRF hybrid approach
-- Custom DynamoDB checkpointer required until langgraph-checkpoint-postgres v1.0
 
 ### Testing Guidelines
 - Test search with actual PostgreSQL backend

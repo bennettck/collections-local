@@ -9,8 +9,6 @@ class Settings(BaseSettings):
     anthropic_api_key: str
     openai_api_key: Optional[str] = None
     langsmith_prompt_name: str = "collections-app-initial"
-    prod_database_path: str = "./data/collections.db"
-    golden_database_path: str = "./data/collections_golden.db"
     images_path: str = "./data/images"
 
     class Config:

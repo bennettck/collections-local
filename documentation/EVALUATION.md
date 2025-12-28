@@ -9,7 +9,7 @@ The retrieval evaluation system measures search quality using a golden dataset o
 ```
 ┌─────────────────────────────────────────────────────────┐
 │              Golden Database (55 Items)                  │
-│         data/collections_golden.db                       │
+│         PostgreSQL with golden dataset schema            │
 └────────────────────┬────────────────────────────────────┘
                      │
                      ▼
@@ -65,7 +65,7 @@ python scripts/setup_golden_db.py
 - Manually curated for quality and variety
 - Covers all major categories and content types
 
-See [DUAL_DATABASE.md](./DUAL_DATABASE.md) for complete dual-database documentation.
+The golden database uses a separate schema/namespace within PostgreSQL for evaluation isolation.
 
 ### 2. Evaluation Dataset
 
@@ -862,8 +862,8 @@ lsof -i :8001
 
 **Solutions**:
 ```bash
-# Verify golden DB exists and has 55 items
-sqlite3 data/collections_golden.db "SELECT COUNT(*) FROM items"
+# Verify golden DB has 55 items via API
+curl http://localhost:8000/health?_db=golden
 
 # Recreate golden DB if needed
 python scripts/setup_golden_db.py --force
@@ -880,11 +880,11 @@ python scripts/evaluate_retrieval.py --skip-item-check
 
 **Solutions**:
 ```bash
-# Rebuild search index
-python scripts/setup_golden_db.py --force
+# Rebuild search index via API
+curl -X POST http://localhost:8000/index/rebuild?_db=golden
 
-# Verify FTS table exists
-sqlite3 data/collections_golden.db "SELECT COUNT(*) FROM items_fts"
+# Verify items are indexed
+curl http://localhost:8000/index/status?_db=golden
 ```
 
 ### Missing Dataset File
@@ -902,10 +902,10 @@ ls -l data/eval/retrieval_evaluation_dataset.json
 
 ## Related Documentation
 
-- [RETRIEVAL.md](./RETRIEVAL.md) - BM25 search implementation details
-- [DUAL_DATABASE.md](./DUAL_DATABASE.md) - Golden database setup and management
+- [FEATURES.md](./FEATURES.md) - Search implementation details (BM25, Vector, Hybrid)
 - [GOLDEN_DATASET.md](./GOLDEN_DATASET.md) - Golden dataset creation tool
 - [API.md](./API.md) - API endpoints and usage
+- [ARCHITECTURE.md](./ARCHITECTURE.md) - System architecture
 
 ## References
 

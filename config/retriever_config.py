@@ -88,24 +88,16 @@ VOYAGE_CONFIG = {
 }
 
 
-# Chroma Configuration
-# --------------------
-# Based on Chroma documentation and LangChain best practices
+# PGVector Configuration
+# ----------------------
+# Based on pgvector documentation and LangChain best practices
 
-CHROMA_CONFIG = {
+PGVECTOR_CONFIG = {
     # Distance metric for similarity search
-    # - "cosine": Cosine similarity - REQUIRED to match native vector implementation
-    # - "l2": L2 (Euclidean) distance - Chroma default (NOT RECOMMENDED)
+    # - "cosine": Cosine similarity - used by VoyageAI normalized embeddings
+    # - "l2": L2 (Euclidean) distance
     # - "ip": Inner product
-    #
-    # CRITICAL: Native vector search (sqlite-vec) uses cosine similarity
-    # Chroma MUST use the same metric for fair comparison
-    #
-    # Note: VoyageAI embeddings are normalized, so cosine similarity
-    # is the correct choice for text embeddings
-    #
-    # WARNING: Changing distance metric requires rebuilding the entire index
-    "distance_metric": "cosine",  # Matches native vector implementation
+    "distance_metric": "cosine",
 
     # Collection naming
     "collection_name_prod": "collections_vectors_prod",
@@ -173,66 +165,10 @@ def get_hybrid_config() -> dict:
     return HYBRID_CONFIG.copy()
 
 
-# Parameter Tuning Guide
-# -----------------------
-"""
-## BM25 Parameter Tuning
+def get_pgvector_config() -> dict:
+    """Get PGVector configuration.
 
-### k1 (Term Frequency Saturation)
-- **Effect**: Controls how much additional occurrences of a term increase relevance
-- **Lower k1 (0.8-1.2)**: Stronger saturation, diminishing returns for term repetition
-- **Higher k1 (1.5-3.0)**: Weaker saturation, repeated terms have more impact
-- **When to adjust**:
-  - Increase k1 if important terms appear multiple times in relevant documents
-  - Decrease k1 if term repetition doesn't indicate relevance
-
-### b (Length Normalization)
-- **Effect**: Controls penalty for longer documents
-- **Lower b (0.0-0.5)**: Less penalty for long documents
-- **Higher b (0.75-1.0)**: More penalty for long documents
-- **When to adjust**:
-  - Decrease b if longer documents are inherently more relevant
-  - Increase b if longer documents dilute relevance with noise
-
-### epsilon (IDF Floor)
-- **Effect**: Minimum IDF value for common terms
-- **Typical range**: 0.0-0.5
-- **When to adjust**: Rarely needs adjustment unless you have very common terms
-
-## VoyageAI input_type Optimization
-
-**Critical for retrieval quality!**
-
-1. **During indexing** (building Chroma vector store):
-   - Set `input_type="document"`
-   - This optimizes embeddings for storage and matching
-
-2. **During search** (query time):
-   - Set `input_type="query"`
-   - This optimizes embeddings for retrieval
-
-**Implementation note**: Currently requires separate embedding instances or
-runtime parameter changes. Consider creating two ChromaVectorStoreManager
-instances (one for indexing, one for querying) or modifying the query path
-to use query-optimized embeddings.
-
-## Testing Your Changes
-
-After adjusting parameters:
-
-1. Rebuild indexes:
-   ```bash
-   # Rebuild BM25 index (automatic on server restart)
-   # Rebuild Chroma index (if input_type changed)
-   python scripts/regenerate_embeddings.py --database prod
-   ```
-
-2. Run evaluation:
-   ```bash
-   python scripts/evaluate_retrieval.py --database golden
-   ```
-
-3. Compare MRR, Precision@5, and Recall@5 metrics
-
-4. Analyze by query type (single-item, multi-item, semantic)
-"""
+    Returns:
+        Dictionary with distance metric and collection settings
+    """
+    return PGVECTOR_CONFIG.copy()
