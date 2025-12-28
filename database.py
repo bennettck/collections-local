@@ -50,6 +50,28 @@ def _get_active_db_path() -> str:
     return getattr(_context, 'db_path', DATABASE_PATH)
 
 
+def _parse_json_field(value):
+    """
+    Parse a JSON field that might be a string (SQLite) or already parsed (PostgreSQL).
+
+    Args:
+        value: JSON field value from database
+
+    Returns:
+        Parsed dictionary or empty dict if None/empty
+    """
+    if not value:
+        return {}
+    if isinstance(value, dict):
+        # Already parsed (PostgreSQL with RealDictCursor)
+        return value
+    if isinstance(value, str):
+        # String that needs parsing (SQLite)
+        return json.loads(value)
+    # Fallback for unexpected types
+    return {}
+
+
 def init_db():
     """Initialize database with schema."""
     # Ensure data directory exists
@@ -120,18 +142,94 @@ def init_db():
         conn.execute("CREATE INDEX IF NOT EXISTS idx_embeddings_analysis_id ON embeddings(analysis_id)")
 
 
+
+class DatabaseConnectionWrapper:
+    """Wrapper that adapts SQL queries for SQLite or PostgreSQL."""
+
+    def __init__(self, conn, use_postgres=False):
+        self._conn = conn
+        self._use_postgres = use_postgres
+        # For PostgreSQL, create a cursor that will be reused
+        self._cursor = conn.cursor() if use_postgres else None
+
+    def execute(self, query, params=None):
+        """Execute query with parameter adaptation."""
+        if self._use_postgres:
+            # PostgreSQL: use cursor with %s parameters
+            adapted_query = query.replace('?', '%s') if params else query
+            if params:
+                self._cursor.execute(adapted_query, params)
+            else:
+                self._cursor.execute(adapted_query)
+            return self._cursor
+        else:
+            # SQLite: use connection directly with ? parameters
+            if params:
+                return self._conn.execute(query, params)
+            else:
+                return self._conn.execute(query)
+
+    def executescript(self, script):
+        """Execute SQL script (SQLite only)."""
+        if self._use_postgres:
+            # For PostgreSQL, execute as a single statement
+            self._cursor.execute(script)
+            return self._cursor
+        else:
+            return self._conn.executescript(script)
+
+    def commit(self):
+        return self._conn.commit()
+
+    def close(self):
+        if self._cursor:
+            self._cursor.close()
+        return self._conn.close()
+
+    def __getattr__(self, name):
+        """Delegate other methods to underlying connection."""
+        return getattr(self._conn, name)
+
+
 @contextmanager
 def get_db():
     """Get database connection with row factory."""
-    active_path = _get_active_db_path()
-    conn = sqlite3.connect(active_path)
-    conn.row_factory = sqlite3.Row
-    conn.execute("PRAGMA foreign_keys = ON")
-    try:
-        yield conn
-        conn.commit()
-    finally:
-        conn.close()
+    # Check if we should use PostgreSQL (AWS Lambda with Secrets Manager)
+    if os.getenv("DB_SECRET_ARN"):
+        # PostgreSQL via AWS Secrets Manager
+        import psycopg2
+        import psycopg2.extras
+        from utils.aws_secrets import get_database_credentials
+
+        creds = get_database_credentials()
+        conn = psycopg2.connect(
+            host=creds['host'],
+            port=creds['port'],
+            database=creds.get('dbname', 'collections'),
+            user=creds['username'],
+            password=creds['password'],
+            sslmode='require',
+            cursor_factory=psycopg2.extras.RealDictCursor
+        )
+
+        try:
+            wrapped = DatabaseConnectionWrapper(conn, use_postgres=True)
+            yield wrapped
+            conn.commit()
+        finally:
+            conn.close()
+    else:
+        # SQLite for local development
+        active_path = _get_active_db_path()
+        conn = sqlite3.connect(active_path)
+        conn.row_factory = sqlite3.Row
+        conn.execute("PRAGMA foreign_keys = ON")
+        try:
+            wrapped = DatabaseConnectionWrapper(conn, use_postgres=False)
+            yield wrapped
+            conn.commit()
+        finally:
+            conn.close()
 
 
 def create_item(
@@ -241,7 +339,7 @@ def get_analysis(analysis_id: str) -> Optional[dict]:
         row = conn.execute("SELECT * FROM analyses WHERE id = ?", (analysis_id,)).fetchone()
         if row:
             result = dict(row)
-            result["raw_response"] = json.loads(result["raw_response"]) if result["raw_response"] else {}
+            result["raw_response"] = _parse_json_field(result["raw_response"])
             return result
         return None
 
@@ -255,7 +353,7 @@ def get_latest_analysis(item_id: str) -> Optional[dict]:
         ).fetchone()
         if row:
             result = dict(row)
-            result["raw_response"] = json.loads(result["raw_response"]) if result["raw_response"] else {}
+            result["raw_response"] = _parse_json_field(result["raw_response"])
             return result
         return None
 
@@ -270,7 +368,7 @@ def get_item_analyses(item_id: str) -> list[dict]:
         results = []
         for row in rows:
             result = dict(row)
-            result["raw_response"] = json.loads(result["raw_response"]) if result["raw_response"] else {}
+            result["raw_response"] = _parse_json_field(result["raw_response"])
             results.append(result)
         return results
 

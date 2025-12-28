@@ -78,12 +78,13 @@ def _get_database_url_from_parameter_store(parameter_name: str) -> Optional[str]
 
 def _get_database_url() -> str:
     """
-    Get DATABASE_URL from environment or Parameter Store.
+    Get DATABASE_URL with secure credential management.
 
-    Priority:
-    1. DATABASE_URL environment variable (direct)
-    2. AWS Parameter Store (via PARAMETER_STORE_DB_URL env var)
-    3. Fallback to SQLite for local development
+    Priority (Architect Pattern):
+    1. DATABASE_URL environment variable (direct override for testing)
+    2. AWS Secrets Manager (via DB_SECRET_ARN env var) - RECOMMENDED FOR PRODUCTION
+    3. AWS Parameter Store (via PARAMETER_STORE_DB_URL env var) - DEPRECATED
+    4. Fallback to SQLite for local development
 
     Returns:
         Database URL string
@@ -91,17 +92,30 @@ def _get_database_url() -> str:
     Raises:
         ValueError: If no database URL can be determined
     """
-    # Check direct environment variable first
+    # Check direct environment variable first (testing/local override)
     database_url = os.getenv("DATABASE_URL")
     if database_url:
         logger.info("Using DATABASE_URL from environment variable")
         return database_url
 
-    # Try Parameter Store if configured
+    # Try Secrets Manager if configured (RECOMMENDED)
+    if os.getenv("DB_SECRET_ARN"):
+        try:
+            from utils.aws_secrets import get_database_url as get_url_from_secrets
+            database_url = get_url_from_secrets()
+            if database_url:
+                logger.info("Using DATABASE_URL from AWS Secrets Manager")
+                return database_url
+        except Exception as e:
+            logger.warning(f"Failed to retrieve DATABASE_URL from Secrets Manager: {e}")
+            # Continue to next fallback
+
+    # Try Parameter Store if configured (DEPRECATED - use Secrets Manager)
     parameter_name = os.getenv("PARAMETER_STORE_DB_URL")
     if parameter_name:
         database_url = _get_database_url_from_parameter_store(parameter_name)
         if database_url:
+            logger.warning("Using Parameter Store for DATABASE_URL - DEPRECATED, migrate to Secrets Manager")
             return database_url
         logger.warning(f"Failed to retrieve DATABASE_URL from Parameter Store: {parameter_name}")
 
