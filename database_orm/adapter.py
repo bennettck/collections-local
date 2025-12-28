@@ -196,45 +196,9 @@ class DatabaseAdapter(ABC):
         """
         pass
 
-    @abstractmethod
-    def create_embedding(
-        self,
-        user_id: str,
-        item_id: str,
-        analysis_id: str,
-        embedding_id: str,
-        vector: List[float],
-        embedding_model: str,
-        embedding_source: Optional[Dict[str, Any]] = None
-    ) -> Dict[str, Any]:
-        """Store an embedding.
-
-        Args:
-            user_id: User identifier
-            item_id: Item identifier
-            analysis_id: Analysis identifier
-            embedding_id: Unique identifier for embedding
-            vector: Vector embedding as list of floats
-            embedding_model: Embedding model name
-            embedding_source: Optional dictionary of fields used for embedding
-
-        Returns:
-            Dictionary representation of created embedding
-        """
-        pass
-
-    @abstractmethod
-    def get_embedding(self, user_id: str, item_id: str) -> Optional[Dict[str, Any]]:
-        """Get embedding for an item.
-
-        Args:
-            user_id: User identifier
-            item_id: Item identifier
-
-        Returns:
-            Dictionary containing embedding metadata, or None
-        """
-        pass
+    # Note: Embedding methods (create_embedding, get_embedding) have been removed.
+    # Embeddings are now handled by langchain-postgres (PGVectorStoreManager).
+    # See retrieval/pgvector_store.py for the new embedding storage interface.
 
 
 def get_database_adapter() -> DatabaseAdapter:

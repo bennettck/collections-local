@@ -107,6 +107,47 @@ class PGVectorStoreManager:
             logger.error(f"Failed to add documents: {e}")
             raise
 
+    def add_document(
+        self,
+        item_id: str,
+        raw_response: dict,
+        filename: str,
+        user_id: Optional[str] = None
+    ) -> str:
+        """Add a single document to the vector store.
+
+        Convenience method that creates a LangChain Document from raw analysis
+        data and stores it with proper metadata.
+
+        Args:
+            item_id: Item identifier
+            raw_response: Analysis raw_response dictionary
+            filename: Image filename
+            user_id: Optional user ID for multi-tenancy filtering
+
+        Returns:
+            Document ID
+        """
+        # Create document using shared utility
+        doc = create_langchain_document(
+            raw_response=raw_response,
+            item_id=item_id,
+            filename=filename,
+            category=raw_response.get("category")
+        )
+
+        # Add user_id for multi-tenancy filtering if provided
+        if user_id:
+            doc.metadata["user_id"] = user_id
+
+        # Add additional metadata
+        doc.metadata["headline"] = raw_response.get("headline", "")
+        doc.metadata["summary"] = raw_response.get("summary", "")
+
+        # Store document
+        doc_ids = self.add_documents([doc], ids=[item_id])
+        return doc_ids[0] if doc_ids else item_id
+
     def similarity_search(
         self,
         query: str,
