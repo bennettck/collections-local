@@ -55,7 +55,7 @@ Collections is a serverless AI-powered image analysis and search system built on
 │  │    - PostgresHybridRetriever (BM25 + Vector RRF)         │  │
 │  │    - PostgresBM25Retriever (FTS)                          │  │
 │  │    - VectorOnlyRetriever (PGVector)                       │  │
-│  │  • Chat (LangGraph with DynamoDB checkpoints)             │  │
+│  │  • Chat (LangGraph with PostgreSQL checkpoints)            │  │
 │  └──────────────────────────────────────────────────────────┘  │
 └───────┬─────────────┬──────────────┬──────────────┬─────────────┘
         │             │              │              │
@@ -176,7 +176,7 @@ Collections is a serverless AI-powered image analysis and search system built on
 **Tables**:
 - `items` - Image metadata
 - `analyses` - AI analysis results
-- `embeddings` - Vector embeddings (512-dim)
+- `embeddings` - Vector embeddings (1024-dim, Voyage AI)
 - `checkpoints` - LangGraph conversation checkpoints (managed by langgraph-checkpoint-postgres)
 - `checkpoint_writes` - Pending writes for checkpoints
 - `checkpoint_blobs` - Binary data for checkpoints
@@ -266,7 +266,7 @@ Upload → S3 → Image Processor → EventBridge → Analyzer → EventBridge �
 - Enforcement: Middleware adds `user_id` to request context
 - Queries: All include `WHERE user_id = :user_id`
 - S3 Keys: Prefixed with `{user_id}/`
-- DynamoDB: Thread IDs prefixed with `{user_id}#`
+- PostgreSQL Checkpoints: Thread IDs prefixed with `{user_id}#`
 
 ## Custom Retrievers
 
@@ -301,30 +301,26 @@ The system uses custom LangChain retrievers built specifically for PostgreSQL, r
 
 **Production (AWS)**:
 - PGVector extension on PostgreSQL RDS
-- 512-dimensional embeddings (Voyage AI voyage-3.5-lite)
+- 1024-dimensional embeddings (Voyage AI voyage-3.5-lite)
 - IVFFlat index for efficient similarity search
 - Integrated with PostgreSQL for unified storage
 
 **Local Development**:
-- SQLite with sqlite-vec extension (deprecated, compatibility only)
-- Planned migration to PostgreSQL for local dev
-- Use PostgreSQL for production-like testing
+- PostgreSQL required for all development
+- SQLite fully deprecated and removed from codebase
+- Use Docker for local PostgreSQL: `docker run -p 5432:5432 pgvector/pgvector`
 
 **ChromaDB**: Fully deprecated and archived (replaced by PGVector)
 
 ### Conversation State Management
 
-**Current Implementation**:
-- Custom DynamoDB checkpointer for LangGraph state
-- 4-hour TTL for automatic cleanup
-- User-isolated session storage
+**Implementation**:
+- PostgreSQL checkpointer using `langgraph-checkpoint-postgres`
+- Configurable TTL for automatic cleanup (default: 4 hours)
+- User-isolated session storage via thread ID prefix
 - Format: `{user_id}#{session_id}`
-
-**Future Migration**:
-- langgraph-checkpoint-postgres (planned)
-- Unified PostgreSQL storage for all application data
-- Simplified infrastructure (removes DynamoDB dependency)
-- Production-ready when langgraph-checkpoint-postgres reaches v1.0
+- Connection pooling support for high-concurrency scenarios
+- All checkpoint data stored in PostgreSQL (unified storage)
 
 ## Data Flow
 
@@ -456,7 +452,7 @@ User → API Gateway → API Lambda
 - Resource-level permissions
 
 **Layer 4: Data**
-- Encryption at rest (S3, RDS, DynamoDB)
+- Encryption at rest (S3, RDS)
 - Encryption in transit (TLS)
 - Secure parameter storage (SSM)
 - No hardcoded secrets
@@ -653,7 +649,7 @@ User → API Gateway → API Lambda
 
 **Checkpoints**:
 - Automatic cleanup of expired checkpoints (configurable TTL)
-- No additional DynamoDB costs (consolidated in RDS)
+- All checkpoint data in RDS (no separate storage costs)
 
 **Data Transfer**:
 - Use CloudFront for image delivery

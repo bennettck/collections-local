@@ -64,7 +64,8 @@ This directory contains Postman collections and environments for testing the Col
 |---------|-------|-----|
 | Authentication | None | Cognito JWT required |
 | Multi-tenancy | No | Yes (user_id isolation) |
-| Database | SQLite + ChromaDB | PostgreSQL + pgvector + DynamoDB |
+| Database | PostgreSQL + pgvector | PostgreSQL + pgvector (RDS) |
+| Chat Checkpoints | PostgreSQL (langgraph-checkpoint-postgres) | PostgreSQL (langgraph-checkpoint-postgres) |
 | Storage | Local filesystem | S3 with pre-signed URLs |
 | Processing | Synchronous | Event-driven (Lambda) |
 | Database Routing | Supports production/golden | Not applicable |
@@ -140,7 +141,7 @@ This directory contains Postman collections and environments for testing the Col
 - Items CRUD operations (multi-tenant)
 - Analysis endpoints (event-driven)
 - Search (BM25, Vector, Hybrid, Agentic) - user-scoped
-- Chat endpoints (LangGraph with DynamoDB)
+- Chat endpoints (LangGraph with PostgreSQL checkpoints)
 - Image access (S3 pre-signed URLs)
 
 ## Tips
@@ -181,7 +182,7 @@ This makes it easy to chain requests together without manual copy-paste.
 
 ### Local Issues
 - **Connection Refused**: Make sure the API server is running on port 8000
-- **Database Not Found**: Check that `./data/collections.db` exists
+- **Database Connection Failed**: Check that PostgreSQL is running and DATABASE_URL is set
 - **Golden DB Issues**: Verify `/etc/hosts` entry for `golden.localhost`
 
 ### AWS Issues
@@ -193,7 +194,6 @@ This makes it easy to chain requests together without manual copy-paste.
 ## Further Documentation
 
 - **API Documentation (Local)**: [../API.md](../API.md)
-- **API Documentation (AWS)**: [../API_AWS.md](../API_AWS.md)
-- **Credentials & Setup**: [../../CREDENTIALS.md](../../CREDENTIALS.md)
-- **Quick Start Guide**: [../../QUICKSTART.md](../../QUICKSTART.md)
-- **Deployment Summary**: [../../AWS_DEPLOYMENT_SUMMARY.md](../../AWS_DEPLOYMENT_SUMMARY.md)
+- **Credentials & Setup**: [../CREDENTIALS.md](../CREDENTIALS.md)
+- **Quick Start Guide**: [../QUICKSTART.md](../QUICKSTART.md)
+- **Architecture**: [../ARCHITECTURE.md](../ARCHITECTURE.md)

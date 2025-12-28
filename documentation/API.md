@@ -1,6 +1,6 @@
 # Collections Local API Documentation
 
-> **Note:** This documentation is for the **local development version** of the Collections API. For the **AWS deployment** documentation, see [API_AWS.md](./API_AWS.md).
+> **Note:** This documentation is for the local development version of the Collections API using PostgreSQL with pgvector. For AWS deployment details, see [QUICKSTART.md](./QUICKSTART.md) and [CREDENTIALS.md](./CREDENTIALS.md).
 
 API documentation for the Collections App Local - a minimal local version that analyzes and categorizes screenshot images using AI.
 
@@ -78,7 +78,7 @@ Verify that the API server is running and healthy. Also shows which database is 
   "status": "healthy",
   "timestamp": "2025-11-30T12:00:00.000000",
   "active_database": "production",
-  "active_db_path": "./data/collections.db",
+  "database": "PostgreSQL",
   "database_stats": {
     "production": {
       "items": 84
@@ -95,7 +95,7 @@ Verify that the API server is running and healthy. Also shows which database is 
 | `status` | string | Health status, always "healthy" if responding |
 | `timestamp` | string | ISO 8601 timestamp of the response |
 | `active_database` | string | Which database this request is using (`"production"` or `"golden"`) |
-| `active_db_path` | string | File path of the active database |
+| `database` | string | Database type (always "PostgreSQL") |
 | `database_stats` | object | Item counts for both databases |
 
 **Response Headers:**
@@ -746,7 +746,7 @@ Perform natural language search over your collection using keyword-based BM25 or
 | Value | Description | Implementation | Typical Time |
 |-------|-------------|----------------|--------------|
 | `"bm25-lc"` | Fast keyword-based full-text search | LangChain BM25Retriever (default) | 2-10ms |
-| `"vector-lc"` | Semantic similarity search | LangChain Chroma with VoyageAI embeddings | 80-100ms |
+| `"vector-lc"` | Semantic similarity search | PostgreSQL pgvector with VoyageAI embeddings | 80-100ms |
 | `"hybrid-lc"` | Hybrid search with RRF fusion | LangChain EnsembleRetriever combining BM25 + Vector with Reciprocal Rank Fusion | 110-140ms |
 | `"agentic"` | Intelligent agent-based search with iterative refinement | LangChain ReAct Agent with search tools, can call hybrid search multiple times | 2-8 seconds |
 
@@ -972,7 +972,7 @@ curl -X POST http://localhost:8000/search \
 - Typical retrieval time: ~2-5ms
 
 **Vector-LC Semantic Search (`search_type: "vector-lc"`):**
-- Semantic similarity using LangChain Chroma with VoyageAI embeddings (512-dimensional vectors)
+- Semantic similarity using PostgreSQL pgvector with VoyageAI embeddings (1024-dimensional vectors)
 - Best for conceptual queries and finding meaning, not just keywords
 - Understands synonyms and related concepts (e.g., "perfume" finds "fragrance")
 - Cosine similarity ranking (0-1 scale)
@@ -1076,9 +1076,9 @@ curl http://localhost:8000/search/config
   },
   "vector-lc": {
     "algorithm": "Cosine similarity",
-    "implementation": "LangChain Chroma",
+    "implementation": "PostgreSQL pgvector",
     "embedding_model": "voyage-3.5-lite",
-    "dimensions": 512,
+    "dimensions": 1024,
     "field_weighting": {
       "summary": "3x",
       "headline": "2x",

@@ -11,17 +11,17 @@ Complete documentation for the Collections AI-powered image analysis and search 
 ### Core Documentation
 - **[Architecture](./ARCHITECTURE.md)** - System architecture and design
 - **[Features](./FEATURES.md)** - Search, chat, and AI capabilities
-- **[API Reference](./API.md)** - Local development API
-- **[API Reference (AWS)](./API_AWS.md)** - AWS deployment API
+- **[API Reference](./API.md)** - Local development API (PostgreSQL with pgvector)
 
 ### Development
 - **[Evaluation](./EVALUATION.md)** - Search evaluation and metrics
 - **[Golden Dataset](./GOLDEN_DATASET.md)** - Creating evaluation datasets
 - **[LangSmith](./LANGSMITH.md)** - Observability and tracing
 
-### Implementation
-- **[Implementation Guide](./implementation%20notes/IMPLEMENTATION.md)** - Complete implementation details
-- **[Implementation Plan (Historical)](./implementation%20notes/IMPLEMENTATION_PLAN_HISTORICAL.md)** - Original migration plan
+### AWS Deployment
+- **[Credentials](./CREDENTIALS.md)** - AWS credentials and configuration
+- **[Quick Start Guide](./QUICKSTART.md)** - Get up and running with AWS deployment
+- **[AWS Secrets Manager](./AWS_SECRETS_MANAGER_MIGRATION.md)** - Secrets management setup
 
 ### Testing
 - **[Postman Collections](./postman/)** - API testing with Postman
@@ -33,14 +33,13 @@ documentation/
 ├── README.md (this file)
 ├── ARCHITECTURE.md ..................... System architecture
 ├── FEATURES.md ......................... Features guide
-├── API.md .............................. Local API reference
-├── API_AWS.md .......................... AWS API reference
+├── API.md .............................. Local API reference (PostgreSQL)
+├── CREDENTIALS.md ...................... AWS credentials & configuration
+├── QUICKSTART.md ....................... AWS deployment quick start
 ├── EVALUATION.md ....................... Search evaluation
 ├── GOLDEN_DATASET.md ................... Dataset curation
 ├── LANGSMITH.md ........................ LLM observability
-├── implementation notes/
-│   ├── IMPLEMENTATION.md ............... Implementation details
-│   └── IMPLEMENTATION_PLAN_HISTORICAL.md  Original plan
+├── AWS_SECRETS_MANAGER_MIGRATION.md .... AWS secrets setup
 └── postman/
     ├── README.md ....................... Postman guide
     ├── collections-local.* ............. Local collection
@@ -79,19 +78,19 @@ API reference for local development:
 - Health endpoints
 - Items CRUD
 - Analysis endpoints
-- Search endpoints
+- Search endpoints (BM25, Vector, Hybrid, Agentic)
 - Golden dataset curation
-- Database routing
+- PostgreSQL with pgvector
 
 **Read this if**: You're developing locally
 
-### API_AWS.md
-API reference for AWS deployment:
+### CREDENTIALS.md + QUICKSTART.md
+AWS deployment documentation:
 - Authentication with Cognito
 - Multi-tenant endpoints
 - S3 image access
 - Chat endpoints
-- Rate limiting
+- LangGraph conversation state (PostgreSQL checkpoints)
 
 **Read this if**: You're using the AWS deployment
 
@@ -142,7 +141,7 @@ LLM observability with LangSmith:
 → [Postman Collections](./postman/)
 
 **Deploy to AWS**
-→ [Implementation Guide](./implementation%20notes/IMPLEMENTATION.md)
+→ [Quick Start Guide](./QUICKSTART.md) and [Credentials](./CREDENTIALS.md)
 
 **Evaluate search quality**
 → [Evaluation](./EVALUATION.md)
@@ -154,7 +153,7 @@ LLM observability with LangSmith:
 → [LangSmith](./LANGSMITH.md)
 
 **Understand authentication**
-→ [API AWS](./API_AWS.md#authentication)
+→ [Credentials](./CREDENTIALS.md) and [Quick Start Guide](./QUICKSTART.md)
 
 **Learn about multi-tenancy**
 → [Architecture](./ARCHITECTURE.md#multi-tenancy)
@@ -164,32 +163,20 @@ LLM observability with LangSmith:
 
 ## Documentation Updates
 
-**Last Updated**: 2025-12-27
+**Last Updated**: 2025-12-28
 
 **Recent Changes**:
-- Consolidated implementation notes into single guide
-- Created comprehensive architecture documentation
-- Merged feature docs into unified guide
-- Separated local and AWS API documentation
-- Cleaned up redundant and outdated files
-- Created Postman collections for both environments
+- Complete PostgreSQL migration - all SQLite/ChromaDB references removed
+- Updated to PostgreSQL with pgvector for vector storage
+- LangGraph checkpoints now use PostgreSQL (langgraph-checkpoint-postgres)
+- Updated embedding dimensions from 512 to 1024 (voyage-3.5-lite)
+- Consolidated documentation structure
 
-**Removed Documents**:
-- AWS_MIGRATION_PLAN.md (completed, archived in implementation notes)
-- BM25_TUNING_RESULTS.md (historical, details in FEATURES.md)
-- CLEANUP_LAMBDA_IMPLEMENTATION.md (details in IMPLEMENTATION.md)
-- DEPLOYMENT_QUICK_START.md (merged into QUICKSTART.md)
-- DUAL_DATABASE.md (local-only feature)
-- EVENT_DRIVEN_WORKFLOW.md (details in ARCHITECTURE.md)
-- TESTING_SUITE_SUMMARY.md (outdated)
-- TMUX_GUIDE.md (not essential)
-- database-routing.md (local-only feature)
-- AGENTIC_SEARCH.md (merged into FEATURES.md)
-- AGENTIC_SEARCH_OPTIMIZATION.md (merged into FEATURES.md)
-- RETRIEVAL.md (merged into FEATURES.md)
-- CHAT.md (merged into FEATURES.md)
-- All PHASE_4_*.md files (implementation complete)
-- All DEPLOYMENT_*.md duplicates
+**Architecture**:
+- Database: PostgreSQL with pgvector extension
+- Vector Store: PGVector (1024-dimensional embeddings)
+- Conversation State: PostgreSQL checkpoints (langgraph-checkpoint-postgres)
+- Custom Retrievers: PostgresHybridRetriever, PostgresBM25Retriever, VectorOnlyRetriever
 
 ## Contributing to Documentation
 
@@ -197,9 +184,9 @@ When updating documentation:
 
 1. **Architecture changes** → Update ARCHITECTURE.md
 2. **New features** → Update FEATURES.md
-3. **API changes** → Update API.md and/or API_AWS.md
+3. **API changes** → Update API.md
 4. **Search improvements** → Update FEATURES.md and EVALUATION.md
-5. **Deployment changes** → Update implementation notes/IMPLEMENTATION.md
+5. **AWS deployment changes** → Update QUICKSTART.md and CREDENTIALS.md
 
 Keep documentation:
 - Clear and concise
@@ -212,7 +199,7 @@ Keep documentation:
 
 - **Quick questions**: Check [Quick Start](../QUICKSTART.md)
 - **Technical details**: Check [Architecture](./ARCHITECTURE.md)
-- **API usage**: Check [API Reference](./API.md) or [API AWS](./API_AWS.md)
+- **API usage**: Check [API Reference](./API.md)
 - **Search help**: Check [Features](./FEATURES.md)
 - **AWS issues**: Check [Credentials](../CREDENTIALS.md)
 

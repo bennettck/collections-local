@@ -5,9 +5,9 @@ Your Collections Local application has been successfully migrated to AWS! This g
 ## What's Been Deployed
 
 All 5 phases of the AWS migration are complete:
-- Phase 1: AWS Infrastructure (RDS, DynamoDB, S3, Lambda, API Gateway, Cognito)
+- Phase 1: AWS Infrastructure (RDS, S3, Lambda, API Gateway, Cognito)
 - Phase 2: Database migration (PostgreSQL with pgvector)
-- Phase 3: LangGraph conversation system (DynamoDB checkpointer)
+- Phase 3: LangGraph conversation system (PostgreSQL checkpointer via langgraph-checkpoint-postgres)
 - Phase 4: Lambda functions and FastAPI API
 - Phase 5: Testing and validation
 
@@ -199,11 +199,11 @@ User Request
     ↓
 API Gateway → API Lambda (FastAPI + Mangum)
                 ↓
-    ┌───────────┼───────────┐
-    ↓           ↓           ↓
-PostgreSQL  DynamoDB    S3 Bucket
-(pgvector)  (sessions)  (images)
-                            ↓
+    ┌───────────┴───────────┐
+    ↓                       ↓
+PostgreSQL              S3 Bucket
+(pgvector +             (images)
+ checkpoints)               ↓
                     Event-Driven Lambdas
                     (Processor → Analyzer → Embedder)
 ```
@@ -213,12 +213,12 @@ PostgreSQL  DynamoDB    S3 Bucket
 - Full CRUD operations on items
 - Image upload and storage
 - AI-powered image analysis
-- Vector similarity search
+- Vector similarity search (pgvector)
 - Full-text search (BM25)
-- Hybrid search
+- Hybrid search (RRF fusion)
 - Multi-turn conversations with LangGraph
-- Session persistence in DynamoDB
-- Automatic embedding generation
+- Session persistence in PostgreSQL (langgraph-checkpoint-postgres)
+- Automatic embedding generation (Voyage AI, 1024 dimensions)
 - User isolation and multi-tenancy
 
 ## Need Help?
