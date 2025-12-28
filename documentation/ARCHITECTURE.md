@@ -4,6 +4,26 @@
 
 Collections is a serverless AI-powered image analysis and search system built on AWS. It uses computer vision models to analyze images, generates semantic embeddings for search, and provides natural language query capabilities through conversational AI.
 
+### Key Architecture Principles
+
+**Consolidated PostgreSQL Backend**:
+- Single database for all structured data (items, analyses, embeddings, BM25 documents)
+- PGVector extension for vector similarity search
+- PostgreSQL full-text search for keyword matching
+- ChromaDB deprecated and archived
+- SQLite deprecated (local dev compatibility only)
+
+**Custom LangChain Retrievers**:
+- PostgresHybridRetriever: RRF fusion of BM25 + Vector
+- PostgresBM25Retriever: Full-text search with ts_rank
+- VectorOnlyRetriever: Pure semantic search with PGVector
+- Replaces legacy LangChain retrievers with PostgreSQL-native implementations
+
+**Event-Driven Architecture**:
+- Asynchronous processing with Lambda + EventBridge
+- Decoupled components for scalability
+- 5-15 second pipeline from upload to searchable
+
 ## System Architecture
 
 ```
@@ -26,11 +46,16 @@ Collections is a serverless AI-powered image analysis and search system built on
 ┌───────────────────────────┼──────────────────────────────────────┐
 │                      API Lambda (FastAPI)                        │
 │  ┌──────────────────────────────────────────────────────────┐  │
-│  │  • JWT Validation (Cognito)                              │  │
-│  │  • Multi-tenancy (user_id extraction)                    │  │
-│  │  • CRUD Operations                                        │  │
-│  │  • Search (BM25, Vector, Hybrid, Agentic)                │  │
-│  │  • Chat (LangGraph)                                       │  │
+│  │  main.py (FastAPI Application)                           │  │
+│  │                                                            │  │
+│  │  • JWT Validation (Cognito)                               │  │
+│  │  • Multi-tenancy (user_id extraction)                     │  │
+│  │  • CRUD Operations (database/)                            │  │
+│  │  • Custom Retrievers (retrieval/)                         │  │
+│  │    - PostgresHybridRetriever (BM25 + Vector RRF)         │  │
+│  │    - PostgresBM25Retriever (FTS)                          │  │
+│  │    - VectorOnlyRetriever (PGVector)                       │  │
+│  │  • Chat (LangGraph with DynamoDB checkpoints)             │  │
 │  └──────────────────────────────────────────────────────────┘  │
 └───────┬─────────────┬──────────────┬──────────────┬─────────────┘
         │             │              │              │
@@ -42,10 +67,14 @@ Collections is a serverless AI-powered image analysis and search system built on
 │ • Items      │ │ • Sessions   │ │ • Original   │ │ • Users      │
 │ • Analyses   │ │ • Threads    │ │ • Thumbnails │ │ • JWT Tokens │
 │ • Embeddings │ │ • State      │ │              │ │              │
+│ • BM25 Docs  │ │              │ │              │ │              │
 │              │ │              │ │              │ │              │
 │ Extensions:  │ │ TTL: 4 hrs   │ │ Encrypted    │ │ MFA Ready    │
 │ • pgvector   │ │              │ │              │ │              │
-│ • tsvector   │ │              │ │              │ │              │
+│ • tsvector   │ │ Future:      │ │              │ │              │
+│              │ │ langgraph-   │ │              │ │              │
+│              │ │ checkpoint-  │ │              │ │              │
+│              │ │ postgres     │ │              │ │              │
 └──────────────┘ └──────────────┘ └──────┬───────┘ └──────────────┘
                                           │
                                           │ S3 Event
@@ -78,6 +107,7 @@ Collections is a serverless AI-powered image analysis and search system built on
                                           v
                                    ┌──────────────┐
                                    │ PostgreSQL   │
+                                   │  (PGVector)  │
                                    └──────────────┘
 ```
 
@@ -245,6 +275,64 @@ Upload → S3 → Image Processor → EventBridge → Analyzer → EventBridge �
 - S3 Keys: Prefixed with `{user_id}/`
 - DynamoDB: Thread IDs prefixed with `{user_id}#`
 
+## Custom Retrievers
+
+### PostgreSQL-Native Retrievers
+
+The system uses custom LangChain retrievers built specifically for PostgreSQL, replacing legacy ChromaDB and SQLite implementations.
+
+**PostgresHybridRetriever**:
+- Combines BM25 keyword search with PGVector semantic search
+- Uses Reciprocal Rank Fusion (RRF) for score combination
+- Optimized weights: 30% BM25, 70% Vector
+- RRF constant: c=15 (optimized for sensitivity)
+- Supports user isolation and category filtering
+- Returns deduplicated results ranked by RRF score
+
+**PostgresBM25Retriever**:
+- PostgreSQL full-text search using tsvector/tsquery
+- ts_rank for BM25-style relevance scoring
+- GIN index for fast text search
+- Weighted fields: summary (3x), headline (2x), text (2x)
+- User and category filtering support
+- Returns documents with relevance scores
+
+**VectorOnlyRetriever**:
+- Pure semantic search using PGVector
+- Cosine similarity with IVFFlat index
+- Configurable similarity threshold filtering
+- User and category metadata filtering
+- Returns documents with similarity scores
+
+### Vector Store Architecture
+
+**Production (AWS)**:
+- PGVector extension on PostgreSQL RDS
+- 512-dimensional embeddings (Voyage AI voyage-3.5-lite)
+- IVFFlat index for efficient similarity search
+- Integrated with PostgreSQL for unified storage
+
+**Local Development**:
+- SQLite with sqlite-vec extension (deprecated, compatibility only)
+- Planned migration to PostgreSQL for local dev
+- Use PostgreSQL for production-like testing
+
+**ChromaDB**: Fully deprecated and archived (replaced by PGVector)
+
+### Conversation State Management
+
+**Current Implementation**:
+- Custom DynamoDB checkpointer for LangGraph state
+- 4-hour TTL for automatic cleanup
+- User-isolated session storage
+- Format: `{user_id}#{session_id}`
+
+**Future Migration**:
+- langgraph-checkpoint-postgres (planned)
+- Unified PostgreSQL storage for all application data
+- Simplified infrastructure (removes DynamoDB dependency)
+- Production-ready when langgraph-checkpoint-postgres reaches v1.0
+
 ## Data Flow
 
 ### 1. Image Upload Flow
@@ -308,10 +396,10 @@ User → API Gateway → API Lambda
           ↓
     Execute search with user_id filter
           ↓
-    BM25: PostgreSQL FTS query (tsvector)
-    Vector: PostgreSQL similarity query (pgvector)
-    Hybrid: Combine results with RRF
-    Agentic: LangChain ReAct agent
+    BM25: PostgresBM25Retriever (tsvector, ts_rank)
+    Vector: VectorOnlyRetriever (pgvector, cosine similarity)
+    Hybrid: PostgresHybridRetriever (RRF fusion)
+    Agentic: LangChain ReAct agent with custom retrievers
           ↓
     Generate AI answer (optional)
           ↓
@@ -591,7 +679,15 @@ User → API Gateway → API Lambda
 
 ---
 
-**Architecture Version**: 1.0
-**Last Updated**: 2025-12-27
+**Architecture Version**: 2.0
+**Last Updated**: 2025-12-28
 **Environment**: AWS (us-east-1)
 **Status**: Production Ready
+
+### Changelog
+- **v2.0 (2025-12-28)**: Consolidated PostgreSQL architecture
+  - Added custom PostgreSQL retrievers (Hybrid, BM25, Vector)
+  - Deprecated ChromaDB (replaced with PGVector)
+  - Deprecated SQLite for local dev (PostgreSQL recommended)
+  - Added future migration path to langgraph-checkpoint-postgres
+- **v1.0 (2025-12-27)**: Initial production deployment

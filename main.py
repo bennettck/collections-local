@@ -20,7 +20,6 @@ from models import (
     ItemListResponse,
     AnalysisRequest,
     AnalysisResponse,
-    Settings,
     SearchRequest,
     SearchResult,
     SearchResponse,
@@ -59,7 +58,6 @@ from llm import analyze_image, get_trace_id, get_resolved_provider_and_model
 from embeddings import generate_embedding, _create_embedding_document, DEFAULT_EMBEDDING_MODEL, get_embedding_dimensions
 from retrieval.pgvector_store import PGVectorStoreManager
 from config.langchain_config import get_vector_store_config, DEFAULT_EMBEDDING_MODEL as LANGCHAIN_EMBEDDING_MODEL
-from config.retriever_config import get_voyage_config
 
 # Load environment variables
 load_dotenv()
