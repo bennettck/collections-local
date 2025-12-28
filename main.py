@@ -48,14 +48,13 @@ from database.api import (
     rebuild_search_index,
     search_items,
     get_search_status,
-    create_embedding,
     get_db,
     _create_search_document,
     use_postgres,
 )
 
 from llm import analyze_image, get_trace_id, get_resolved_provider_and_model
-from embeddings import generate_embedding, _create_embedding_document, DEFAULT_EMBEDDING_MODEL, get_embedding_dimensions
+from embeddings import DEFAULT_EMBEDDING_MODEL, get_embedding_dimensions
 from retrieval.pgvector_store import PGVectorStoreManager
 from config.langchain_config import get_vector_store_config, DEFAULT_EMBEDDING_MODEL as LANGCHAIN_EMBEDDING_MODEL
 
@@ -501,32 +500,9 @@ async def analyze_item_endpoint(
         user_id=user_id,
     )
 
-    # Generate and store embedding (non-blocking)
+    # Sync to indexes (non-blocking)
     try:
-        # Create embedding document
-        embedding_doc = _create_embedding_document(result)
-
-        # Generate embedding
-        embedding = generate_embedding(embedding_doc)
-
-        # Store embedding with category metadata
-        category = result.get("category")
-        source_fields = {
-            "weighting_strategy": "bm25_mirror",
-            "fields": ["summary", "headline", "extracted_text", "category", "themes", "objects"]
-        }
-
-        create_embedding(
-            item_id=item_id,
-            analysis_id=analysis_id,
-            embedding=embedding,
-            model=DEFAULT_EMBEDDING_MODEL,
-            source_fields=source_fields,
-            category=category,
-            user_id=user_id,
-        )
-
-        # Real-time FTS5 index sync
+        # Real-time FTS5 index sync (SQLite only)
         try:
             search_doc = _create_search_document(result)
             with get_db() as conn:
@@ -542,7 +518,8 @@ async def analyze_item_endpoint(
             # Log but don't fail analysis if FTS5 sync fails
             logger.error(f"Failed to sync FTS5 index for {item_id}: {fts_error}")
 
-        # Real-time vector store sync
+        # Real-time vector store sync (langchain-postgres)
+        # This stores the embedding in langchain_pg_embedding table
         try:
             vector_mgr = get_current_vector_store(http_request)
             item = get_item(item_id, user_id=user_id)
@@ -550,7 +527,8 @@ async def analyze_item_endpoint(
                 vector_mgr.add_document(
                     item_id=item_id,
                     raw_response=result,
-                    filename=item["filename"]
+                    filename=item["filename"],
+                    user_id=user_id  # Pass user_id for multi-tenancy
                 )
                 logger.info(f"Successfully synced vector store for {item_id}")
             else:
