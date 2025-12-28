@@ -60,22 +60,18 @@ Collections is a serverless AI-powered image analysis and search system built on
 └───────┬─────────────┬──────────────┬──────────────┬─────────────┘
         │             │              │              │
         v             v              v              v
-┌──────────────┐ ┌──────────────┐ ┌──────────────┐ ┌──────────────┐
-│ PostgreSQL   │ │  DynamoDB    │ │  S3 Bucket   │ │   Cognito    │
-│  (RDS)       │ │ (Checkpoints)│ │   (Images)   │ │ (User Pool)  │
-│              │ │              │ │              │ │              │
-│ • Items      │ │ • Sessions   │ │ • Original   │ │ • Users      │
-│ • Analyses   │ │ • Threads    │ │ • Thumbnails │ │ • JWT Tokens │
-│ • Embeddings │ │ • State      │ │              │ │              │
-│ • BM25 Docs  │ │              │ │              │ │              │
-│              │ │              │ │              │ │              │
-│ Extensions:  │ │ TTL: 4 hrs   │ │ Encrypted    │ │ MFA Ready    │
-│ • pgvector   │ │              │ │              │ │              │
-│ • tsvector   │ │ Future:      │ │              │ │              │
-│              │ │ langgraph-   │ │              │ │              │
-│              │ │ checkpoint-  │ │              │ │              │
-│              │ │ postgres     │ │              │ │              │
-└──────────────┘ └──────────────┘ └──────┬───────┘ └──────────────┘
+┌──────────────────────────┐ ┌──────────────┐ ┌──────────────┐
+│      PostgreSQL (RDS)    │ │  S3 Bucket   │ │   Cognito    │
+│                          │ │   (Images)   │ │ (User Pool)  │
+│ • Items                  │ │              │ │              │
+│ • Analyses               │ │ • Original   │ │ • Users      │
+│ • Embeddings             │ │ • Thumbnails │ │ • JWT Tokens │
+│ • Checkpoints (LangGraph)│ │              │ │              │
+│                          │ │              │ │              │
+│ Extensions:              │ │ Encrypted    │ │ MFA Ready    │
+│ • pgvector               │ │              │ │              │
+│ • tsvector               │ │              │ │              │
+└──────────────────────────┘ └──────┬───────┘ └──────────────┘
                                           │
                                           │ S3 Event
                                           v
@@ -165,7 +161,7 @@ Collections is a serverless AI-powered image analysis and search system built on
 - Memory: 256 MB
 - Timeout: 60s
 - Trigger: EventBridge cron (hourly)
-- Purpose: Monitor DynamoDB TTL cleanup
+- Purpose: Clean up expired conversation checkpoints
 
 ### 3. Data Layer
 
@@ -181,19 +177,16 @@ Collections is a serverless AI-powered image analysis and search system built on
 - `items` - Image metadata
 - `analyses` - AI analysis results
 - `embeddings` - Vector embeddings (512-dim)
+- `checkpoints` - LangGraph conversation checkpoints (managed by langgraph-checkpoint-postgres)
+- `checkpoint_writes` - Pending writes for checkpoints
+- `checkpoint_blobs` - Binary data for checkpoints
 - `users` - User profiles (future)
 
 **Indexes**:
 - `user_id` on all tables (B-tree)
 - `search_vector` GIN index (analyses table)
 - `vector` IVFFlat index (embeddings table)
-
-**DynamoDB**:
-- Table: `collections-checkpoints-dev`
-- Billing: On-demand
-- TTL: Enabled on `expires_at` (4 hours)
-- GSI: `user_id-index`
-- Purpose: LangGraph conversation state
+- `thread_id` on checkpoint tables (B-tree)
 
 **S3**:
 - Bucket: `collections-images-dev-{account-id}`
@@ -423,8 +416,8 @@ User → API Gateway → API Lambda
           ↓
     Load or create session
           ↓
-    Fetch checkpoint from DynamoDB
-    Key: {user_id}#{session_id}
+    Fetch checkpoint from PostgreSQL
+    thread_id: {user_id}#{session_id}
           ↓
     Execute LangGraph workflow
           ↓
@@ -432,14 +425,13 @@ User → API Gateway → API Lambda
           ↓
     Generate response
           ↓
-    Save checkpoint to DynamoDB
-    TTL: current_time + 4 hours
+    Save checkpoint to PostgreSQL
           ↓
     Return response to user
 ```
 
 **Latency**: ~2-5 seconds
-**Session Lifetime**: 4 hours of inactivity
+**Session Cleanup**: Periodic cleanup of sessions older than 4 hours
 
 ## Security Architecture
 
@@ -473,10 +465,9 @@ User → API Gateway → API Lambda
 
 **API Lambda Role**:
 - S3: Read/Write to bucket
-- DynamoDB: Read/Write to checkpoints table
 - Secrets Manager: Read database credentials
 - SSM Parameter Store: Read parameters
-- RDS: Connect to database
+- RDS: Connect to database (including checkpoints)
 - CloudWatch Logs: Write logs
 
 **Image Processor Role**:
@@ -499,7 +490,8 @@ User → API Gateway → API Lambda
 - CloudWatch Logs: Write logs
 
 **Cleanup Role**:
-- DynamoDB: Scan checkpoints table
+- Secrets Manager: Read database credentials
+- RDS: Connect to database for checkpoint cleanup
 - CloudWatch Logs: Write logs
 
 ## Scalability
@@ -508,8 +500,7 @@ User → API Gateway → API Lambda
 
 - API Gateway: 10,000 requests/second (soft limit)
 - Lambda concurrent executions: 1,000 (regional)
-- RDS connections: 100 (instance limit)
-- DynamoDB: On-demand (unlimited)
+- RDS connections: 100 (instance limit, shared with checkpoints)
 - S3: Unlimited requests
 
 ### Scaling Strategies
@@ -517,7 +508,6 @@ User → API Gateway → API Lambda
 **Horizontal Scaling**:
 - Lambda: Auto-scales to concurrent executions limit
 - API Gateway: Auto-scales
-- DynamoDB: Auto-scales with on-demand
 - S3: Unlimited
 
 **Vertical Scaling**:
@@ -555,12 +545,7 @@ User → API Gateway → API Lambda
 - Read/Write IOPS
 - Storage space
 - Query performance
-
-**DynamoDB**:
-- Consumed read/write units
-- Throttled requests
-- Table size
-- TTL deleted items
+- Checkpoint table size
 
 ### Logging
 
@@ -612,10 +597,10 @@ User → API Gateway → API Lambda
 - Cross-region replication: Future
 - Lifecycle policies: Delete old versions after 90 days
 
-**DynamoDB**:
-- Point-in-time recovery: Enabled
-- Retention: 35 days
-- On-demand backups: Manual
+**Checkpoints**:
+- Stored in PostgreSQL with automatic cleanup
+- Covered by RDS automated backups
+- Point-in-time recovery: Yes (via RDS)
 
 ### Recovery Procedures
 
@@ -641,13 +626,12 @@ User → API Gateway → API Lambda
 ### Current Architecture Costs
 
 **Monthly (Dev Environment)**:
-- RDS: $15-20 (db.t4g.micro)
+- RDS: $15-20 (db.t4g.micro, includes checkpoints)
 - Lambda: $2-5 (50K invocations)
 - API Gateway: $0.50 (50K requests)
-- DynamoDB: $1-2 (on-demand)
 - S3: $0.50 (5GB storage)
 - CloudWatch: $1 (5GB logs)
-- **Total**: ~$20-30/month
+- **Total**: ~$18-27/month
 
 ### Optimization Strategies
 
@@ -667,10 +651,9 @@ User → API Gateway → API Lambda
 - Intelligent-Tiering for automatic cost optimization
 - Delete unnecessary thumbnails
 
-**DynamoDB**:
-- On-demand for dev (variable traffic)
-- Provisioned for prod (predictable traffic)
-- Enable auto-scaling
+**Checkpoints**:
+- Automatic cleanup of expired checkpoints (configurable TTL)
+- No additional DynamoDB costs (consolidated in RDS)
 
 **Data Transfer**:
 - Use CloudFront for image delivery
@@ -679,15 +662,10 @@ User → API Gateway → API Lambda
 
 ---
 
-**Architecture Version**: 2.0
+**Architecture Version**: 1.1
 **Last Updated**: 2025-12-28
 **Environment**: AWS (us-east-1)
 **Status**: Production Ready
 
-### Changelog
-- **v2.0 (2025-12-28)**: Consolidated PostgreSQL architecture
-  - Added custom PostgreSQL retrievers (Hybrid, BM25, Vector)
-  - Deprecated ChromaDB (replaced with PGVector)
-  - Deprecated SQLite for local dev (PostgreSQL recommended)
-  - Added future migration path to langgraph-checkpoint-postgres
-- **v1.0 (2025-12-27)**: Initial production deployment
+**Change Log**:
+- v1.1 (2025-12-28): Migrated from DynamoDB to PostgreSQL for LangGraph checkpoints using `langgraph-checkpoint-postgres`

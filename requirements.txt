@@ -22,7 +22,7 @@ langchain-postgres>=0.0.9
 langsmith>=0.1.100
 langchainhub>=0.1.14
 langgraph>=0.2.0
-langgraph-checkpoint-sqlite>=2.0.0
+langgraph-checkpoint-postgres>=2.0.0
 tavily-python>=0.3.0
 # LangChain community and text processing
 langchain-text-splitters>=0.3.0
