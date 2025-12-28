@@ -39,6 +39,10 @@ help: ## Show this help message
 	@echo "  make db-migrate ENV=dev         - Run schema migrations (future)"
 	@echo "  make db-seed-golden ENV=dev     - Seed golden dataset (future)"
 	@echo ""
+	@echo "$(GREEN)Cognito Commands:$(NC)"
+	@echo "  make cognito-setup ENV=dev      - Setup test users with passwords"
+	@echo "  make cognito-list ENV=dev       - List all users in pool"
+	@echo ""
 	@echo "$(GREEN)Secrets Commands:$(NC)"
 	@echo "  make secrets-populate ENV=dev   - Push secrets from .env to Parameter Store"
 	@echo "  make secrets-export ENV=dev     - Pull secrets from Parameter Store to .env"
@@ -120,6 +124,25 @@ db-seed-golden: check-deps ## Seed golden dataset (future)
 	@echo "Future: Upload golden images to S3 and trigger processing"
 
 ###########################################
+# Cognito Commands
+###########################################
+
+.PHONY: cognito-setup
+cognito-setup: check-deps ## Setup test users with passwords
+	@echo "$(BLUE)Setting up Cognito test users for $(ENV)...$(NC)"
+	@python3 scripts/setup_cognito_users.py --env $(ENV)
+
+.PHONY: cognito-list
+cognito-list: check-deps ## List all users in pool
+	@echo "$(BLUE)Listing Cognito users for $(ENV)...$(NC)"
+	@python3 scripts/setup_cognito_users.py --env $(ENV) --list
+
+.PHONY: cognito-setup-dry-run
+cognito-setup-dry-run: check-deps ## Preview what would be done (dry run)
+	@echo "$(BLUE)Dry run: Cognito setup for $(ENV)...$(NC)"
+	@python3 scripts/setup_cognito_users.py --env $(ENV) --dry-run
+
+###########################################
 # Secrets Commands
 ###########################################
 
@@ -181,6 +204,7 @@ dev-setup: check-deps ## Quick setup for dev environment
 	@make secrets-populate ENV=dev
 	@make infra-deploy ENV=dev
 	@make infra-outputs ENV=dev
+	@make cognito-setup ENV=dev
 	@echo "$(GREEN)Dev environment ready!$(NC)"
 
 .PHONY: dev-reset
