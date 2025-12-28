@@ -1,11 +1,18 @@
 """
-LangChain-based retrieval implementations for Collections Local API.
+DEPRECATED: Legacy LangChain retrievers for SQLite/ChromaDB.
 
-Provides BM25 and Vector retrievers that wrap existing database functions
-while conforming to LangChain's BaseRetriever interface for evaluation.
+For PostgreSQL backends, use:
+- retrieval.postgres_bm25.PostgresBM25Retriever
+- retrieval.hybrid_retriever.PostgresHybridRetriever
+- retrieval.hybrid_retriever.VectorOnlyRetriever
+
+These classes are kept for backward compatibility with local development
+using SQLite/ChromaDB. Production deployments should use PostgreSQL retrievers.
 """
 
 import logging
+import warnings
+import os
 from typing import List, Optional
 
 from langchain_core.retrievers import BaseRetriever
@@ -18,6 +25,15 @@ import database
 import embeddings
 
 logger = logging.getLogger(__name__)
+
+# Issue deprecation warning in PostgreSQL mode
+if os.getenv("DB_SECRET_ARN") or os.getenv("DATABASE_URL", "").startswith("postgresql"):
+    warnings.warn(
+        "langchain_retrievers.py is deprecated for PostgreSQL deployments. "
+        "Use postgres_bm25.PostgresBM25Retriever and hybrid_retriever.PostgresHybridRetriever instead.",
+        DeprecationWarning,
+        stacklevel=2
+    )
 
 
 class BM25LangChainRetriever(BaseRetriever):

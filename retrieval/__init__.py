@@ -10,9 +10,12 @@ from retrieval.pgvector_store import PGVectorStoreManager
 from retrieval.postgres_bm25 import PostgresBM25Retriever
 from retrieval.hybrid_retriever import PostgresHybridRetriever, VectorOnlyRetriever
 
-# DEPRECATED: ChromaDB support has been removed
-# Legacy imports available in retrieval.archive for reference only
-# Use PGVectorStoreManager instead
+# DEPRECATED for PostgreSQL deployments:
+# - retrieval.langchain_retrievers (uses SQLite/ChromaDB)
+# - ChromaDB support (removed, available in retrieval.archive for reference)
+#
+# For PostgreSQL deployments, use the exports above.
+# For local SQLite development, langchain_retrievers.py is still available.
 
 __all__ = [
     "PGVectorStoreManager",

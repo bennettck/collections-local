@@ -10,7 +10,7 @@ from langchain_core.messages import HumanMessage
 from langgraph.prebuilt import create_react_agent
 from langsmith import traceable
 
-from retrieval.langchain_retrievers import HybridLangChainRetriever
+from retrieval.hybrid_retriever import PostgresHybridRetriever
 from config.agent_config import (
     AGENT_MODEL,
     AGENT_TEMPERATURE,
@@ -35,6 +35,7 @@ class AgenticSearchOrchestrator:
     def __init__(
         self,
         vector_store,
+        user_id: str,
         top_k: int = 10,
         category_filter: Optional[str] = None,
         min_relevance_score: float = -1.0,
@@ -44,12 +45,14 @@ class AgenticSearchOrchestrator:
 
         Args:
             vector_store: Vector store manager instance for vector search
+            user_id: User ID for multi-tenancy filtering
             top_k: Number of results to return per search
             category_filter: Optional category filter
             min_relevance_score: Minimum BM25 relevance score
             min_similarity_score: Minimum vector similarity score
         """
         self.vector_store = vector_store
+        self.user_id = user_id
         self.top_k = top_k
         self.category_filter = category_filter
         self.min_relevance_score = min_relevance_score
@@ -64,7 +67,9 @@ class AgenticSearchOrchestrator:
 
         # OPTIMIZATION: Create retriever once and reuse it
         # This avoids re-instantiation overhead on every tool call
-        self.retriever = HybridLangChainRetriever(
+        self.retriever = PostgresHybridRetriever(
+            pgvector_manager=self.vector_store,
+            user_id=self.user_id,
             top_k=self.top_k,
             bm25_top_k=self.top_k * 2,
             vector_top_k=self.top_k * 2,
@@ -73,8 +78,7 @@ class AgenticSearchOrchestrator:
             rrf_c=15,
             category_filter=self.category_filter,
             min_relevance_score=self.min_relevance_score,
-            min_similarity_score=self.min_similarity_score,
-            vector_store=self.vector_store
+            min_similarity_score=self.min_similarity_score
         )
 
         # Create the search tool

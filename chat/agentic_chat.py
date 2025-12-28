@@ -14,7 +14,7 @@ from langsmith import traceable
 from langchain_community.tools.tavily_search import TavilySearchResults
 
 from chat.conversation_manager import ConversationManager
-from retrieval.langchain_retrievers import HybridLangChainRetriever
+from retrieval.hybrid_retriever import PostgresHybridRetriever
 from config.chat_config import (
     CHAT_MODEL,
     CHAT_TEMPERATURE,
@@ -40,6 +40,7 @@ class AgenticChatOrchestrator:
         self,
         vector_store,
         conversation_manager: ConversationManager,
+        user_id: str,
         top_k: int = 10,
         category_filter: Optional[str] = None,
         min_relevance_score: float = -1.0,
@@ -50,6 +51,7 @@ class AgenticChatOrchestrator:
         Args:
             vector_store: Vector store manager for vector search.
             conversation_manager: ConversationManager for state persistence.
+            user_id: User ID for multi-tenancy filtering.
             top_k: Number of results per search.
             category_filter: Optional category filter.
             min_relevance_score: Minimum BM25 score.
@@ -57,6 +59,7 @@ class AgenticChatOrchestrator:
         """
         self.vector_store = vector_store
         self.conversation_manager = conversation_manager
+        self.user_id = user_id
         self.top_k = top_k
         self.category_filter = category_filter
         self.min_relevance_score = min_relevance_score
@@ -70,7 +73,9 @@ class AgenticChatOrchestrator:
         )
 
         # Create the retriever (reused across tool calls)
-        self.retriever = HybridLangChainRetriever(
+        self.retriever = PostgresHybridRetriever(
+            pgvector_manager=self.vector_store,
+            user_id=self.user_id,
             top_k=self.top_k,
             bm25_top_k=self.top_k * 2,
             vector_top_k=self.top_k * 2,
@@ -79,8 +84,7 @@ class AgenticChatOrchestrator:
             rrf_c=15,
             category_filter=self.category_filter,
             min_relevance_score=self.min_relevance_score,
-            min_similarity_score=self.min_similarity_score,
-            vector_store=self.vector_store
+            min_similarity_score=self.min_similarity_score
         )
 
         # Create search tool

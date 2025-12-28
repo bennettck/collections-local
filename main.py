@@ -612,10 +612,12 @@ async def search_collection(search_request: SearchRequest, request: Request):
         from retrieval.agentic_search import AgenticSearchOrchestrator
 
         vector_mgr = get_current_vector_store(request)
+        user_id = get_user_id_from_request(request)
 
         # Create orchestrator
         orchestrator = AgenticSearchOrchestrator(
             vector_store=vector_mgr,
+            user_id=user_id,
             top_k=search_request.top_k,
             category_filter=search_request.category_filter,
             min_relevance_score=search_request.min_relevance_score,
@@ -638,13 +640,16 @@ async def search_collection(search_request: SearchRequest, request: Request):
         ]
         score_type = "hybrid_rrf"
 
-    elif search_request.search_type == "hybrid-lc":
-        # Hybrid retrieval with RRF (LangChain BM25 + Vector)
-        from retrieval.langchain_retrievers import HybridLangChainRetriever
+    elif search_request.search_type == "hybrid":
+        # Hybrid retrieval with RRF (PostgreSQL BM25 + PGVector)
+        from retrieval.hybrid_retriever import PostgresHybridRetriever
 
         vector_mgr = get_current_vector_store(request)
+        user_id = get_user_id_from_request(request)
 
-        retriever = HybridLangChainRetriever(
+        retriever = PostgresHybridRetriever(
+            pgvector_manager=vector_mgr,
+            user_id=user_id,
             top_k=search_request.top_k,
             bm25_top_k=search_request.top_k * 2,        # Fetch 2x for better fusion
             vector_top_k=search_request.top_k * 2,
@@ -653,8 +658,7 @@ async def search_collection(search_request: SearchRequest, request: Request):
             rrf_c=15,                            # Lower c = more rank sensitivity
             category_filter=search_request.category_filter,
             min_relevance_score=search_request.min_relevance_score,
-            min_similarity_score=search_request.min_similarity_score,
-            vector_store=vector_mgr
+            min_similarity_score=search_request.min_similarity_score
         )
 
         documents = retriever.invoke(search_request.query)
@@ -666,17 +670,19 @@ async def search_collection(search_request: SearchRequest, request: Request):
         ]
         score_type = "hybrid_rrf"
 
-    elif search_request.search_type == "vector-lc":
-        # LangChain Vector retrieval
-        from retrieval.langchain_retrievers import VectorLangChainRetriever
+    elif search_request.search_type == "vector":
+        # PGVector semantic search
+        from retrieval.hybrid_retriever import VectorOnlyRetriever
 
         vector_mgr = get_current_vector_store(request)
+        user_id = get_user_id_from_request(request)
 
-        retriever = VectorLangChainRetriever(
+        retriever = VectorOnlyRetriever(
+            pgvector_manager=vector_mgr,
+            user_id=user_id,
             top_k=search_request.top_k,
             category_filter=search_request.category_filter,
-            min_similarity_score=search_request.min_similarity_score,
-            vector_store=vector_mgr
+            min_similarity_score=search_request.min_similarity_score
         )
 
         documents = retriever.invoke(search_request.query)
@@ -688,11 +694,14 @@ async def search_collection(search_request: SearchRequest, request: Request):
         ]
         score_type = "similarity"
 
-    elif search_request.search_type == "bm25-lc":
-        # LangChain BM25 retrieval
-        from retrieval.langchain_retrievers import BM25LangChainRetriever
+    elif search_request.search_type == "bm25":
+        # PostgreSQL BM25 full-text search
+        from retrieval.postgres_bm25 import PostgresBM25Retriever
 
-        retriever = BM25LangChainRetriever(
+        user_id = get_user_id_from_request(request)
+
+        retriever = PostgresBM25Retriever(
+            user_id=user_id,
             top_k=search_request.top_k,
             category_filter=search_request.category_filter,
             min_relevance_score=search_request.min_relevance_score
@@ -863,11 +872,13 @@ async def chat_endpoint(chat_request: ChatRequest, request: Request):
     from datetime import datetime
 
     vector_mgr = get_current_vector_store(request)
+    user_id = get_user_id_from_request(request)
 
     # Create orchestrator with conversation manager
     orchestrator = AgenticChatOrchestrator(
         vector_store=vector_mgr,
         conversation_manager=conversation_manager,
+        user_id=user_id,
         top_k=chat_request.top_k,
         category_filter=chat_request.category_filter,
         min_similarity_score=chat_request.min_similarity_score
@@ -878,10 +889,6 @@ async def chat_endpoint(chat_request: ChatRequest, request: Request):
         message=chat_request.message,
         session_id=chat_request.session_id
     )
-
-    # Convert documents to SearchResult format
-    # Extract user_id for multi-tenancy
-    user_id = get_user_id_from_request(request)
 
     search_results = None
     if result["documents"]:
@@ -937,10 +944,12 @@ async def get_chat_history(session_id: str, request: Request):
     from datetime import datetime
 
     vector_mgr = get_current_vector_store(request)
+    user_id = get_user_id_from_request(request)
 
     orchestrator = AgenticChatOrchestrator(
         vector_store=vector_mgr,
-        conversation_manager=conversation_manager
+        conversation_manager=conversation_manager,
+        user_id=user_id
     )
 
     # Get session info
