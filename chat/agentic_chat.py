@@ -30,7 +30,7 @@ class AgenticChatOrchestrator:
     """Orchestrates multi-turn agentic chat with conversation memory.
 
     Extends the single-turn agentic search pattern to support:
-    - Persistent conversation state via DynamoDB checkpointing
+    - Persistent conversation state via PostgreSQL checkpointing
     - Context-aware responses that reference previous exchanges
     - Follow-up queries ("show me more", "filter those by...")
     - Multi-tenant support with user isolation
