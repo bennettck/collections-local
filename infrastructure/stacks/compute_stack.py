@@ -77,6 +77,9 @@ class ComputeStack(Stack):
             "ENVIRONMENT": env_name,
             "CHECKPOINT_TABLE_NAME": checkpoint_table.table_name,
             "BUCKET_NAME": self.bucket.bucket_name,
+            # Database credentials via Secrets Manager (secure approach)
+            "DB_SECRET_ARN": db_credentials.secret_arn,
+            # Legacy environment variables (for backwards compatibility during migration)
             "DATABASE_HOST": database.db_instance_endpoint_address,
             "DATABASE_PORT": str(database.db_instance_endpoint_port),
             "DATABASE_NAME": "collections",
