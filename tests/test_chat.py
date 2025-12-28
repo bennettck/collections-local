@@ -39,40 +39,36 @@ requires_pydantic = pytest.mark.skipif(
 
 @requires_langgraph
 class TestConversationManager:
-    """Unit tests for ConversationManager (DynamoDB-based)."""
+    """Unit tests for ConversationManager (PostgreSQL-based)."""
 
     @pytest.fixture
-    def mock_dynamodb_saver(self):
-        """Create a mock DynamoDBSaver."""
-        with patch('chat.conversation_manager.DynamoDBSaver') as mock:
+    def mock_postgres_saver(self):
+        """Create a mock PostgresCheckpointerSaver."""
+        with patch('chat.conversation_manager.PostgresCheckpointerSaver') as mock:
             saver_instance = MagicMock()
             mock.return_value = saver_instance
             yield saver_instance
 
     @pytest.fixture
-    def conversation_manager(self, mock_dynamodb_saver):
-        """Create a ConversationManager with mocked DynamoDB."""
+    def conversation_manager(self, mock_postgres_saver):
+        """Create a ConversationManager with mocked PostgreSQL."""
         from chat.conversation_manager import ConversationManager
         return ConversationManager(
-            table_name="test-checkpoints",
+            connection_string="postgresql://test:test@localhost/test",
             ttl_hours=24,
-            region_name="us-east-1",
             user_id="test-user"
         )
 
-    def test_init_sets_parameters(self, mock_dynamodb_saver):
+    def test_init_sets_parameters(self, mock_postgres_saver):
         """Test that initialization sets parameters correctly."""
         from chat.conversation_manager import ConversationManager
         manager = ConversationManager(
-            table_name="my-table",
+            connection_string="postgresql://test:test@localhost/test",
             ttl_hours=48,
-            region_name="us-west-2",
             user_id="user123"
         )
 
-        assert manager.table_name == "my-table"
         assert manager.ttl_hours == 48
-        assert manager.region_name == "us-west-2"
         assert manager.user_id == "user123"
 
     def test_get_thread_config_returns_correct_format(self, conversation_manager):
@@ -85,20 +81,20 @@ class TestConversationManager:
         # Thread ID format: {user_id}#{session_id}
         assert config["configurable"]["thread_id"] == "test-user#test-session-123"
 
-    def test_get_checkpointer_creates_dynamodb_saver(self, mock_dynamodb_saver, conversation_manager):
-        """Test that get_checkpointer creates and returns DynamoDBSaver."""
+    def test_get_checkpointer_creates_postgres_saver(self, mock_postgres_saver, conversation_manager):
+        """Test that get_checkpointer creates and returns PostgresCheckpointerSaver."""
         checkpointer = conversation_manager.get_checkpointer()
 
         assert checkpointer is not None
 
-    def test_get_checkpointer_reuses_instance(self, mock_dynamodb_saver, conversation_manager):
+    def test_get_checkpointer_reuses_instance(self, mock_postgres_saver, conversation_manager):
         """Test that get_checkpointer returns the same instance."""
         checkpointer1 = conversation_manager.get_checkpointer()
         checkpointer2 = conversation_manager.get_checkpointer()
 
         assert checkpointer1 is checkpointer2
 
-    def test_get_session_info_returns_info_when_exists(self, mock_dynamodb_saver, conversation_manager):
+    def test_get_session_info_returns_info_when_exists(self, mock_postgres_saver, conversation_manager):
         """Test that get_session_info returns session info when checkpoint exists."""
         # Mock checkpoint tuple
         mock_checkpoint = MagicMock()
@@ -108,7 +104,7 @@ class TestConversationManager:
             },
             "ts": "2024-01-01T00:00:00Z"
         }
-        mock_dynamodb_saver.get_tuple.return_value = mock_checkpoint
+        mock_postgres_saver.get_tuple.return_value = mock_checkpoint
 
         info = conversation_manager.get_session_info("test-session")
 
@@ -116,24 +112,24 @@ class TestConversationManager:
         assert info["session_id"] == "test-session"
         assert info["message_count"] == 3
 
-    def test_get_session_info_returns_none_when_not_exists(self, mock_dynamodb_saver, conversation_manager):
+    def test_get_session_info_returns_none_when_not_exists(self, mock_postgres_saver, conversation_manager):
         """Test that get_session_info returns None when session doesn't exist."""
-        mock_dynamodb_saver.get_tuple.return_value = None
+        mock_postgres_saver.get_tuple.return_value = None
 
         info = conversation_manager.get_session_info("nonexistent")
 
         assert info is None
 
-    def test_delete_session_calls_checkpointer(self, mock_dynamodb_saver, conversation_manager):
+    def test_delete_session_calls_checkpointer(self, mock_postgres_saver, conversation_manager):
         """Test that delete_session calls delete_thread on checkpointer."""
         result = conversation_manager.delete_session("test-session")
 
-        mock_dynamodb_saver.delete_thread.assert_called_once_with("test-user#test-session")
+        mock_postgres_saver.delete_thread.assert_called_once_with("test-user#test-session")
         assert result is True
 
-    def test_delete_session_handles_error(self, mock_dynamodb_saver, conversation_manager):
+    def test_delete_session_handles_error(self, mock_postgres_saver, conversation_manager):
         """Test that delete_session returns False on error."""
-        mock_dynamodb_saver.delete_thread.side_effect = Exception("DynamoDB error")
+        mock_postgres_saver.delete_thread.side_effect = Exception("PostgreSQL error")
 
         result = conversation_manager.delete_session("test-session")
 
@@ -143,10 +139,8 @@ class TestConversationManager:
         """Test that get_stats returns configuration info."""
         stats = conversation_manager.get_stats()
 
-        assert stats["backend"] == "dynamodb"
-        assert stats["table_name"] == "test-checkpoints"
+        assert stats["backend"] == "postgres"
         assert stats["ttl_hours"] == 24
-        assert stats["region"] == "us-east-1"
         assert stats["user_id"] == "test-user"
 
 

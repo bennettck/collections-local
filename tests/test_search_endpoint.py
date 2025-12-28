@@ -84,7 +84,7 @@ class TestSearchTypeRouting:
         mock_get_item.return_value = None
         mock_analysis.return_value = None
 
-        with patch('retrieval.langchain_retrievers.BM25LangChainRetriever') as mock_retriever:
+        with patch('retrieval.postgres_bm25.PostgresBM25Retriever') as mock_retriever:
             mock_instance = MagicMock()
             mock_instance.invoke.return_value = []
             mock_retriever.return_value = mock_instance
@@ -93,14 +93,14 @@ class TestSearchTypeRouting:
                 "/search",
                 json={
                     "query": "test query",
-                    "search_type": "bm25-lc",
+                    "search_type": "bm25",
                     "include_answer": False
                 }
             )
 
             assert response.status_code == 200
             data = response.json()
-            assert data["search_type"] == "bm25-lc"
+            assert data["search_type"] == "bm25"
 
     @patch('main.get_item')
     @patch('main.get_latest_analysis')
@@ -111,7 +111,7 @@ class TestSearchTypeRouting:
         mock_analysis.return_value = None
         mock_vector_store.return_value = MagicMock()
 
-        with patch('retrieval.langchain_retrievers.VectorLangChainRetriever') as mock_retriever:
+        with patch('retrieval.hybrid_retriever.VectorOnlyRetriever') as mock_retriever:
             mock_instance = MagicMock()
             mock_instance.invoke.return_value = []
             mock_retriever.return_value = mock_instance
@@ -120,14 +120,14 @@ class TestSearchTypeRouting:
                 "/search",
                 json={
                     "query": "test query",
-                    "search_type": "vector-lc",
+                    "search_type": "vector",
                     "include_answer": False
                 }
             )
 
             assert response.status_code == 200
             data = response.json()
-            assert data["search_type"] == "vector-lc"
+            assert data["search_type"] == "vector"
 
     @patch('main.get_item')
     @patch('main.get_latest_analysis')
@@ -138,7 +138,7 @@ class TestSearchTypeRouting:
         mock_analysis.return_value = None
         mock_vector_store.return_value = MagicMock()
 
-        with patch('retrieval.langchain_retrievers.HybridLangChainRetriever') as mock_retriever:
+        with patch('retrieval.hybrid_retriever.PostgresHybridRetriever') as mock_retriever:
             mock_instance = MagicMock()
             mock_instance.invoke.return_value = []
             mock_retriever.return_value = mock_instance
@@ -147,14 +147,14 @@ class TestSearchTypeRouting:
                 "/search",
                 json={
                     "query": "test query",
-                    "search_type": "hybrid-lc",
+                    "search_type": "hybrid",
                     "include_answer": False
                 }
             )
 
             assert response.status_code == 200
             data = response.json()
-            assert data["search_type"] == "hybrid-lc"
+            assert data["search_type"] == "hybrid"
 
 
 class TestAgenticSearchEndpoint:
@@ -311,7 +311,7 @@ class TestDatabaseRouting:
         mock_get_item.return_value = None
         mock_analysis.return_value = None
 
-        with patch('retrieval.langchain_retrievers.BM25LangChainRetriever') as mock_retriever:
+        with patch('retrieval.postgres_bm25.PostgresBM25Retriever') as mock_retriever:
             mock_instance = MagicMock()
             mock_instance.invoke.return_value = []
             mock_retriever.return_value = mock_instance
@@ -320,7 +320,7 @@ class TestDatabaseRouting:
                 "/search",
                 json={
                     "query": "test query",
-                    "search_type": "bm25-lc",
+                    "search_type": "bm25",
                     "include_answer": False
                 }
             )
@@ -336,7 +336,7 @@ class TestDatabaseRouting:
         mock_analysis.return_value = None
         mock_vector_store.return_value = MagicMock()
 
-        with patch('retrieval.langchain_retrievers.BM25LangChainRetriever') as mock_retriever:
+        with patch('retrieval.postgres_bm25.PostgresBM25Retriever') as mock_retriever:
             mock_instance = MagicMock()
             mock_instance.invoke.return_value = []
             mock_retriever.return_value = mock_instance
@@ -345,7 +345,7 @@ class TestDatabaseRouting:
                 "/search",
                 json={
                     "query": "test query",
-                    "search_type": "bm25-lc",
+                    "search_type": "bm25",
                     "include_answer": False
                 },
                 headers={"Host": "golden.localhost:8000"}
@@ -364,7 +364,7 @@ class TestSearchResponseFormat:
         mock_get_item.return_value = None
         mock_analysis.return_value = None
 
-        with patch('retrieval.langchain_retrievers.BM25LangChainRetriever') as mock_retriever:
+        with patch('retrieval.postgres_bm25.PostgresBM25Retriever') as mock_retriever:
             mock_instance = MagicMock()
             mock_instance.invoke.return_value = []
             mock_retriever.return_value = mock_instance
@@ -373,7 +373,7 @@ class TestSearchResponseFormat:
                 "/search",
                 json={
                     "query": "test query",
-                    "search_type": "bm25-lc",
+                    "search_type": "bm25",
                     "include_answer": False
                 }
             )
@@ -411,7 +411,7 @@ class TestSearchResponseFormat:
         mock_get_item.return_value = mock_item
         mock_analysis.return_value = mock_analysis_data
 
-        with patch('retrieval.langchain_retrievers.BM25LangChainRetriever') as mock_retriever:
+        with patch('retrieval.postgres_bm25.PostgresBM25Retriever') as mock_retriever:
             mock_instance = MagicMock()
             mock_doc = MagicMock()
             mock_doc.metadata = {"item_id": "test-item-1", "score": 0.85}
@@ -422,7 +422,7 @@ class TestSearchResponseFormat:
                 "/search",
                 json={
                     "query": "test query",
-                    "search_type": "bm25-lc",
+                    "search_type": "bm25",
                     "include_answer": False
                 }
             )
