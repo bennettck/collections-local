@@ -4,23 +4,17 @@ Embedder Lambda Handler.
 Triggered by "AnalysisComplete" EventBridge events, this Lambda:
 1. Parses EventBridge event to get analysis details
 2. Fetches analysis from PostgreSQL
-3. Calls embeddings.generate_embedding() with analysis data
-4. Stores embedding in pgvector using langchain-postgres
-5. NO EventBridge event needed (end of workflow)
+3. Stores document with embedding in langchain-postgres vector store
+4. NO EventBridge event needed (end of workflow)
+
+Uses LangChain's langchain-postgres for vector storage with VoyageAI embeddings.
+This is the single source of truth for embeddings (no ORM table).
 """
 
 import os
 import json
 import logging
-import uuid
 import boto3
-
-# Import embeddings module (copied from root)
-import embeddings
-
-# Import database modules
-from database_orm.connection import init_connection, get_session
-from database_orm.models import Analysis, Embedding
 
 # Setup logging
 logger = logging.getLogger()
@@ -28,11 +22,6 @@ logger.setLevel(logging.INFO)
 
 # Initialize AWS clients
 ssm_client = boto3.client('ssm')
-
-# Configuration from environment variables
-DATABASE_HOST = os.environ.get('DATABASE_HOST', '')
-DATABASE_PORT = os.environ.get('DATABASE_PORT', '5432')
-DATABASE_NAME = os.environ.get('DATABASE_NAME', 'collections')
 
 # Database connection (initialized on cold start)
 _db_initialized = False
@@ -58,7 +47,11 @@ def ensure_db_connection():
         )
         database_url = response['Parameter']['Value']
 
+        # Set environment variable for database_orm.connection
+        os.environ['DATABASE_URL'] = database_url
+
         # Initialize database connection
+        from database_orm.connection import init_connection
         init_connection(database_url=database_url)
         _db_initialized = True
         logger.info("Database connection initialized")
@@ -135,14 +128,25 @@ def fetch_analysis(analysis_id: str, user_id: str) -> dict:
     """
     logger.info(f"Fetching analysis: analysis_id={analysis_id}")
 
+    from database_orm.connection import get_session
+    from database_orm.models import Analysis, Item
+
     with get_session() as session:
         from sqlalchemy import select
 
+        # Fetch analysis
         stmt = select(Analysis).filter_by(id=analysis_id, user_id=user_id)
         analysis = session.scalar(stmt)
 
         if not analysis:
             raise ValueError(f"Analysis not found: {analysis_id}")
+
+        # Fetch associated item to get filename
+        item_stmt = select(Item).filter_by(id=analysis.item_id, user_id=user_id)
+        item = session.scalar(item_stmt)
+
+        if not item:
+            raise ValueError(f"Item not found: {analysis.item_id}")
 
         # Convert to dictionary
         analysis_dict = {
@@ -156,113 +160,54 @@ def fetch_analysis(analysis_id: str, user_id: str) -> dict:
             'provider_used': analysis.provider_used,
             'model_used': analysis.model_used,
             'trace_id': analysis.trace_id,
-            'created_at': analysis.created_at.isoformat() if analysis.created_at else None
+            'created_at': analysis.created_at.isoformat() if analysis.created_at else None,
+            'filename': item.filename  # Include filename for document creation
         }
 
-        logger.info(f"Analysis fetched: category={analysis.category}")
+        logger.info(f"Analysis fetched: category={analysis.category}, filename={item.filename}")
         return analysis_dict
 
 
-def generate_embedding_vector(analysis_data: dict) -> list[float]:
-    """
-    Generate embedding vector from analysis data.
-
-    Args:
-        analysis_data: Analysis dictionary with raw_response
-
-    Returns:
-        Embedding vector as list of floats
-    """
-    logger.info("Generating embedding from analysis data")
-
-    # Use the same document creation logic as in embeddings.py
-    raw_response = analysis_data.get('raw_response', {})
-
-    # Create embedding document
-    parts = []
-
-    # Extract all fields once (same order as in embeddings.py)
-    parts.append(raw_response.get("summary", ""))
-    parts.append(raw_response.get("headline", ""))
-    parts.append(raw_response.get("category", ""))
-    parts.append(" ".join(raw_response.get("subcategories", [])))
-
-    # Image details
-    image_details = raw_response.get("image_details", {})
-    if isinstance(image_details.get("extracted_text"), list):
-        parts.append(" ".join(image_details.get("extracted_text", [])))
-    else:
-        parts.append(image_details.get("extracted_text", ""))
-
-    parts.append(image_details.get("key_interest", ""))
-    parts.append(" ".join(image_details.get("themes", [])))
-    parts.append(" ".join(image_details.get("objects", [])))
-    parts.append(" ".join(image_details.get("emotions", [])))
-    parts.append(" ".join(image_details.get("vibes", [])))
-
-    # Media metadata
-    media_metadata = raw_response.get("media_metadata", {})
-    parts.append(" ".join(media_metadata.get("location_tags", [])))
-    parts.append(" ".join(media_metadata.get("hashtags", [])))
-
-    # Combine and clean
-    document = " ".join([p for p in parts if p and p.strip()])
-
-    if not document:
-        raise ValueError("Empty document generated from analysis data")
-
-    # Generate embedding using embeddings.py
-    embedding_vector = embeddings.generate_embedding(document)
-
-    logger.info(f"Embedding generated: dimensions={len(embedding_vector)}")
-    return embedding_vector
-
-
-def store_embedding(
+def store_in_vector_store(
     item_id: str,
-    analysis_id: str,
     user_id: str,
-    embedding_vector: list[float],
-    model: str,
-    source_fields: dict
+    raw_response: dict,
+    filename: str
 ) -> str:
     """
-    Store embedding in PostgreSQL with pgvector.
+    Store document with embedding in langchain-postgres vector store.
+
+    This uses PGVectorStoreManager which handles:
+    - VoyageAI embedding generation
+    - PostgreSQL pgvector storage
+    - Proper metadata for retrieval
 
     Args:
         item_id: Item identifier
-        analysis_id: Analysis identifier
         user_id: User identifier
-        embedding_vector: Vector embedding as list of floats
-        model: Embedding model name
-        source_fields: Dictionary of fields used for embedding
+        raw_response: Analysis result dictionary
+        filename: Image filename
 
     Returns:
-        Embedding ID
+        Document ID
     """
-    logger.info(f"Storing embedding for item_id={item_id}")
+    logger.info(f"Storing document in vector store: item_id={item_id}")
 
-    embedding_id = str(uuid.uuid4())
+    from retrieval.pgvector_store import PGVectorStoreManager
 
-    with get_session() as session:
-        # Create embedding record
-        embedding = Embedding(
-            id=embedding_id,
-            item_id=item_id,
-            analysis_id=analysis_id,
-            user_id=user_id,
-            vector=embedding_vector,
-            embedding_model=model,
-            embedding_dimensions=len(embedding_vector),
-            embedding_source=source_fields
-        )
+    # Initialize vector store manager
+    vector_mgr = PGVectorStoreManager()
 
-        session.add(embedding)
-        session.commit()
+    # Add document using the convenience method
+    doc_id = vector_mgr.add_document(
+        item_id=item_id,
+        raw_response=raw_response,
+        filename=filename,
+        user_id=user_id
+    )
 
-        logger.info(f"Embedding stored: embedding_id={embedding_id}, dimensions={len(embedding_vector)}")
-
-    return embedding_id
+    logger.info(f"Document stored in vector store: doc_id={doc_id}")
+    return doc_id
 
 
 def handler(event: dict, context) -> dict:
@@ -292,40 +237,26 @@ def handler(event: dict, context) -> dict:
         analysis_id = detail['analysis_id']
         user_id = detail['user_id']
 
-        # Fetch analysis from database
+        # Fetch analysis from database (includes filename)
         analysis_data = fetch_analysis(analysis_id, user_id)
 
-        # Generate embedding vector
-        embedding_vector = generate_embedding_vector(analysis_data)
-
-        # Get embedding model name from environment or use default
-        model = os.environ.get('VOYAGE_EMBEDDING_MODEL', embeddings.DEFAULT_EMBEDDING_MODEL)
-
-        # Store embedding in database
-        source_fields = {
-            'analysis_id': analysis_id,
-            'category': analysis_data.get('category'),
-            'summary': analysis_data.get('summary')
-        }
-
-        embedding_id = store_embedding(
+        # Store in langchain-postgres vector store
+        # This handles embedding generation and storage
+        doc_id = store_in_vector_store(
             item_id=item_id,
-            analysis_id=analysis_id,
             user_id=user_id,
-            embedding_vector=embedding_vector,
-            model=model,
-            source_fields=source_fields
+            raw_response=analysis_data['raw_response'],
+            filename=analysis_data['filename']
         )
 
-        logger.info(f"Successfully generated embedding: item_id={item_id}, embedding_id={embedding_id}")
+        logger.info(f"Successfully processed embedding: item_id={item_id}, doc_id={doc_id}")
 
         return {
             'statusCode': 200,
             'body': json.dumps({
-                'message': 'Embedding generated successfully',
+                'message': 'Embedding generated and stored successfully',
                 'item_id': item_id,
-                'embedding_id': embedding_id,
-                'dimensions': len(embedding_vector)
+                'doc_id': doc_id
             })
         }
 

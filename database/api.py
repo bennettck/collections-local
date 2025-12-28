@@ -39,9 +39,9 @@ if _use_postgres:
         get_latest_analysis as _get_latest_analysis,
         get_item_analyses as _get_item_analyses,
         search_items as _search_items,
-        create_embedding as _create_embedding,
-        get_embedding as _get_embedding,
     )
+    # Note: Embeddings are now handled by langchain-postgres (PGVectorStoreManager)
+    # The ORM embeddings table is deprecated
 else:
     # SQLite backend (no user_id)
     logger.info("Using SQLite backend (database_sqlite_legacy)")
@@ -57,14 +57,14 @@ else:
         get_latest_analysis as _get_latest_analysis,
         get_item_analyses as _get_item_analyses,
         search_items as _search_items,
-        create_embedding as _create_embedding,
-        get_embedding as _get_embedding,
         rebuild_search_index as _rebuild_search_index,
         get_search_status as _get_search_status,
         get_vector_index_status as _get_vector_index_status,
         get_db as _get_db,
         _create_search_document as __create_search_document,
     )
+    # Note: Embeddings are now handled by langchain-postgres (PGVectorStoreManager)
+    # The ORM embeddings table is deprecated
 
 
 def use_postgres() -> bool:
@@ -356,72 +356,9 @@ def search_items(
         )
 
 
-def create_embedding(
-    item_id: str,
-    analysis_id: str,
-    embedding: list,
-    model: str,
-    source_fields: dict,
-    category: Optional[str] = None,
-    user_id: Optional[str] = None
-) -> dict:
-    """
-    Store an embedding.
-
-    Args:
-        item_id: Item identifier
-        analysis_id: Analysis identifier
-        embedding: Vector embedding as list of floats
-        model: Embedding model name
-        source_fields: Dictionary of fields used for embedding
-        category: Optional category
-        user_id: User identifier (required for PostgreSQL, ignored for SQLite)
-
-    Returns:
-        Dictionary with embedding_id for PostgreSQL, full dict for SQLite
-    """
-    if _use_postgres:
-        if not user_id:
-            raise ValueError("user_id is required when using PostgreSQL backend")
-        # PostgreSQL implementation returns embedding_id string
-        embedding_id = _create_embedding(
-            item_id=item_id,
-            analysis_id=analysis_id,
-            user_id=user_id,
-            embedding=embedding,
-            model=model,
-            source_fields=source_fields,
-            category=category
-        )
-        return {"embedding_id": embedding_id, "item_id": item_id}
-    else:
-        return _create_embedding(
-            item_id=item_id,
-            analysis_id=analysis_id,
-            embedding=embedding,
-            model=model,
-            source_fields=source_fields,
-            category=category
-        )
-
-
-def get_embedding(item_id: str, user_id: Optional[str] = None) -> Optional[dict]:
-    """
-    Get embedding for an item.
-
-    Args:
-        item_id: Item identifier
-        user_id: User identifier (required for PostgreSQL, ignored for SQLite)
-
-    Returns:
-        Dictionary containing embedding metadata, or None
-    """
-    if _use_postgres:
-        if not user_id:
-            raise ValueError("user_id is required when using PostgreSQL backend")
-        return _get_embedding(item_id=item_id, user_id=user_id)
-    else:
-        return _get_embedding(item_id=item_id)
+# Note: create_embedding and get_embedding have been removed.
+# Embeddings are now handled by langchain-postgres (PGVectorStoreManager).
+# See retrieval/pgvector_store.py for the new embedding storage interface.
 
 
 # SQLite-only functions (not available in PostgreSQL yet)

@@ -22,7 +22,8 @@ from typing import Optional, Generator
 from sqlalchemy import select, func, delete, or_, text
 from sqlalchemy.orm import Session, joinedload
 
-from database_orm.models import Item, Analysis, Embedding
+from database_orm.models import Item, Analysis
+# Note: Embedding model removed - embeddings now handled by langchain-postgres
 from database_orm.connection import get_session, init_connection
 
 logger = logging.getLogger(__name__)
@@ -455,88 +456,10 @@ def get_search_status() -> dict:
         }
 
 
-def create_embedding(
-    item_id: str,
-    analysis_id: str,
-    user_id: str,
-    embedding: list[float],
-    model: str,
-    source_fields: dict,
-    category: Optional[str] = None
-) -> str:
-    """
-    Create embedding record and insert vector.
-
-    Args:
-        item_id: Item identifier
-        analysis_id: Analysis identifier
-        user_id: User identifier
-        embedding: Vector embedding as list of floats
-        model: Embedding model name
-        source_fields: Dictionary of fields used for embedding
-        category: Optional category (unused, kept for compatibility)
-
-    Returns:
-        The ID of the created embedding record
-    """
-    with get_session() as session:
-        embedding_id = str(uuid.uuid4())
-
-        emb = Embedding(
-            id=embedding_id,
-            item_id=item_id,
-            analysis_id=analysis_id,
-            user_id=user_id,
-            vector=embedding,
-            embedding_model=model,
-            embedding_dimensions=len(embedding),
-            embedding_source=source_fields
-        )
-
-        session.add(emb)
-        session.commit()
-
-        return embedding_id
-
-
-def get_embedding(item_id: str, user_id: str) -> Optional[dict]:
-    """
-    Get latest embedding for an item.
-
-    Args:
-        item_id: Item identifier
-        user_id: User identifier
-
-    Returns:
-        Dictionary containing embedding metadata, or None
-    """
-    with get_session() as session:
-        stmt = (
-            select(Embedding)
-            .filter_by(item_id=item_id, user_id=user_id)
-            .order_by(Embedding.created_at.desc())
-            .limit(1)
-        )
-        embedding = session.scalar(stmt)
-        return _embedding_to_dict(embedding) if embedding else None
-
-
-def get_vector_index_status() -> dict:
-    """Get statistics about the vector index."""
-    with get_session() as session:
-        # Count items with analyses
-        stmt = select(func.count(func.distinct(Analysis.item_id)))
-        total_analyzed = session.scalar(stmt) or 0
-
-        # Count embeddings
-        stmt = select(func.count(Embedding.id))
-        total_embeddings = session.scalar(stmt) or 0
-
-        return {
-            "total_analyzed_items": total_analyzed,
-            "total_embeddings": total_embeddings,
-            "coverage": (total_embeddings / total_analyzed * 100) if total_analyzed > 0 else 0
-        }
+# Note: create_embedding, get_embedding, and get_vector_index_status have been removed.
+# Embeddings are now handled by langchain-postgres (PGVectorStoreManager).
+# See retrieval/pgvector_store.py for the new embedding storage interface.
+# Use PGVectorStoreManager.get_collection_stats() for vector index status.
 
 
 # Helper functions to convert ORM objects to dictionaries
@@ -579,21 +502,7 @@ def _analysis_to_dict(analysis: Optional[Analysis]) -> Optional[dict]:
     }
 
 
-def _embedding_to_dict(embedding: Optional[Embedding]) -> Optional[dict]:
-    """Convert Embedding ORM object to dictionary."""
-    if not embedding:
-        return None
-
-    return {
-        "id": embedding.id,
-        "item_id": embedding.item_id,
-        "analysis_id": embedding.analysis_id,
-        "user_id": embedding.user_id,
-        "embedding_model": embedding.embedding_model,
-        "embedding_dimensions": embedding.embedding_dimensions,
-        "embedding_source": json.dumps(embedding.embedding_source) if embedding.embedding_source else "{}",
-        "created_at": embedding.created_at.isoformat() if embedding.created_at else None,
-    }
+# Note: _embedding_to_dict removed - embeddings now handled by langchain-postgres
 
 
 # Thread-local context compatibility (not needed for SQLAlchemy but kept for API compatibility)
