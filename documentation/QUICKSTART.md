@@ -27,6 +27,8 @@ Three test users have been created for you:
 | Test User 2 | testuser2@example.com | Collections2025! |
 | Demo User | demo@example.com | Collections2025! |
 
+**Important**: If users can't authenticate, run `make cognito-setup ENV=dev` to configure passwords.
+
 ## Get Started in 30 Seconds
 
 ### Option 1: Use the Test Script (Recommended)

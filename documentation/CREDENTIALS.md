@@ -27,7 +27,25 @@ us-east-1 (US East - N. Virginia)
 - **App Client ID**: `1tce0ddbsbm254e9r9p4jar1em`
 - **App Client Name**: `collections-dev-client`
 
+### Setup Test Users
+To configure test users with permanent passwords, run:
+```bash
+make cognito-setup ENV=dev
+```
+
+To list all users in the pool:
+```bash
+make cognito-list ENV=dev
+```
+
+To preview changes without making them:
+```bash
+make cognito-setup-dry-run ENV=dev
+```
+
 ### Test User Accounts
+
+**Important**: After deploying infrastructure, run `make cognito-setup ENV=dev` to configure user passwords.
 
 #### User 1
 - **Email/Username**: `testuser1@example.com`
