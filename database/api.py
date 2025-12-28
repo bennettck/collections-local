@@ -378,13 +378,22 @@ def create_embedding(
         user_id: User identifier (required for PostgreSQL, ignored for SQLite)
 
     Returns:
-        Dictionary representation of created embedding
+        Dictionary with embedding_id for PostgreSQL, full dict for SQLite
     """
     if _use_postgres:
         if not user_id:
             raise ValueError("user_id is required when using PostgreSQL backend")
-        # TODO: Implement create_embedding in database_sqlalchemy.py
-        raise NotImplementedError("create_embedding not yet implemented for PostgreSQL")
+        # PostgreSQL implementation returns embedding_id string
+        embedding_id = _create_embedding(
+            item_id=item_id,
+            analysis_id=analysis_id,
+            user_id=user_id,
+            embedding=embedding,
+            model=model,
+            source_fields=source_fields,
+            category=category
+        )
+        return {"embedding_id": embedding_id, "item_id": item_id}
     else:
         return _create_embedding(
             item_id=item_id,
@@ -410,8 +419,7 @@ def get_embedding(item_id: str, user_id: Optional[str] = None) -> Optional[dict]
     if _use_postgres:
         if not user_id:
             raise ValueError("user_id is required when using PostgreSQL backend")
-        # TODO: Implement get_embedding in database_sqlalchemy.py
-        raise NotImplementedError("get_embedding not yet implemented for PostgreSQL")
+        return _get_embedding(item_id=item_id, user_id=user_id)
     else:
         return _get_embedding(item_id=item_id)
 

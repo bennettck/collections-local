@@ -182,13 +182,14 @@ async def lifespan(app: FastAPI):
     if not is_lambda:
         try:
             from chat.conversation_manager import ConversationManager
-            from config.chat_config import CONVERSATION_DB_PATH, CLEANUP_ON_STARTUP, CONVERSATION_TTL_HOURS
+            from config.chat_config import CONVERSATION_TTL_HOURS
 
-            conversation_manager = ConversationManager(db_path=CONVERSATION_DB_PATH)
-
-            # Cleanup expired sessions on startup
-            if CLEANUP_ON_STARTUP:
-                conversation_manager.cleanup_expired_sessions(ttl_hours=CONVERSATION_TTL_HOURS)
+            # Initialize ConversationManager with DynamoDB settings
+            # Note: user_id is set per-request in chat endpoints for multi-tenancy
+            conversation_manager = ConversationManager(
+                ttl_hours=CONVERSATION_TTL_HOURS
+            )
+            # DynamoDB TTL handles session cleanup automatically
         except Exception as e:
             logger.error(f"Failed to initialize conversation manager: {e}")
 
