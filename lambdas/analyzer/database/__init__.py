@@ -7,8 +7,8 @@ This package provides:
 - Alembic migrations for schema management
 """
 
-from database.models import Item, Analysis, Embedding, Base
-from database.connection import get_session, get_engine, init_connection
+from database_orm.models import Item, Analysis, Embedding, Base
+from database_orm.connection import get_session, get_engine, init_connection
 
 __all__ = [
     "Item",

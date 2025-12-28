@@ -77,11 +77,18 @@ See [QUICKSTART.md](./QUICKSTART.md) for detailed setup guide.
 API Gateway + Cognito Auth
          ↓
    API Lambda (FastAPI)
+   ┌─────────────────────────┐
+   │ • PostgresHybridRetriever│
+   │ • PostgresBM25Retriever  │
+   │ • VectorOnlyRetriever    │
+   └─────────────────────────┘
          ↓
     ┌────┴────┐
     ↓         ↓
 PostgreSQL  DynamoDB
 (pgvector)  (sessions)
+(tsvector)
+(BM25 docs)
     ↑
     │
 S3 → Image Processor → Analyzer → Embedder
@@ -90,20 +97,21 @@ S3 → Image Processor → Analyzer → Embedder
 
 **Technology Stack**:
 - **Compute**: AWS Lambda, FastAPI, Mangum
-- **Data**: PostgreSQL (pgvector), DynamoDB, S3
+- **Data**: PostgreSQL (pgvector + tsvector), DynamoDB, S3
 - **AI**: Anthropic Claude, Voyage AI, LangChain, LangGraph
 - **Auth**: Cognito User Pools (JWT)
+- **Search**: Custom PostgreSQL retrievers with RRF fusion
 
 See [ARCHITECTURE.md](./documentation/ARCHITECTURE.md) for details.
 
 ## Search Capabilities
 
-| Type | Use Case | Speed | Best For |
-|------|----------|-------|----------|
-| **BM25** | Keyword search | ~5ms | Exact terms, OCR text |
-| **Vector** | Semantic search | ~100ms | Concepts, synonyms |
-| **Hybrid** | General search | ~130ms | Production (recommended) |
-| **Agentic** | Complex queries | ~3s | Multi-part questions |
+| Type | Implementation | Speed | Best For |
+|------|----------------|-------|----------|
+| **BM25** | PostgresBM25Retriever (tsvector) | ~5ms | Exact terms, OCR text |
+| **Vector** | VectorOnlyRetriever (pgvector) | ~100ms | Concepts, synonyms |
+| **Hybrid** | PostgresHybridRetriever (RRF) | ~130ms | Production (recommended) |
+| **Agentic** | LangChain ReAct + Custom Retrievers | ~3s | Multi-part questions |
 
 See [FEATURES.md](./documentation/FEATURES.md) for details.
 
@@ -235,5 +243,6 @@ Private project - All rights reserved
 ---
 
 **Status**: Production Ready ✅
-**Last Updated**: 2025-12-27
+**Last Updated**: 2025-12-28
 **Environment**: AWS (us-east-1)
+**Architecture**: PostgreSQL + PGVector (v2.0)

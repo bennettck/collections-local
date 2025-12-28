@@ -22,8 +22,8 @@ from typing import Optional, Generator
 from sqlalchemy import select, func, delete, or_, text
 from sqlalchemy.orm import Session, joinedload
 
-from database.models import Item, Analysis, Embedding
-from database.connection import get_session, init_connection
+from database_orm.models import Item, Analysis, Embedding
+from database_orm.connection import get_session, init_connection
 
 logger = logging.getLogger(__name__)
 

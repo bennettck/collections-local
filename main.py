@@ -6,6 +6,7 @@ import logging
 import aiofiles
 from datetime import datetime
 from pathlib import Path
+from typing import Optional
 
 from fastapi import FastAPI, UploadFile, File, HTTPException, Query, Request
 from fastapi.staticfiles import StaticFiles
@@ -19,7 +20,6 @@ from models import (
     ItemListResponse,
     AnalysisRequest,
     AnalysisResponse,
-    Settings,
     SearchRequest,
     SearchResult,
     SearchResponse,
@@ -33,7 +33,8 @@ from models import (
     ChatSessionInfo,
 )
 
-from database import (
+# Database API - routes to SQLite or PostgreSQL based on environment
+from database.api import (
     init_db,
     create_item,
     get_item,
@@ -50,19 +51,42 @@ from database import (
     create_embedding,
     get_db,
     _create_search_document,
+    use_postgres,
 )
 
 from llm import analyze_image, get_trace_id, get_resolved_provider_and_model
 from embeddings import generate_embedding, _create_embedding_document, DEFAULT_EMBEDDING_MODEL, get_embedding_dimensions
 from retrieval.pgvector_store import PGVectorStoreManager
-from config.langchain_config import get_chroma_config, DEFAULT_EMBEDDING_MODEL as LANGCHAIN_EMBEDDING_MODEL
-from config.retriever_config import get_voyage_config
+from config.langchain_config import get_vector_store_config, DEFAULT_EMBEDDING_MODEL as LANGCHAIN_EMBEDDING_MODEL
 
 # Load environment variables
 load_dotenv()
 
 # Setup logging
 logger = logging.getLogger(__name__)
+
+
+def get_user_id_from_request(request: Request) -> str:
+    """
+    Extract user_id from authenticated request.
+
+    For Cognito JWT, the user_id is in request.state.user_id (set by CognitoAuthMiddleware).
+    Falls back to 'default' for local development.
+
+    Args:
+        request: FastAPI request
+
+    Returns:
+        User ID string
+    """
+    # Check if user_id is attached to request state (from auth middleware)
+    user_id = getattr(request.state, 'user_id', None)
+    if user_id:
+        return user_id
+
+    # Fallback for local development (when auth is disabled)
+    return os.getenv("DEFAULT_USER_ID", "default")
+
 
 # Get settings - support both new and old env var names (backwards compatibility)
 PROD_DATABASE_PATH = os.getenv("PROD_DATABASE_PATH") or os.getenv("DATABASE_PATH", "./data/collections.db")
@@ -81,9 +105,9 @@ ALLOWED_MIME_TYPES = {
     "image/gif",
 }
 
-# Global instances for Chroma vector stores (dual database support)
-prod_chroma_manager = None
-golden_chroma_manager = None
+# Global instances for vector stores (dual database support)
+prod_vector_store = None
+golden_vector_store = None
 
 # Global conversation manager for multi-turn chat
 conversation_manager = None
@@ -97,7 +121,7 @@ async def lifespan(app: FastAPI):
 
     if not is_lambda:
         # Local development only: Initialize SQLite databases
-        from database import database_context
+        from database_sqlite import database_context
 
         # Initialize production database
         with database_context(PROD_DATABASE_PATH):
@@ -123,14 +147,14 @@ async def lifespan(app: FastAPI):
                 rebuild_search_index()
 
     # Initialize PGVector store for PRODUCTION database
-    global prod_chroma_manager
+    global prod_vector_store
 
     # Skip PGVector initialization in Lambda for now (lazy load on first use)
     if not is_lambda:
         try:
-            prod_chroma_config = get_chroma_config("prod")
-            prod_chroma_manager = PGVectorStoreManager(
-                collection_name=prod_chroma_config["collection_name"],
+            prod_vector_config = get_vector_store_config("prod")
+            prod_vector_store = PGVectorStoreManager(
+                collection_name=prod_vector_config["collection_name"],
                 embedding_model=LANGCHAIN_EMBEDDING_MODEL,
                 use_parameter_store=False,  # Use database connection from environment
                 parameter_name=None
@@ -139,12 +163,12 @@ async def lifespan(app: FastAPI):
             logger.error(f"Failed to initialize PGVector (PROD): {e}")
 
         # Initialize PGVector store for GOLDEN database
-        global golden_chroma_manager
+        global golden_vector_store
 
         try:
-            golden_chroma_config = get_chroma_config("golden")
-            golden_chroma_manager = PGVectorStoreManager(
-                collection_name=golden_chroma_config["collection_name"] + "_golden",
+            golden_vector_config = get_vector_store_config("golden")
+            golden_vector_store = PGVectorStoreManager(
+                collection_name=golden_vector_config["collection_name"] + "_golden",
                 embedding_model=LANGCHAIN_EMBEDDING_MODEL,
                 use_parameter_store=False,  # Use database connection from environment
                 parameter_name=None
@@ -158,13 +182,14 @@ async def lifespan(app: FastAPI):
     if not is_lambda:
         try:
             from chat.conversation_manager import ConversationManager
-            from config.chat_config import CONVERSATION_DB_PATH, CLEANUP_ON_STARTUP, CONVERSATION_TTL_HOURS
+            from config.chat_config import CONVERSATION_TTL_HOURS
 
-            conversation_manager = ConversationManager(db_path=CONVERSATION_DB_PATH)
-
-            # Cleanup expired sessions on startup
-            if CLEANUP_ON_STARTUP:
-                conversation_manager.cleanup_expired_sessions(ttl_hours=CONVERSATION_TTL_HOURS)
+            # Initialize ConversationManager with DynamoDB settings
+            # Note: user_id is set per-request in chat endpoints for multi-tenancy
+            conversation_manager = ConversationManager(
+                ttl_hours=CONVERSATION_TTL_HOURS
+            )
+            # DynamoDB TTL handles session cleanup automatically
         except Exception as e:
             logger.error(f"Failed to initialize conversation manager: {e}")
 
@@ -202,12 +227,12 @@ if os.path.exists("static"):
 
 
 # Helper function for database routing
-def get_current_chroma_manager(request: Request) -> PGVectorStoreManager:
-    """Get the appropriate Chroma manager based on request context."""
+def get_current_vector_store(request: Request) -> PGVectorStoreManager:
+    """Get the appropriate vector store manager based on request context."""
     host = request.headers.get("host", "")
     if "golden" in host:
-        return golden_chroma_manager
-    return prod_chroma_manager
+        return golden_vector_store
+    return prod_vector_store
 
 
 def _parse_datetime(dt_value) -> datetime:
@@ -219,11 +244,16 @@ def _parse_datetime(dt_value) -> datetime:
     return datetime.fromisoformat(dt_value)
 
 
-def _item_to_response(item: dict, include_analysis: bool = True) -> ItemResponse:
+def _item_to_response(item: dict, include_analysis: bool = True, user_id: Optional[str] = None) -> ItemResponse:
     """Convert database item dict to ItemResponse."""
     latest_analysis = None
     if include_analysis:
-        analysis_data = get_latest_analysis(item["id"])
+        # For PostgreSQL, user_id is required; for SQLite, it's ignored
+        if use_postgres() and not user_id:
+            # Extract from item if available (multi-tenancy)
+            user_id = item.get("user_id", "default")
+
+        analysis_data = get_latest_analysis(item["id"], user_id=user_id)
         if analysis_data:
             latest_analysis = AnalysisResponse(
                 id=analysis_data["id"],
@@ -277,7 +307,7 @@ async def health_check(request: Request):
     # Try to get item counts from databases (may fail in Lambda environment)
     database_stats = None
     try:
-        from database import database_context
+        from database_sqlite import database_context
         with database_context(PROD_DATABASE_PATH):
             prod_count = count_items()
         with database_context(GOLDEN_DATABASE_PATH):
@@ -305,8 +335,11 @@ async def health_check(request: Request):
 
 # Item Endpoints
 @app.post("/items", response_model=ItemResponse)
-async def create_item_endpoint(file: UploadFile = File(...)):
+async def create_item_endpoint(request: Request, file: UploadFile = File(...)):
     """Upload an image and create a new item."""
+    # Extract user_id for multi-tenancy
+    user_id = get_user_id_from_request(request)
+
     # Validate file type
     if file.content_type not in ALLOWED_MIME_TYPES:
         raise HTTPException(
@@ -343,41 +376,52 @@ async def create_item_endpoint(file: UploadFile = File(...)):
         file_path=file_path,
         file_size=file_size,
         mime_type=file.content_type,
+        user_id=user_id,
     )
 
-    return _item_to_response(item, include_analysis=False)
+    return _item_to_response(item, include_analysis=False, user_id=user_id)
 
 
 @app.get("/items", response_model=ItemListResponse)
 async def list_items_endpoint(
+    request: Request,
     category: str | None = Query(None),
     limit: int = Query(50, le=100),
     offset: int = Query(0, ge=0)
 ):
     """List all items with optional filtering."""
-    items = list_items(category=category, limit=limit, offset=offset)
-    total = count_items(category=category)
+    # Extract user_id for multi-tenancy
+    user_id = get_user_id_from_request(request)
+
+    items = list_items(category=category, limit=limit, offset=offset, user_id=user_id)
+    total = count_items(category=category, user_id=user_id)
 
     return ItemListResponse(
-        items=[_item_to_response(item) for item in items],
+        items=[_item_to_response(item, user_id=user_id) for item in items],
         total=total,
     )
 
 
 @app.get("/items/{item_id}", response_model=ItemResponse)
-async def get_item_endpoint(item_id: str):
+async def get_item_endpoint(request: Request, item_id: str):
     """Get a single item with its latest analysis."""
-    item = get_item(item_id)
+    # Extract user_id for multi-tenancy
+    user_id = get_user_id_from_request(request)
+
+    item = get_item(item_id, user_id=user_id)
     if not item:
         raise HTTPException(status_code=404, detail="Item not found")
 
-    return _item_to_response(item)
+    return _item_to_response(item, user_id=user_id)
 
 
 @app.delete("/items/{item_id}")
-async def delete_item_endpoint(item_id: str):
+async def delete_item_endpoint(request: Request, item_id: str):
     """Delete an item and its associated files and analyses."""
-    item = get_item(item_id)
+    # Extract user_id for multi-tenancy
+    user_id = get_user_id_from_request(request)
+
+    item = get_item(item_id, user_id=user_id)
     if not item:
         raise HTTPException(status_code=404, detail="Item not found")
 
@@ -387,7 +431,7 @@ async def delete_item_endpoint(item_id: str):
         os.remove(file_path)
 
     # Delete from database (cascades to analyses)
-    delete_item(item_id)
+    delete_item(item_id, user_id=user_id)
 
     return {"status": "deleted", "id": item_id}
 
@@ -396,17 +440,21 @@ async def delete_item_endpoint(item_id: str):
 @app.post("/items/{item_id}/analyze", response_model=AnalysisResponse)
 async def analyze_item_endpoint(
     item_id: str,
+    http_request: Request,
     request: AnalysisRequest = AnalysisRequest()
 ):
     """Trigger AI analysis on an item."""
+    # Extract user_id for multi-tenancy
+    user_id = get_user_id_from_request(http_request)
+
     # Get item from DB
-    item = get_item(item_id)
+    item = get_item(item_id, user_id=user_id)
     if not item:
         raise HTTPException(status_code=404, detail="Item not found")
 
     # Check if analysis exists (unless force_reanalyze)
     if not request.force_reanalyze:
-        existing = get_latest_analysis(item_id)
+        existing = get_latest_analysis(item_id, user_id=user_id)
         if existing:
             return _analysis_to_response(existing)
 
@@ -450,6 +498,7 @@ async def analyze_item_endpoint(
         provider_used=provider_used,
         model_used=model_used,
         trace_id=trace_id,
+        user_id=user_id,
     )
 
     # Generate and store embedding (non-blocking)
@@ -473,7 +522,8 @@ async def analyze_item_endpoint(
             embedding=embedding,
             model=DEFAULT_EMBEDDING_MODEL,
             source_fields=source_fields,
-            category=category
+            category=category,
+            user_id=user_id,
         )
 
         # Real-time FTS5 index sync
@@ -492,22 +542,22 @@ async def analyze_item_endpoint(
             # Log but don't fail analysis if FTS5 sync fails
             logger.error(f"Failed to sync FTS5 index for {item_id}: {fts_error}")
 
-        # Real-time Chroma sync
+        # Real-time vector store sync
         try:
-            chroma_mgr = get_current_chroma_manager(request)
-            item = get_item(item_id)
+            vector_mgr = get_current_vector_store(http_request)
+            item = get_item(item_id, user_id=user_id)
             if item:
-                chroma_mgr.add_document(
+                vector_mgr.add_document(
                     item_id=item_id,
                     raw_response=result,
                     filename=item["filename"]
                 )
-                logger.info(f"Successfully synced Chroma vector store for {item_id}")
+                logger.info(f"Successfully synced vector store for {item_id}")
             else:
-                logger.error(f"Cannot sync to Chroma: item {item_id} not found")
-        except Exception as chroma_error:
-            # Log but don't fail analysis if Chroma sync fails
-            logger.error(f"Failed to sync to Chroma for {item_id}: {chroma_error}", exc_info=True)
+                logger.error(f"Cannot sync to vector store: item {item_id} not found")
+        except Exception as vector_error:
+            # Log but don't fail analysis if vector store sync fails
+            logger.error(f"Failed to sync to vector store for {item_id}: {vector_error}", exc_info=True)
 
     except Exception as e:
         # Log error but don't fail the analysis
@@ -517,21 +567,27 @@ async def analyze_item_endpoint(
 
 
 @app.get("/items/{item_id}/analyses", response_model=list[AnalysisResponse])
-async def get_item_analyses_endpoint(item_id: str):
+async def get_item_analyses_endpoint(request: Request, item_id: str):
     """Get all analysis versions for an item."""
+    # Extract user_id for multi-tenancy
+    user_id = get_user_id_from_request(request)
+
     # Verify item exists
-    item = get_item(item_id)
+    item = get_item(item_id, user_id=user_id)
     if not item:
         raise HTTPException(status_code=404, detail="Item not found")
 
-    analyses = get_item_analyses(item_id)
+    analyses = get_item_analyses(item_id, user_id=user_id)
     return [_analysis_to_response(a) for a in analyses]
 
 
 @app.get("/analyses/{analysis_id}", response_model=AnalysisResponse)
-async def get_analysis_endpoint(analysis_id: str):
+async def get_analysis_endpoint(request: Request, analysis_id: str):
     """Get a specific analysis."""
-    analysis = get_analysis(analysis_id)
+    # Extract user_id for multi-tenancy
+    user_id = get_user_id_from_request(request)
+
+    analysis = get_analysis(analysis_id, user_id=user_id)
     if not analysis:
         raise HTTPException(status_code=404, detail="Analysis not found")
 
@@ -554,11 +610,13 @@ async def search_collection(search_request: SearchRequest, request: Request):
         # Agentic search with LangChain agent
         from retrieval.agentic_search import AgenticSearchOrchestrator
 
-        chroma_mgr = get_current_chroma_manager(request)
+        vector_mgr = get_current_vector_store(request)
+        user_id = get_user_id_from_request(request)
 
         # Create orchestrator
         orchestrator = AgenticSearchOrchestrator(
-            chroma_manager=chroma_mgr,
+            vector_store=vector_mgr,
+            user_id=user_id,
             top_k=search_request.top_k,
             category_filter=search_request.category_filter,
             min_relevance_score=search_request.min_relevance_score,
@@ -581,13 +639,16 @@ async def search_collection(search_request: SearchRequest, request: Request):
         ]
         score_type = "hybrid_rrf"
 
-    elif search_request.search_type == "hybrid-lc":
-        # Hybrid retrieval with RRF (LangChain BM25 + Chroma Vector)
-        from retrieval.langchain_retrievers import HybridLangChainRetriever
+    elif search_request.search_type == "hybrid":
+        # Hybrid retrieval with RRF (PostgreSQL BM25 + PGVector)
+        from retrieval.hybrid_retriever import PostgresHybridRetriever
 
-        chroma_mgr = get_current_chroma_manager(request)
+        vector_mgr = get_current_vector_store(request)
+        user_id = get_user_id_from_request(request)
 
-        retriever = HybridLangChainRetriever(
+        retriever = PostgresHybridRetriever(
+            pgvector_manager=vector_mgr,
+            user_id=user_id,
             top_k=search_request.top_k,
             bm25_top_k=search_request.top_k * 2,        # Fetch 2x for better fusion
             vector_top_k=search_request.top_k * 2,
@@ -596,8 +657,7 @@ async def search_collection(search_request: SearchRequest, request: Request):
             rrf_c=15,                            # Lower c = more rank sensitivity
             category_filter=search_request.category_filter,
             min_relevance_score=search_request.min_relevance_score,
-            min_similarity_score=search_request.min_similarity_score,
-            chroma_manager=chroma_mgr
+            min_similarity_score=search_request.min_similarity_score
         )
 
         documents = retriever.invoke(search_request.query)
@@ -609,17 +669,19 @@ async def search_collection(search_request: SearchRequest, request: Request):
         ]
         score_type = "hybrid_rrf"
 
-    elif search_request.search_type == "vector-lc":
-        # LangChain Vector retrieval
-        from retrieval.langchain_retrievers import VectorLangChainRetriever
+    elif search_request.search_type == "vector":
+        # PGVector semantic search
+        from retrieval.hybrid_retriever import VectorOnlyRetriever
 
-        chroma_mgr = get_current_chroma_manager(request)
+        vector_mgr = get_current_vector_store(request)
+        user_id = get_user_id_from_request(request)
 
-        retriever = VectorLangChainRetriever(
+        retriever = VectorOnlyRetriever(
+            pgvector_manager=vector_mgr,
+            user_id=user_id,
             top_k=search_request.top_k,
             category_filter=search_request.category_filter,
-            min_similarity_score=search_request.min_similarity_score,
-            chroma_manager=chroma_mgr
+            min_similarity_score=search_request.min_similarity_score
         )
 
         documents = retriever.invoke(search_request.query)
@@ -631,11 +693,14 @@ async def search_collection(search_request: SearchRequest, request: Request):
         ]
         score_type = "similarity"
 
-    elif search_request.search_type == "bm25-lc":
-        # LangChain BM25 retrieval
-        from retrieval.langchain_retrievers import BM25LangChainRetriever
+    elif search_request.search_type == "bm25":
+        # PostgreSQL BM25 full-text search
+        from retrieval.postgres_bm25 import PostgresBM25Retriever
 
-        retriever = BM25LangChainRetriever(
+        user_id = get_user_id_from_request(request)
+
+        retriever = PostgresBM25Retriever(
+            user_id=user_id,
             top_k=search_request.top_k,
             category_filter=search_request.category_filter,
             min_relevance_score=search_request.min_relevance_score
@@ -657,13 +722,16 @@ async def search_collection(search_request: SearchRequest, request: Request):
     retrieval_time = (time.time() - retrieval_start) * 1000
 
     # Build SearchResult objects (same for both search types)
+    # Extract user_id for multi-tenancy
+    user_id = get_user_id_from_request(request)
+
     results = []
     for rank, (item_id, score) in enumerate(search_results, start=1):
-        item = get_item(item_id)
+        item = get_item(item_id, user_id=user_id)
         if not item:
             continue
 
-        analysis = get_latest_analysis(item_id)
+        analysis = get_latest_analysis(item_id, user_id=user_id)
         if not analysis:
             continue
 
@@ -802,12 +870,14 @@ async def chat_endpoint(chat_request: ChatRequest, request: Request):
     from chat.agentic_chat import AgenticChatOrchestrator
     from datetime import datetime
 
-    chroma_mgr = get_current_chroma_manager(request)
+    vector_mgr = get_current_vector_store(request)
+    user_id = get_user_id_from_request(request)
 
     # Create orchestrator with conversation manager
     orchestrator = AgenticChatOrchestrator(
-        chroma_manager=chroma_mgr,
+        vector_store=vector_mgr,
         conversation_manager=conversation_manager,
+        user_id=user_id,
         top_k=chat_request.top_k,
         category_filter=chat_request.category_filter,
         min_similarity_score=chat_request.min_similarity_score
@@ -819,13 +889,12 @@ async def chat_endpoint(chat_request: ChatRequest, request: Request):
         session_id=chat_request.session_id
     )
 
-    # Convert documents to SearchResult format
     search_results = None
     if result["documents"]:
         search_results = []
         for rank, doc in enumerate(result["documents"], start=1):
             metadata = doc.metadata
-            item = get_item(metadata.get("item_id"))
+            item = get_item(metadata.get("item_id"), user_id=user_id)
             if item:
                 search_results.append(SearchResult(
                     item_id=metadata.get("item_id"),
@@ -873,11 +942,13 @@ async def get_chat_history(session_id: str, request: Request):
     from chat.agentic_chat import AgenticChatOrchestrator
     from datetime import datetime
 
-    chroma_mgr = get_current_chroma_manager(request)
+    vector_mgr = get_current_vector_store(request)
+    user_id = get_user_id_from_request(request)
 
     orchestrator = AgenticChatOrchestrator(
-        chroma_manager=chroma_mgr,
-        conversation_manager=conversation_manager
+        vector_store=vector_mgr,
+        conversation_manager=conversation_manager,
+        user_id=user_id
     )
 
     # Get session info
@@ -996,7 +1067,7 @@ async def get_index_status_endpoint():
 @app.get("/vector-index/status")
 async def vector_index_status():
     """Get vector index statistics."""
-    from database import get_vector_index_status
+    from database_sqlite import get_vector_index_status
     return get_vector_index_status()
 
 
@@ -1005,19 +1076,19 @@ async def vector_index_status():
 @app.post("/langchain-index/rebuild-chroma")
 async def rebuild_chroma_index(database: str = Query("prod", description="Database type: prod or golden")):
     """Rebuild PGVector index for specified database."""
-    global prod_chroma_manager, golden_chroma_manager
+    global prod_vector_store, golden_vector_store
 
     try:
         if database == "golden":
-            chroma_config = get_chroma_config("golden")
-            golden_chroma_manager = PGVectorStoreManager(
-                collection_name=chroma_config["collection_name"] + "_golden",
+            vector_config = get_vector_store_config("golden")
+            golden_vector_store = PGVectorStoreManager(
+                collection_name=vector_config["collection_name"] + "_golden",
                 embedding_model=LANGCHAIN_EMBEDDING_MODEL,
                 use_parameter_store=True,
                 parameter_name="/collections-local/rds/connection-string"
             )
-            golden_chroma_manager.delete_collection()
-            num_docs = golden_chroma_manager.build_index(batch_size=128)
+            golden_vector_store.delete_collection()
+            num_docs = golden_vector_store.build_index(batch_size=128)
             return {
                 "status": "success",
                 "database": "golden",
@@ -1025,15 +1096,15 @@ async def rebuild_chroma_index(database: str = Query("prod", description="Databa
                 "message": "PGVector index rebuilt successfully"
             }
         else:
-            chroma_config = get_chroma_config("prod")
-            prod_chroma_manager = PGVectorStoreManager(
-                collection_name=chroma_config["collection_name"],
+            vector_config = get_vector_store_config("prod")
+            prod_vector_store = PGVectorStoreManager(
+                collection_name=vector_config["collection_name"],
                 embedding_model=LANGCHAIN_EMBEDDING_MODEL,
                 use_parameter_store=True,
                 parameter_name="/collections-local/rds/connection-string"
             )
-            prod_chroma_manager.delete_collection()
-            num_docs = prod_chroma_manager.build_index(batch_size=128)
+            prod_vector_store.delete_collection()
+            num_docs = prod_vector_store.build_index(batch_size=128)
             return {
                 "status": "success",
                 "database": "prod",
@@ -1052,15 +1123,15 @@ async def langchain_index_status():
     """Get status of LangChain indexes for both databases."""
     return {
         "prod": {
-            "chroma": {
-                "status": "loaded" if prod_chroma_manager else "not_loaded",
-                "stats": prod_chroma_manager.get_collection_stats() if prod_chroma_manager else None
+            "vector_store": {
+                "status": "loaded" if prod_vector_store else "not_loaded",
+                "stats": prod_vector_store.get_collection_stats() if prod_vector_store else None
             }
         },
         "golden": {
-            "chroma": {
-                "status": "loaded" if golden_chroma_manager else "not_loaded",
-                "stats": golden_chroma_manager.get_collection_stats() if golden_chroma_manager else None
+            "vector_store": {
+                "status": "loaded" if golden_vector_store else "not_loaded",
+                "stats": golden_vector_store.get_collection_stats() if golden_vector_store else None
             }
         }
     }
@@ -1119,7 +1190,7 @@ async def get_items_for_review(
     Returns:
         Dict with items list, total count, and reviewed count
     """
-    from database import get_db
+    from database_sqlite import get_db
 
     with get_db() as conn:
         # Get items with pagination
@@ -1154,13 +1225,16 @@ async def get_items_for_review(
         paginated_ids = filtered_item_ids[offset:offset + limit]
 
         # Build response for each item
+        # Extract user_id for multi-tenancy (golden dataset uses default user)
+        user_id = "default"  # Golden dataset is single-tenant
+
         items = []
         for item_id in paginated_ids:
-            item = get_item(item_id)
+            item = get_item(item_id, user_id=user_id)
             if not item:
                 continue
 
-            analyses = get_item_analyses(item_id)
+            analyses = get_item_analyses(item_id, user_id=user_id)
 
             items.append({
                 "item_id": item_id,
@@ -1218,8 +1292,9 @@ async def save_golden_entry(entry: GoldenAnalysisEntry):
         Dict with status and updated count
     """
     try:
-        # Fetch item to get original_filename
-        item = get_item(entry.item_id)
+        # Fetch item to get original_filename (golden dataset uses default user)
+        user_id = "default"  # Golden dataset is single-tenant
+        item = get_item(entry.item_id, user_id=user_id)
         if not item:
             raise HTTPException(status_code=404, detail=f"Item {entry.item_id} not found")
 
@@ -1249,7 +1324,7 @@ async def get_golden_status():
     Returns:
         Dict with total items, reviewed items, and progress percentage
     """
-    from database import get_db
+    from database_sqlite import get_db
 
     try:
         with get_db() as conn:

@@ -9,7 +9,7 @@ import pytest
 from unittest.mock import patch, MagicMock
 from sqlalchemy.exc import OperationalError
 
-from database.connection import (
+from database_orm.connection import (
     init_connection,
     get_engine,
     get_session,
@@ -18,7 +18,7 @@ from database.connection import (
     _get_database_url,
     _get_database_url_from_parameter_store,
 )
-from database.models import Base, Item
+from database_orm.models import Base, Item
 
 
 class TestDatabaseURL:

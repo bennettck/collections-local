@@ -20,8 +20,8 @@ import boto3
 import llm
 
 # Import database modules
-from database.connection import init_connection, get_session
-from database.models import Analysis
+from database_orm.connection import init_connection, get_session
+from database_orm.models import Analysis
 
 # Setup logging
 logger = logging.getLogger()

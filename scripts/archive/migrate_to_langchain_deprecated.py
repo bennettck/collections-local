@@ -1,5 +1,13 @@
 #!/usr/bin/env python3
 """
+DEPRECATED: Migration script to build Chroma vector stores.
+
+This script has been replaced by PostgreSQL-based vector storage.
+ChromaDB is no longer used in this project.
+
+Kept for reference only. Do not use in new code.
+---
+
 Migration script to build Chroma vector stores.
 
 This script:
@@ -11,6 +19,13 @@ Note: BM25 search uses SQLite FTS5 directly (no separate indexing required)
 Usage:
     python scripts/migrate_to_langchain.py [--batch-size 128] [--skip-test]
 """
+
+import warnings
+warnings.warn(
+    "migrate_to_langchain.py is deprecated. ChromaDB has been replaced by PGVector.",
+    DeprecationWarning,
+    stacklevel=2
+)
 
 import sys
 import os

@@ -1,7 +1,7 @@
 import re
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
-from database import database_context
+from database_sqlite_legacy import database_context
 
 
 class DatabaseRoutingMiddleware(BaseHTTPMiddleware):

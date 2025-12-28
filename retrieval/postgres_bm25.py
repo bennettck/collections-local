@@ -9,7 +9,6 @@ import logging
 import json
 import os
 from typing import List, Optional, Dict, Any
-import boto3
 import psycopg2
 from psycopg2.extras import RealDictCursor
 
@@ -53,42 +52,9 @@ class PostgresBM25Retriever(BaseRetriever):
 
         # Load connection string if not provided
         if not self.connection_string:
-            if self.use_parameter_store:
-                self.connection_string = self._load_connection_string_from_parameter_store(
-                    self.parameter_name
-                )
-            else:
-                self.connection_string = os.getenv("POSTGRES_CONNECTION_STRING")
-                if not self.connection_string:
-                    raise ValueError(
-                        "No connection string provided. Set POSTGRES_CONNECTION_STRING "
-                        "environment variable or enable use_parameter_store"
-                    )
-
-    def _load_connection_string_from_parameter_store(self, parameter_name: str) -> str:
-        """Load PostgreSQL connection string from AWS Systems Manager Parameter Store.
-
-        Args:
-            parameter_name: Parameter Store parameter name
-
-        Returns:
-            Connection string
-
-        Raises:
-            Exception: If parameter cannot be retrieved
-        """
-        try:
-            ssm = boto3.client('ssm')
-            response = ssm.get_parameter(
-                Name=parameter_name,
-                WithDecryption=True
-            )
-            connection_string = response['Parameter']['Value']
-            logger.info(f"Loaded connection string from Parameter Store: {parameter_name}")
-            return connection_string
-        except Exception as e:
-            logger.error(f"Failed to load connection string from Parameter Store: {e}")
-            raise
+            # Use shared connection management from database_orm.connection
+            from database_orm.connection import get_connection_string
+            self.connection_string = get_connection_string()
 
     @traceable(name="postgres_bm25_retrieval", run_type="retriever")
     def _get_relevant_documents(
