@@ -10,7 +10,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import IntegrityError
 
-from database.models import Base, Item, Analysis, Embedding
+from database_orm.models import Base, Item, Analysis, Embedding
 
 
 @pytest.fixture

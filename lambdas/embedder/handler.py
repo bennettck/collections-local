@@ -19,8 +19,8 @@ import boto3
 import embeddings
 
 # Import database modules
-from database.connection import init_connection, get_session
-from database.models import Analysis, Embedding
+from database_orm.connection import init_connection, get_session
+from database_orm.models import Analysis, Embedding
 
 # Setup logging
 logger = logging.getLogger()

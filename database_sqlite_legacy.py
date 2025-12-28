@@ -1,3 +1,24 @@
+"""
+DEPRECATED: Legacy SQLite database implementation.
+
+This module is deprecated and maintained only for local development compatibility.
+For production use, see database_sqlalchemy.py which provides:
+- PostgreSQL support via SQLAlchemy
+- Multi-tenancy via user_id parameter
+- Better connection pooling
+- JSONB support for analysis data
+
+This file will be removed in a future version.
+"""
+
+import warnings
+warnings.warn(
+    "database_sqlite_legacy is deprecated. Use database_sqlalchemy for new code. "
+    "This module is only for local development without PostgreSQL.",
+    DeprecationWarning,
+    stacklevel=2
+)
+
 import sqlite3
 import os
 import json

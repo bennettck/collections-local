@@ -9,7 +9,6 @@ import logging
 import json
 import os
 from typing import List, Optional, Dict, Any
-import boto3
 
 from langchain_postgres import PGVector
 from langchain_postgres.vectorstores import PGVector as PGVectorStore
@@ -52,16 +51,10 @@ class PGVectorStoreManager:
         self.embedding_model = embedding_model
 
         # Get connection string
-        if use_parameter_store and not connection_string:
-            connection_string = self._load_connection_string_from_parameter_store(parameter_name)
-        elif not connection_string:
-            # Fallback to environment variable
-            connection_string = os.getenv("POSTGRES_CONNECTION_STRING")
-            if not connection_string:
-                raise ValueError(
-                    "No connection string provided. Set POSTGRES_CONNECTION_STRING "
-                    "environment variable or enable use_parameter_store"
-                )
+        if not connection_string:
+            # Use shared connection management from database_orm.connection
+            from database_orm.connection import get_connection_string
+            connection_string = get_connection_string()
 
         self.connection_string = connection_string
 
@@ -88,31 +81,6 @@ class PGVectorStoreManager:
             f"Initialized PGVector store: {collection_name} "
             f"(model={embedding_model}, distance=cosine)"
         )
-
-    def _load_connection_string_from_parameter_store(self, parameter_name: str) -> str:
-        """Load PostgreSQL connection string from AWS Systems Manager Parameter Store.
-
-        Args:
-            parameter_name: Parameter Store parameter name
-
-        Returns:
-            Connection string
-
-        Raises:
-            Exception: If parameter cannot be retrieved
-        """
-        try:
-            ssm = boto3.client('ssm')
-            response = ssm.get_parameter(
-                Name=parameter_name,
-                WithDecryption=True
-            )
-            connection_string = response['Parameter']['Value']
-            logger.info(f"Loaded connection string from Parameter Store: {parameter_name}")
-            return connection_string
-        except Exception as e:
-            logger.error(f"Failed to load connection string from Parameter Store: {e}")
-            raise
 
     def add_documents(
         self,

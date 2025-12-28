@@ -30,8 +30,8 @@ from datetime import datetime, UTC
 # Add parent directory to path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from database.connection import init_connection, get_session, close_connection
-from database.models import Analysis, Embedding
+from database_orm.connection import init_connection, get_session, close_connection
+from database_orm.models import Analysis, Embedding
 from sqlalchemy import text, select
 from dotenv import load_dotenv
 
