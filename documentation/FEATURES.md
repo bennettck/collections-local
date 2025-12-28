@@ -32,10 +32,14 @@ Upload Image → S3 Storage → Image Processor → AI Analysis → Database Sto
 #### BM25 Full-Text Search
 **Best for**: Exact keyword matching, abbreviations
 
+**Implementation**: PostgresBM25Retriever (custom LangChain retriever)
+
 **How it works**:
 - PostgreSQL tsvector with GIN index
+- ts_rank for BM25-style relevance scoring
 - Weighted fields (summary: 3x, headline: 2x, text: 2x)
 - Boolean operators support (AND, OR, NOT)
+- User and category filtering
 - Fast execution (~2-10ms)
 
 **Example**:
@@ -56,10 +60,14 @@ Upload Image → S3 Storage → Image Processor → AI Analysis → Database Sto
 #### Vector Semantic Search
 **Best for**: Conceptual queries, synonyms, related topics
 
+**Implementation**: VectorOnlyRetriever (custom LangChain retriever)
+
 **How it works**:
 - Voyage AI embeddings (voyage-3.5-lite, 512 dimensions)
-- pgvector with IVFFlat index
+- PGVector extension with IVFFlat index
 - Cosine similarity scoring
+- Configurable similarity threshold filtering
+- User and category metadata filtering
 - Execution time (~80-100ms)
 
 **Example**:
@@ -80,11 +88,15 @@ Upload Image → S3 Storage → Image Processor → AI Analysis → Database Sto
 #### Hybrid Search (Recommended)
 **Best for**: Production use, general queries
 
+**Implementation**: PostgresHybridRetriever (custom LangChain retriever)
+
 **How it works**:
-- Combines BM25 + Vector search
-- Reciprocal Rank Fusion (RRF) algorithm
-- Weighted: 30% BM25, 70% Vector
-- RRF constant c=15
+- Combines PostgresBM25Retriever + VectorOnlyRetriever
+- Reciprocal Rank Fusion (RRF) algorithm using LangChain's EnsembleRetriever
+- Optimized weights: 30% BM25, 70% Vector
+- RRF constant c=15 (optimized for sensitivity)
+- Deduplication by item_id
+- User and category filtering on both retrievers
 - Execution time (~110-140ms)
 
 **Example**:
@@ -339,19 +351,28 @@ Bot: "Tofuya Ukai is a traditional Japanese restaurant beneath Tokyo Tower..."
 |---------|-----------|----------------|
 | Image Upload | ✅ | ✅ |
 | AI Analysis | ✅ | ✅ (Event-driven) |
-| BM25 Search | ✅ | ✅ |
-| Vector Search | ✅ (SQLite-vec) | ✅ (pgvector) |
+| BM25 Search | ✅ (PostgreSQL) | ✅ (PostgreSQL) |
+| Vector Search | ✅ (SQLite-vec*) | ✅ (pgvector) |
 | Hybrid Search | ✅ | ✅ |
 | Agentic Search | ✅ | ✅ |
-| Chat (LangGraph) | ✅ (SQLite) | ✅ (DynamoDB) |
+| Chat (LangGraph) | ✅ (SQLite*) | ✅ (DynamoDB) |
 | Multi-Tenancy | ❌ | ✅ |
 | Authentication | ❌ | ✅ (Cognito) |
 | Event Processing | ❌ | ✅ |
 | Golden Dataset | ✅ | ❌ |
 | Database Routing | ✅ | ❌ |
 
+**Note**: *SQLite is deprecated for local development (compatibility only). Use PostgreSQL for production-like testing.
+
 ---
 
-**Last Updated**: 2025-12-27
-**Version**: 1.0
+**Last Updated**: 2025-12-28
+**Version**: 2.0
 **Environment**: AWS Production
+
+### Changelog
+- **v2.0 (2025-12-28)**: Updated to reflect consolidated PostgreSQL architecture
+  - Clarified SQLite deprecation status
+  - Updated BM25 search to use PostgreSQL (not SQLite)
+  - Added note about custom retrievers
+- **v1.0 (2025-12-27)**: Initial feature documentation

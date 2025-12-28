@@ -1,11 +1,18 @@
 """
-LangChain-based retrieval implementations for Collections Local API.
+DEPRECATED: Legacy LangChain retrievers for SQLite/ChromaDB.
 
-Provides BM25 and Vector retrievers that wrap existing database functions
-while conforming to LangChain's BaseRetriever interface for evaluation.
+For PostgreSQL backends, use:
+- retrieval.postgres_bm25.PostgresBM25Retriever
+- retrieval.hybrid_retriever.PostgresHybridRetriever
+- retrieval.hybrid_retriever.VectorOnlyRetriever
+
+These classes are kept for backward compatibility with local development
+using SQLite/ChromaDB. Production deployments should use PostgreSQL retrievers.
 """
 
 import logging
+import warnings
+import os
 from typing import List, Optional
 
 from langchain_core.retrievers import BaseRetriever
@@ -18,6 +25,15 @@ import database
 import embeddings
 
 logger = logging.getLogger(__name__)
+
+# Issue deprecation warning in PostgreSQL mode
+if os.getenv("DB_SECRET_ARN") or os.getenv("DATABASE_URL", "").startswith("postgresql"):
+    warnings.warn(
+        "langchain_retrievers.py is deprecated for PostgreSQL deployments. "
+        "Use postgres_bm25.PostgresBM25Retriever and hybrid_retriever.PostgresHybridRetriever instead.",
+        DeprecationWarning,
+        stacklevel=2
+    )
 
 
 class BM25LangChainRetriever(BaseRetriever):
@@ -114,12 +130,12 @@ class BM25LangChainRetriever(BaseRetriever):
 
 
 class VectorLangChainRetriever(BaseRetriever):
-    """LangChain retriever using Chroma vector store."""
+    """LangChain retriever using vector store."""
 
     top_k: int = 10
     category_filter: Optional[str] = None
     min_similarity_score: float = 0.0
-    chroma_manager: Optional[object] = None  # ChromaVectorStoreManager instance
+    vector_store: Optional[object] = None  # Vector store manager instance
 
     @traceable(name="vector_retrieval", run_type="retriever")
     def _get_relevant_documents(
@@ -128,10 +144,10 @@ class VectorLangChainRetriever(BaseRetriever):
         *,
         run_manager: Optional[CallbackManagerForRetrieverRun] = None
     ) -> List[Document]:
-        """Execute vector search using Chroma and return as LangChain Documents."""
+        """Execute vector search and return as LangChain Documents."""
         try:
-            if not self.chroma_manager:
-                logger.error("Chroma manager not provided to VectorLangChainRetriever")
+            if not self.vector_store:
+                logger.error("Vector store not provided to VectorLangChainRetriever")
                 return []
 
             # Build filter dict for category filtering
@@ -139,8 +155,8 @@ class VectorLangChainRetriever(BaseRetriever):
             if self.category_filter:
                 filter_dict = {"category": self.category_filter}
 
-            # Use Chroma's similarity_search_with_score for threshold filtering
-            results = self.chroma_manager.vectorstore.similarity_search_with_score(
+            # Use vector store's similarity_search_with_score for threshold filtering
+            results = self.vector_store.vectorstore.similarity_search_with_score(
                 query,
                 k=self.top_k,
                 filter=filter_dict
@@ -149,7 +165,7 @@ class VectorLangChainRetriever(BaseRetriever):
             # Filter by similarity threshold and add scores to metadata
             documents = []
             for doc, distance in results:
-                # Convert distance to similarity (Chroma returns cosine distance)
+                # Convert distance to similarity (cosine distance)
                 similarity = 1.0 - distance
 
                 if similarity >= self.min_similarity_score:
@@ -161,7 +177,7 @@ class VectorLangChainRetriever(BaseRetriever):
             return documents
 
         except Exception as e:
-            logger.error(f"Chroma vector retrieval failed: {e}")
+            logger.error(f"Vector retrieval failed: {e}")
             return []
 
 class HybridLangChainRetriever(BaseRetriever):
@@ -179,7 +195,7 @@ class HybridLangChainRetriever(BaseRetriever):
     category_filter: Optional[str] = None
     min_relevance_score: float = -1.0        # For BM25
     min_similarity_score: float = 0.0        # For vector
-    chroma_manager: Optional[object] = None  # ChromaVectorStoreManager instance
+    vector_store: Optional[object] = None    # Vector store manager instance
     rrf_c: int = 15                          # RRF constant (optimized for sensitivity)
 
     @traceable(name="hybrid_retrieval", run_type="retriever")
@@ -195,12 +211,12 @@ class HybridLangChainRetriever(BaseRetriever):
             min_relevance_score=self.min_relevance_score
         )
 
-        # Create vector retriever with Chroma
+        # Create vector retriever
         vector_retriever = VectorLangChainRetriever(
             top_k=self.vector_top_k,
             category_filter=self.category_filter,
             min_similarity_score=self.min_similarity_score,
-            chroma_manager=self.chroma_manager
+            vector_store=self.vector_store
         )
 
         # Create ensemble retriever with RRF

@@ -6,19 +6,15 @@ dependencies to verify:
 - Session lifecycle management
 - Conversation state persistence
 - Multi-turn context handling
-- Cleanup and expiration logic
 """
 
 import pytest
-import sqlite3
-import tempfile
-import os
-from datetime import datetime, timedelta
+from datetime import datetime
 from unittest.mock import Mock, patch, MagicMock
 
 # Check if langgraph is available
 try:
-    from langgraph.checkpoint.sqlite import SqliteSaver
+    from langgraph.checkpoint.base import CheckpointTuple
     HAS_LANGGRAPH = True
 except ImportError:
     HAS_LANGGRAPH = False
@@ -43,163 +39,115 @@ requires_pydantic = pytest.mark.skipif(
 
 @requires_langgraph
 class TestConversationManager:
-    """Unit tests for ConversationManager."""
+    """Unit tests for ConversationManager (DynamoDB-based)."""
 
     @pytest.fixture
-    def temp_db_path(self):
-        """Create a temporary database file."""
-        fd, path = tempfile.mkstemp(suffix='.db')
-        os.close(fd)
-        yield path
-        # Cleanup
-        if os.path.exists(path):
-            os.remove(path)
-        # Also remove WAL files if present
-        for suffix in ['-wal', '-shm']:
-            wal_path = path + suffix
-            if os.path.exists(wal_path):
-                os.remove(wal_path)
+    def mock_dynamodb_saver(self):
+        """Create a mock DynamoDBSaver."""
+        with patch('chat.conversation_manager.DynamoDBSaver') as mock:
+            saver_instance = MagicMock()
+            mock.return_value = saver_instance
+            yield saver_instance
 
     @pytest.fixture
-    def conversation_manager(self, temp_db_path):
-        """Create a ConversationManager with temp database."""
+    def conversation_manager(self, mock_dynamodb_saver):
+        """Create a ConversationManager with mocked DynamoDB."""
         from chat.conversation_manager import ConversationManager
-        return ConversationManager(db_path=temp_db_path)
+        return ConversationManager(
+            table_name="test-checkpoints",
+            ttl_hours=24,
+            region_name="us-east-1",
+            user_id="test-user"
+        )
 
-    def test_init_creates_database(self, temp_db_path):
-        """Test that initialization creates the database file."""
+    def test_init_sets_parameters(self, mock_dynamodb_saver):
+        """Test that initialization sets parameters correctly."""
         from chat.conversation_manager import ConversationManager
-        manager = ConversationManager(db_path=temp_db_path)
+        manager = ConversationManager(
+            table_name="my-table",
+            ttl_hours=48,
+            region_name="us-west-2",
+            user_id="user123"
+        )
 
-        assert os.path.exists(temp_db_path)
+        assert manager.table_name == "my-table"
+        assert manager.ttl_hours == 48
+        assert manager.region_name == "us-west-2"
+        assert manager.user_id == "user123"
 
-        # Verify tables exist
-        conn = sqlite3.connect(temp_db_path)
-        cursor = conn.cursor()
-        cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
-        tables = {row[0] for row in cursor.fetchall()}
-        conn.close()
-
-        assert 'chat_sessions' in tables
-
-    def test_get_thread_config_creates_session(self, conversation_manager):
-        """Test that get_thread_config creates a new session."""
+    def test_get_thread_config_returns_correct_format(self, conversation_manager):
+        """Test that get_thread_config returns correct config structure."""
         session_id = "test-session-123"
         config = conversation_manager.get_thread_config(session_id)
 
-        assert config["configurable"]["thread_id"] == f"session_{session_id}"
+        assert "configurable" in config
+        assert "thread_id" in config["configurable"]
+        # Thread ID format: {user_id}#{session_id}
+        assert config["configurable"]["thread_id"] == "test-user#test-session-123"
 
-        # Verify session was created
-        session_info = conversation_manager.get_session_info(session_id)
-        assert session_info is not None
-        assert session_info["session_id"] == session_id
-        assert session_info["message_count"] == 1
-
-    def test_get_thread_config_updates_existing_session(self, conversation_manager):
-        """Test that get_thread_config updates existing session."""
-        session_id = "test-session-456"
-
-        # First call creates session
-        conversation_manager.get_thread_config(session_id)
-        info1 = conversation_manager.get_session_info(session_id)
-        assert info1["message_count"] == 1
-
-        # Second call updates message count
-        conversation_manager.get_thread_config(session_id)
-        info2 = conversation_manager.get_session_info(session_id)
-        assert info2["message_count"] == 2
-
-    def test_list_sessions_returns_sessions(self, conversation_manager):
-        """Test that list_sessions returns created sessions."""
-        # Create some sessions
-        for i in range(3):
-            conversation_manager.get_thread_config(f"session-{i}")
-
-        sessions = conversation_manager.list_sessions()
-
-        assert len(sessions) == 3
-        session_ids = {s["session_id"] for s in sessions}
-        assert session_ids == {"session-0", "session-1", "session-2"}
-
-    def test_list_sessions_respects_limit(self, conversation_manager):
-        """Test that list_sessions respects the limit parameter."""
-        for i in range(10):
-            conversation_manager.get_thread_config(f"session-{i}")
-
-        sessions = conversation_manager.list_sessions(limit=5)
-        assert len(sessions) == 5
-
-    def test_delete_session_removes_session(self, conversation_manager):
-        """Test that delete_session removes the session."""
-        session_id = "to-delete"
-        conversation_manager.get_thread_config(session_id)
-
-        assert conversation_manager.get_session_info(session_id) is not None
-
-        deleted = conversation_manager.delete_session(session_id)
-
-        assert deleted is True
-        assert conversation_manager.get_session_info(session_id) is None
-
-    def test_delete_nonexistent_session_returns_false(self, conversation_manager):
-        """Test that deleting nonexistent session returns False."""
-        deleted = conversation_manager.delete_session("nonexistent")
-        assert deleted is False
-
-    def test_cleanup_expired_sessions(self, conversation_manager, temp_db_path):
-        """Test that cleanup removes expired sessions."""
-        # Create a session
-        session_id = "old-session"
-        conversation_manager.get_thread_config(session_id)
-
-        # Manually backdate the session
-        conn = sqlite3.connect(temp_db_path)
-        old_time = (datetime.utcnow() - timedelta(hours=5)).isoformat()
-        conn.execute(
-            "UPDATE chat_sessions SET last_activity = ? WHERE session_id = ?",
-            (old_time, session_id)
-        )
-        conn.commit()
-        conn.close()
-
-        # Cleanup with 4-hour TTL should remove it
-        removed = conversation_manager.cleanup_expired_sessions(ttl_hours=4)
-
-        assert removed == 1
-        assert conversation_manager.get_session_info(session_id) is None
-
-    def test_cleanup_keeps_recent_sessions(self, conversation_manager):
-        """Test that cleanup keeps recent sessions."""
-        session_id = "recent-session"
-        conversation_manager.get_thread_config(session_id)
-
-        # Cleanup with 4-hour TTL should keep it
-        removed = conversation_manager.cleanup_expired_sessions(ttl_hours=4)
-
-        assert removed == 0
-        assert conversation_manager.get_session_info(session_id) is not None
-
-    def test_get_stats_returns_correct_counts(self, conversation_manager):
-        """Test that get_stats returns correct statistics."""
-        # Create some sessions
-        for i in range(3):
-            conversation_manager.get_thread_config(f"session-{i}")
-            # Add extra messages
-            conversation_manager.get_thread_config(f"session-{i}")
-
-        stats = conversation_manager.get_stats()
-
-        assert stats["total_sessions"] == 3
-        assert stats["total_messages"] == 6  # 3 sessions * 2 messages each
-
-    def test_checkpointer_creation(self, conversation_manager):
-        """Test that get_checkpointer returns a valid checkpointer."""
+    def test_get_checkpointer_creates_dynamodb_saver(self, mock_dynamodb_saver, conversation_manager):
+        """Test that get_checkpointer creates and returns DynamoDBSaver."""
         checkpointer = conversation_manager.get_checkpointer()
 
         assert checkpointer is not None
-        # Checkpointer should be reused
+
+    def test_get_checkpointer_reuses_instance(self, mock_dynamodb_saver, conversation_manager):
+        """Test that get_checkpointer returns the same instance."""
+        checkpointer1 = conversation_manager.get_checkpointer()
         checkpointer2 = conversation_manager.get_checkpointer()
-        assert checkpointer is checkpointer2
+
+        assert checkpointer1 is checkpointer2
+
+    def test_get_session_info_returns_info_when_exists(self, mock_dynamodb_saver, conversation_manager):
+        """Test that get_session_info returns session info when checkpoint exists."""
+        # Mock checkpoint tuple
+        mock_checkpoint = MagicMock()
+        mock_checkpoint.checkpoint = {
+            "channel_values": {
+                "messages": [MagicMock(), MagicMock(), MagicMock()]
+            },
+            "ts": "2024-01-01T00:00:00Z"
+        }
+        mock_dynamodb_saver.get_tuple.return_value = mock_checkpoint
+
+        info = conversation_manager.get_session_info("test-session")
+
+        assert info is not None
+        assert info["session_id"] == "test-session"
+        assert info["message_count"] == 3
+
+    def test_get_session_info_returns_none_when_not_exists(self, mock_dynamodb_saver, conversation_manager):
+        """Test that get_session_info returns None when session doesn't exist."""
+        mock_dynamodb_saver.get_tuple.return_value = None
+
+        info = conversation_manager.get_session_info("nonexistent")
+
+        assert info is None
+
+    def test_delete_session_calls_checkpointer(self, mock_dynamodb_saver, conversation_manager):
+        """Test that delete_session calls delete_thread on checkpointer."""
+        result = conversation_manager.delete_session("test-session")
+
+        mock_dynamodb_saver.delete_thread.assert_called_once_with("test-user#test-session")
+        assert result is True
+
+    def test_delete_session_handles_error(self, mock_dynamodb_saver, conversation_manager):
+        """Test that delete_session returns False on error."""
+        mock_dynamodb_saver.delete_thread.side_effect = Exception("DynamoDB error")
+
+        result = conversation_manager.delete_session("test-session")
+
+        assert result is False
+
+    def test_get_stats_returns_configuration(self, conversation_manager):
+        """Test that get_stats returns configuration info."""
+        stats = conversation_manager.get_stats()
+
+        assert stats["backend"] == "dynamodb"
+        assert stats["table_name"] == "test-checkpoints"
+        assert stats["ttl_hours"] == 24
+        assert stats["region"] == "us-east-1"
+        assert stats["user_id"] == "test-user"
 
 
 @requires_langgraph
@@ -207,8 +155,8 @@ class TestAgenticChatOrchestrator:
     """Unit tests for AgenticChatOrchestrator."""
 
     @pytest.fixture
-    def mock_chroma_manager(self):
-        """Create a mock ChromaVectorStoreManager."""
+    def mock_vector_store(self):
+        """Create a mock vector store manager."""
         return MagicMock()
 
     @pytest.fixture
@@ -217,7 +165,7 @@ class TestAgenticChatOrchestrator:
         manager = MagicMock()
         manager.get_checkpointer.return_value = MagicMock()
         manager.get_thread_config.return_value = {
-            "configurable": {"thread_id": "session_test"}
+            "configurable": {"thread_id": "user#test"}
         }
         manager.get_session_info.return_value = {
             "session_id": "test",
@@ -227,28 +175,29 @@ class TestAgenticChatOrchestrator:
         }
         return manager
 
-    def test_orchestrator_initialization(self, mock_chroma_manager, mock_conversation_manager):
+    def test_orchestrator_initialization(self, mock_vector_store, mock_conversation_manager):
         """Test that orchestrator initializes correctly."""
-        with patch('chat.agentic_chat.HybridLangChainRetriever'):
+        with patch('chat.agentic_chat.PostgresHybridRetriever'):
             with patch('chat.agentic_chat.ChatAnthropic'):
                 with patch('chat.agentic_chat.create_react_agent'):
                     from chat.agentic_chat import AgenticChatOrchestrator
 
                     orchestrator = AgenticChatOrchestrator(
-                        chroma_manager=mock_chroma_manager,
+                        vector_store=mock_vector_store,
                         conversation_manager=mock_conversation_manager,
+                        user_id="test-user",
                         top_k=5,
                         category_filter="Food"
                     )
 
                     assert orchestrator.top_k == 5
                     assert orchestrator.category_filter == "Food"
-                    assert orchestrator.chroma_manager == mock_chroma_manager
+                    assert orchestrator.vector_store == mock_vector_store
                     assert orchestrator.conversation_manager == mock_conversation_manager
 
-    def test_chat_returns_response(self, mock_chroma_manager, mock_conversation_manager):
+    def test_chat_returns_response(self, mock_vector_store, mock_conversation_manager):
         """Test that chat returns a properly formatted response."""
-        with patch('chat.agentic_chat.HybridLangChainRetriever') as mock_retriever:
+        with patch('chat.agentic_chat.PostgresHybridRetriever') as mock_retriever:
             with patch('chat.agentic_chat.ChatAnthropic'):
                 with patch('chat.agentic_chat.create_react_agent') as mock_agent:
                     # Setup mock agent to return events
@@ -266,8 +215,9 @@ class TestAgenticChatOrchestrator:
                     from chat.agentic_chat import AgenticChatOrchestrator
 
                     orchestrator = AgenticChatOrchestrator(
-                        chroma_manager=mock_chroma_manager,
-                        conversation_manager=mock_conversation_manager
+                        vector_store=mock_vector_store,
+                        conversation_manager=mock_conversation_manager,
+                        user_id="test-user"
                     )
 
                     result = orchestrator.chat(
@@ -283,9 +233,9 @@ class TestAgenticChatOrchestrator:
                     assert "conversation_turn" in result
                     assert "response_time_ms" in result
 
-    def test_chat_uses_session_id(self, mock_chroma_manager, mock_conversation_manager):
+    def test_chat_uses_session_id(self, mock_vector_store, mock_conversation_manager):
         """Test that chat correctly uses the session_id."""
-        with patch('chat.agentic_chat.HybridLangChainRetriever'):
+        with patch('chat.agentic_chat.PostgresHybridRetriever'):
             with patch('chat.agentic_chat.ChatAnthropic'):
                 with patch('chat.agentic_chat.create_react_agent') as mock_agent:
                     mock_graph = MagicMock()
@@ -301,8 +251,9 @@ class TestAgenticChatOrchestrator:
                     from chat.agentic_chat import AgenticChatOrchestrator
 
                     orchestrator = AgenticChatOrchestrator(
-                        chroma_manager=mock_chroma_manager,
-                        conversation_manager=mock_conversation_manager
+                        vector_store=mock_vector_store,
+                        conversation_manager=mock_conversation_manager,
+                        user_id="test-user"
                     )
 
                     orchestrator.chat(message="Hello", session_id="unique-session")
@@ -310,16 +261,17 @@ class TestAgenticChatOrchestrator:
                     # Verify get_thread_config was called with session_id
                     mock_conversation_manager.get_thread_config.assert_called_with("unique-session")
 
-    def test_clear_session_delegates_to_manager(self, mock_chroma_manager, mock_conversation_manager):
+    def test_clear_session_delegates_to_manager(self, mock_vector_store, mock_conversation_manager):
         """Test that clear_session delegates to conversation manager."""
-        with patch('chat.agentic_chat.HybridLangChainRetriever'):
+        with patch('chat.agentic_chat.PostgresHybridRetriever'):
             with patch('chat.agentic_chat.ChatAnthropic'):
                 with patch('chat.agentic_chat.create_react_agent'):
                     from chat.agentic_chat import AgenticChatOrchestrator
 
                     orchestrator = AgenticChatOrchestrator(
-                        chroma_manager=mock_chroma_manager,
-                        conversation_manager=mock_conversation_manager
+                        vector_store=mock_vector_store,
+                        conversation_manager=mock_conversation_manager,
+                        user_id="test-user"
                     )
 
                     orchestrator.clear_session("test-session")

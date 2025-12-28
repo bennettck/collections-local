@@ -69,11 +69,11 @@ class SearchRequest(BaseModel):
         description="Natural language search query",
         examples=["What restaurants are in Tokyo?", "Show me beauty products", "perfume"]
     )
-    search_type: Literal["bm25-lc", "vector-lc", "hybrid-lc", "agentic"] = Field(
-        "bm25-lc",
-        description="Search type: 'bm25-lc' for LangChain BM25 full-text search, "
-                    "'vector-lc' for LangChain semantic search, "
-                    "'hybrid-lc' for LangChain hybrid search with RRF (Recommended), "
+    search_type: Literal["bm25", "vector", "hybrid", "agentic"] = Field(
+        "hybrid",
+        description="Search type: 'bm25' for PostgreSQL BM25 full-text search, "
+                    "'vector' for PGVector semantic search, "
+                    "'hybrid' for hybrid search with RRF (Recommended), "
                     "'agentic' for AI agent-driven iterative search with reasoning"
     )
     top_k: int = Field(

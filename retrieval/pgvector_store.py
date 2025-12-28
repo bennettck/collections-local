@@ -9,12 +9,13 @@ import logging
 import json
 import os
 from typing import List, Optional, Dict, Any
-import boto3
 
 from langchain_postgres import PGVector
 from langchain_postgres.vectorstores import PGVector as PGVectorStore
 from langchain_voyageai import VoyageAIEmbeddings
 from langchain_core.documents import Document
+
+from utils.document_builder import create_flat_document, create_langchain_document
 
 logger = logging.getLogger(__name__)
 
@@ -52,16 +53,10 @@ class PGVectorStoreManager:
         self.embedding_model = embedding_model
 
         # Get connection string
-        if use_parameter_store and not connection_string:
-            connection_string = self._load_connection_string_from_parameter_store(parameter_name)
-        elif not connection_string:
-            # Fallback to environment variable
-            connection_string = os.getenv("POSTGRES_CONNECTION_STRING")
-            if not connection_string:
-                raise ValueError(
-                    "No connection string provided. Set POSTGRES_CONNECTION_STRING "
-                    "environment variable or enable use_parameter_store"
-                )
+        if not connection_string:
+            # Use shared connection management from database_orm.connection
+            from database_orm.connection import get_connection_string
+            connection_string = get_connection_string()
 
         self.connection_string = connection_string
 
@@ -88,31 +83,6 @@ class PGVectorStoreManager:
             f"Initialized PGVector store: {collection_name} "
             f"(model={embedding_model}, distance=cosine)"
         )
-
-    def _load_connection_string_from_parameter_store(self, parameter_name: str) -> str:
-        """Load PostgreSQL connection string from AWS Systems Manager Parameter Store.
-
-        Args:
-            parameter_name: Parameter Store parameter name
-
-        Returns:
-            Connection string
-
-        Raises:
-            Exception: If parameter cannot be retrieved
-        """
-        try:
-            ssm = boto3.client('ssm')
-            response = ssm.get_parameter(
-                Name=parameter_name,
-                WithDecryption=True
-            )
-            connection_string = response['Parameter']['Value']
-            logger.info(f"Loaded connection string from Parameter Store: {parameter_name}")
-            return connection_string
-        except Exception as e:
-            logger.error(f"Failed to load connection string from Parameter Store: {e}")
-            raise
 
     def add_documents(
         self,
@@ -251,7 +221,10 @@ class PGVectorStoreManager:
 
     @staticmethod
     def create_flat_document(raw_response: dict, item_id: str, filename: str) -> Document:
-        """Create flat document (no field weighting) - matches ChromaDB approach.
+        """Create flat document using shared document builder utility.
+
+        This is a compatibility wrapper that maintains the original API while using
+        the centralized document builder from utils.document_builder.
 
         Args:
             raw_response: Analysis data dictionary
@@ -261,49 +234,23 @@ class PGVectorStoreManager:
         Returns:
             LangChain Document with flat content and metadata
         """
-        parts = []
-
-        # Extract all fields once (same order as ChromaDB)
-        parts.append(raw_response.get("summary", ""))
-        parts.append(raw_response.get("headline", ""))
-        parts.append(raw_response.get("category", ""))
-        parts.append(" ".join(raw_response.get("subcategories", [])))
-
-        # Image details
-        image_details = raw_response.get("image_details", {})
-        if isinstance(image_details.get("extracted_text"), list):
-            parts.append(" ".join(image_details.get("extracted_text", [])))
-        else:
-            parts.append(image_details.get("extracted_text", ""))
-
-        parts.append(image_details.get("key_interest", ""))
-        parts.append(" ".join(image_details.get("themes", [])))
-        parts.append(" ".join(image_details.get("objects", [])))
-        parts.append(" ".join(image_details.get("emotions", [])))
-        parts.append(" ".join(image_details.get("vibes", [])))
-
-        # Media metadata
-        media_metadata = raw_response.get("media_metadata", {})
-        parts.append(" ".join(media_metadata.get("location_tags", [])))
-        parts.append(" ".join(media_metadata.get("hashtags", [])))
-
-        # Join all parts, filtering out empty strings
-        content = " ".join([p for p in parts if p and p.strip()])
-
-        # Create Document with metadata
-        # Note: user_id should be added by caller if needed
-        return Document(
-            page_content=content,
-            metadata={
-                "item_id": item_id,
-                "category": raw_response.get("category"),
-                "headline": raw_response.get("headline"),
-                "summary": raw_response.get("summary"),
-                "image_url": f"/images/{filename}",
-                "filename": filename,
-                "raw_response": json.dumps(raw_response)  # Store as JSON string
-            }
+        # Create document using shared utility
+        doc = create_langchain_document(
+            raw_response=raw_response,
+            item_id=item_id,
+            filename=filename,
+            category=raw_response.get("category")
         )
+
+        # Add PGVector-specific metadata
+        doc.metadata.update({
+            "headline": raw_response.get("headline"),
+            "summary": raw_response.get("summary"),
+            "image_url": f"/images/{filename}",
+            "raw_response": json.dumps(raw_response)  # Store as JSON string
+        })
+
+        return doc
 
     def build_index(self, batch_size: int = 128) -> int:
         """Build index from database analyses.

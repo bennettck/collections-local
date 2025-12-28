@@ -38,7 +38,7 @@ class ConversationManager:
         use_pooling: bool = False,
         pool_size: int = 10,
     ):
-        """Initialize the conversation manager.
+        """Initialize conversation manager.
 
         Args:
             connection_string: PostgreSQL connection string. If None, uses
@@ -83,22 +83,17 @@ class ConversationManager:
         return self._checkpointer
 
     def get_thread_config(self, session_id: str) -> Dict[str, Any]:
-        """Get LangGraph config for a conversation thread.
-
-        Creates a multi-tenant thread ID: {user_id}#{session_id}
+        """Get LangGraph config with multi-tenant thread ID: {user_id}#{session_id}
 
         Args:
-            session_id: Client-provided session identifier.
+            session_id: Session identifier
 
         Returns:
-            Config dict for LangGraph invoke() with thread_id.
+            Config dict for LangGraph with thread_id
         """
-        # Multi-tenant thread ID format
-        thread_id = f"{self.user_id}#{session_id}"
-
         return {
             "configurable": {
-                "thread_id": thread_id,
+                "thread_id": f"{self.user_id}#{session_id}",
             }
         }
 
@@ -106,20 +101,16 @@ class ConversationManager:
         """Get session metadata.
 
         Args:
-            session_id: Session identifier.
+            session_id: Session identifier
 
         Returns:
-            Dict with basic session info or None if not found.
+            Dict with session info or None if not found
         """
         try:
             config = self.get_thread_config(session_id)
-            checkpointer = self.get_checkpointer()
-
-            # Try to get the latest checkpoint
-            checkpoint_tuple = checkpointer.get_tuple(config)
+            checkpoint_tuple = self.get_checkpointer().get_tuple(config)
 
             if checkpoint_tuple:
-                # Count messages in checkpoint state
                 state = checkpoint_tuple.checkpoint.get("channel_values", {})
                 messages = state.get("messages", [])
 
@@ -155,24 +146,19 @@ class ConversationManager:
         return []
 
     def delete_session(self, session_id: str) -> bool:
-        """Delete a session and its checkpoints.
+        """Delete session and all its checkpoints.
 
         Args:
-            session_id: Session identifier.
+            session_id: Session identifier
 
         Returns:
-            True if session was deleted, False if not found.
+            True if deleted successfully
         """
         try:
             thread_id = f"{self.user_id}#{session_id}"
-            checkpointer = self.get_checkpointer()
-
-            # Delete all checkpoints for this thread
-            checkpointer.delete_thread(thread_id)
-
+            self.get_checkpointer().delete_thread(thread_id)
             logger.info(f"Deleted session {session_id} for user {self.user_id}")
             return True
-
         except Exception as e:
             logger.error(f"Failed to delete session: {e}")
             return False
@@ -245,7 +231,7 @@ class ConversationManager:
         return 0
 
     def get_stats(self) -> Dict[str, Any]:
-        """Get conversation manager statistics.
+        """Get basic configuration info.
 
         Returns:
             Dict with configuration info.

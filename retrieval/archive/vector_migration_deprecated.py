@@ -1,4 +1,20 @@
 """
+DEPRECATED: Migration helper to migrate from ChromaDB to PostgreSQL PGVector.
+
+This module was used for the one-time migration from ChromaDB to PGVector.
+The migration has been completed and this module is no longer needed.
+
+Kept for reference only. Do not use in new code.
+"""
+
+import warnings
+warnings.warn(
+    "vector_migration is deprecated. Migration to PGVector is complete.",
+    DeprecationWarning,
+    stacklevel=2
+)
+
+"""
 Migration helper to migrate from ChromaDB to PostgreSQL PGVector.
 
 Reads data from existing ChromaDB collections and imports into PostgreSQL.

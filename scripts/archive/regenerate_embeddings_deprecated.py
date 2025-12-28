@@ -1,5 +1,15 @@
 #!/usr/bin/env python3
 """
+DEPRECATED: Regenerate embeddings using Chroma vector store.
+
+This script has been replaced by PostgreSQL-based vector storage.
+ChromaDB is no longer used in this project.
+
+Use scripts/regenerate_pgvector.py instead (if available).
+
+Kept for reference only. Do not use in new code.
+---
+
 Regenerate embeddings using Chroma vector store.
 
 This script rebuilds Chroma indexes for prod and/or golden databases.
@@ -9,6 +19,13 @@ can be used to rebuild the Chroma index from existing SQLite data.
 Usage:
     python scripts/regenerate_embeddings.py [--database prod|golden|both]
 """
+
+import warnings
+warnings.warn(
+    "regenerate_embeddings.py is deprecated. ChromaDB has been replaced by PGVector.",
+    DeprecationWarning,
+    stacklevel=2
+)
 
 import argparse
 import sys

@@ -246,6 +246,31 @@ def get_session() -> Generator[Session, None, None]:
         session.close()
 
 
+def get_connection_string() -> str:
+    """
+    Get database connection string for use by retrievers and other components.
+
+    Returns the connection string using the same priority as init_connection():
+    1. DATABASE_URL environment variable (direct override for testing)
+    2. AWS Secrets Manager (via DB_SECRET_ARN env var) - RECOMMENDED FOR PRODUCTION
+    3. AWS Parameter Store (via PARAMETER_STORE_DB_URL env var) - DEPRECATED
+    4. Fallback to SQLite for local development
+
+    This is the single source of truth for connection string management.
+
+    Returns:
+        PostgreSQL/SQLite connection string
+
+    Raises:
+        ValueError: If no connection string can be determined
+
+    Example:
+        >>> conn_str = get_connection_string()
+        >>> # Use in retrievers or other components
+    """
+    return _get_database_url()
+
+
 def close_connection():
     """
     Close all database connections and dispose of the engine.
