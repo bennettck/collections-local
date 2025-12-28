@@ -52,7 +52,7 @@ from database import (
 )
 from llm import analyze_image, get_trace_id, get_resolved_provider_and_model
 from embeddings import generate_embedding, _create_embedding_document, DEFAULT_EMBEDDING_MODEL, get_embedding_dimensions
-from retrieval.chroma_manager import ChromaVectorStoreManager
+from retrieval.pgvector_store import PGVectorStoreManager
 from config.langchain_config import get_chroma_config, DEFAULT_EMBEDDING_MODEL as LANGCHAIN_EMBEDDING_MODEL
 from config.retriever_config import get_voyage_config
 
@@ -128,37 +128,37 @@ async def lifespan(app: FastAPI):
         else:
             print(f"Golden index ready: {status['doc_count']} documents")
 
-    # Initialize Chroma vector store for PRODUCTION database
+    # Initialize PGVector store for PRODUCTION database
     global prod_chroma_manager
 
-    print("Initializing Chroma vector store (PROD)...")
+    print("Initializing PGVector store (PROD)...")
     try:
         prod_chroma_config = get_chroma_config("prod")
-        prod_chroma_manager = ChromaVectorStoreManager(
-            database_path=PROD_DATABASE_PATH,
-            persist_directory=prod_chroma_config["persist_directory"],
+        prod_chroma_manager = PGVectorStoreManager(
             collection_name=prod_chroma_config["collection_name"],
-            embedding_model=LANGCHAIN_EMBEDDING_MODEL
+            embedding_model=LANGCHAIN_EMBEDDING_MODEL,
+            use_parameter_store=True,  # Load from AWS Parameter Store in Lambda
+            parameter_name="/collections-local/rds/connection-string"
         )
-        print(f"✓ Chroma vector store (PROD) initialized (distance=cosine)")
+        print(f"✓ PGVector store (PROD) initialized (distance=cosine)")
     except Exception as e:
-        print(f"⚠️  Failed to initialize Chroma (PROD): {e}")
+        print(f"⚠️  Failed to initialize PGVector (PROD): {e}")
 
-    # Initialize Chroma vector store for GOLDEN database
+    # Initialize PGVector store for GOLDEN database
     global golden_chroma_manager
 
-    print("Initializing Chroma vector store (GOLDEN)...")
+    print("Initializing PGVector store (GOLDEN)...")
     try:
         golden_chroma_config = get_chroma_config("golden")
-        golden_chroma_manager = ChromaVectorStoreManager(
-            database_path=GOLDEN_DATABASE_PATH,
-            persist_directory=golden_chroma_config["persist_directory"],
-            collection_name=golden_chroma_config["collection_name"],
-            embedding_model=LANGCHAIN_EMBEDDING_MODEL
+        golden_chroma_manager = PGVectorStoreManager(
+            collection_name=golden_chroma_config["collection_name"] + "_golden",
+            embedding_model=LANGCHAIN_EMBEDDING_MODEL,
+            use_parameter_store=True,  # Load from AWS Parameter Store in Lambda
+            parameter_name="/collections-local/rds/connection-string"
         )
-        print(f"✓ Chroma vector store (GOLDEN) initialized (distance=cosine)")
+        print(f"✓ PGVector store (GOLDEN) initialized (distance=cosine)")
     except Exception as e:
-        print(f"⚠️  Failed to initialize Chroma (GOLDEN): {e}")
+        print(f"⚠️  Failed to initialize PGVector (GOLDEN): {e}")
 
     # Initialize conversation manager for multi-turn chat
     global conversation_manager
@@ -208,12 +208,13 @@ app.add_middleware(
     golden_db_path=GOLDEN_DATABASE_PATH
 )
 
-# Mount static files
-app.mount("/static", StaticFiles(directory="static"), name="static")
+# Mount static files (only if directory exists - not needed in Lambda)
+if os.path.exists("static"):
+    app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 # Helper function for database routing
-def get_current_chroma_manager(request: Request) -> ChromaVectorStoreManager:
+def get_current_chroma_manager(request: Request) -> PGVectorStoreManager:
     """Get the appropriate Chroma manager based on request context."""
     host = request.headers.get("host", "")
     if "golden" in host:
@@ -277,29 +278,37 @@ def _analysis_to_response(analysis: dict) -> AnalysisResponse:
 @app.get("/health")
 async def health_check(request: Request):
     """Health check endpoint with database context info."""
-    from database import database_context
-
     # Get active database from request state (set by middleware)
     active_db = getattr(request.state, "active_database", "unknown")
     db_path = getattr(request.state, "db_path", "unknown")
 
-    # Get item counts from both databases
-    with database_context(PROD_DATABASE_PATH):
-        prod_count = count_items()
+    # Try to get item counts from databases (may fail in Lambda environment)
+    database_stats = None
+    try:
+        from database import database_context
+        with database_context(PROD_DATABASE_PATH):
+            prod_count = count_items()
+        with database_context(GOLDEN_DATABASE_PATH):
+            golden_count = count_items()
+        database_stats = {
+            "production": {"items": prod_count},
+            "golden": {"items": golden_count}
+        }
+    except Exception as e:
+        # Database access not available (e.g., in Lambda) - skip stats
+        logger.debug(f"Database stats unavailable: {e}")
 
-    with database_context(GOLDEN_DATABASE_PATH):
-        golden_count = count_items()
-
-    return {
+    response = {
         "status": "healthy",
         "timestamp": datetime.utcnow().isoformat(),
         "active_database": active_db,
         "active_db_path": db_path,
-        "database_stats": {
-            "production": {"items": prod_count},
-            "golden": {"items": golden_count}
-        }
     }
+
+    if database_stats:
+        response["database_stats"] = database_stats
+
+    return response
 
 
 # Item Endpoints
@@ -1003,17 +1012,17 @@ async def vector_index_status():
 
 @app.post("/langchain-index/rebuild-chroma")
 async def rebuild_chroma_index(database: str = Query("prod", description="Database type: prod or golden")):
-    """Rebuild Chroma vector index for specified database."""
+    """Rebuild PGVector index for specified database."""
     global prod_chroma_manager, golden_chroma_manager
 
     try:
         if database == "golden":
             chroma_config = get_chroma_config("golden")
-            golden_chroma_manager = ChromaVectorStoreManager(
-                database_path=GOLDEN_DATABASE_PATH,
-                persist_directory=chroma_config["persist_directory"],
-                collection_name=chroma_config["collection_name"],
-                embedding_model=LANGCHAIN_EMBEDDING_MODEL
+            golden_chroma_manager = PGVectorStoreManager(
+                collection_name=chroma_config["collection_name"] + "_golden",
+                embedding_model=LANGCHAIN_EMBEDDING_MODEL,
+                use_parameter_store=True,
+                parameter_name="/collections-local/rds/connection-string"
             )
             golden_chroma_manager.delete_collection()
             num_docs = golden_chroma_manager.build_index(batch_size=128)
@@ -1021,15 +1030,15 @@ async def rebuild_chroma_index(database: str = Query("prod", description="Databa
                 "status": "success",
                 "database": "golden",
                 "num_documents": num_docs,
-                "message": "Chroma index rebuilt successfully"
+                "message": "PGVector index rebuilt successfully"
             }
         else:
             chroma_config = get_chroma_config("prod")
-            prod_chroma_manager = ChromaVectorStoreManager(
-                database_path=PROD_DATABASE_PATH,
-                persist_directory=chroma_config["persist_directory"],
+            prod_chroma_manager = PGVectorStoreManager(
                 collection_name=chroma_config["collection_name"],
-                embedding_model=LANGCHAIN_EMBEDDING_MODEL
+                embedding_model=LANGCHAIN_EMBEDDING_MODEL,
+                use_parameter_store=True,
+                parameter_name="/collections-local/rds/connection-string"
             )
             prod_chroma_manager.delete_collection()
             num_docs = prod_chroma_manager.build_index(batch_size=128)
@@ -1037,12 +1046,12 @@ async def rebuild_chroma_index(database: str = Query("prod", description="Databa
                 "status": "success",
                 "database": "prod",
                 "num_documents": num_docs,
-                "message": "Chroma index rebuilt successfully"
+                "message": "PGVector index rebuilt successfully"
             }
     except Exception as e:
         raise HTTPException(
             status_code=500,
-            detail=f"Failed to rebuild Chroma index: {str(e)}"
+            detail=f"Failed to rebuild PGVector index: {str(e)}"
         )
 
 

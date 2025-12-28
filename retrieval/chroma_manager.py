@@ -12,7 +12,11 @@ import os
 from typing import List, Optional, Dict, Any
 from contextlib import contextmanager
 
-from langchain_chroma import Chroma
+try:
+    from langchain_chroma import Chroma
+except ImportError:
+    # langchain_chroma not available - ChromaDB support disabled
+    Chroma = None
 from langchain_voyageai import VoyageAIEmbeddings
 from langchain_core.documents import Document
 

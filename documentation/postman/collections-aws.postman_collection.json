@@ -20,6 +20,133 @@
       "name": "Authentication",
       "item": [
         {
+          "name": "User Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.AuthenticationResult) {",
+                  "        pm.environment.set('id_token', jsonData.AuthenticationResult.IdToken);",
+                  "        pm.environment.set('access_token', jsonData.AuthenticationResult.AccessToken);",
+                  "        pm.environment.set('refresh_token', jsonData.AuthenticationResult.RefreshToken);",
+                  "        console.log('Tokens saved to environment variables');",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Amz-Target",
+                "value": "AWSCognitoIdentityProviderService.InitiateAuth",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/x-amz-json-1.1",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"AuthFlow\": \"USER_PASSWORD_AUTH\",\n  \"ClientId\": \"{{cognito_client_id}}\",\n  \"AuthParameters\": {\n    \"USERNAME\": \"testuser1@example.com\",\n    \"PASSWORD\": \"Collections2025!\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://cognito-idp.{{aws_region}}.amazonaws.com/",
+              "protocol": "https",
+              "host": [
+                "cognito-idp",
+                "{{aws_region}}",
+                "amazonaws",
+                "com"
+              ],
+              "path": [
+                ""
+              ]
+            },
+            "description": "## User Login\n\nAuthenticate with AWS Cognito to get JWT tokens.\n\n### Request Body\n\n```json\n{\n  \"AuthFlow\": \"USER_PASSWORD_AUTH\",\n  \"ClientId\": \"1tce0ddbsbm254e9r9p4jar1em\",\n  \"AuthParameters\": {\n    \"USERNAME\": \"testuser1@example.com\",\n    \"PASSWORD\": \"Collections2025!\"\n  }\n}\n```\n\n### Test Credentials\n\n- testuser1@example.com / Collections2025!\n- testuser2@example.com / Collections2025!\n- demo@example.com / Collections2025!\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"AuthenticationResult\": {\n    \"IdToken\": \"eyJra...\",\n    \"AccessToken\": \"eyJra...\",\n    \"RefreshToken\": \"eyJra...\",\n    \"TokenType\": \"Bearer\",\n    \"ExpiresIn\": 3600\n  },\n  \"ChallengeParameters\": {}\n}\n```\n\n### Response Fields\n\n| Field | Type | Description |\n|-------|------|-------------|\n| `IdToken` | string | JWT ID token - **Use this for API authentication** |\n| `AccessToken` | string | OAuth 2.0 access token |\n| `RefreshToken` | string | Use to get new tokens without re-authenticating |\n| `TokenType` | string | Always \"Bearer\" |\n| `ExpiresIn` | integer | Token lifetime in seconds (3600 = 1 hour) |\n\n### Automatic Setup\n\nTokens are automatically saved to environment variables:\n- `id_token` - Use for API calls\n- `access_token`\n- `refresh_token`\n\n### Token Expiration\n\n- Tokens expire after 1 hour\n- Use the \"Refresh Token\" endpoint to get new tokens without re-authenticating"
+          },
+          "response": []
+        },
+        {
+          "name": "Refresh Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    var jsonData = pm.response.json();",
+                  "    if (jsonData.AuthenticationResult) {",
+                  "        pm.environment.set('id_token', jsonData.AuthenticationResult.IdToken);",
+                  "        pm.environment.set('access_token', jsonData.AuthenticationResult.AccessToken);",
+                  "        console.log('Tokens refreshed and saved to environment variables');",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-Amz-Target",
+                "value": "AWSCognitoIdentityProviderService.InitiateAuth",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/x-amz-json-1.1",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"AuthFlow\": \"REFRESH_TOKEN_AUTH\",\n  \"ClientId\": \"{{cognito_client_id}}\",\n  \"AuthParameters\": {\n    \"REFRESH_TOKEN\": \"{{refresh_token}}\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://cognito-idp.{{aws_region}}.amazonaws.com/",
+              "protocol": "https",
+              "host": [
+                "cognito-idp",
+                "{{aws_region}}",
+                "amazonaws",
+                "com"
+              ],
+              "path": [
+                ""
+              ]
+            },
+            "description": "## Refresh Token\n\nGet new JWT tokens using a refresh token without re-authenticating.\n\n### Request Body\n\n```json\n{\n  \"AuthFlow\": \"REFRESH_TOKEN_AUTH\",\n  \"ClientId\": \"1tce0ddbsbm254e9r9p4jar1em\",\n  \"AuthParameters\": {\n    \"REFRESH_TOKEN\": \"your-refresh-token\"\n  }\n}\n```\n\n### Response\n\n**Status Code:** `200 OK`\n\n```json\n{\n  \"AuthenticationResult\": {\n    \"IdToken\": \"eyJra...\",\n    \"AccessToken\": \"eyJra...\",\n    \"TokenType\": \"Bearer\",\n    \"ExpiresIn\": 3600\n  },\n  \"ChallengeParameters\": {}\n}\n```\n\n### Notes\n\n- Refresh tokens do not expire (unless explicitly revoked)\n- New tokens are automatically saved to environment variables\n- Refreshed tokens are valid for 1 hour"
+          },
+          "response": []
+        },
+        {
           "name": "Get JWT Token (via AWS CLI)",
           "request": {
             "auth": {
@@ -35,12 +162,12 @@
               "raw": "",
               "host": []
             },
-            "description": "## Get JWT Token\n\nAuthenticate with AWS Cognito to get a JWT token.\n\n**Note:** This request cannot be executed in Postman directly. Use the AWS CLI command shown in the body.\n\n### Command\n\n```bash\naws cognito-idp initiate-auth \\\n  --auth-flow USER_PASSWORD_AUTH \\\n  --client-id 1tce0ddbsbm254e9r9p4jar1em \\\n  --auth-parameters USERNAME=testuser1@example.com,PASSWORD=Collections2025! \\\n  --region us-east-1\n```\n\n### Response\n\n```json\n{\n  \"AuthenticationResult\": {\n    \"IdToken\": \"eyJra...\",\n    \"AccessToken\": \"eyJra...\",\n    \"RefreshToken\": \"eyJra...\",\n    \"TokenType\": \"Bearer\",\n    \"ExpiresIn\": 3600\n  }\n}\n```\n\n### Setup\n\n1. Copy the `IdToken` value\n2. Set it as the `id_token` variable in your Postman environment\n3. All subsequent requests will use this token automatically\n\n### Token Expiration\n\n- Tokens expire after 1 hour\n- Use the RefreshToken to get new tokens without re-authenticating"
+            "description": "## Get JWT Token (AWS CLI Alternative)\n\nAuthenticate with AWS Cognito using the AWS CLI.\n\n**Note:** This is an alternative to the \"User Login\" endpoint above. Use the \"User Login\" endpoint for direct Postman execution.\n\n### Command\n\n```bash\naws cognito-idp initiate-auth \\\n  --auth-flow USER_PASSWORD_AUTH \\\n  --client-id 1tce0ddbsbm254e9r9p4jar1em \\\n  --auth-parameters USERNAME=testuser1@example.com,PASSWORD=Collections2025! \\\n  --region us-east-1\n```\n\n### Response\n\n```json\n{\n  \"AuthenticationResult\": {\n    \"IdToken\": \"eyJra...\",\n    \"AccessToken\": \"eyJra...\",\n    \"RefreshToken\": \"eyJra...\",\n    \"TokenType\": \"Bearer\",\n    \"ExpiresIn\": 3600\n  }\n}\n```\n\n### Setup\n\n1. Copy the `IdToken` value\n2. Set it as the `id_token` variable in your Postman environment\n3. All subsequent requests will use this token automatically"
           },
           "response": []
         }
       ],
-      "description": "Authentication with AWS Cognito to obtain JWT tokens."
+      "description": "Authentication with AWS Cognito to obtain JWT tokens. Use the 'User Login' endpoint to authenticate directly from Postman."
     },
     {
       "name": "Health",

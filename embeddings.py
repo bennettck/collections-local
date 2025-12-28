@@ -13,16 +13,21 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
-# Initialize VoyageAI client with built-in retry support
-VOYAGE_API_KEY = os.getenv("VOYAGE_API_KEY")
-if not VOYAGE_API_KEY:
-    raise ValueError("VOYAGE_API_KEY environment variable not set")
+# Lazy-initialized VoyageAI client
+_voyage_client = None
 
-# Client with automatic retry on rate limits and transient errors
-voyage_client = voyageai.Client(
-    api_key=VOYAGE_API_KEY,
-    max_retries=3  # Built-in exponential backoff for 429 and 5xx errors
-)
+def _get_voyage_client():
+    """Get or create VoyageAI client (lazy initialization)."""
+    global _voyage_client
+    if _voyage_client is None:
+        api_key = os.getenv("VOYAGE_API_KEY")
+        if not api_key:
+            raise ValueError("VOYAGE_API_KEY environment variable not set")
+        _voyage_client = voyageai.Client(
+            api_key=api_key,
+            max_retries=3  # Built-in exponential backoff for 429 and 5xx errors
+        )
+    return _voyage_client
 
 # Model configuration
 DEFAULT_EMBEDDING_MODEL = os.getenv("VOYAGE_EMBEDDING_MODEL", "voyage-3.5-lite")
@@ -67,7 +72,7 @@ def generate_embedding(
         raise ValueError("Cannot embed empty text")
 
     try:
-        result = voyage_client.embed(
+        result = _get_voyage_client().embed(
             texts=[text],
             model=model,
             input_type="document",  # Use "document" for indexing
@@ -105,7 +110,7 @@ def generate_query_embedding(
         raise ValueError("Cannot embed empty query")
 
     try:
-        result = voyage_client.embed(
+        result = _get_voyage_client().embed(
             texts=[query],
             model=model,
             input_type="query",  # Use "query" for searching
@@ -158,7 +163,7 @@ def generate_embeddings_batch(
         batch = texts[i:i + batch_size]
 
         try:
-            result = voyage_client.embed(
+            result = _get_voyage_client().embed(
                 texts=batch,
                 model=model,
                 input_type="document",

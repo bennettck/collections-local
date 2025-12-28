@@ -12,16 +12,10 @@ except ImportError:
     # dotenv not available (Lambda environment) - use system environment variables
     pass
 
-from anthropic import Anthropic
-from openai import OpenAI
 from langchain_anthropic import ChatAnthropic
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage, SystemMessage
 from langsmith import traceable, get_current_run_tree, Client as LangSmithClient
-
-# Initialize legacy clients (kept for backward compatibility if needed)
-anthropic_client = Anthropic()
-openai_client = OpenAI()
 
 # Setup logging
 logger = logging.getLogger(__name__)

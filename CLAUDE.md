@@ -9,6 +9,7 @@ IMPORTANT: Library-first development. Use foundational libraries and their prove
 - langgraph
 - fastapi
 - uvicorn
+- boto3
 
 ## Workflow Rules
 - Test during development AND at feature completion — tests must exercise actual code paths

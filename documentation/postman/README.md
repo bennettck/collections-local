@@ -33,7 +33,12 @@ This directory contains Postman collections and environments for testing the Col
 1. Import `collections-aws.postman_collection.json`
 2. Import `collections-aws.postman_environment.json`
 3. Select the "Collections AWS (Dev)" environment
-4. Get a JWT token using the AWS CLI:
+4. **Option A - Direct Authentication in Postman (Recommended)**:
+   - Open the "Authentication" folder in the collection
+   - Run the "User Login" request
+   - The tokens will be automatically saved to your environment
+   - Test with the Health Check endpoint
+5. **Option B - Using AWS CLI**:
    ```bash
    aws cognito-idp initiate-auth \
      --auth-flow USER_PASSWORD_AUTH \
@@ -41,9 +46,9 @@ This directory contains Postman collections and environments for testing the Col
      --auth-parameters USERNAME=testuser1@example.com,PASSWORD=Collections2025! \
      --region us-east-1
    ```
-5. Copy the `IdToken` from the response
-6. Set it as the `id_token` variable in your Postman environment
-7. Test with the Health Check endpoint
+   - Copy the `IdToken` from the response
+   - Manually set it as the `id_token` variable in your Postman environment
+   - Test with the Health Check endpoint
 
 ## Test Credentials (AWS Only)
 
@@ -78,15 +83,31 @@ This directory contains Postman collections and environments for testing the Col
 - `cognito_user_pool_id`: us-east-1_SGF7r9htD
 - `cognito_client_id`: 1tce0ddbsbm254e9r9p4jar1em
 - `cognito_region`: us-east-1
-- `id_token`: (set after authentication)
-- `access_token`: (set after authentication)
-- `refresh_token`: (set after authentication)
+- `aws_region`: us-east-1
+- `id_token`: (auto-populated by User Login request)
+- `access_token`: (auto-populated by User Login request)
+- `refresh_token`: (auto-populated by User Login request)
 - `item_id`: (auto-populated by tests)
 - `analysis_id`: (auto-populated by tests)
 - `session_id`: (for chat endpoints)
 - `filename`: (for image endpoints)
 
 ## Authentication Flow (AWS)
+
+### Method 1: Direct Authentication in Postman (Recommended)
+
+1. **Login**: Run the "Authentication > User Login" request
+   - The request body contains default test credentials
+   - Tokens are automatically saved to environment variables
+   - `id_token`, `access_token`, and `refresh_token` are set for you
+
+2. **Use Token**: The collection automatically adds `id_token` to the `Authorization: Bearer` header
+
+3. **Refresh Token**: When the token expires (after 1 hour), run the "Authentication > Refresh Token" request
+   - Uses the saved `refresh_token` to get new tokens
+   - Automatically updates `id_token` and `access_token`
+
+### Method 2: Using AWS CLI (Alternative)
 
 1. **Get Token**: Use AWS CLI to authenticate with Cognito
    ```bash
@@ -97,11 +118,9 @@ This directory contains Postman collections and environments for testing the Col
      --region us-east-1
    ```
 
-2. **Set Token**: Copy the `IdToken` and set it as `id_token` in your environment
+2. **Set Token**: Copy the `IdToken` and manually set it as `id_token` in your environment
 
 3. **Use Token**: The collection automatically adds it to the `Authorization: Bearer` header
-
-4. **Refresh Token**: When the token expires (after 1 hour), use the `RefreshToken` to get a new one
 
 ## Collection Features
 
@@ -116,28 +135,35 @@ This directory contains Postman collections and environments for testing the Col
 - Keepalive endpoint
 
 ### AWS Collection
+- **Authentication** - User login and token refresh (direct Postman execution)
 - Health check
 - Items CRUD operations (multi-tenant)
 - Analysis endpoints (event-driven)
 - Search (BM25, Vector, Hybrid, Agentic) - user-scoped
 - Chat endpoints (LangGraph with DynamoDB)
 - Image access (S3 pre-signed URLs)
-- Authentication helper
 
 ## Tips
 
 ### Auto-Save Variables
-Both collections include test scripts that automatically save:
-- `item_id` after uploading an item
-- `analysis_id` after analyzing an item
+Both collections include test scripts that automatically save response data to environment variables:
+- **AWS Collection**:
+  - `id_token`, `access_token`, `refresh_token` after User Login
+  - `item_id` after uploading an item
+  - `analysis_id` after analyzing an item
+- **Local Collection**:
+  - `item_id` after uploading an item
+  - `analysis_id` after analyzing an item
 
-This makes it easy to chain requests together.
+This makes it easy to chain requests together without manual copy-paste.
 
 ### Token Management (AWS)
 - Tokens expire after 1 hour
-- Set `id_token` as a **secret** variable in your environment
-- Clear the token when switching users
-- Use the Python script for easier token management:
+- **Recommended**: Use the "User Login" request in Postman to automatically save tokens
+- When tokens expire, use the "Refresh Token" request to renew them
+- Set `id_token` as a **secret** variable in your environment for security
+- Clear tokens when switching users (delete the values from environment variables)
+- **Alternative**: Use the Python script for token management:
   ```bash
   python scripts/test_api_access.py --token-only
   cat .api-tokens.json | jq -r .IdToken
@@ -149,7 +175,7 @@ This makes it easy to chain requests together.
 1. Upload Item → Analyze Item → Search Collection → View Results
 
 **AWS Deployment:**
-1. Get JWT Token → Upload Item → Wait for Event Processing → Search Collection → View Results
+1. User Login → Upload Item → Wait for Event Processing → Search Collection → View Results
 
 ## Troubleshooting
 

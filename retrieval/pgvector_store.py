@@ -304,3 +304,23 @@ class PGVectorStoreManager:
                 "raw_response": json.dumps(raw_response)  # Store as JSON string
             }
         )
+
+    def build_index(self, batch_size: int = 128) -> int:
+        """Build index from database analyses.
+
+        Note: For PGVector with RDS PostgreSQL, items/analyses should be in PostgreSQL.
+        This is a compatibility stub for the ChromaDB interface.
+        Use manual migrations or populate via API endpoints instead.
+
+        Args:
+            batch_size: Number of documents to process at once (unused)
+
+        Returns:
+            Number of documents indexed (0 for stub)
+        """
+        logger.warning(
+            "build_index() called on PGVectorStoreManager. "
+            "For RDS deployment, populate vector store via API endpoints or migrations. "
+            "Use scripts/migrate/chromadb_to_pgvector.py for migration from ChromaDB."
+        )
+        return 0

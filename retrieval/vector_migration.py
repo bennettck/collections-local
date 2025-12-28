@@ -9,10 +9,15 @@ import json
 from typing import List, Optional, Dict, Any
 from pathlib import Path
 
-from langchain_chroma import Chroma
+try:
+    from langchain_chroma import Chroma
+    import chromadb
+except ImportError:
+    # langchain_chroma/chromadb not available - ChromaDB support disabled
+    Chroma = None
+    chromadb = None
 from langchain_voyageai import VoyageAIEmbeddings
 from langchain_core.documents import Document
-import chromadb
 
 from retrieval.pgvector_store import PGVectorStoreManager
 from retrieval.postgres_bm25 import PostgresBM25Retriever
