@@ -500,9 +500,9 @@ async def analyze_item_endpoint(
         user_id=user_id,
     )
 
-    # Sync to indexes (non-blocking)
+    # Sync to search indexes (non-blocking)
     try:
-        # Real-time FTS5 index sync (SQLite only)
+        # Real-time FTS5 index sync (SQLite for backwards compatibility)
         try:
             search_doc = _create_search_document(result)
             with get_db() as conn:
@@ -518,8 +518,7 @@ async def analyze_item_endpoint(
             # Log but don't fail analysis if FTS5 sync fails
             logger.error(f"Failed to sync FTS5 index for {item_id}: {fts_error}")
 
-        # Real-time vector store sync (langchain-postgres)
-        # This stores the embedding in langchain_pg_embedding table
+        # Real-time vector store sync (langchain-postgres - single source of truth)
         try:
             vector_mgr = get_current_vector_store(http_request)
             item = get_item(item_id, user_id=user_id)
@@ -528,7 +527,7 @@ async def analyze_item_endpoint(
                     item_id=item_id,
                     raw_response=result,
                     filename=item["filename"],
-                    user_id=user_id  # Pass user_id for multi-tenancy
+                    user_id=user_id
                 )
                 logger.info(f"Successfully synced vector store for {item_id}")
             else:

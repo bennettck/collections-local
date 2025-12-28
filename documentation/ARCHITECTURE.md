@@ -662,10 +662,18 @@ User → API Gateway → API Lambda
 
 ---
 
-**Architecture Version**: 1.1
+**Architecture Version**: 2.1
 **Last Updated**: 2025-12-28
 **Environment**: AWS (us-east-1)
 **Status**: Production Ready
 
-**Change Log**:
-- v1.1 (2025-12-28): Migrated from DynamoDB to PostgreSQL for LangGraph checkpoints using `langgraph-checkpoint-postgres`
+### Changelog
+- **v2.1 (2025-12-28)**: Migrated LangGraph checkpoints from DynamoDB to PostgreSQL
+  - Uses `langgraph-checkpoint-postgres` for conversation state
+  - Removes DynamoDB dependency for simplified infrastructure
+  - All application data now consolidated in PostgreSQL
+- **v2.0 (2025-12-28)**: Consolidated PostgreSQL architecture
+  - Added custom PostgreSQL retrievers (Hybrid, BM25, Vector)
+  - Deprecated ChromaDB (replaced with PGVector)
+  - Deprecated SQLite for local dev (PostgreSQL recommended)
+- **v1.0 (2025-12-27)**: Initial production deployment

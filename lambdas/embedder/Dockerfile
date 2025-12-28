@@ -7,7 +7,15 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application code
 COPY handler.py .
 COPY embeddings.py .
-COPY database/ ./database/
+
+# Copy database modules (aliased as database_orm for compatibility)
+COPY database_orm/ ./database_orm/
+
+# Copy utils for document builder
+COPY utils/ ./utils/
+
+# Copy retrieval for PGVectorStoreManager
+COPY retrieval/ ./retrieval/
 
 # Fix permissions for all files
 RUN chmod -R 755 ${LAMBDA_TASK_ROOT}
