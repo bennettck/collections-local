@@ -22,8 +22,8 @@ LANGCHAIN_CONFIG = {
         "dimensions": 1024  # voyage-3.5-lite actual dimension
     },
 
-    # Chroma vector store settings (dual database support)
-    "chroma": {
+    # Vector store settings (dual database support)
+    "vector_store": {
         # Production database
         "persist_directory_prod": os.getenv(
             "CHROMA_PROD_PERSIST_DIRECTORY",
@@ -55,8 +55,8 @@ LANGCHAIN_CONFIG = {
 }
 
 
-def get_chroma_config(database_type: str = "prod") -> dict:
-    """Get Chroma configuration for specific database.
+def get_vector_store_config(database_type: str = "prod") -> dict:
+    """Get vector store configuration for specific database.
 
     Args:
         database_type: Either "prod" or "golden"
@@ -66,13 +66,13 @@ def get_chroma_config(database_type: str = "prod") -> dict:
     """
     if database_type == "golden":
         return {
-            "persist_directory": LANGCHAIN_CONFIG["chroma"]["persist_directory_golden"],
-            "collection_name": LANGCHAIN_CONFIG["chroma"]["collection_name_golden"]
+            "persist_directory": LANGCHAIN_CONFIG["vector_store"]["persist_directory_golden"],
+            "collection_name": LANGCHAIN_CONFIG["vector_store"]["collection_name_golden"]
         }
     else:
         return {
-            "persist_directory": LANGCHAIN_CONFIG["chroma"]["persist_directory_prod"],
-            "collection_name": LANGCHAIN_CONFIG["chroma"]["collection_name_prod"]
+            "persist_directory": LANGCHAIN_CONFIG["vector_store"]["persist_directory_prod"],
+            "collection_name": LANGCHAIN_CONFIG["vector_store"]["collection_name_prod"]
         }
 
 

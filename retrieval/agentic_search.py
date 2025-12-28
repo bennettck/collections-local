@@ -34,7 +34,7 @@ class AgenticSearchOrchestrator:
 
     def __init__(
         self,
-        chroma_manager,
+        vector_store,
         top_k: int = 10,
         category_filter: Optional[str] = None,
         min_relevance_score: float = -1.0,
@@ -43,13 +43,13 @@ class AgenticSearchOrchestrator:
         """Initialize the agentic search orchestrator.
 
         Args:
-            chroma_manager: ChromaVectorStoreManager instance for vector search
+            vector_store: Vector store manager instance for vector search
             top_k: Number of results to return per search
             category_filter: Optional category filter
             min_relevance_score: Minimum BM25 relevance score
             min_similarity_score: Minimum vector similarity score
         """
-        self.chroma_manager = chroma_manager
+        self.vector_store = vector_store
         self.top_k = top_k
         self.category_filter = category_filter
         self.min_relevance_score = min_relevance_score
@@ -74,7 +74,7 @@ class AgenticSearchOrchestrator:
             category_filter=self.category_filter,
             min_relevance_score=self.min_relevance_score,
             min_similarity_score=self.min_similarity_score,
-            chroma_manager=self.chroma_manager
+            vector_store=self.vector_store
         )
 
         # Create the search tool

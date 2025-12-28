@@ -9,16 +9,14 @@ Provides PostgreSQL-based retrieval components:
 from retrieval.pgvector_store import PGVectorStoreManager
 from retrieval.postgres_bm25 import PostgresBM25Retriever
 from retrieval.hybrid_retriever import PostgresHybridRetriever, VectorOnlyRetriever
-from retrieval.vector_migration import VectorMigrationHelper
 
-# Legacy ChromaDB support (to be deprecated)
-from retrieval.chroma_manager import ChromaVectorStoreManager
+# DEPRECATED: ChromaDB support has been removed
+# Legacy imports available in retrieval.archive for reference only
+# Use PGVectorStoreManager instead
 
 __all__ = [
     "PGVectorStoreManager",
     "PostgresBM25Retriever",
     "PostgresHybridRetriever",
     "VectorOnlyRetriever",
-    "VectorMigrationHelper",
-    "ChromaVectorStoreManager",  # Legacy
 ]

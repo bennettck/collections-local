@@ -31,6 +31,9 @@ pandas>=2.0.0
 # Vector search dependencies
 voyageai>=0.2.0
 numpy>=1.24.0
+# DEPRECATED: ChromaDB replaced by PGVector (PostgreSQL extension)
+# chromadb>=0.4.0
+# langchain-chroma>=0.1.0
 # Golden dataset tool dependencies
 scikit-learn>=1.3.0
 # Evaluation script dependencies

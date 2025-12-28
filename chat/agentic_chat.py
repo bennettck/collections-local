@@ -38,7 +38,7 @@ class AgenticChatOrchestrator:
 
     def __init__(
         self,
-        chroma_manager,
+        vector_store,
         conversation_manager: ConversationManager,
         top_k: int = 10,
         category_filter: Optional[str] = None,
@@ -48,14 +48,14 @@ class AgenticChatOrchestrator:
         """Initialize the chat orchestrator.
 
         Args:
-            chroma_manager: ChromaVectorStoreManager for vector search.
+            vector_store: Vector store manager for vector search.
             conversation_manager: ConversationManager for state persistence.
             top_k: Number of results per search.
             category_filter: Optional category filter.
             min_relevance_score: Minimum BM25 score.
             min_similarity_score: Minimum vector similarity score.
         """
-        self.chroma_manager = chroma_manager
+        self.vector_store = vector_store
         self.conversation_manager = conversation_manager
         self.top_k = top_k
         self.category_filter = category_filter
@@ -80,7 +80,7 @@ class AgenticChatOrchestrator:
             category_filter=self.category_filter,
             min_relevance_score=self.min_relevance_score,
             min_similarity_score=self.min_similarity_score,
-            chroma_manager=self.chroma_manager
+            vector_store=self.vector_store
         )
 
         # Create search tool

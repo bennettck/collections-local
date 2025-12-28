@@ -1,5 +1,13 @@
 #!/usr/bin/env python3
 """
+DEPRECATED: Build Chroma vector index from database analyses.
+
+This script has been replaced by PostgreSQL-based vector storage.
+ChromaDB is no longer used in this project.
+
+Kept for reference only. Do not use in new code.
+---
+
 Build Chroma vector index from database analyses.
 
 This script builds a Chroma vector store from the SQLite database.
@@ -8,6 +16,13 @@ Supports both production and golden databases.
 Usage:
     python scripts/build_chroma_index.py [--database prod|golden] [--batch-size 128]
 """
+
+import warnings
+warnings.warn(
+    "build_chroma_index.py is deprecated. ChromaDB has been replaced by PGVector.",
+    DeprecationWarning,
+    stacklevel=2
+)
 
 import sys
 import os

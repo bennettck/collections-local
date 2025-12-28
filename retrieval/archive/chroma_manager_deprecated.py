@@ -1,4 +1,20 @@
 """
+DEPRECATED: ChromaDB vector store manager.
+
+This module has been replaced by pgvector_store.py which uses PostgreSQL
+with the pgvector extension for vector storage.
+
+Kept for reference only. Do not use in new code.
+"""
+
+import warnings
+warnings.warn(
+    "chroma_manager is deprecated. Use pgvector_store.py instead.",
+    DeprecationWarning,
+    stacklevel=2
+)
+
+"""
 Chroma vector store management for Collections Local API.
 
 Provides persistent vector storage using Chroma with VoyageAI embeddings.

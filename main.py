@@ -58,7 +58,7 @@ from database.api import (
 from llm import analyze_image, get_trace_id, get_resolved_provider_and_model
 from embeddings import generate_embedding, _create_embedding_document, DEFAULT_EMBEDDING_MODEL, get_embedding_dimensions
 from retrieval.pgvector_store import PGVectorStoreManager
-from config.langchain_config import get_chroma_config, DEFAULT_EMBEDDING_MODEL as LANGCHAIN_EMBEDDING_MODEL
+from config.langchain_config import get_vector_store_config, DEFAULT_EMBEDDING_MODEL as LANGCHAIN_EMBEDDING_MODEL
 from config.retriever_config import get_voyage_config
 
 # Load environment variables
@@ -107,9 +107,9 @@ ALLOWED_MIME_TYPES = {
     "image/gif",
 }
 
-# Global instances for Chroma vector stores (dual database support)
-prod_chroma_manager = None
-golden_chroma_manager = None
+# Global instances for vector stores (dual database support)
+prod_vector_store = None
+golden_vector_store = None
 
 # Global conversation manager for multi-turn chat
 conversation_manager = None
@@ -149,14 +149,14 @@ async def lifespan(app: FastAPI):
                 rebuild_search_index()
 
     # Initialize PGVector store for PRODUCTION database
-    global prod_chroma_manager
+    global prod_vector_store
 
     # Skip PGVector initialization in Lambda for now (lazy load on first use)
     if not is_lambda:
         try:
-            prod_chroma_config = get_chroma_config("prod")
-            prod_chroma_manager = PGVectorStoreManager(
-                collection_name=prod_chroma_config["collection_name"],
+            prod_vector_config = get_vector_store_config("prod")
+            prod_vector_store = PGVectorStoreManager(
+                collection_name=prod_vector_config["collection_name"],
                 embedding_model=LANGCHAIN_EMBEDDING_MODEL,
                 use_parameter_store=False,  # Use database connection from environment
                 parameter_name=None
@@ -165,12 +165,12 @@ async def lifespan(app: FastAPI):
             logger.error(f"Failed to initialize PGVector (PROD): {e}")
 
         # Initialize PGVector store for GOLDEN database
-        global golden_chroma_manager
+        global golden_vector_store
 
         try:
-            golden_chroma_config = get_chroma_config("golden")
-            golden_chroma_manager = PGVectorStoreManager(
-                collection_name=golden_chroma_config["collection_name"] + "_golden",
+            golden_vector_config = get_vector_store_config("golden")
+            golden_vector_store = PGVectorStoreManager(
+                collection_name=golden_vector_config["collection_name"] + "_golden",
                 embedding_model=LANGCHAIN_EMBEDDING_MODEL,
                 use_parameter_store=False,  # Use database connection from environment
                 parameter_name=None
@@ -228,12 +228,12 @@ if os.path.exists("static"):
 
 
 # Helper function for database routing
-def get_current_chroma_manager(request: Request) -> PGVectorStoreManager:
-    """Get the appropriate Chroma manager based on request context."""
+def get_current_vector_store(request: Request) -> PGVectorStoreManager:
+    """Get the appropriate vector store manager based on request context."""
     host = request.headers.get("host", "")
     if "golden" in host:
-        return golden_chroma_manager
-    return prod_chroma_manager
+        return golden_vector_store
+    return prod_vector_store
 
 
 def _parse_datetime(dt_value) -> datetime:
@@ -543,22 +543,22 @@ async def analyze_item_endpoint(
             # Log but don't fail analysis if FTS5 sync fails
             logger.error(f"Failed to sync FTS5 index for {item_id}: {fts_error}")
 
-        # Real-time Chroma sync
+        # Real-time vector store sync
         try:
-            chroma_mgr = get_current_chroma_manager(http_request)
+            vector_mgr = get_current_vector_store(http_request)
             item = get_item(item_id, user_id=user_id)
             if item:
-                chroma_mgr.add_document(
+                vector_mgr.add_document(
                     item_id=item_id,
                     raw_response=result,
                     filename=item["filename"]
                 )
-                logger.info(f"Successfully synced Chroma vector store for {item_id}")
+                logger.info(f"Successfully synced vector store for {item_id}")
             else:
-                logger.error(f"Cannot sync to Chroma: item {item_id} not found")
-        except Exception as chroma_error:
-            # Log but don't fail analysis if Chroma sync fails
-            logger.error(f"Failed to sync to Chroma for {item_id}: {chroma_error}", exc_info=True)
+                logger.error(f"Cannot sync to vector store: item {item_id} not found")
+        except Exception as vector_error:
+            # Log but don't fail analysis if vector store sync fails
+            logger.error(f"Failed to sync to vector store for {item_id}: {vector_error}", exc_info=True)
 
     except Exception as e:
         # Log error but don't fail the analysis
@@ -611,11 +611,11 @@ async def search_collection(search_request: SearchRequest, request: Request):
         # Agentic search with LangChain agent
         from retrieval.agentic_search import AgenticSearchOrchestrator
 
-        chroma_mgr = get_current_chroma_manager(request)
+        vector_mgr = get_current_vector_store(request)
 
         # Create orchestrator
         orchestrator = AgenticSearchOrchestrator(
-            chroma_manager=chroma_mgr,
+            vector_store=vector_mgr,
             top_k=search_request.top_k,
             category_filter=search_request.category_filter,
             min_relevance_score=search_request.min_relevance_score,
@@ -639,10 +639,10 @@ async def search_collection(search_request: SearchRequest, request: Request):
         score_type = "hybrid_rrf"
 
     elif search_request.search_type == "hybrid-lc":
-        # Hybrid retrieval with RRF (LangChain BM25 + Chroma Vector)
+        # Hybrid retrieval with RRF (LangChain BM25 + Vector)
         from retrieval.langchain_retrievers import HybridLangChainRetriever
 
-        chroma_mgr = get_current_chroma_manager(request)
+        vector_mgr = get_current_vector_store(request)
 
         retriever = HybridLangChainRetriever(
             top_k=search_request.top_k,
@@ -654,7 +654,7 @@ async def search_collection(search_request: SearchRequest, request: Request):
             category_filter=search_request.category_filter,
             min_relevance_score=search_request.min_relevance_score,
             min_similarity_score=search_request.min_similarity_score,
-            chroma_manager=chroma_mgr
+            vector_store=vector_mgr
         )
 
         documents = retriever.invoke(search_request.query)
@@ -670,13 +670,13 @@ async def search_collection(search_request: SearchRequest, request: Request):
         # LangChain Vector retrieval
         from retrieval.langchain_retrievers import VectorLangChainRetriever
 
-        chroma_mgr = get_current_chroma_manager(request)
+        vector_mgr = get_current_vector_store(request)
 
         retriever = VectorLangChainRetriever(
             top_k=search_request.top_k,
             category_filter=search_request.category_filter,
             min_similarity_score=search_request.min_similarity_score,
-            chroma_manager=chroma_mgr
+            vector_store=vector_mgr
         )
 
         documents = retriever.invoke(search_request.query)
@@ -862,11 +862,11 @@ async def chat_endpoint(chat_request: ChatRequest, request: Request):
     from chat.agentic_chat import AgenticChatOrchestrator
     from datetime import datetime
 
-    chroma_mgr = get_current_chroma_manager(request)
+    vector_mgr = get_current_vector_store(request)
 
     # Create orchestrator with conversation manager
     orchestrator = AgenticChatOrchestrator(
-        chroma_manager=chroma_mgr,
+        vector_store=vector_mgr,
         conversation_manager=conversation_manager,
         top_k=chat_request.top_k,
         category_filter=chat_request.category_filter,
@@ -936,10 +936,10 @@ async def get_chat_history(session_id: str, request: Request):
     from chat.agentic_chat import AgenticChatOrchestrator
     from datetime import datetime
 
-    chroma_mgr = get_current_chroma_manager(request)
+    vector_mgr = get_current_vector_store(request)
 
     orchestrator = AgenticChatOrchestrator(
-        chroma_manager=chroma_mgr,
+        vector_store=vector_mgr,
         conversation_manager=conversation_manager
     )
 
@@ -1068,19 +1068,19 @@ async def vector_index_status():
 @app.post("/langchain-index/rebuild-chroma")
 async def rebuild_chroma_index(database: str = Query("prod", description="Database type: prod or golden")):
     """Rebuild PGVector index for specified database."""
-    global prod_chroma_manager, golden_chroma_manager
+    global prod_vector_store, golden_vector_store
 
     try:
         if database == "golden":
-            chroma_config = get_chroma_config("golden")
-            golden_chroma_manager = PGVectorStoreManager(
-                collection_name=chroma_config["collection_name"] + "_golden",
+            vector_config = get_vector_store_config("golden")
+            golden_vector_store = PGVectorStoreManager(
+                collection_name=vector_config["collection_name"] + "_golden",
                 embedding_model=LANGCHAIN_EMBEDDING_MODEL,
                 use_parameter_store=True,
                 parameter_name="/collections-local/rds/connection-string"
             )
-            golden_chroma_manager.delete_collection()
-            num_docs = golden_chroma_manager.build_index(batch_size=128)
+            golden_vector_store.delete_collection()
+            num_docs = golden_vector_store.build_index(batch_size=128)
             return {
                 "status": "success",
                 "database": "golden",
@@ -1088,15 +1088,15 @@ async def rebuild_chroma_index(database: str = Query("prod", description="Databa
                 "message": "PGVector index rebuilt successfully"
             }
         else:
-            chroma_config = get_chroma_config("prod")
-            prod_chroma_manager = PGVectorStoreManager(
-                collection_name=chroma_config["collection_name"],
+            vector_config = get_vector_store_config("prod")
+            prod_vector_store = PGVectorStoreManager(
+                collection_name=vector_config["collection_name"],
                 embedding_model=LANGCHAIN_EMBEDDING_MODEL,
                 use_parameter_store=True,
                 parameter_name="/collections-local/rds/connection-string"
             )
-            prod_chroma_manager.delete_collection()
-            num_docs = prod_chroma_manager.build_index(batch_size=128)
+            prod_vector_store.delete_collection()
+            num_docs = prod_vector_store.build_index(batch_size=128)
             return {
                 "status": "success",
                 "database": "prod",
@@ -1115,15 +1115,15 @@ async def langchain_index_status():
     """Get status of LangChain indexes for both databases."""
     return {
         "prod": {
-            "chroma": {
-                "status": "loaded" if prod_chroma_manager else "not_loaded",
-                "stats": prod_chroma_manager.get_collection_stats() if prod_chroma_manager else None
+            "vector_store": {
+                "status": "loaded" if prod_vector_store else "not_loaded",
+                "stats": prod_vector_store.get_collection_stats() if prod_vector_store else None
             }
         },
         "golden": {
-            "chroma": {
-                "status": "loaded" if golden_chroma_manager else "not_loaded",
-                "stats": golden_chroma_manager.get_collection_stats() if golden_chroma_manager else None
+            "vector_store": {
+                "status": "loaded" if golden_vector_store else "not_loaded",
+                "stats": golden_vector_store.get_collection_stats() if golden_vector_store else None
             }
         }
     }
