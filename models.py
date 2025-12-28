@@ -111,7 +111,7 @@ class SearchRequest(BaseModel):
             "examples": [
                 {
                     "query": "What restaurants are in Tokyo?",
-                    "search_type": "bm25-lc",
+                    "search_type": "bm25",
                     "top_k": 10,
                     "category_filter": None,
                     "min_relevance_score": -1.0,
@@ -121,7 +121,7 @@ class SearchRequest(BaseModel):
                 },
                 {
                     "query": "Japanese beauty products and perfume",
-                    "search_type": "vector-lc",
+                    "search_type": "vector",
                     "top_k": 5,
                     "category_filter": None,
                     "min_relevance_score": -1.0,
@@ -131,7 +131,7 @@ class SearchRequest(BaseModel):
                 },
                 {
                     "query": "traditional architecture",
-                    "search_type": "hybrid-lc",
+                    "search_type": "hybrid",
                     "top_k": 10,
                     "category_filter": "Travel",
                     "min_relevance_score": -1.0,
@@ -162,11 +162,9 @@ class SearchResult(BaseModel):
 class SearchResponse(BaseModel):
     """Response model for search and Q&A."""
     query: str
-    search_type: Literal["bm25", "vector", "bm25-lc", "vector-lc", "hybrid", "hybrid-lc", "agentic"] = Field(
+    search_type: Literal["bm25", "vector", "hybrid", "agentic"] = Field(
         description="Search method used: 'bm25' for keyword search, 'vector' for semantic search, "
-                    "'bm25-lc' for LangChain BM25, 'vector-lc' for LangChain vector, "
-                    "'hybrid' for native hybrid RRF, 'hybrid-lc' for LangChain hybrid RRF, "
-                    "'agentic' for AI agent-driven iterative search"
+                    "'hybrid' for hybrid RRF, 'agentic' for AI agent-driven iterative search"
     )
     results: list[SearchResult]
     total_results: int

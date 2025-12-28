@@ -64,9 +64,6 @@ def ensure_db_connection():
 def get_api_keys():
     """
     Get API keys from Parameter Store.
-
-    Returns:
-        Dictionary with API keys
     """
     try:
         # Get Voyage API key for embeddings
@@ -261,7 +258,7 @@ def handler(event: dict, context) -> dict:
         }
 
     except Exception as e:
-        logger.error(f"Error generating embedding: {e}", exc_info=True)
+        logger.error(f"Error storing embedding: {e}", exc_info=True)
         return {
             'statusCode': 500,
             'body': json.dumps({
