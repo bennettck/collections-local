@@ -3,7 +3,7 @@ Centralized LangChain configuration for Collections Local API.
 
 This module provides default configuration values for:
 - Embedding models and settings
-- Chroma vector store paths
+- PGVector store settings
 - BM25 retriever settings
 - Document chunking parameters
 """
@@ -25,17 +25,9 @@ LANGCHAIN_CONFIG = {
     # Vector store settings (dual database support)
     "vector_store": {
         # Production database
-        "persist_directory_prod": os.getenv(
-            "CHROMA_PROD_PERSIST_DIRECTORY",
-            "./data/chroma_prod"
-        ),
         "collection_name_prod": "collections_vectors_prod",
 
         # Golden database
-        "persist_directory_golden": os.getenv(
-            "CHROMA_GOLDEN_PERSIST_DIRECTORY",
-            "./data/chroma_golden"
-        ),
         "collection_name_golden": "collections_vectors_golden"
     },
 
@@ -62,16 +54,14 @@ def get_vector_store_config(database_type: str = "prod") -> dict:
         database_type: Either "prod" or "golden"
 
     Returns:
-        Dictionary with persist_directory and collection_name
+        Dictionary with collection_name
     """
     if database_type == "golden":
         return {
-            "persist_directory": LANGCHAIN_CONFIG["vector_store"]["persist_directory_golden"],
             "collection_name": LANGCHAIN_CONFIG["vector_store"]["collection_name_golden"]
         }
     else:
         return {
-            "persist_directory": LANGCHAIN_CONFIG["vector_store"]["persist_directory_prod"],
             "collection_name": LANGCHAIN_CONFIG["vector_store"]["collection_name_prod"]
         }
 

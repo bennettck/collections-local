@@ -80,14 +80,13 @@ def _get_database_url() -> str:
     """
     Get DATABASE_URL with secure credential management.
 
-    Priority (Architect Pattern):
+    Priority:
     1. DATABASE_URL environment variable (direct override for testing)
     2. AWS Secrets Manager (via DB_SECRET_ARN env var) - RECOMMENDED FOR PRODUCTION
-    3. AWS Parameter Store (via PARAMETER_STORE_DB_URL env var) - DEPRECATED
-    4. Fallback to SQLite for local development
+    3. AWS Parameter Store (via PARAMETER_STORE_DB_URL env var)
 
     Returns:
-        Database URL string
+        PostgreSQL connection string
 
     Raises:
         ValueError: If no database URL can be determined
@@ -108,30 +107,19 @@ def _get_database_url() -> str:
                 return database_url
         except Exception as e:
             logger.warning(f"Failed to retrieve DATABASE_URL from Secrets Manager: {e}")
-            # Continue to next fallback
 
-    # Try Parameter Store if configured (DEPRECATED - use Secrets Manager)
+    # Try Parameter Store if configured
     parameter_name = os.getenv("PARAMETER_STORE_DB_URL")
     if parameter_name:
         database_url = _get_database_url_from_parameter_store(parameter_name)
         if database_url:
-            logger.warning("Using Parameter Store for DATABASE_URL - DEPRECATED, migrate to Secrets Manager")
             return database_url
-        logger.warning(f"Failed to retrieve DATABASE_URL from Parameter Store: {parameter_name}")
 
-    # Fallback to SQLite for local development
-    logger.warning("No DATABASE_URL found, falling back to SQLite for local development")
-    sqlite_path = os.getenv("DATABASE_PATH", "./data/collections.db")
-    return f"sqlite:///{sqlite_path}"
-
-
-@event.listens_for(Pool, "connect")
-def _set_sqlite_pragma(dbapi_conn, connection_record):
-    """Enable foreign keys for SQLite connections."""
-    if 'sqlite' in str(type(dbapi_conn)):
-        cursor = dbapi_conn.cursor()
-        cursor.execute("PRAGMA foreign_keys=ON")
-        cursor.close()
+    raise ValueError(
+        "DATABASE_URL not found. Set DATABASE_URL environment variable, "
+        "DB_SECRET_ARN for AWS Secrets Manager, or "
+        "PARAMETER_STORE_DB_URL for AWS Parameter Store lookup."
+    )
 
 
 def init_connection(database_url: Optional[str] = None, echo: bool = False) -> Engine:

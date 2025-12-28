@@ -12,10 +12,9 @@ import os
 import logging
 from contextlib import contextmanager
 from typing import Optional, Generator
-from sqlalchemy import create_engine, event, text
+from sqlalchemy import create_engine, text
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import sessionmaker, Session
-from sqlalchemy.pool import Pool
 
 # Optional boto3 import for AWS Parameter Store
 try:
@@ -83,7 +82,6 @@ def _get_database_url() -> str:
     Priority:
     1. DATABASE_URL environment variable (direct)
     2. AWS Parameter Store (via PARAMETER_STORE_DB_URL env var)
-    3. Fallback to SQLite for local development
 
     Returns:
         Database URL string
@@ -103,21 +101,11 @@ def _get_database_url() -> str:
         database_url = _get_database_url_from_parameter_store(parameter_name)
         if database_url:
             return database_url
-        logger.warning(f"Failed to retrieve DATABASE_URL from Parameter Store: {parameter_name}")
 
-    # Fallback to SQLite for local development
-    logger.warning("No DATABASE_URL found, falling back to SQLite for local development")
-    sqlite_path = os.getenv("DATABASE_PATH", "./data/collections.db")
-    return f"sqlite:///{sqlite_path}"
-
-
-@event.listens_for(Pool, "connect")
-def _set_sqlite_pragma(dbapi_conn, connection_record):
-    """Enable foreign keys for SQLite connections."""
-    if 'sqlite' in str(type(dbapi_conn)):
-        cursor = dbapi_conn.cursor()
-        cursor.execute("PRAGMA foreign_keys=ON")
-        cursor.close()
+    raise ValueError(
+        "DATABASE_URL not found. Set DATABASE_URL environment variable "
+        "or PARAMETER_STORE_DB_URL for AWS Parameter Store lookup."
+    )
 
 
 def init_connection(database_url: Optional[str] = None, echo: bool = False) -> Engine:
@@ -147,21 +135,14 @@ def init_connection(database_url: Optional[str] = None, echo: bool = False) -> E
     # Get database URL
     url = database_url or _get_database_url()
 
-    # Create engine with connection pooling
-    # Using pre_ping=True to handle stale connections
+    # Create engine with connection pooling for PostgreSQL
     engine_kwargs = {
         "echo": echo,
         "pool_pre_ping": True,  # Verify connections before using them
+        "pool_size": 10,        # Connection pool size
+        "max_overflow": 20,     # Max connections beyond pool_size
+        "pool_recycle": 3600,   # Recycle connections after 1 hour
     }
-
-    # For PostgreSQL, use specific pool settings
-    # SQLite doesn't support these pool arguments
-    if url.startswith("postgresql"):
-        engine_kwargs.update({
-            "pool_size": 10,        # Connection pool size
-            "max_overflow": 20,     # Max connections beyond pool_size
-            "pool_recycle": 3600,  # Recycle connections after 1 hour
-        })
 
     _engine = create_engine(url, **engine_kwargs)
 
@@ -173,7 +154,7 @@ def init_connection(database_url: Optional[str] = None, echo: bool = False) -> E
         expire_on_commit=False  # Don't expire objects after commit
     )
 
-    logger.info(f"Database engine initialized: {url.split('@')[-1] if '@' in url else 'sqlite'}")
+    logger.info(f"Database engine initialized: {url.split('@')[-1] if '@' in url else url}")
     return _engine
 
 
@@ -277,14 +258,13 @@ def health_check() -> dict:
             "database": _engine.dialect.name,
         }
 
-        # Add pool statistics if available (not all pools support these methods)
+        # Add pool statistics
         try:
             pool_stats["pool_size"] = pool.size()
             pool_stats["checked_in"] = pool.checkedin()
             pool_stats["checked_out"] = pool.checkedout()
             pool_stats["overflow"] = pool.overflow()
         except (TypeError, AttributeError):
-            # SQLite SingletonThreadPool doesn't support these methods
             pass
 
         return pool_stats
