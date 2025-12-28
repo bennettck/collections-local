@@ -19,8 +19,12 @@ import boto3
 import embeddings
 
 # Import database modules
-from database_orm.connection import init_connection, get_session
-from database_orm.models import Analysis, Embedding
+from database_orm.connection import init_connection, get_session, get_connection_string
+from database_orm.models import Analysis, Embedding, Item
+
+# Import LangChain modules for vector store
+from utils.document_builder import create_langchain_document
+from retrieval.pgvector_store import PGVectorStoreManager
 
 # Setup logging
 logger = logging.getLogger()
@@ -265,6 +269,87 @@ def store_embedding(
     return embedding_id
 
 
+def store_in_langchain_vectorstore(
+    item_id: str,
+    analysis_id: str,
+    user_id: str,
+    analysis_data: dict,
+    filename: str
+) -> None:
+    """
+    Store document in langchain-postgres vector store.
+
+    This ensures the embedding is queryable by LangChain retrievers.
+
+    Args:
+        item_id: Item identifier
+        analysis_id: Analysis identifier
+        user_id: User identifier
+        analysis_data: Analysis dictionary with raw_response
+        filename: Image filename
+    """
+    logger.info(f"Storing in langchain-postgres vector store: item_id={item_id}")
+
+    try:
+        # Get connection string
+        connection_string = get_connection_string()
+
+        # Initialize PGVectorStoreManager
+        pgvector_manager = PGVectorStoreManager(
+            connection_string=connection_string,
+            collection_name="collections_vectors"
+        )
+
+        # Get raw_response
+        raw_response = analysis_data.get('raw_response', {})
+
+        # Create LangChain document with proper metadata
+        doc = create_langchain_document(
+            raw_response=raw_response,
+            item_id=item_id,
+            filename=filename,
+            category=analysis_data.get('category')
+        )
+
+        # Add additional metadata for filtering
+        doc.metadata["user_id"] = user_id
+        doc.metadata["analysis_id"] = analysis_id
+        doc.metadata["headline"] = raw_response.get("headline", "")
+        doc.metadata["summary"] = raw_response.get("summary", "")
+
+        # Add document to vector store (this will generate embedding via VoyageAI)
+        pgvector_manager.add_documents([doc], ids=[item_id])
+
+        logger.info(f"Document stored in langchain-postgres: item_id={item_id}")
+
+    except Exception as e:
+        # Log error but don't fail the Lambda - ORM storage already succeeded
+        logger.error(f"Failed to store in langchain-postgres (non-fatal): {e}")
+
+
+def fetch_item_filename(item_id: str, user_id: str) -> str:
+    """
+    Fetch item filename from database.
+
+    Args:
+        item_id: Item identifier
+        user_id: User identifier
+
+    Returns:
+        Filename string
+    """
+    with get_session() as session:
+        from sqlalchemy import select
+
+        stmt = select(Item).filter_by(id=item_id, user_id=user_id)
+        item = session.scalar(stmt)
+
+        if not item:
+            raise ValueError(f"Item not found: {item_id}")
+
+        return item.filename
+
+
 def handler(event: dict, context) -> dict:
     """
     Lambda handler for embedding generation.
@@ -315,6 +400,16 @@ def handler(event: dict, context) -> dict:
             embedding_vector=embedding_vector,
             model=model,
             source_fields=source_fields
+        )
+
+        # Also store in langchain-postgres vector store for LangChain retrievers
+        filename = fetch_item_filename(item_id, user_id)
+        store_in_langchain_vectorstore(
+            item_id=item_id,
+            analysis_id=analysis_id,
+            user_id=user_id,
+            analysis_data=analysis_data,
+            filename=filename
         )
 
         logger.info(f"Successfully generated embedding: item_id={item_id}, embedding_id={embedding_id}")
