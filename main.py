@@ -34,7 +34,7 @@ from models import (
 )
 
 # Database API - PostgreSQL via SQLAlchemy
-from database.api import (
+from database_sqlalchemy import (
     init_db,
     create_item,
     get_item,
