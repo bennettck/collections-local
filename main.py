@@ -32,6 +32,7 @@ from models import (
     ChatHistoryResponse,
     ChatSessionInfo,
 )
+
 from database import (
     init_db,
     create_item,
@@ -50,6 +51,7 @@ from database import (
     get_db,
     _create_search_document,
 )
+
 from llm import analyze_image, get_trace_id, get_resolved_provider_and_model
 from embeddings import generate_embedding, _create_embedding_document, DEFAULT_EMBEDDING_MODEL, get_embedding_dimensions
 from retrieval.pgvector_store import PGVectorStoreManager
@@ -69,7 +71,7 @@ IMAGES_PATH = os.getenv("IMAGES_PATH", "./data/images")
 
 # Log deprecation warning if old var is used
 if os.getenv("DATABASE_PATH") and not os.getenv("PROD_DATABASE_PATH"):
-    print("⚠️  WARNING: DATABASE_PATH is deprecated. Use PROD_DATABASE_PATH instead.")
+    logger.warning("DATABASE_PATH is deprecated. Use PROD_DATABASE_PATH instead.")
 
 # Allowed image MIME types
 ALLOWED_MIME_TYPES = {
@@ -90,95 +92,81 @@ conversation_manager = None
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Startup and shutdown events."""
-    # Import database_context for scoped DB access
-    from database import database_context
+    # Skip SQLite initialization in Lambda (use PostgreSQL instead)
+    is_lambda = bool(os.getenv("DB_SECRET_ARN") or os.getenv("AWS_LAMBDA_FUNCTION_NAME"))
 
-    # Initialize production database
-    print("Initializing production database...")
-    with database_context(PROD_DATABASE_PATH):
-        init_db()
+    if not is_lambda:
+        # Local development only: Initialize SQLite databases
+        from database import database_context
 
-    # Initialize golden database
-    print("Initializing golden database...")
-    with database_context(GOLDEN_DATABASE_PATH):
-        init_db()
+        # Initialize production database
+        with database_context(PROD_DATABASE_PATH):
+            init_db()
 
-    # Ensure images directory exists
-    os.makedirs(IMAGES_PATH, exist_ok=True)
+        # Initialize golden database
+        with database_context(GOLDEN_DATABASE_PATH):
+            init_db()
 
-    # Initialize search index for production DB
-    print("Checking production search index...")
-    with database_context(PROD_DATABASE_PATH):
-        status = get_search_status()
-        if status['doc_count'] == 0 and status['total_items'] > 0:
-            print(f"Building production search index ({status['total_items']} items)...")
-            stats = rebuild_search_index()
-            print(f"Production index built: {stats['num_documents']} documents")
-        else:
-            print(f"Production index ready: {status['doc_count']} documents")
+        # Ensure images directory exists
+        os.makedirs(IMAGES_PATH, exist_ok=True)
 
-    # Initialize search index for golden DB
-    print("Checking golden search index...")
-    with database_context(GOLDEN_DATABASE_PATH):
-        status = get_search_status()
-        if status['doc_count'] == 0 and status['total_items'] > 0:
-            print(f"Building golden search index ({status['total_items']} items)...")
-            stats = rebuild_search_index()
-            print(f"Golden index built: {stats['num_documents']} documents")
-        else:
-            print(f"Golden index ready: {status['doc_count']} documents")
+        # Initialize search index for production DB
+        with database_context(PROD_DATABASE_PATH):
+            status = get_search_status()
+            if status['doc_count'] == 0 and status['total_items'] > 0:
+                rebuild_search_index()
+
+        # Initialize search index for golden DB
+        with database_context(GOLDEN_DATABASE_PATH):
+            status = get_search_status()
+            if status['doc_count'] == 0 and status['total_items'] > 0:
+                rebuild_search_index()
 
     # Initialize PGVector store for PRODUCTION database
     global prod_chroma_manager
 
-    print("Initializing PGVector store (PROD)...")
-    try:
-        prod_chroma_config = get_chroma_config("prod")
-        prod_chroma_manager = PGVectorStoreManager(
-            collection_name=prod_chroma_config["collection_name"],
-            embedding_model=LANGCHAIN_EMBEDDING_MODEL,
-            use_parameter_store=True,  # Load from AWS Parameter Store in Lambda
-            parameter_name="/collections-local/rds/connection-string"
-        )
-        print(f"✓ PGVector store (PROD) initialized (distance=cosine)")
-    except Exception as e:
-        print(f"⚠️  Failed to initialize PGVector (PROD): {e}")
+    # Skip PGVector initialization in Lambda for now (lazy load on first use)
+    if not is_lambda:
+        try:
+            prod_chroma_config = get_chroma_config("prod")
+            prod_chroma_manager = PGVectorStoreManager(
+                collection_name=prod_chroma_config["collection_name"],
+                embedding_model=LANGCHAIN_EMBEDDING_MODEL,
+                use_parameter_store=False,  # Use database connection from environment
+                parameter_name=None
+            )
+        except Exception as e:
+            logger.error(f"Failed to initialize PGVector (PROD): {e}")
 
-    # Initialize PGVector store for GOLDEN database
-    global golden_chroma_manager
+        # Initialize PGVector store for GOLDEN database
+        global golden_chroma_manager
 
-    print("Initializing PGVector store (GOLDEN)...")
-    try:
-        golden_chroma_config = get_chroma_config("golden")
-        golden_chroma_manager = PGVectorStoreManager(
-            collection_name=golden_chroma_config["collection_name"] + "_golden",
-            embedding_model=LANGCHAIN_EMBEDDING_MODEL,
-            use_parameter_store=True,  # Load from AWS Parameter Store in Lambda
-            parameter_name="/collections-local/rds/connection-string"
-        )
-        print(f"✓ PGVector store (GOLDEN) initialized (distance=cosine)")
-    except Exception as e:
-        print(f"⚠️  Failed to initialize PGVector (GOLDEN): {e}")
+        try:
+            golden_chroma_config = get_chroma_config("golden")
+            golden_chroma_manager = PGVectorStoreManager(
+                collection_name=golden_chroma_config["collection_name"] + "_golden",
+                embedding_model=LANGCHAIN_EMBEDDING_MODEL,
+                use_parameter_store=False,  # Use database connection from environment
+                parameter_name=None
+            )
+        except Exception as e:
+            logger.error(f"Failed to initialize PGVector (GOLDEN): {e}")
 
-    # Initialize conversation manager for multi-turn chat
+    # Initialize conversation manager for multi-turn chat (local development only)
     global conversation_manager
 
-    print("Initializing conversation manager...")
-    try:
-        from chat.conversation_manager import ConversationManager
-        from config.chat_config import CONVERSATION_DB_PATH, CLEANUP_ON_STARTUP, CONVERSATION_TTL_HOURS
+    if not is_lambda:
+        try:
+            from chat.conversation_manager import ConversationManager
+            from config.chat_config import CONVERSATION_DB_PATH, CLEANUP_ON_STARTUP, CONVERSATION_TTL_HOURS
 
-        conversation_manager = ConversationManager(db_path=CONVERSATION_DB_PATH)
+            conversation_manager = ConversationManager(db_path=CONVERSATION_DB_PATH)
 
-        # Cleanup expired sessions on startup
-        if CLEANUP_ON_STARTUP:
-            expired = conversation_manager.cleanup_expired_sessions(ttl_hours=CONVERSATION_TTL_HOURS)
-            if expired > 0:
-                print(f"  Cleaned up {expired} expired chat sessions")
-
-        print(f"✓ Conversation manager initialized")
-    except Exception as e:
-        print(f"⚠️  Failed to initialize conversation manager: {e}")
+            # Cleanup expired sessions on startup
+            if CLEANUP_ON_STARTUP:
+                conversation_manager.cleanup_expired_sessions(ttl_hours=CONVERSATION_TTL_HOURS)
+        except Exception as e:
+            logger.error(f"Failed to initialize conversation manager: {e}")
 
     yield
     # Shutdown: cleanup if needed
@@ -222,9 +210,13 @@ def get_current_chroma_manager(request: Request) -> PGVectorStoreManager:
     return prod_chroma_manager
 
 
-def _parse_datetime(dt_str: str) -> datetime:
-    """Parse ISO datetime string to datetime object."""
-    return datetime.fromisoformat(dt_str)
+def _parse_datetime(dt_value) -> datetime:
+    """Parse datetime value (string from SQLite or datetime from PostgreSQL)."""
+    if isinstance(dt_value, datetime):
+        # Already a datetime object (PostgreSQL)
+        return dt_value
+    # String that needs parsing (SQLite)
+    return datetime.fromisoformat(dt_value)
 
 
 def _item_to_response(item: dict, include_analysis: bool = True) -> ItemResponse:
@@ -1292,7 +1284,7 @@ async def keepalive():
         return {"status": "alive", "timestamp": time.time()}
     except Exception as e:
         # Don't fail if keepalive fails, just log it
-        print(f"Keepalive error: {e}")
+        logger.error(f"Keepalive error: {e}")
         return {"status": "error", "message": str(e)}
 
 
