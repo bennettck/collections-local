@@ -63,11 +63,47 @@ No authentication required for local development.
 
 ---
 
-## Health
+## Health & Version
+
+### Version Check
+
+Get version and build information for the running application. Use this to verify which code version is deployed.
+
+**Endpoint:** `GET /version`
+
+**Response:**
+
+```json
+{
+  "git_sha": "718290f",
+  "git_tag": "v1.0.0",
+  "git_branch": "main",
+  "build_timestamp": "2025-12-29T02:50:00Z",
+  "environment": "lambda"
+}
+```
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `git_sha` | string | Git commit SHA (short form) - exact code deployed |
+| `git_tag` | string/null | Git tag if commit is tagged (e.g., `"v1.0.0"`), null otherwise |
+| `git_branch` | string | Git branch at build time |
+| `build_timestamp` | string | ISO 8601 timestamp when the image was built |
+| `environment` | string | Runtime environment: `"lambda"`, `"codespace"`, or `"local"` |
+
+**Example (curl):**
+
+```bash
+curl https://your-api-endpoint/version
+```
+
+**Note:** Version info is baked into the Docker image at build time. For local development, it reads from git directly. Use `git tag v1.0.0` to tag releases.
+
+---
 
 ### Health Check
 
-Verify that the API server is running and healthy. Also shows which database is active and statistics for both databases.
+Verify that the API server is running and healthy. Also shows version info, database status, and statistics.
 
 **Endpoint:** `GET /health`
 
@@ -76,16 +112,13 @@ Verify that the API server is running and healthy. Also shows which database is 
 ```json
 {
   "status": "healthy",
+  "git_sha": "718290f",
+  "git_tag": "v1.0.0",
   "timestamp": "2025-11-30T12:00:00.000000",
-  "active_database": "production",
-  "database": "PostgreSQL",
+  "database": "postgresql",
+  "environment": "lambda",
   "database_stats": {
-    "production": {
-      "items": 84
-    },
-    "golden": {
-      "items": 55
-    }
+    "items": 84
   }
 }
 ```
@@ -93,10 +126,12 @@ Verify that the API server is running and healthy. Also shows which database is 
 | Field | Type | Description |
 |-------|------|-------------|
 | `status` | string | Health status, always "healthy" if responding |
+| `git_sha` | string | Git commit SHA (short form) - quickly identify deployed code |
+| `git_tag` | string/null | Git tag if commit is tagged, null otherwise |
 | `timestamp` | string | ISO 8601 timestamp of the response |
-| `active_database` | string | Which database this request is using (`"production"` or `"golden"`) |
-| `database` | string | Database type (always "PostgreSQL") |
-| `database_stats` | object | Item counts for both databases |
+| `database` | string | Database type (always "postgresql") |
+| `environment` | string | Runtime environment: `"lambda"`, `"codespace"`, or `"local"` |
+| `database_stats` | object | Item count for the current user |
 
 **Response Headers:**
 

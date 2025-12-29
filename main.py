@@ -32,6 +32,7 @@ from models import (
     ChatHistoryResponse,
     ChatSessionInfo,
 )
+from version import get_version_info
 
 # Database API - PostgreSQL via SQLAlchemy
 from database_sqlalchemy import (
@@ -290,11 +291,19 @@ def _analysis_to_response(analysis: dict) -> AnalysisResponse:
     )
 
 
+# Version endpoint
+@app.get("/version")
+async def version():
+    """Return version and build information."""
+    return get_version_info()
+
+
 # Health Check
 @app.get("/health")
 async def health_check(request: Request):
     """Health check endpoint."""
     user_id = get_user_id_from_request(request)
+    version_info = get_version_info()
 
     # Get database stats
     database_stats = None
@@ -306,8 +315,11 @@ async def health_check(request: Request):
 
     response = {
         "status": "healthy",
+        "git_sha": version_info["git_sha"],
+        "git_tag": version_info["git_tag"],
         "timestamp": datetime.utcnow().isoformat(),
         "database": "postgresql",
+        "environment": version_info["environment"],
     }
 
     if database_stats:
