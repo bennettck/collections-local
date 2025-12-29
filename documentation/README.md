@@ -14,6 +14,7 @@ Complete documentation for the Collections AI-powered image analysis and search 
 - **[API Reference](./API.md)** - Local development API (PostgreSQL with pgvector)
 
 ### Development
+- **[Database Access](./DATABASE_ACCESS.md)** - Connect to RDS from Codespaces or anywhere
 - **[Evaluation](./EVALUATION.md)** - Search evaluation and metrics
 - **[Golden Dataset](./GOLDEN_DATASET.md)** - Creating evaluation datasets
 - **[LangSmith](./LANGSMITH.md)** - Observability and tracing
@@ -35,6 +36,7 @@ documentation/
 ├── FEATURES.md ......................... Features guide
 ├── API.md .............................. Local API reference (PostgreSQL)
 ├── CREDENTIALS.md ...................... AWS credentials & configuration
+├── DATABASE_ACCESS.md .................. Secure database access via SSM
 ├── QUICKSTART.md ....................... AWS deployment quick start
 ├── EVALUATION.md ....................... Search evaluation
 ├── GOLDEN_DATASET.md ................... Dataset curation
@@ -83,6 +85,15 @@ API reference for local development:
 - PostgreSQL with pgvector
 
 **Read this if**: You're developing locally
+
+### DATABASE_ACCESS.md
+Secure database access documentation:
+- SSM Session Manager setup
+- Bastion host architecture
+- Connection from GitHub Codespaces
+- Troubleshooting guide
+
+**Read this if**: You need to connect to the database from a Codespace or any location
 
 ### CREDENTIALS.md + QUICKSTART.md
 AWS deployment documentation:
@@ -142,6 +153,9 @@ LLM observability with LangSmith:
 
 **Deploy to AWS**
 → [Quick Start Guide](./QUICKSTART.md) and [Credentials](./CREDENTIALS.md)
+
+**Connect to the database from Codespaces**
+→ [Database Access](./DATABASE_ACCESS.md)
 
 **Evaluate search quality**
 → [Evaluation](./EVALUATION.md)
