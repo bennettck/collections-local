@@ -733,7 +733,7 @@ Perform natural language search over your collection using keyword-based BM25 or
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `query` | string | *required* | Natural language search query (min 3 characters) |
-| `search_type` | string | `"bm25-lc"` | Search method: `"bm25-lc"` (keyword), `"vector-lc"` (semantic), `"hybrid-lc"` (hybrid with RRF), or `"agentic"` (intelligent agent-based search) |
+| `search_type` | string | `"hybrid"` | Search method: `"bm25"` (keyword), `"vector"` (semantic), `"hybrid"` (hybrid with RRF, recommended), or `"agentic"` (intelligent agent-based search). All search types query the `langchain_pg_embedding` table (single source of truth). |
 | `top_k` | integer | `10` | Number of results to return (1-50) |
 | `category_filter` | string | `null` | Filter results by category |
 | `min_relevance_score` | float | `-1.0` | **BM25 only**: Minimum BM25 relevance score threshold. Results with scores > this value will be filtered out. Default `-1.0` effectively disables filtering since most results score lower (more negative = better match). |
@@ -745,53 +745,55 @@ Perform natural language search over your collection using keyword-based BM25 or
 
 | Value | Description | Implementation | Typical Time |
 |-------|-------------|----------------|--------------|
-| `"bm25-lc"` | Fast keyword-based full-text search | LangChain BM25Retriever (default) | 2-10ms |
-| `"vector-lc"` | Semantic similarity search | PostgreSQL pgvector with VoyageAI embeddings | 80-100ms |
-| `"hybrid-lc"` | Hybrid search with RRF fusion | LangChain EnsembleRetriever combining BM25 + Vector with Reciprocal Rank Fusion | 110-140ms |
-| `"agentic"` | Intelligent agent-based search with iterative refinement | LangChain ReAct Agent with search tools, can call hybrid search multiple times | 2-8 seconds |
+| `"bm25"` | Fast keyword-based full-text search | PostgresBM25Retriever (queries `langchain_pg_embedding`) | 2-10ms |
+| `"vector"` | Semantic similarity search | VectorOnlyRetriever with VoyageAI embeddings | 80-100ms |
+| `"hybrid"` | Hybrid search with RRF fusion (recommended) | PostgresHybridRetriever combining BM25 + Vector with RRF | 110-140ms |
+| `"agentic"` | Intelligent agent-based search with iterative refinement | LangChain ReAct Agent with search tools | 2-8 seconds |
+
+**Note**: All search types query the `langchain_pg_embedding` table (single source of truth for search).
 
 **Example (curl):**
 
 ```bash
-# Basic BM25-LC search (default)
+# Basic BM25 search (default)
 curl -X POST http://localhost:8000/search \
   -H "Content-Type: application/json" \
   -d '{"query": "Tokyo restaurants", "top_k": 5}'
 
-# Vector-LC semantic search
+# Vector semantic search
 curl -X POST http://localhost:8000/search \
   -H "Content-Type: application/json" \
-  -d '{"query": "Japanese beauty products", "search_type": "vector-lc", "top_k": 5}'
+  -d '{"query": "Japanese beauty products", "search_type": "vector", "top_k": 5}'
 
-# Vector-LC search with similarity threshold
+# Vector search with similarity threshold
 curl -X POST http://localhost:8000/search \
   -H "Content-Type: application/json" \
-  -d '{"query": "perfume", "search_type": "vector-lc", "min_similarity_score": 0.6}'
+  -d '{"query": "perfume", "search_type": "vector", "min_similarity_score": 0.6}'
 
 # Search without answer generation (faster)
 curl -X POST http://localhost:8000/search \
   -H "Content-Type: application/json" \
   -d '{"query": "beauty products perfume", "include_answer": false}'
 
-# Vector-LC search with category filter
+# Vector search with category filter
 curl -X POST http://localhost:8000/search \
   -H "Content-Type: application/json" \
-  -d '{"query": "delicious food", "search_type": "vector-lc", "category_filter": "Food"}'
+  -d '{"query": "delicious food", "search_type": "vector", "category_filter": "Food"}'
 
 # Use different model for answer
 curl -X POST http://localhost:8000/search \
   -H "Content-Type: application/json" \
   -d '{"query": "Tokyo restaurants", "answer_model": "gpt-4o"}'
 
-# BM25-LC search with strict relevance threshold
+# BM25 search with strict relevance threshold
 curl -X POST http://localhost:8000/search \
   -H "Content-Type: application/json" \
-  -d '{"query": "perfume", "search_type": "bm25-lc", "min_relevance_score": -5.0}'
+  -d '{"query": "perfume", "search_type": "bm25", "min_relevance_score": -5.0}'
 
-# Hybrid-LC search with RRF fusion (combines BM25 + Vector, recommended)
+# Hybrid search with RRF fusion (combines BM25 + Vector, recommended)
 curl -X POST http://localhost:8000/search \
   -H "Content-Type: application/json" \
-  -d '{"query": "authentic local food experiences", "search_type": "hybrid-lc", "top_k": 10}'
+  -d '{"query": "authentic local food experiences", "search_type": "hybrid", "top_k": 10}'
 
 # Agentic search with intelligent refinement (best for complex queries)
 curl -X POST http://localhost:8000/search \
@@ -801,11 +803,11 @@ curl -X POST http://localhost:8000/search \
 
 **Response:** `200 OK`
 
-**BM25-LC Search Response Example:**
+**BM25 Search Response Example:**
 ```json
 {
   "query": "Tokyo restaurants",
-  "search_type": "bm25-lc",
+  "search_type": "bm25",
   "results": [
     {
       "item_id": "8aed0ca7-6aed-4635-9cb2-ef47a2aba461",
@@ -835,11 +837,11 @@ curl -X POST http://localhost:8000/search \
 }
 ```
 
-**Vector-LC Search Response Example:**
+**Vector Search Response Example:**
 ```json
 {
   "query": "Japanese beauty products",
-  "search_type": "vector-lc",
+  "search_type": "vector",
   "results": [
     {
       "item_id": "fe0288ee-5bcf-46e5-8ce6-c1c65cae5395",
@@ -862,11 +864,11 @@ curl -X POST http://localhost:8000/search \
 }
 ```
 
-**Hybrid-LC Search Response Example:**
+**Hybrid Search Response Example:**
 ```json
 {
   "query": "authentic local food experiences",
-  "search_type": "hybrid-lc",
+  "search_type": "hybrid",
   "results": [
     {
       "item_id": "d4fa1f7b-8e2d-4a3f-9c1b-5e6f7a8b9c0d",
@@ -929,7 +931,7 @@ curl -X POST http://localhost:8000/search \
 | Field | Type | Description |
 |-------|------|-------------|
 | `query` | string | The search query that was executed |
-| `search_type` | string | The search method used: `"bm25"`, `"vector"`, `"bm25-lc"`, `"vector-lc"`, `"hybrid-lc"`, or `"agentic"` |
+| `search_type` | string | The search method used: `"bm25"`, `"vector"`, `"hybrid"`, or `"agentic"` |
 | `results` | array | List of search results ordered by relevance |
 | `total_results` | integer | Total number of results returned |
 | `answer` | string/null | AI-generated answer (null if `include_answer` is false) |
@@ -964,22 +966,25 @@ curl -X POST http://localhost:8000/search \
 
 **Search Features:**
 
-**BM25-LC Full-Text Search (`search_type: "bm25-lc"`):**
-- Fast keyword-based search using LangChain BM25Retriever
+**BM25 Full-Text Search (`search_type: "bm25"`):**
+- Fast keyword-based search using PostgresBM25Retriever
+- Queries `langchain_pg_embedding.document` column (single source of truth)
 - Best for exact term matching and keyword queries
 - All fields searchable: categories, summaries, extracted text, locations, hashtags, metadata
-- Weighted ranking: Important fields (summary, headline) ranked higher
+- Uses OR operator for inclusive matching
 - Typical retrieval time: ~2-5ms
 
-**Vector-LC Semantic Search (`search_type: "vector-lc"`):**
-- Semantic similarity using PostgreSQL pgvector with VoyageAI embeddings (1024-dimensional vectors)
+**Vector Semantic Search (`search_type: "vector"`):**
+- Semantic similarity using VectorOnlyRetriever with VoyageAI embeddings (1024-dimensional vectors)
+- Queries `langchain_pg_embedding.embedding` column (single source of truth)
 - Best for conceptual queries and finding meaning, not just keywords
 - Understands synonyms and related concepts (e.g., "perfume" finds "fragrance")
 - Cosine similarity ranking (0-1 scale)
 - Typical retrieval time: ~80-100ms (includes query embedding generation)
 
-**Hybrid-LC Search with RRF (`search_type: "hybrid-lc"`):**
+**Hybrid Search with RRF (`search_type: "hybrid"`, recommended):**
 - Combines BM25 keyword search + Vector semantic search using Reciprocal Rank Fusion (RRF)
+- Both retrievers query same `langchain_pg_embedding` table = guaranteed data consistency
 - Best overall performance across different query types
 - Leverages strengths of both keyword and semantic matching
 - Weighted fusion: 30% BM25 + 70% Vector (optimized for this dataset)
@@ -1016,16 +1021,16 @@ curl -X POST http://localhost:8000/search \
 | Ambiguous/exploratory queries | Agentic | "luxury items" (agent tries Beauty, Fashion, Travel) |
 | Queries requiring refinement | Agentic | "perfume" → agent tries "Japanese perfume", "affordable perfume" |
 | Comparative searches | Agentic | "Compare Tokyo and Kyoto restaurants" |
-| Best overall results | Hybrid-LC | "authentic local food experiences" |
-| Multi-faceted queries | Hybrid-LC | "Tokyo restaurants with traditional vibes" |
-| Exact keyword match | BM25-LC | "Tokyo Tower restaurant" |
-| Conceptual/semantic search | Vector-LC | "affordable luxury experiences" |
-| Abbreviations/OCR text | BM25-LC | "J-SCENT" (exact text match) |
-| Related concepts | Vector-LC | "Japanese culture" (finds travel, food, traditions) |
-| Mixed keywords | Hybrid-LC or BM25-LC | "perfume shopping Tokyo" |
-| Vague descriptions | Vector-LC or Hybrid-LC | "authentic local vibes" |
-| Fast/high-volume queries | Hybrid-LC or BM25-LC | Any query with strict latency requirements |
-| Standard production use | Hybrid-LC | Any natural language query |
+| Best overall results | Hybrid | "authentic local food experiences" |
+| Multi-faceted queries | Hybrid | "Tokyo restaurants with traditional vibes" |
+| Exact keyword match | BM25 | "Tokyo Tower restaurant" |
+| Conceptual/semantic search | Vector | "affordable luxury experiences" |
+| Abbreviations/OCR text | BM25 | "J-SCENT" (exact text match) |
+| Related concepts | Vector | "Japanese culture" (finds travel, food, traditions) |
+| Mixed keywords | Hybrid or BM25 | "perfume shopping Tokyo" |
+| Vague descriptions | Vector or Hybrid | "authentic local vibes" |
+| Fast/high-volume queries | Hybrid or BM25 | Any query with strict latency requirements |
+| Standard production use | Hybrid | Any natural language query |
 | Exploratory/conversational use | Agentic | Complex natural language questions |
 
 **Error Response:** `500 Internal Server Error`
@@ -1056,47 +1061,26 @@ curl http://localhost:8000/search/config
 
 ```json
 {
-  "bm25-lc": {
+  "bm25": {
     "algorithm": "BM25 keyword search",
-    "implementation": "LangChain BM25Retriever",
-    "field_weighting": {
-      "summary": "3x",
-      "headline": "2x",
-      "extracted_text": "2x",
-      "category": "1.5x",
-      "subcategories": "1.5x",
-      "key_interest": "1.5x",
-      "themes": "1x",
-      "objects": "1x",
-      "location_tags": "1x",
-      "emotions": "0.5x",
-      "vibes": "0.5x",
-      "hashtags": "0.5x"
-    }
+    "implementation": "PostgresBM25Retriever",
+    "source_table": "langchain_pg_embedding",
+    "source_column": "document",
+    "note": "Single source of truth - same table as vector search"
   },
-  "vector-lc": {
+  "vector": {
     "algorithm": "Cosine similarity",
-    "implementation": "PostgreSQL pgvector",
+    "implementation": "VectorOnlyRetriever (pgvector)",
+    "source_table": "langchain_pg_embedding",
+    "source_column": "embedding",
     "embedding_model": "voyage-3.5-lite",
     "dimensions": 1024,
-    "field_weighting": {
-      "summary": "3x",
-      "headline": "2x",
-      "extracted_text": "2x",
-      "category": "1.5x",
-      "subcategories": "1.5x",
-      "key_interest": "1.5x",
-      "themes": "1x",
-      "objects": "1x",
-      "location_tags": "1x",
-      "emotions": "0.5x",
-      "vibes": "0.5x",
-      "hashtags": "0.5x"
-    }
+    "note": "Single source of truth - same table as BM25 search"
   },
-  "hybrid-lc": {
+  "hybrid": {
     "algorithm": "RRF Ensemble (BM25 + Vector)",
-    "implementation": "LangChain EnsembleRetriever",
+    "implementation": "PostgresHybridRetriever",
+    "source_table": "langchain_pg_embedding",
     "rrf_constant_c": 15,
     "weights": {
       "bm25": 0.3,
@@ -1105,7 +1089,7 @@ curl http://localhost:8000/search/config
     "fetch_multiplier": "2x top_k from each retriever",
     "embedding_model": "voyage-3.5-lite",
     "deduplication": "by item_id",
-    "field_weighting": "Inherits from BM25-LC and Vector-LC (see above)"
+    "note": "Both retrievers query same langchain_pg_embedding table"
   }
 }
 ```
@@ -1792,11 +1776,11 @@ Request model for search and Q&A endpoint.
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `query` | string | *required* | Natural language search query (min 3 characters) |
-| `search_type` | string | `"bm25-lc"` | Search method: `"bm25-lc"`, `"vector-lc"`, `"hybrid-lc"`, or `"agentic"` |
+| `search_type` | string | `"hybrid"` | Search method: `"bm25"`, `"vector"`, `"hybrid"`, or `"agentic"` |
 | `top_k` | integer | `10` | Number of results to return (1-50) |
 | `category_filter` | string | `null` | Filter results by category |
-| `min_relevance_score` | float | `-1.0` | **BM25-LC only**: Minimum BM25 relevance score threshold. Results with scores > this value will be filtered out. Default `-1.0` effectively disables filtering since most results score lower (more negative = better match). |
-| `min_similarity_score` | float | `0.0` | **Vector-LC only**: Minimum similarity score threshold (0-1 range, higher = more similar) |
+| `min_relevance_score` | float | `-1.0` | **BM25 only**: Minimum BM25 relevance score threshold. Results with scores > this value will be filtered out. Default `-1.0` effectively disables filtering since most results score lower (more negative = better match). |
+| `min_similarity_score` | float | `0.0` | **Vector only**: Minimum similarity score threshold (0-1 range, higher = more similar) |
 | `include_answer` | boolean | `true` | Generate LLM answer from search results |
 | `answer_model` | string | `null` | Model for answer generation (defaults to `claude-sonnet-4-5`) |
 
@@ -1822,7 +1806,7 @@ Response model for search and Q&A endpoint.
 | Field | Type | Description |
 |-------|------|-------------|
 | `query` | string | The search query that was executed |
-| `search_type` | string | The search method used: `"bm25"`, `"vector"`, `"bm25-lc"`, `"vector-lc"`, `"hybrid-lc"`, or `"agentic"` |
+| `search_type` | string | The search method used: `"bm25"`, `"vector"`, `"hybrid"`, or `"agentic"` |
 | `results` | array[SearchResult] | List of search results ordered by relevance |
 | `total_results` | integer | Total number of results returned |
 | `answer` | string/null | AI-generated answer (null if `include_answer` is false) |

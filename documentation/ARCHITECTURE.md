@@ -6,11 +6,15 @@ Collections is a serverless AI-powered image analysis and search system built on
 
 ### Key Architecture Principles
 
-**Consolidated PostgreSQL Backend**:
-- Single database for all structured data (items, analyses, embeddings, BM25 documents)
+**Consolidated PostgreSQL Backend** (SINGLE SOURCE OF TRUTH):
+- Single database for all structured data (items, analyses)
+- **`langchain_pg_embedding` table**: Single source of truth for ALL search operations
+  - Vector embeddings (1024-dim, VoyageAI voyage-3.5-lite)
+  - BM25 full-text search (tsvector on `document` column)
+  - Managed by `langchain-postgres` library
 - PGVector extension for vector similarity search
 - PostgreSQL full-text search for keyword matching
-- ChromaDB deprecated and archived
+- ChromaDB fully removed from codebase
 - SQLite deprecated (local dev compatibility only)
 
 **Custom LangChain Retrievers**:
@@ -176,17 +180,23 @@ Collections is a serverless AI-powered image analysis and search system built on
 **Tables**:
 - `items` - Image metadata
 - `analyses` - AI analysis results
-- `embeddings` - Vector embeddings (1024-dim, Voyage AI)
+- `langchain_pg_embedding` - **SINGLE SOURCE OF TRUTH** for search
+  - Vector embeddings (1024-dim, VoyageAI voyage-3.5-lite)
+  - Document text for BM25 search (tsvector)
+  - Metadata (user_id, category, item_id, headline, etc.)
+  - Managed by `langchain-postgres` library
+- `langchain_pg_collection` - Vector store collection metadata
 - `checkpoints` - LangGraph conversation checkpoints (managed by langgraph-checkpoint-postgres)
 - `checkpoint_writes` - Pending writes for checkpoints
 - `checkpoint_blobs` - Binary data for checkpoints
 - `users` - User profiles (future)
 
 **Indexes**:
-- `user_id` on all tables (B-tree)
-- `search_vector` GIN index (analyses table)
-- `vector` IVFFlat index (embeddings table)
+- `user_id` on items/analyses tables (B-tree)
+- `search_vector` GIN index (analyses table - legacy)
+- `embedding` IVFFlat index (langchain_pg_embedding table)
 - `thread_id` on checkpoint tables (B-tree)
+- GIN index on `document` column for BM25 (langchain_pg_embedding)
 
 **S3**:
 - Bucket: `collections-images-dev-{account-id}`
@@ -284,10 +294,11 @@ The system uses custom LangChain retrievers built specifically for PostgreSQL, r
 
 **PostgresBM25Retriever**:
 - PostgreSQL full-text search using tsvector/tsquery
+- Queries `langchain_pg_embedding.document` column (SAME table as vector search)
 - ts_rank for BM25-style relevance scoring
 - GIN index for fast text search
-- Weighted fields: summary (3x), headline (2x), text (2x)
-- User and category filtering support
+- Uses OR operator for inclusive matching (e.g., "delicious | food")
+- User and category filtering via `cmetadata` JSONB column
 - Returns documents with relevance scores
 
 **VectorOnlyRetriever**:
@@ -658,12 +669,19 @@ User → API Gateway → API Lambda
 
 ---
 
-**Architecture Version**: 2.1
-**Last Updated**: 2025-12-28
+**Architecture Version**: 2.2
+**Last Updated**: 2025-12-29
 **Environment**: AWS (us-east-1)
 **Status**: Production Ready
 
 ### Changelog
+- **v2.2 (2025-12-29)**: Single Source of Truth Architecture
+  - `langchain_pg_embedding` is the ONLY table for search (vector + BM25)
+  - Removed `embeddings` ORM model (deprecated - never actually used for search)
+  - BM25 now queries `langchain_pg_embedding.document` column directly
+  - Vector search queries `langchain_pg_embedding.embedding` column
+  - Both search types use same table = guaranteed data consistency
+  - Removed all references to deprecated `collections_documents` table
 - **v2.1 (2025-12-28)**: Migrated LangGraph checkpoints from DynamoDB to PostgreSQL
   - Uses `langgraph-checkpoint-postgres` for conversation state
   - Removes DynamoDB dependency for simplified infrastructure

@@ -46,7 +46,7 @@ Upload Image → S3 Storage → Image Processor → AI Analysis → Database Sto
 ```json
 {
   "query": "Tokyo Tower restaurant",
-  "search_type": "bm25-lc",
+  "search_type": "bm25",
   "top_k": 5
 }
 ```
@@ -63,8 +63,9 @@ Upload Image → S3 Storage → Image Processor → AI Analysis → Database Sto
 **Implementation**: VectorOnlyRetriever (custom LangChain retriever)
 
 **How it works**:
-- Voyage AI embeddings (voyage-3.5-lite, 512 dimensions)
+- Voyage AI embeddings (voyage-3.5-lite, 1024 dimensions)
 - PGVector extension with IVFFlat index
+- Queries `langchain_pg_embedding` table (same as BM25 - single source of truth)
 - Cosine similarity scoring
 - Configurable similarity threshold filtering
 - User and category metadata filtering
@@ -74,7 +75,7 @@ Upload Image → S3 Storage → Image Processor → AI Analysis → Database Sto
 ```json
 {
   "query": "Japanese beauty products perfume",
-  "search_type": "vector-lc",
+  "search_type": "vector",
   "min_similarity_score": 0.6
 }
 ```
@@ -92,6 +93,7 @@ Upload Image → S3 Storage → Image Processor → AI Analysis → Database Sto
 
 **How it works**:
 - Combines PostgresBM25Retriever + VectorOnlyRetriever
+- Both query `langchain_pg_embedding` table (single source of truth)
 - Reciprocal Rank Fusion (RRF) algorithm using LangChain's EnsembleRetriever
 - Optimized weights: 30% BM25, 70% Vector
 - RRF constant c=15 (optimized for sensitivity)
@@ -103,7 +105,7 @@ Upload Image → S3 Storage → Image Processor → AI Analysis → Database Sto
 ```json
 {
   "query": "authentic local food experiences Tokyo",
-  "search_type": "hybrid-lc",
+  "search_type": "hybrid",
   "top_k": 10
 }
 ```
@@ -185,7 +187,7 @@ Upload Image → S3 Storage → Image Processor → AI Analysis → Database Sto
 
 ### 4. Conversational Search (Chat)
 
-**Technology**: LangGraph with DynamoDB checkpointing
+**Technology**: LangGraph with PostgreSQL checkpointing (langgraph-checkpoint-postgres)
 
 **Features**:
 - Multi-turn conversations
@@ -197,13 +199,13 @@ Upload Image → S3 Storage → Image Processor → AI Analysis → Database Sto
 ```
 User Message → API Lambda → LangGraph Agent
      ↓
-Load Session State from DynamoDB
+Load Session State from PostgreSQL
      ↓
 Process Message (can call search tools)
      ↓
 Generate Response
      ↓
-Save State to DynamoDB (TTL: 4 hours)
+Save State to PostgreSQL (TTL: 4 hours)
      ↓
 Return Response
 ```
@@ -220,11 +222,12 @@ User: "Tell me more about the first one"
 Bot: "Tofuya Ukai is a traditional Japanese restaurant beneath Tokyo Tower..."
 ```
 
-**Session Management**:
+**Session Management** (PostgreSQL-based):
 - Session ID format: `{user_id}#{session_id}`
 - Automatic TTL: 4 hours of inactivity
 - Manual deletion: `DELETE /chat/sessions/{id}`
 - List sessions: `GET /chat/sessions`
+- All session data stored in PostgreSQL checkpoints table
 
 **Benefits**:
 - Natural conversation flow
@@ -244,7 +247,7 @@ Bot: "Tofuya Ukai is a traditional Japanese restaurant beneath Tokyo Tower..."
 - Middleware extracts user_id from JWT
 - Database queries include `WHERE user_id = :user_id`
 - S3 keys prefixed: `{user_id}/item.jpg`
-- DynamoDB thread IDs: `{user_id}#{session_id}`
+- PostgreSQL checkpoint thread IDs: `{user_id}#{session_id}`
 
 **Verified**:
 - Cross-user access blocked
@@ -284,7 +287,7 @@ Bot: "Tofuya Ukai is a traditional Japanese restaurant beneath Tokyo Tower..."
 {
   "query": "delicious food",
   "category_filter": "Food",
-  "search_type": "vector-lc"
+  "search_type": "vector"
 }
 ```
 
@@ -292,7 +295,7 @@ Bot: "Tofuya Ukai is a traditional Japanese restaurant beneath Tokyo Tower..."
 ```json
 {
   "query": "perfume",
-  "search_type": "vector-lc",
+  "search_type": "vector",
   "min_similarity_score": 0.7
 }
 ```
@@ -352,25 +355,31 @@ Bot: "Tofuya Ukai is a traditional Japanese restaurant beneath Tokyo Tower..."
 | Image Upload | ✅ | ✅ |
 | AI Analysis | ✅ | ✅ (Event-driven) |
 | BM25 Search | ✅ (PostgreSQL) | ✅ (PostgreSQL) |
-| Vector Search | ✅ (SQLite-vec*) | ✅ (pgvector) |
+| Vector Search | ✅ (PGVector) | ✅ (PGVector) |
 | Hybrid Search | ✅ | ✅ |
 | Agentic Search | ✅ | ✅ |
-| Chat (LangGraph) | ✅ (SQLite*) | ✅ (DynamoDB) |
+| Chat (LangGraph) | ✅ (PostgreSQL) | ✅ (PostgreSQL) |
 | Multi-Tenancy | ❌ | ✅ |
 | Authentication | ❌ | ✅ (Cognito) |
 | Event Processing | ❌ | ✅ |
 | Golden Dataset | ✅ | ❌ |
 | Database Routing | ✅ | ❌ |
 
-**Note**: *SQLite is deprecated for local development (compatibility only). Use PostgreSQL for production-like testing.
+**Note**: All data (items, analyses, embeddings, checkpoints) stored in PostgreSQL. `langchain_pg_embedding` is the single source of truth for all search operations.
 
 ---
 
-**Last Updated**: 2025-12-28
-**Version**: 2.0
+**Last Updated**: 2025-12-29
+**Version**: 2.1
 **Environment**: AWS Production
 
 ### Changelog
+- **v2.1 (2025-12-29)**: Single source of truth architecture
+  - Updated search type literals (removed `-lc` suffix: now `bm25`, `vector`, `hybrid`, `agentic`)
+  - Documented `langchain_pg_embedding` as single source of truth for all search
+  - Fixed embedding dimensions (1024, not 512)
+  - Updated chat to use PostgreSQL checkpoints (not DynamoDB)
+  - Both BM25 and Vector search query same `langchain_pg_embedding` table
 - **v2.0 (2025-12-28)**: Updated to reflect consolidated PostgreSQL architecture
   - Clarified SQLite deprecation status
   - Updated BM25 search to use PostgreSQL (not SQLite)
