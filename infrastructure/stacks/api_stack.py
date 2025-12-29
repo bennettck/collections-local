@@ -175,6 +175,14 @@ class ApiStack(Stack):
             # No authorizer for health endpoint
         )
 
+        # Add public route for version info
+        self.http_api.add_routes(
+            path="/version",
+            methods=[apigw.HttpMethod.GET],
+            integration=lambda_integration,
+            # No authorizer for version endpoint
+        )
+
     def _create_outputs(self):
         """Create CloudFormation outputs."""
         CfnOutput(
