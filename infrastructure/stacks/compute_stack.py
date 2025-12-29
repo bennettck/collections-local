@@ -16,7 +16,6 @@ from aws_cdk import (
     aws_rds as rds,
     aws_secretsmanager as secretsmanager,
     aws_s3_notifications as s3n,
-    aws_ecr as ecr,
     aws_ssm as ssm,
 )
 from constructs import Construct
@@ -208,19 +207,32 @@ class ComputeStack(Stack):
 
     def _create_api_lambda(self):
         """Create API Lambda function (FastAPI + Mangum) using Docker image."""
-        # Get ECR repository
-        api_repo = ecr.Repository.from_repository_name(
-            self,
-            "APIRepository",
-            f"collections-api-{self.env_name}"
-        )
+        import os
+
+        # Build context is the project root (parent of infrastructure/)
+        project_root = os.path.join(os.path.dirname(os.path.dirname(__file__)), "..")
 
         self.api_lambda = lambda_.DockerImageFunction(
             self,
             "APILambda",
-            code=lambda_.DockerImageCode.from_ecr(
-                repository=api_repo,
-                tag_or_digest="latest"
+            code=lambda_.DockerImageCode.from_image_asset(
+                directory=project_root,
+                file="app/Dockerfile",
+                exclude=[
+                    "cdk.out",
+                    ".git",
+                    ".venv",
+                    "__pycache__",
+                    "*.pyc",
+                    ".pytest_cache",
+                    "node_modules",
+                    "infrastructure/cdk.out",
+                    "claude-temp",
+                    ".mypy_cache",
+                    "tests",
+                    "scripts",
+                    "documentation",
+                ],
             ),
             timeout=Duration.seconds(self.env_config["lambda_timeout_api"]),
             memory_size=self.env_config["lambda_memory_api"],
@@ -327,19 +339,32 @@ class ComputeStack(Stack):
 
     def _create_embedder_lambda(self):
         """Create Embedder Lambda (EventBridge trigger) using Docker image."""
-        # Get ECR repository
-        embedder_repo = ecr.Repository.from_repository_name(
-            self,
-            "EmbedderRepository",
-            f"collections-embedder-{self.env_name}"
-        )
+        import os
+
+        # Build context is the project root (parent of infrastructure/)
+        project_root = os.path.join(os.path.dirname(os.path.dirname(__file__)), "..")
 
         self.embedder_lambda = lambda_.DockerImageFunction(
             self,
             "EmbedderLambda",
-            code=lambda_.DockerImageCode.from_ecr(
-                repository=embedder_repo,
-                tag_or_digest="latest"
+            code=lambda_.DockerImageCode.from_image_asset(
+                directory=project_root,
+                file="lambdas/embedder/Dockerfile",
+                exclude=[
+                    "cdk.out",
+                    ".git",
+                    ".venv",
+                    "__pycache__",
+                    "*.pyc",
+                    ".pytest_cache",
+                    "node_modules",
+                    "infrastructure/cdk.out",
+                    "claude-temp",
+                    ".mypy_cache",
+                    "tests",
+                    "scripts",
+                    "documentation",
+                ],
             ),
             timeout=Duration.seconds(self.env_config["lambda_timeout_embedder"]),
             memory_size=self.env_config["lambda_memory_embedder"],
