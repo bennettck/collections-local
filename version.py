@@ -22,21 +22,24 @@ def get_version_info() -> dict:
     """
     # Check for build-time injected values first
     git_sha = os.getenv("GIT_SHA")
+    git_tag = os.getenv("GIT_TAG")
     git_branch = os.getenv("GIT_BRANCH")
     build_timestamp = os.getenv("BUILD_TIMESTAMP")
-    app_version = os.getenv("APP_VERSION", "0.1.0")
 
     # If not set (local dev), try to get from git
     if not git_sha:
         git_sha = _run_git_command("git rev-parse --short HEAD")
+    if not git_tag:
+        # Get tag pointing to HEAD, or None if no tag
+        git_tag = _run_git_command("git describe --tags --exact-match HEAD 2>/dev/null")
     if not git_branch:
         git_branch = _run_git_command("git rev-parse --abbrev-ref HEAD")
     if not build_timestamp:
         build_timestamp = datetime.utcnow().isoformat() + "Z"
 
     return {
-        "version": app_version,
         "git_sha": git_sha or "unknown",
+        "git_tag": git_tag,  # None if no tag
         "git_branch": git_branch or "unknown",
         "build_timestamp": build_timestamp,
         "environment": _detect_environment(),

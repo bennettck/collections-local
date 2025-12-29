@@ -75,8 +75,8 @@ Get version and build information for the running application. Use this to verif
 
 ```json
 {
-  "version": "0.1.0",
   "git_sha": "718290f",
+  "git_tag": "v1.0.0",
   "git_branch": "main",
   "build_timestamp": "2025-12-29T02:50:00Z",
   "environment": "lambda"
@@ -85,8 +85,8 @@ Get version and build information for the running application. Use this to verif
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `version` | string | Application semantic version |
-| `git_sha` | string | Git commit SHA (short form) |
+| `git_sha` | string | Git commit SHA (short form) - exact code deployed |
+| `git_tag` | string/null | Git tag if commit is tagged (e.g., `"v1.0.0"`), null otherwise |
 | `git_branch` | string | Git branch at build time |
 | `build_timestamp` | string | ISO 8601 timestamp when the image was built |
 | `environment` | string | Runtime environment: `"lambda"`, `"codespace"`, or `"local"` |
@@ -97,7 +97,7 @@ Get version and build information for the running application. Use this to verif
 curl https://your-api-endpoint/version
 ```
 
-**Note:** Version info is baked into the Docker image at build time. For local development, it reads from git directly.
+**Note:** Version info is baked into the Docker image at build time. For local development, it reads from git directly. Use `git tag v1.0.0` to tag releases.
 
 ---
 
@@ -112,8 +112,8 @@ Verify that the API server is running and healthy. Also shows version info, data
 ```json
 {
   "status": "healthy",
-  "version": "0.1.0",
   "git_sha": "718290f",
+  "git_tag": "v1.0.0",
   "timestamp": "2025-11-30T12:00:00.000000",
   "database": "postgresql",
   "environment": "lambda",
@@ -126,8 +126,8 @@ Verify that the API server is running and healthy. Also shows version info, data
 | Field | Type | Description |
 |-------|------|-------------|
 | `status` | string | Health status, always "healthy" if responding |
-| `version` | string | Application semantic version |
 | `git_sha` | string | Git commit SHA (short form) - quickly identify deployed code |
+| `git_tag` | string/null | Git tag if commit is tagged, null otherwise |
 | `timestamp` | string | ISO 8601 timestamp of the response |
 | `database` | string | Database type (always "postgresql") |
 | `environment` | string | Runtime environment: `"lambda"`, `"codespace"`, or `"local"` |

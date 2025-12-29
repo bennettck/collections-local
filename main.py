@@ -315,8 +315,8 @@ async def health_check(request: Request):
 
     response = {
         "status": "healthy",
-        "version": version_info["version"],
         "git_sha": version_info["git_sha"],
+        "git_tag": version_info["git_tag"],
         "timestamp": datetime.utcnow().isoformat(),
         "database": "postgresql",
         "environment": version_info["environment"],
