@@ -10,6 +10,7 @@ from aws_cdk import (
     aws_dynamodb as dynamodb,
     aws_secretsmanager as secretsmanager,
     aws_ssm as ssm,
+    aws_iam as iam,
 )
 from constructs import Construct
 from typing import Dict, Any
@@ -52,6 +53,9 @@ class DatabaseStack(Stack):
 
         # Create PostgreSQL database
         self._create_rds_database()
+
+        # Create bastion host for secure database access
+        self._create_bastion_host()
 
         # Create DynamoDB table for checkpoints
         self._create_dynamodb_table()
@@ -153,6 +157,58 @@ class DatabaseStack(Stack):
         # Note: This requires a Lambda-backed custom resource
         # For now, document manual installation step
         # TODO: Add Lambda custom resource for: CREATE EXTENSION IF NOT EXISTS vector;
+
+    def _create_bastion_host(self):
+        """Create a minimal bastion host for SSM-based database access.
+
+        This enables secure database access from anywhere (including GitHub Codespaces)
+        without IP whitelisting, using AWS SSM Session Manager for port forwarding.
+        """
+        # Security group for bastion (no inbound rules needed - SSM uses outbound only)
+        self.bastion_security_group = ec2.SecurityGroup(
+            self,
+            "BastionSecurityGroup",
+            vpc=self.vpc,
+            description=f"Security group for Bastion Host - {self.env_name}",
+            allow_all_outbound=True,
+        )
+
+        # Allow database access from bastion
+        self.db_security_group.add_ingress_rule(
+            self.bastion_security_group,
+            ec2.Port.tcp(5432),
+            "Allow PostgreSQL access from Bastion",
+        )
+
+        # IAM role for bastion with SSM permissions
+        bastion_role = iam.Role(
+            self,
+            "BastionRole",
+            assumed_by=iam.ServicePrincipal("ec2.amazonaws.com"),
+            managed_policies=[
+                iam.ManagedPolicy.from_aws_managed_policy_name(
+                    "AmazonSSMManagedInstanceCore"
+                ),
+            ],
+            description=f"IAM role for Bastion Host - {self.env_name}",
+        )
+
+        # Minimal bastion instance (t4g.nano is ~$3/month)
+        self.bastion = ec2.Instance(
+            self,
+            "BastionHost",
+            instance_type=ec2.InstanceType.of(
+                ec2.InstanceClass.T4G, ec2.InstanceSize.NANO
+            ),
+            machine_image=ec2.MachineImage.latest_amazon_linux2023(
+                cpu_type=ec2.AmazonLinuxCpuType.ARM_64
+            ),
+            vpc=self.vpc,
+            vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PUBLIC),
+            security_group=self.bastion_security_group,
+            role=bastion_role,
+            require_imdsv2=True,  # Security best practice
+        )
 
     def _create_dynamodb_table(self):
         """Create DynamoDB table for LangGraph conversation checkpoints."""
@@ -299,4 +355,12 @@ class DatabaseStack(Stack):
             value=self.checkpoint_table.table_arn,
             description="DynamoDB checkpoint table ARN",
             export_name=f"collections-{self.env_name}-checkpoint-table-arn",
+        )
+
+        CfnOutput(
+            self,
+            "BastionInstanceId",
+            value=self.bastion.instance_id,
+            description="Bastion host instance ID for SSM access",
+            export_name=f"collections-{self.env_name}-bastion-id",
         )
