@@ -4,9 +4,15 @@ SQLAlchemy ORM models for PostgreSQL database.
 This module defines the database schema using SQLAlchemy ORM with:
 - Items table with user_id for multi-tenancy
 - Analyses table with JSONB for structured data and tsvector for full-text search
-- Embeddings table with pgvector support for semantic search
 - Proper relationships and foreign keys with CASCADE delete
 - Indexes for performance optimization
+
+EMBEDDING ARCHITECTURE:
+- Embeddings are stored in the langchain_pg_embedding table (managed by langchain-postgres)
+- This table is the SINGLE SOURCE OF TRUTH for all search (BM25, vector, hybrid)
+- Do NOT use a separate ORM Embedding model - it creates sync issues
+- See retrieval/pgvector_store.py for embedding storage
+- See retrieval/postgres_bm25.py for BM25 search on the same table
 """
 
 from datetime import datetime, timezone
@@ -20,17 +26,14 @@ from sqlalchemy import (
     ForeignKey,
     Index,
     Text,
-    text,
 )
-from sqlalchemy.dialects.postgresql import JSONB, TSVECTOR
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import DeclarativeBase, relationship, Mapped, mapped_column
 from sqlalchemy.types import TypeDecorator, JSON
 
-try:
-    from pgvector.sqlalchemy import Vector
-except ImportError:
-    # Fallback for environments without pgvector
-    Vector = None
+# NOTE: pgvector is not imported here because embeddings are stored in
+# the langchain_pg_embedding table (managed by langchain-postgres library)
+# See retrieval/pgvector_store.py for vector storage
 
 
 class JSONBType(TypeDecorator):
@@ -49,21 +52,9 @@ class JSONBType(TypeDecorator):
             return dialect.type_descriptor(JSON())
 
 
-class VectorType(TypeDecorator):
-    """
-    Custom Vector type that works with both PostgreSQL (pgvector) and SQLite.
-
-    Uses Vector for PostgreSQL and JSON array for other databases.
-    """
-    impl = JSON
-    cache_ok = True
-
-    def load_dialect_impl(self, dialect):
-        if dialect.name == 'postgresql' and Vector is not None:
-            return dialect.type_descriptor(Vector(1024))
-        else:
-            # Store as JSON array for SQLite/testing
-            return dialect.type_descriptor(JSON())
+# NOTE: VectorType was removed because embeddings are now stored in
+# the langchain_pg_embedding table (managed by langchain-postgres library)
+# See retrieval/pgvector_store.py for embedding storage
 
 
 class Base(DeclarativeBase):
@@ -111,11 +102,8 @@ class Item(Base):
         back_populates="item",
         cascade="all, delete-orphan"
     )
-    embeddings: Mapped[list["Embedding"]] = relationship(
-        "Embedding",
-        back_populates="item",
-        cascade="all, delete-orphan"
-    )
+    # NOTE: Embeddings are stored in langchain_pg_embedding table (not ORM)
+    # See retrieval/pgvector_store.py for embedding management
 
     def __repr__(self) -> str:
         return f"<Item(id={self.id}, user_id={self.user_id}, filename={self.filename})>"
@@ -171,78 +159,41 @@ class Analysis(Base):
 
     # Relationships
     item: Mapped["Item"] = relationship("Item", back_populates="analyses")
-    embeddings: Mapped[list["Embedding"]] = relationship(
-        "Embedding",
-        back_populates="analysis",
-        cascade="all, delete-orphan"
-    )
+    # NOTE: Embeddings are stored in langchain_pg_embedding table (not ORM)
+    # See retrieval/pgvector_store.py for embedding management
 
     def __repr__(self) -> str:
         return f"<Analysis(id={self.id}, item_id={self.item_id}, version={self.version})>"
 
 
-class Embedding(Base):
-    """
-    Embeddings table stores vector embeddings for semantic search.
-
-    Uses pgvector extension for efficient similarity search with:
-    - Vector(1024) for 1024-dimensional embeddings
-    - IVFFlat index with cosine similarity
-    - User association for multi-tenancy
-    """
-    __tablename__ = "embeddings"
-
-    # Primary key
-    id: Mapped[str] = mapped_column(String, primary_key=True)
-
-    # Foreign keys
-    item_id: Mapped[str] = mapped_column(
-        String,
-        ForeignKey("items.id", ondelete="CASCADE"),
-        nullable=False,
-        index=True
-    )
-    analysis_id: Mapped[str] = mapped_column(
-        String,
-        ForeignKey("analyses.id", ondelete="CASCADE"),
-        nullable=False,
-        index=True
-    )
-
-    # User association for multi-tenancy (denormalized for faster queries)
-    user_id: Mapped[str] = mapped_column(String, nullable=False, index=True)
-
-    # Vector embedding (1024 dimensions for Voyage AI embeddings)
-    vector: Mapped[Optional[list[float]]] = mapped_column(
-        VectorType,
-        nullable=True
-    )
-
-    # Embedding metadata
-    embedding_model: Mapped[str] = mapped_column(String, nullable=False)
-    embedding_dimensions: Mapped[int] = mapped_column(Integer, nullable=False)
-    embedding_source: Mapped[Optional[dict]] = mapped_column(JSONBType, nullable=True)
-
-    # Timestamp
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True),
-        nullable=False,
-        default=lambda: datetime.now(timezone.utc)
-    )
-
-    # Relationships
-    item: Mapped["Item"] = relationship("Item", back_populates="embeddings")
-    analysis: Mapped["Analysis"] = relationship("Analysis", back_populates="embeddings")
-
-    def __repr__(self) -> str:
-        return f"<Embedding(id={self.id}, item_id={self.item_id}, model={self.embedding_model})>"
+# EMBEDDING ARCHITECTURE NOTE:
+# ----------------------------
+# Embeddings are NOT stored in an ORM model. They are stored in the
+# langchain_pg_embedding table which is managed by the langchain-postgres library.
+#
+# This table is the SINGLE SOURCE OF TRUTH for all search functionality:
+# - Vector search: Uses PGVector cosine similarity on the 'embedding' column
+# - BM25 search: Uses PostgreSQL full-text search on the 'document' column
+# - Hybrid search: Combines both using RRF (Reciprocal Rank Fusion)
+#
+# Key table: langchain_pg_embedding
+# Key columns:
+#   - id: UUID primary key
+#   - collection_id: Links to langchain_pg_collection
+#   - embedding: vector(1024) for VoyageAI embeddings
+#   - document: TEXT content for BM25 search
+#   - cmetadata: JSONB with user_id, item_id, category, etc.
+#
+# See:
+# - retrieval/pgvector_store.py: PGVectorStoreManager for embedding storage
+# - retrieval/postgres_bm25.py: PostgresBM25Retriever for BM25 search
+# - retrieval/hybrid_retriever.py: PostgresHybridRetriever for combined search
 
 
 # Indexes for performance optimization
 
 # Index for user_id on items (already created via index=True in column definition)
 # Index for user_id on analyses (already created via index=True in column definition)
-# Index for user_id on embeddings (already created via index=True in column definition)
 
 # Index for item_id on analyses (already created via index=True in column definition)
 # Index for category on analyses (already created via index=True in column definition)
@@ -253,6 +204,5 @@ Index("idx_analyses_item_version", Analysis.item_id, Analysis.version.desc())
 # GIN index for full-text search on search_vector
 Index("idx_analyses_search_vector", Analysis.search_vector, postgresql_using="gin")
 
-# IVFFlat index for vector similarity search with cosine distance
-# Note: This will be created in the migration after data is populated
-# Index("idx_embeddings_vector_cosine", Embedding.vector, postgresql_using="ivfflat", postgresql_with={"lists": 100}, postgresql_ops={"vector": "vector_cosine_ops"})
+# NOTE: Vector search indexes are managed by langchain-postgres in the
+# langchain_pg_embedding table. See retrieval/pgvector_store.py for details.

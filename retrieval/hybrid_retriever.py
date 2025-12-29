@@ -1,11 +1,22 @@
 """
 Hybrid retriever combining PostgreSQL BM25 and PGVector with RRF.
 
-Uses LangChain's EnsembleRetriever for Reciprocal Rank Fusion (RRF).
-Replaces ChromaDB-based hybrid retriever with PostgreSQL backend.
+ARCHITECTURE:
+- Both BM25 and Vector search use the langchain_pg_embedding table
+- This ensures data consistency and eliminates sync issues
+- BM25 uses PostgreSQL full-text search (tsvector/tsquery) on the document column
+- Vector uses PGVector cosine similarity on the embedding column
+- RRF (Reciprocal Rank Fusion) combines results with configurable weights
+
+ERROR HANDLING:
+- If BM25 fails, falls back to vector-only search
+- If Vector fails, falls back to BM25-only search
+- All errors are logged with full tracebacks for debugging
+- Never silently returns empty results without logging why
 """
 
 import logging
+import traceback
 from typing import List, Optional
 
 from langchain_core.retrievers import BaseRetriever
@@ -20,16 +31,31 @@ from retrieval.pgvector_store import PGVectorStoreManager
 logger = logging.getLogger(__name__)
 
 
+def _log(msg: str, level: str = "INFO"):
+    """Log with both print (for Lambda CloudWatch) and logger."""
+    print(f"[HYBRID:{level}] {msg}")
+    if level == "ERROR":
+        logger.error(msg)
+    elif level == "WARNING":
+        logger.warning(msg)
+    else:
+        logger.info(msg)
+
+
 class PostgresHybridRetriever(BaseRetriever):
     """Hybrid retriever combining PostgreSQL BM25 and PGVector with RRF.
 
+    IMPORTANT: Both retrievers query the same langchain_pg_embedding table.
+    This ensures data consistency between keyword and semantic search.
+
     Features:
-    - PostgreSQL BM25 for keyword matching
-    - PGVector for semantic similarity
+    - PostgreSQL BM25 for keyword matching (full-text search on document column)
+    - PGVector for semantic similarity (cosine on embedding column)
     - Reciprocal Rank Fusion (RRF) for score combination
     - User isolation via metadata filtering
     - Category filtering support
     - Configurable weights and RRF constant
+    - Graceful fallback if one retriever fails
     """
 
     # Configuration
@@ -63,7 +89,7 @@ class PostgresHybridRetriever(BaseRetriever):
         *,
         run_manager: Optional[CallbackManagerForRetrieverRun] = None
     ) -> List[Document]:
-        """Execute hybrid search using EnsembleRetriever with RRF.
+        """Execute hybrid search using BM25 + Vector with RRF fusion.
 
         Args:
             query: Search query string
@@ -71,9 +97,21 @@ class PostgresHybridRetriever(BaseRetriever):
 
         Returns:
             List of relevant Documents ranked by RRF
+
+        Note:
+            If one retriever fails, gracefully falls back to the other.
+            Only raises if both retrievers fail.
         """
+        _log(f"Starting hybrid search: query='{query[:50]}...', user_id={self.user_id}")
+
+        bm25_docs = []
+        vector_docs = []
+        bm25_error = None
+        vector_error = None
+
+        # Execute BM25 retrieval
         try:
-            # Create BM25 retriever
+            _log(f"Executing BM25 search (top_k={self.bm25_top_k})")
             bm25_retriever = PostgresBM25Retriever(
                 top_k=self.bm25_top_k,
                 user_id=self.user_id,
@@ -83,11 +121,19 @@ class PostgresHybridRetriever(BaseRetriever):
                 use_parameter_store=self.use_parameter_store,
                 parameter_name=self.parameter_name
             )
+            bm25_docs = bm25_retriever._get_relevant_documents(query)
+            _log(f"BM25 returned {len(bm25_docs)} documents")
+        except Exception as e:
+            bm25_error = e
+            _log(f"BM25 search failed: {e}", "WARNING")
+            _log(f"BM25 traceback: {traceback.format_exc()}", "WARNING")
 
-            # Create vector retriever
+        # Execute vector retrieval
+        try:
             if not self.pgvector_manager:
-                logger.error("PGVector manager not provided to PostgresHybridRetriever")
-                return []
+                raise ValueError("PGVector manager not provided to PostgresHybridRetriever")
+
+            _log(f"Executing vector search (top_k={self.vector_top_k})")
 
             # Build filter dict for PGVector
             filter_dict = {}
@@ -104,39 +150,57 @@ class PostgresHybridRetriever(BaseRetriever):
                 }
             )
 
-            # Execute BM25 retrieval
-            bm25_docs = bm25_retriever._get_relevant_documents(query)
-            logger.info(f"BM25 returned {len(bm25_docs)} documents")
-
-            # Execute vector retrieval
             vector_docs = vector_retriever._get_relevant_documents(query)
-            logger.info(f"Vector returned {len(vector_docs)} documents")
+            _log(f"Vector returned {len(vector_docs)} documents")
+        except Exception as e:
+            vector_error = e
+            _log(f"Vector search failed: {e}", "WARNING")
+            _log(f"Vector traceback: {traceback.format_exc()}", "WARNING")
 
-            # Manual RRF fusion
-            documents = self._manual_rrf_fusion(
-                bm25_docs=bm25_docs,
-                vector_docs=vector_docs,
-                bm25_weight=self.bm25_weight,
-                vector_weight=self.vector_weight,
-                c=self.rrf_c
-            )
+        # Check if both failed
+        if bm25_error and vector_error:
+            _log("Both BM25 and Vector search failed!", "ERROR")
+            _log(f"BM25 error: {bm25_error}", "ERROR")
+            _log(f"Vector error: {vector_error}", "ERROR")
+            # Return empty but log the failures
+            return []
 
-            # Limit to top_k results
-            documents = documents[:self.top_k]
-
-            # Mark as hybrid search in metadata and add RRF score
-            for i, doc in enumerate(documents, start=1):
-                doc.metadata["score_type"] = "hybrid_rrf"
-                # Calculate approximate RRF score for this rank
-                if "rrf_score" not in doc.metadata:
-                    doc.metadata["rrf_score"] = 1.0 / (self.rrf_c + i)
-
-            logger.info(f"Hybrid search returned {len(documents)} documents")
+        # Handle fallback scenarios
+        if bm25_error:
+            _log("Falling back to vector-only search (BM25 failed)", "WARNING")
+            documents = vector_docs[:self.top_k]
+            for doc in documents:
+                doc.metadata["score_type"] = "vector_fallback"
             return documents
 
-        except Exception as e:
-            logger.error(f"Hybrid retrieval failed: {e}")
-            return []
+        if vector_error:
+            _log("Falling back to BM25-only search (Vector failed)", "WARNING")
+            documents = bm25_docs[:self.top_k]
+            for doc in documents:
+                doc.metadata["score_type"] = "bm25_fallback"
+            return documents
+
+        # Normal case: both succeeded, perform RRF fusion
+        _log(f"Performing RRF fusion: {len(bm25_docs)} BM25 + {len(vector_docs)} vector")
+        documents = self._manual_rrf_fusion(
+            bm25_docs=bm25_docs,
+            vector_docs=vector_docs,
+            bm25_weight=self.bm25_weight,
+            vector_weight=self.vector_weight,
+            c=self.rrf_c
+        )
+
+        # Limit to top_k results
+        documents = documents[:self.top_k]
+
+        # Mark as hybrid search in metadata and add RRF score
+        for i, doc in enumerate(documents, start=1):
+            doc.metadata["score_type"] = "hybrid_rrf"
+            if "rrf_score" not in doc.metadata:
+                doc.metadata["rrf_score"] = 1.0 / (self.rrf_c + i)
+
+        _log(f"Hybrid search complete: returning {len(documents)} documents")
+        return documents
 
     def _manual_rrf_fusion(
         self,
@@ -147,14 +211,16 @@ class PostgresHybridRetriever(BaseRetriever):
         c: int
     ) -> List[Document]:
         """
-        Manually perform Reciprocal Rank Fusion (RRF) on two document lists.
+        Perform Reciprocal Rank Fusion (RRF) on two document lists.
+
+        RRF Score = sum(weight * 1/(c + rank)) for each retriever
 
         Args:
             bm25_docs: Documents from BM25 retriever (ranked)
             vector_docs: Documents from vector retriever (ranked)
-            bm25_weight: Weight for BM25 scores
-            vector_weight: Weight for vector scores
-            c: RRF constant (default 60 in literature, we use 15 for sensitivity)
+            bm25_weight: Weight for BM25 scores (default 0.3)
+            vector_weight: Weight for vector scores (default 0.7)
+            c: RRF constant (lower = more sensitive to rank differences)
 
         Returns:
             Fused and re-ranked documents
@@ -167,6 +233,7 @@ class PostgresHybridRetriever(BaseRetriever):
         for rank, doc in enumerate(bm25_docs, start=1):
             item_id = doc.metadata.get("item_id")
             if not item_id:
+                _log(f"BM25 doc missing item_id, skipping", "WARNING")
                 continue
 
             rrf_score = bm25_weight * (1.0 / (c + rank))
@@ -180,6 +247,7 @@ class PostgresHybridRetriever(BaseRetriever):
         for rank, doc in enumerate(vector_docs, start=1):
             item_id = doc.metadata.get("item_id")
             if not item_id:
+                _log(f"Vector doc missing item_id, skipping", "WARNING")
                 continue
 
             rrf_score = vector_weight * (1.0 / (c + rank))
@@ -206,80 +274,15 @@ class PostgresHybridRetriever(BaseRetriever):
             doc.metadata["score_type"] = "hybrid_rrf"
             fused_docs.append(doc)
 
-        logger.info(f"RRF fusion: {len(bm25_docs)} BM25 + {len(vector_docs)} vector -> {len(fused_docs)} unique")
+        _log(f"RRF fusion: {len(bm25_docs)} BM25 + {len(vector_docs)} vector -> {len(fused_docs)} unique")
         return fused_docs
-
-    def _wrap_vector_retriever_with_scoring(
-        self,
-        base_retriever,
-        min_similarity: float
-    ) -> BaseRetriever:
-        """Wrap vector retriever to add similarity scores and filter by threshold.
-
-        Args:
-            base_retriever: Base vector retriever
-            min_similarity: Minimum similarity threshold
-
-        Returns:
-            Wrapped retriever with scoring
-        """
-        class ScoredVectorRetriever(BaseRetriever):
-            """Wrapper to add scores to vector retriever results."""
-
-            retriever: BaseRetriever
-            min_similarity: float
-            pgvector_manager: PGVectorStoreManager
-
-            class Config:
-                arbitrary_types_allowed = True
-
-            def _get_relevant_documents(
-                self,
-                query: str,
-                *,
-                run_manager: Optional[CallbackManagerForRetrieverRun] = None
-            ) -> List[Document]:
-                """Get documents with similarity scores."""
-                try:
-                    # Use similarity_search_with_score directly from PGVector
-                    filter_dict = self.retriever.search_kwargs.get("filter")
-                    k = self.retriever.search_kwargs.get("k", 10)
-
-                    results = self.pgvector_manager.similarity_search_with_score(
-                        query,
-                        k=k,
-                        filter=filter_dict
-                    )
-
-                    # Filter by similarity and add scores
-                    documents = []
-                    for doc, distance in results:
-                        # Convert distance to similarity (cosine distance: lower is better)
-                        # For cosine distance in range [0, 2], similarity = 1 - (distance / 2)
-                        similarity = 1.0 - (distance / 2.0)
-
-                        if similarity >= self.min_similarity:
-                            doc.metadata["score"] = similarity
-                            doc.metadata["score_type"] = "similarity"
-                            documents.append(doc)
-
-                    return documents
-
-                except Exception as e:
-                    logger.error(f"Scored vector retrieval failed: {e}")
-                    return []
-
-        return ScoredVectorRetriever(
-            retriever=base_retriever,
-            min_similarity=min_similarity,
-            pgvector_manager=self.pgvector_manager
-        )
 
 
 class VectorOnlyRetriever(BaseRetriever):
     """Vector-only retriever using PGVector.
 
     Convenience class for vector-only search without BM25.
+    Uses the langchain_pg_embedding table directly via PGVectorStoreManager.
     """
 
     top_k: int = 10
@@ -308,10 +311,12 @@ class VectorOnlyRetriever(BaseRetriever):
         Returns:
             List of relevant Documents
         """
+        _log(f"Starting vector-only search: query='{query[:50]}...', user_id={self.user_id}")
+
         try:
             if not self.pgvector_manager:
-                logger.error("PGVector manager not provided to VectorOnlyRetriever")
-                return []
+                _log("PGVector manager not provided to VectorOnlyRetriever", "ERROR")
+                raise ValueError("PGVector manager not provided to VectorOnlyRetriever")
 
             # Build filter dict
             filter_dict = {}
@@ -320,7 +325,7 @@ class VectorOnlyRetriever(BaseRetriever):
             if self.category_filter:
                 filter_dict["category"] = self.category_filter
 
-            logger.info(f"Vector search: query='{query}', filter={filter_dict}, top_k={self.top_k}")
+            _log(f"Vector search params: filter={filter_dict}, top_k={self.top_k}")
 
             # Use similarity_search_with_score for threshold filtering
             results = self.pgvector_manager.similarity_search_with_score(
@@ -329,12 +334,13 @@ class VectorOnlyRetriever(BaseRetriever):
                 filter=filter_dict if filter_dict else None
             )
 
-            logger.info(f"Vector search raw results: {len(results)} documents from PGVector")
+            _log(f"Vector search raw results: {len(results)} documents from PGVector")
 
             # Filter by similarity threshold and add scores to metadata
             documents = []
             for doc, distance in results:
                 # Convert distance to similarity (cosine distance: lower is better)
+                # For cosine distance in range [0, 2], similarity = 1 - (distance / 2)
                 similarity = 1.0 - (distance / 2.0)
 
                 if similarity >= self.min_similarity_score:
@@ -343,11 +349,11 @@ class VectorOnlyRetriever(BaseRetriever):
                     doc.metadata["score_type"] = "similarity"
                     documents.append(doc)
 
-            logger.info(f"Vector search after threshold filter ({self.min_similarity_score}): {len(documents)} documents")
+            _log(f"Vector search complete: {len(documents)} documents (threshold={self.min_similarity_score})")
             return documents
 
         except Exception as e:
-            logger.error(f"Vector retrieval failed: {e}")
-            import traceback
-            logger.error(f"Traceback: {traceback.format_exc()}")
-            return []
+            _log(f"Vector retrieval failed: {e}", "ERROR")
+            _log(f"Traceback: {traceback.format_exc()}", "ERROR")
+            # Re-raise so caller knows there was an error
+            raise

@@ -2,6 +2,12 @@
 Unit tests for SQLAlchemy ORM models.
 
 Tests model creation, relationships, and constraints.
+
+EMBEDDING ARCHITECTURE NOTE:
+- Embeddings are NOT stored in an ORM model
+- They are stored in the langchain_pg_embedding table (managed by langchain-postgres)
+- See retrieval/pgvector_store.py for embedding storage
+- See retrieval/postgres_bm25.py for BM25 search on the same table
 """
 
 import pytest
@@ -10,7 +16,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import IntegrityError
 
-from database_orm.models import Base, Item, Analysis, Embedding
+from database_orm.models import Base, Item, Analysis
 
 
 @pytest.fixture
@@ -85,7 +91,7 @@ class TestItemModel:
             session.commit()
 
     def test_item_relationships(self, session):
-        """Test item relationships with analyses and embeddings."""
+        """Test item relationships with analyses."""
         item = Item(
             id="test-item-4",
             user_id="user-123",
@@ -153,7 +159,7 @@ class TestAnalysisModel:
         assert retrieved.raw_response["tags"] == ["nature", "landscape"]
 
     def test_analysis_jsonb_field(self, session):
-        """Test JSONB field for raw_response (SQLite doesn't support JSONB, so we test dict)."""
+        """Test JSONB field for raw_response (SQLite uses JSON)."""
         item = Item(
             id="test-item-6",
             user_id="user-123",
@@ -239,13 +245,8 @@ class TestAnalysisModel:
         retrieved = session.query(Analysis).filter_by(id="analysis-4").first()
         assert retrieved is None
 
-
-class TestEmbeddingModel:
-    """Test Embedding ORM model."""
-
-    def test_create_embedding(self, session):
-        """Test creating an embedding."""
-        # Create item and analysis first
+    def test_analysis_relationship_to_item(self, session):
+        """Test analysis back-reference to item."""
         item = Item(
             id="test-item-9",
             user_id="user-123",
@@ -264,137 +265,11 @@ class TestEmbeddingModel:
         session.add(analysis)
         session.commit()
 
-        # Create embedding
-        embedding = Embedding(
-            id="embedding-1",
-            item_id="test-item-9",
-            analysis_id="analysis-5",
-            user_id="user-123",
-            vector=[0.1] * 1024,  # 1024-dimensional vector
-            embedding_model="voyage-2",
-            embedding_dimensions=1024,
-            embedding_source={"fields": ["summary", "category"]}
-        )
-        session.add(embedding)
-        session.commit()
+        # Verify back-reference
+        assert analysis.item.id == "test-item-9"
+        assert analysis.item.filename == "test9.jpg"
 
-        # Verify embedding was created
-        retrieved = session.query(Embedding).filter_by(id="embedding-1").first()
-        assert retrieved is not None
-        assert retrieved.embedding_model == "voyage-2"
-        assert retrieved.embedding_dimensions == 1024
-        assert len(retrieved.vector) == 1024
 
-    def test_embedding_vector_dimensions(self, session):
-        """Test vector dimension validation."""
-        item = Item(
-            id="test-item-10",
-            user_id="user-123",
-            filename="test10.jpg",
-            file_path="/data/test10.jpg"
-        )
-        session.add(item)
-
-        analysis = Analysis(
-            id="analysis-6",
-            item_id="test-item-10",
-            user_id="user-123",
-            version=1,
-            raw_response={}
-        )
-        session.add(analysis)
-        session.commit()
-
-        # Create embedding with different dimensions
-        embedding = Embedding(
-            id="embedding-2",
-            item_id="test-item-10",
-            analysis_id="analysis-6",
-            user_id="user-123",
-            vector=[0.1] * 512,  # Different size
-            embedding_model="test-model",
-            embedding_dimensions=512
-        )
-        session.add(embedding)
-        session.commit()
-
-        # Verify dimensions stored correctly
-        retrieved = session.query(Embedding).filter_by(id="embedding-2").first()
-        assert retrieved.embedding_dimensions == 512
-        assert len(retrieved.vector) == 512
-
-    def test_embedding_cascade_delete(self, session):
-        """Test cascade delete from item to embedding."""
-        item = Item(
-            id="test-item-11",
-            user_id="user-123",
-            filename="test11.jpg",
-            file_path="/data/test11.jpg"
-        )
-        session.add(item)
-
-        analysis = Analysis(
-            id="analysis-7",
-            item_id="test-item-11",
-            user_id="user-123",
-            version=1,
-            raw_response={}
-        )
-        session.add(analysis)
-
-        embedding = Embedding(
-            id="embedding-3",
-            item_id="test-item-11",
-            analysis_id="analysis-7",
-            user_id="user-123",
-            vector=[0.1] * 1024,
-            embedding_model="test",
-            embedding_dimensions=1024
-        )
-        session.add(embedding)
-        session.commit()
-
-        # Delete item (should cascade to analysis and embedding)
-        session.delete(item)
-        session.commit()
-
-        # Verify embedding was also deleted
-        retrieved = session.query(Embedding).filter_by(id="embedding-3").first()
-        assert retrieved is None
-
-    def test_embedding_relationships(self, session):
-        """Test embedding relationships."""
-        item = Item(
-            id="test-item-12",
-            user_id="user-123",
-            filename="test12.jpg",
-            file_path="/data/test12.jpg"
-        )
-        session.add(item)
-
-        analysis = Analysis(
-            id="analysis-8",
-            item_id="test-item-12",
-            user_id="user-123",
-            version=1,
-            raw_response={}
-        )
-        session.add(analysis)
-
-        embedding = Embedding(
-            id="embedding-4",
-            item_id="test-item-12",
-            analysis_id="analysis-8",
-            user_id="user-123",
-            vector=[0.1] * 1024,
-            embedding_model="test",
-            embedding_dimensions=1024
-        )
-        session.add(embedding)
-        session.commit()
-
-        # Verify relationships
-        assert embedding.item.id == "test-item-12"
-        assert embedding.analysis.id == "analysis-8"
-        assert item.embeddings[0].id == "embedding-4"
-        assert analysis.embeddings[0].id == "embedding-4"
+# NOTE: Embedding tests were removed because embeddings are now stored
+# in the langchain_pg_embedding table (managed by langchain-postgres library),
+# not in an ORM model. See retrieval/pgvector_store.py for embedding storage.

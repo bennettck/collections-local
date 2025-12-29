@@ -179,6 +179,9 @@ def store_in_vector_store(
     - PostgreSQL pgvector storage
     - Proper metadata for retrieval
 
+    CRITICAL: Must use the same collection name as the search API.
+    Collection name comes from config/langchain_config.py to ensure consistency.
+
     Args:
         item_id: Item identifier
         user_id: User identifier
@@ -188,12 +191,28 @@ def store_in_vector_store(
     Returns:
         Document ID
     """
+    # Use print() for Lambda CloudWatch visibility (logger may not be configured)
+    print(f"[EMBEDDER] Storing document in vector store: item_id={item_id}")
     logger.info(f"Storing document in vector store: item_id={item_id}")
 
     from retrieval.pgvector_store import PGVectorStoreManager
+    from config.langchain_config import get_vector_store_config, DEFAULT_EMBEDDING_MODEL
 
-    # Initialize vector store manager
-    vector_mgr = PGVectorStoreManager()
+    # CRITICAL: Use the same collection name as the search API
+    # This was previously using the default "collections_vectors" which caused
+    # embeddings to be stored in a different collection than search was querying
+    vector_config = get_vector_store_config("prod")
+    collection_name = vector_config["collection_name"]  # "collections_vectors_prod"
+
+    print(f"[EMBEDDER] Using collection: {collection_name}, model: {DEFAULT_EMBEDDING_MODEL}")
+    logger.info(f"Using collection: {collection_name}, model: {DEFAULT_EMBEDDING_MODEL}")
+
+    # Initialize vector store manager with CORRECT collection name
+    vector_mgr = PGVectorStoreManager(
+        collection_name=collection_name,
+        embedding_model=DEFAULT_EMBEDDING_MODEL,
+        use_parameter_store=False  # Use DB_SECRET_ARN via get_connection_string()
+    )
 
     # Add document using the convenience method
     doc_id = vector_mgr.add_document(
@@ -203,6 +222,7 @@ def store_in_vector_store(
         user_id=user_id
     )
 
+    print(f"[EMBEDDER] Document stored successfully: doc_id={doc_id}")
     logger.info(f"Document stored in vector store: doc_id={doc_id}")
     return doc_id
 
@@ -218,14 +238,22 @@ def handler(event: dict, context) -> dict:
     Returns:
         Response dictionary
     """
+    # Use print() for guaranteed CloudWatch visibility
+    print(f"[EMBEDDER] Handler invoked")
+
     try:
+        print(f"[EMBEDDER] Received event: {json.dumps(event)}")
         logger.info(f"Received event: {json.dumps(event)}")
 
         # Initialize database connection
+        print("[EMBEDDER] Initializing database connection...")
         ensure_db_connection()
+        print("[EMBEDDER] Database connection initialized")
 
         # Get API keys from Parameter Store
+        print("[EMBEDDER] Getting API keys from Parameter Store...")
         get_api_keys()
+        print("[EMBEDDER] API keys retrieved")
 
         # Parse EventBridge event
         detail = parse_eventbridge_event(event)
@@ -233,12 +261,16 @@ def handler(event: dict, context) -> dict:
         item_id = detail['item_id']
         analysis_id = detail['analysis_id']
         user_id = detail['user_id']
+        print(f"[EMBEDDER] Processing: item_id={item_id}, analysis_id={analysis_id}, user_id={user_id}")
 
         # Fetch analysis from database (includes filename)
+        print("[EMBEDDER] Fetching analysis from database...")
         analysis_data = fetch_analysis(analysis_id, user_id)
+        print(f"[EMBEDDER] Analysis fetched: category={analysis_data.get('category')}")
 
         # Store in langchain-postgres vector store
         # This handles embedding generation and storage
+        print("[EMBEDDER] Storing in vector store...")
         doc_id = store_in_vector_store(
             item_id=item_id,
             user_id=user_id,
@@ -246,6 +278,7 @@ def handler(event: dict, context) -> dict:
             filename=analysis_data['filename']
         )
 
+        print(f"[EMBEDDER] SUCCESS: item_id={item_id}, doc_id={doc_id}")
         logger.info(f"Successfully processed embedding: item_id={item_id}, doc_id={doc_id}")
 
         return {
@@ -258,10 +291,15 @@ def handler(event: dict, context) -> dict:
         }
 
     except Exception as e:
+        import traceback
+        error_trace = traceback.format_exc()
+        print(f"[EMBEDDER] ERROR: {e}")
+        print(f"[EMBEDDER] TRACEBACK: {error_trace}")
         logger.error(f"Error storing embedding: {e}", exc_info=True)
         return {
             'statusCode': 500,
             'body': json.dumps({
-                'error': str(e)
+                'error': str(e),
+                'traceback': error_trace
             })
         }

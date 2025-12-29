@@ -1,27 +1,44 @@
 # Archived Scripts
 
-This directory contains deprecated scripts that have been replaced by newer implementations.
+This directory contains utility scripts that are no longer needed for normal operations.
 
-## Archived Scripts
+## Kept Scripts
 
-- `regenerate_embeddings_deprecated.py` - ChromaDB embedding regeneration (no longer needed)
-- `migrate_to_langchain_deprecated.py` - ChromaDB vector store builder (no longer needed)
-- `build_chroma_index_deprecated.py` - ChromaDB index builder (no longer needed)
+- `backfill_golden_filenames.py` - Backfill filenames for golden dataset
+- `copy_golden_images.py` - Copy golden dataset images
+- `remove_duplicate_items.py` - Remove duplicate items from database
 
-## Why Archived?
+## Removed (Deprecated)
 
-The project migrated from ChromaDB (local development) to PostgreSQL with pgvector
-extension (AWS RDS compatible). These scripts are kept for reference only.
+The following scripts were removed because they wrote to incorrect tables:
 
-## Do Not Use
+- `regenerate_embeddings_deprecated.py` - Wrote to wrong table (removed)
+- `migrate_to_langchain_deprecated.py` - ChromaDB migration (removed)
+- `build_chroma_index_deprecated.py` - ChromaDB index builder (removed)
 
-These scripts will generate `DeprecationWarning` if executed. They are kept for:
-- Historical reference
-- Understanding migration decisions
-- Documentation purposes
+The following retrieval modules were removed:
 
-## Current Scripts
+- `retrieval/archive/` - Entire directory removed (contained deprecated ChromaDB and migration code)
 
-Use these scripts instead:
-- For vector index management, use PostgreSQL-based tools or the API endpoints
-- PGVector indices are managed automatically by the retrieval system
+## Architecture
+
+Embeddings are now stored in the `langchain_pg_embedding` table:
+
+- **Storage**: `retrieval/pgvector_store.py` (PGVectorStoreManager.add_document)
+- **Vector Search**: `retrieval/pgvector_store.py` (PGVectorStoreManager.similarity_search_with_score)
+- **BM25 Search**: `retrieval/postgres_bm25.py` (PostgresBM25Retriever)
+- **Hybrid Search**: `retrieval/hybrid_retriever.py` (PostgresHybridRetriever)
+
+## Current Embedding Script
+
+Use `scripts/regenerate_embeddings_langchain.py` to regenerate embeddings:
+
+```bash
+# Regenerate for specific user
+python scripts/regenerate_embeddings_langchain.py --user-id <UUID>
+
+# Regenerate for all users
+python scripts/regenerate_embeddings_langchain.py --all-users
+```
+
+This script correctly writes to the `langchain_pg_embedding` table.
