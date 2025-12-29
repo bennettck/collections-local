@@ -5,7 +5,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
-COPY handler.py .
+COPY lambdas/embedder/handler.py ./handler.py
 COPY embeddings.py .
 
 # Copy database modules (aliased as database_orm for compatibility)

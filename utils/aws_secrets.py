@@ -60,7 +60,14 @@ def get_database_credentials() -> Dict[str, str]:
         )
 
     try:
-        client = boto3.client('secretsmanager')
+        # Create client with short timeout for Lambda init/first request
+        from botocore.config import Config
+        boto_config = Config(
+            connect_timeout=3,  # 3 seconds to establish connection
+            read_timeout=5,     # 5 seconds to read response
+            retries={'max_attempts': 1}  # Don't retry on timeout
+        )
+        client = boto3.client('secretsmanager', config=boto_config)
         response = client.get_secret_value(SecretId=secret_arn)
 
         # Parse the secret JSON

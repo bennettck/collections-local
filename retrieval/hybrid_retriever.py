@@ -11,8 +11,8 @@ from typing import List, Optional
 from langchain_core.retrievers import BaseRetriever
 from langchain_core.documents import Document
 from langchain_core.callbacks import CallbackManagerForRetrieverRun
-from langchain.retrievers.ensemble import EnsembleRetriever
 from langsmith import traceable
+from collections import defaultdict
 
 from retrieval.postgres_bm25 import PostgresBM25Retriever
 from retrieval.pgvector_store import PGVectorStoreManager
@@ -104,33 +104,22 @@ class PostgresHybridRetriever(BaseRetriever):
                 }
             )
 
-            # Wrap vector retriever to add scores and filter by similarity threshold
-            vector_retriever = self._wrap_vector_retriever_with_scoring(
-                vector_retriever,
-                self.min_similarity_score
-            )
+            # Execute BM25 retrieval
+            bm25_docs = bm25_retriever._get_relevant_documents(query)
+            logger.info(f"BM25 returned {len(bm25_docs)} documents")
 
-            # Create ensemble retriever with RRF
-            ensemble = EnsembleRetriever(
-                retrievers=[bm25_retriever, vector_retriever],
-                weights=[self.bm25_weight, self.vector_weight],
-                c=self.rrf_c,  # RRF constant
-                id_key="item_id"  # Use item_id for deduplication
-            )
+            # Execute vector retrieval
+            vector_docs = vector_retriever._get_relevant_documents(query)
+            logger.info(f"Vector returned {len(vector_docs)} documents")
 
-            # Execute retrieval with proper callback handling
-            try:
-                if run_manager:
-                    documents = ensemble.invoke(
-                        query,
-                        config={"callbacks": run_manager.get_child()}
-                    )
-                else:
-                    documents = ensemble.invoke(query)
-            except Exception as e:
-                logger.warning(f"Ensemble retrieval callback error, retrying without callbacks: {e}")
-                # Fallback without callbacks if there's an issue
-                documents = ensemble.invoke(query)
+            # Manual RRF fusion
+            documents = self._manual_rrf_fusion(
+                bm25_docs=bm25_docs,
+                vector_docs=vector_docs,
+                bm25_weight=self.bm25_weight,
+                vector_weight=self.vector_weight,
+                c=self.rrf_c
+            )
 
             # Limit to top_k results
             documents = documents[:self.top_k]
@@ -148,6 +137,77 @@ class PostgresHybridRetriever(BaseRetriever):
         except Exception as e:
             logger.error(f"Hybrid retrieval failed: {e}")
             return []
+
+    def _manual_rrf_fusion(
+        self,
+        bm25_docs: List[Document],
+        vector_docs: List[Document],
+        bm25_weight: float,
+        vector_weight: float,
+        c: int
+    ) -> List[Document]:
+        """
+        Manually perform Reciprocal Rank Fusion (RRF) on two document lists.
+
+        Args:
+            bm25_docs: Documents from BM25 retriever (ranked)
+            vector_docs: Documents from vector retriever (ranked)
+            bm25_weight: Weight for BM25 scores
+            vector_weight: Weight for vector scores
+            c: RRF constant (default 60 in literature, we use 15 for sensitivity)
+
+        Returns:
+            Fused and re-ranked documents
+        """
+        # Build score mapping: item_id -> weighted RRF score
+        rrf_scores = defaultdict(float)
+        doc_map = {}  # item_id -> Document
+
+        # Process BM25 results (rank starts at 1)
+        for rank, doc in enumerate(bm25_docs, start=1):
+            item_id = doc.metadata.get("item_id")
+            if not item_id:
+                continue
+
+            rrf_score = bm25_weight * (1.0 / (c + rank))
+            rrf_scores[item_id] += rrf_score
+
+            # Store doc (prefer first occurrence)
+            if item_id not in doc_map:
+                doc_map[item_id] = doc
+
+        # Process vector results
+        for rank, doc in enumerate(vector_docs, start=1):
+            item_id = doc.metadata.get("item_id")
+            if not item_id:
+                continue
+
+            rrf_score = vector_weight * (1.0 / (c + rank))
+            rrf_scores[item_id] += rrf_score
+
+            # Store doc if not already stored
+            if item_id not in doc_map:
+                doc_map[item_id] = doc
+
+        # Sort by RRF score (descending)
+        sorted_items = sorted(
+            rrf_scores.items(),
+            key=lambda x: x[1],
+            reverse=True
+        )
+
+        # Build final document list
+        fused_docs = []
+        for item_id, rrf_score in sorted_items:
+            doc = doc_map[item_id]
+            # Add RRF score to metadata
+            doc.metadata["rrf_score"] = rrf_score
+            doc.metadata["score"] = rrf_score  # Use as primary score
+            doc.metadata["score_type"] = "hybrid_rrf"
+            fused_docs.append(doc)
+
+        logger.info(f"RRF fusion: {len(bm25_docs)} BM25 + {len(vector_docs)} vector -> {len(fused_docs)} unique")
+        return fused_docs
 
     def _wrap_vector_retriever_with_scoring(
         self,
@@ -260,12 +320,16 @@ class VectorOnlyRetriever(BaseRetriever):
             if self.category_filter:
                 filter_dict["category"] = self.category_filter
 
+            logger.info(f"Vector search: query='{query}', filter={filter_dict}, top_k={self.top_k}")
+
             # Use similarity_search_with_score for threshold filtering
             results = self.pgvector_manager.similarity_search_with_score(
                 query,
                 k=self.top_k,
                 filter=filter_dict if filter_dict else None
             )
+
+            logger.info(f"Vector search raw results: {len(results)} documents from PGVector")
 
             # Filter by similarity threshold and add scores to metadata
             documents = []
@@ -279,9 +343,11 @@ class VectorOnlyRetriever(BaseRetriever):
                     doc.metadata["score_type"] = "similarity"
                     documents.append(doc)
 
-            logger.info(f"Vector search returned {len(documents)} documents")
+            logger.info(f"Vector search after threshold filter ({self.min_similarity_score}): {len(documents)} documents")
             return documents
 
         except Exception as e:
             logger.error(f"Vector retrieval failed: {e}")
+            import traceback
+            logger.error(f"Traceback: {traceback.format_exc()}")
             return []

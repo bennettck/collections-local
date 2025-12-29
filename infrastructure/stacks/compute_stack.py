@@ -4,6 +4,8 @@ from aws_cdk import (
     Stack,
     Duration,
     CfnOutput,
+    CfnDynamicReference,
+    CfnDynamicReferenceService,
     aws_lambda as lambda_,
     aws_logs as logs,
     aws_iam as iam,
@@ -15,6 +17,7 @@ from aws_cdk import (
     aws_secretsmanager as secretsmanager,
     aws_s3_notifications as s3n,
     aws_ecr as ecr,
+    aws_ssm as ssm,
 )
 from constructs import Construct
 from typing import Dict, Any, List
@@ -71,18 +74,46 @@ class ComputeStack(Stack):
         # Create S3 bucket and EventBridge bus internally (before common_env)
         self._create_storage_resources()
 
+        # Load API keys from Parameter Store using CloudFormation dynamic references
+        # This keeps secrets secure and doesn't expose them in CloudFormation templates
+        # Using ssm-secure for SecureString parameters
+        anthropic_key = CfnDynamicReference(
+            CfnDynamicReferenceService.SSM,
+            "/collections/anthropic-api-key"
+        ).to_string()
+        voyage_key = CfnDynamicReference(
+            CfnDynamicReferenceService.SSM,
+            "/collections/voyage-api-key"
+        ).to_string()
+        tavily_key = CfnDynamicReference(
+            CfnDynamicReferenceService.SSM,
+            "/collections/tavily-api-key"
+        ).to_string()
+        langsmith_key = CfnDynamicReference(
+            CfnDynamicReferenceService.SSM,
+            "/collections/langsmith-api-key"
+        ).to_string()
+
         # Common environment variables for all Lambdas
         # Note: AWS_REGION is automatically set by Lambda runtime
         self.common_env = {
             "ENVIRONMENT": env_name,
             "CHECKPOINT_TABLE_NAME": checkpoint_table.table_name,
             "BUCKET_NAME": self.bucket.bucket_name,
+            # Fix for read-only filesystem error in Lambda
+            # VoyageAI tries to write cache files to HOME directory
+            "HOME": "/tmp",
             # Database credentials via Secrets Manager (secure approach)
             "DB_SECRET_ARN": db_credentials.secret_arn,
             # Legacy environment variables (for backwards compatibility during migration)
             "DATABASE_HOST": database.db_instance_endpoint_address,
             "DATABASE_PORT": str(database.db_instance_endpoint_port),
             "DATABASE_NAME": "collections",
+            # API Keys from Parameter Store (using dynamic references)
+            "ANTHROPIC_API_KEY": anthropic_key,
+            "VOYAGE_API_KEY": voyage_key,
+            "TAVILY_API_KEY": tavily_key,
+            "LANGSMITH_API_KEY": langsmith_key,
         }
 
         # Create Lambda functions
