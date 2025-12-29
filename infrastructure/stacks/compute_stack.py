@@ -208,19 +208,38 @@ class ComputeStack(Stack):
 
     def _create_api_lambda(self):
         """Create API Lambda function (FastAPI + Mangum) using Docker image."""
-        # Get ECR repository
-        api_repo = ecr.Repository.from_repository_name(
-            self,
-            "APIRepository",
-            f"collections-api-{self.env_name}"
-        )
+        import os
+        import subprocess
+        from datetime import datetime
+
+        # Get version info at build time
+        def run_git(cmd):
+            try:
+                result = subprocess.run(cmd.split(), capture_output=True, text=True, timeout=5)
+                return result.stdout.strip() if result.returncode == 0 else ""
+            except Exception:
+                return ""
+
+        git_sha = run_git("git rev-parse --short HEAD") or "unknown"
+        git_tag = run_git("git describe --tags --exact-match HEAD") or ""
+        git_branch = run_git("git rev-parse --abbrev-ref HEAD") or "unknown"
+        build_timestamp = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+
+        # Path to project root (where Dockerfile expects to be built from)
+        project_root = os.path.join(os.path.dirname(os.path.dirname(__file__)), "..")
 
         self.api_lambda = lambda_.DockerImageFunction(
             self,
             "APILambda",
-            code=lambda_.DockerImageCode.from_ecr(
-                repository=api_repo,
-                tag_or_digest="latest"
+            code=lambda_.DockerImageCode.from_image_asset(
+                directory=project_root,
+                file="app/Dockerfile",
+                build_args={
+                    "GIT_SHA": git_sha,
+                    "GIT_TAG": git_tag,
+                    "GIT_BRANCH": git_branch,
+                    "BUILD_TIMESTAMP": build_timestamp,
+                },
             ),
             timeout=Duration.seconds(self.env_config["lambda_timeout_api"]),
             memory_size=self.env_config["lambda_memory_api"],
