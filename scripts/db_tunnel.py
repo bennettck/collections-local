@@ -33,7 +33,7 @@ from botocore.exceptions import ClientError
 def get_stack_outputs(env_name: str) -> dict:
     """Get CloudFormation stack outputs for the database stack."""
     cf_client = boto3.client("cloudformation")
-    stack_name = f"collections-{env_name}-database"
+    stack_name = f"CollectionsDB-{env_name}"
 
     try:
         response = cf_client.describe_stacks(StackName=stack_name)

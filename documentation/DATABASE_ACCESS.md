@@ -71,12 +71,6 @@ The bastion host is a minimal EC2 instance that acts as a secure jump point:
 # Navigate to infrastructure directory
 cd infrastructure
 
-# Install CDK dependencies (first time only)
-pip install -r requirements.txt
-
-# Bootstrap CDK (first time only, per account/region)
-cdk bootstrap
-
 # Deploy all stacks (includes bastion host)
 cdk deploy --all
 
@@ -91,9 +85,10 @@ After deployment, verify the bastion host is running:
 ```bash
 # Check CloudFormation outputs
 aws cloudformation describe-stacks \
-  --stack-name collections-dev-database \
+  --stack-name CollectionsDB-dev \
   --query "Stacks[0].Outputs" \
   --output table
+
 
 # Verify bastion is online in SSM
 aws ssm describe-instance-information \
@@ -177,17 +172,17 @@ Ensure your IAM user/role has these permissions:
 Retrieve the auto-generated password from Secrets Manager:
 
 ```bash
-# Get the secret ARN
-SECRET_ARN=$(aws cloudformation describe-stacks \
-  --stack-name collections-dev-database \
-  --query "Stacks[0].Outputs[?OutputKey=='DatabaseSecretArn'].OutputValue" \
-  --output text)
+  # Get the secret ARN (corrected stack name)
+  SECRET_ARN=$(aws cloudformation describe-stacks \
+    --stack-name CollectionsDB-dev \
+    --query "Stacks[0].Outputs[?OutputKey=='DatabaseSecretArn'].OutputValue" \
+    --output text)
 
-# Get the password
-aws secretsmanager get-secret-value \
-  --secret-id $SECRET_ARN \
-  --query 'SecretString' \
-  --output text | jq -r '.password'
+  # Get the password
+  aws secretsmanager get-secret-value \
+    --secret-id "$SECRET_ARN" \
+    --query 'SecretString' \
+    --output text | jq -r '.password'
 ```
 
 Save this password securely - you'll need it to connect.
@@ -246,12 +241,12 @@ Once the tunnel is running, open another terminal:
 ```bash
 psql -h localhost -p 5432 -U postgres -d collections
 ```
-
+access wrd: d9zqRRf1pcgiHUAV6.HUvGdaWppqiH
 ### Connect via Python
 
 ```python
 import os
-os.environ["DATABASE_URL"] = "postgresql://postgres:<password>@localhost:5432/collections"
+os.environ["DATABASE_URL"] = "postgresql://postgres:d9zqRRf1pcgiHUAV6.HUvGdaWppqiH@localhost:5432/collections"
 
 from sqlalchemy import create_engine
 engine = create_engine(os.environ["DATABASE_URL"])

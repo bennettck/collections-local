@@ -1,5 +1,14 @@
 -- These are notes for Chris, do not delete. --
-~/.claude/plans/concurrent-beaming-river.md
+TODO
+* items broken
+* /health git_sha still unknown
+* /versions everything still unknow
+* /item 500 error 
+* logic to save new items need to record user_id from jit not email
+* 
+
+
+
 
 
 7All phases of your AWS migration plan have been successfully completed. I've created test user accounts and compiled comprehensive documentation for accessing the system.
