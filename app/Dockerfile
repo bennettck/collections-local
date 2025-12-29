@@ -16,14 +16,14 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application code (must build from project root)
 COPY main.py .
 COPY models.py .
-COPY database.py .
+COPY database_sqlalchemy.py .
 COPY llm.py .
 COPY embeddings.py .
 COPY app/ ./app/
 COPY config/ ./config/
 COPY retrieval/ ./retrieval/
 COPY chat/ ./chat/
-COPY middleware/ ./middleware/
+COPY database_orm/ ./database_orm/
 COPY utils/ ./utils/
 
 # Fix permissions for all files

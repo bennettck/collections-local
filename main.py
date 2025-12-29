@@ -110,11 +110,12 @@ async def lifespan(app: FastAPI):
     if not is_lambda:
         os.makedirs(IMAGES_PATH, exist_ok=True)
 
-    # Initialize PostgreSQL database schema
-    try:
-        init_db()
-    except Exception as e:
-        logger.error(f"Failed to initialize database: {e}")
+    # Initialize PostgreSQL database schema (skip in Lambda - connections are lazy)
+    if not is_lambda:
+        try:
+            init_db()
+        except Exception as e:
+            logger.error(f"Failed to initialize database: {e}")
 
     # Initialize PGVector stores
     global prod_vector_store, golden_vector_store
@@ -184,9 +185,45 @@ if os.path.exists("static"):
 # Helper function for database routing
 def get_current_vector_store(request: Request) -> PGVectorStoreManager:
     """Get the appropriate vector store manager based on request context."""
+    global prod_vector_store, golden_vector_store
+
+    # Lazy initialization in Lambda environment
+    if prod_vector_store is None:
+        from config.langchain_config import get_vector_store_config
+
+        try:
+            prod_vector_config = get_vector_store_config("prod")
+            prod_vector_store = PGVectorStoreManager(
+                collection_name=prod_vector_config["collection_name"],
+                embedding_model=LANGCHAIN_EMBEDDING_MODEL,
+                use_parameter_store=False,
+                parameter_name=None
+            )
+            logger.info("Lazy-initialized prod vector store in Lambda")
+        except Exception as e:
+            logger.error(f"Failed to lazy-initialize prod vector store: {e}")
+            raise
+
     host = request.headers.get("host", "")
     if "golden" in host:
+        # Lazy initialize golden store if needed
+        if golden_vector_store is None:
+            from config.langchain_config import get_vector_store_config
+
+            try:
+                golden_vector_config = get_vector_store_config("golden")
+                golden_vector_store = PGVectorStoreManager(
+                    collection_name=golden_vector_config["collection_name"] + "_golden",
+                    embedding_model=LANGCHAIN_EMBEDDING_MODEL,
+                    use_parameter_store=False,
+                    parameter_name=None
+                )
+                logger.info("Lazy-initialized golden vector store in Lambda")
+            except Exception as e:
+                logger.error(f"Failed to lazy-initialize golden vector store: {e}")
+                raise
         return golden_vector_store
+
     return prod_vector_store
 
 
