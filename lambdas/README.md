@@ -73,10 +73,15 @@ lambdas/
 **Workflow**:
 - Parse EventBridge event
 - Fetch analysis from PostgreSQL
-- Generate embedding with Voyage AI
-- Store embedding in pgvector
+- Generate embedding with Voyage AI (voyage-3.5-lite, 1024 dimensions)
+- Store in `langchain_pg_embedding` table (SINGLE SOURCE OF TRUTH)
+  - Uses PGVectorStoreManager from `retrieval/pgvector_store.py`
+  - Collection: `collections_vectors_prod` (from config)
 
-**Reuses**: `embeddings.py`, `database/` (NO CHANGES)
+**Critical**: Uses same `langchain_pg_embedding` table that search queries read from.
+Both vector AND BM25 search query this table = guaranteed data consistency.
+
+**Reuses**: `retrieval/pgvector_store.py`, `config/langchain_config.py`
 
 **Tests**: 10 passing tests
 
@@ -152,7 +157,6 @@ Each Lambda requires specific environment variables (set by CDK):
 - `DATABASE_HOST` - PostgreSQL host
 - `DATABASE_PORT` - PostgreSQL port
 - `DATABASE_NAME` - Database name
-- `CHECKPOINT_TABLE_NAME` - DynamoDB table for checkpoints
 
 ### Image Processor
 
@@ -186,11 +190,13 @@ See [EVENT_DRIVEN_WORKFLOW.md](../documentation/EVENT_DRIVEN_WORKFLOW.md) for de
 
 The analyzer and embedder Lambdas reuse existing code:
 
-- **llm.py**: Copied to analyzer/ (NO CHANGES)
-- **embeddings.py**: Copied to embedder/ (NO CHANGES)
-- **database/**: Copied to both (NO CHANGES)
+- **llm.py**: Copied to analyzer/
+- **database_orm/**: Database models and connection
+- **retrieval/pgvector_store.py**: Vector store management (for embedder)
+- **config/langchain_config.py**: Collection names and embedding config
 
-This ensures consistency with the existing codebase while enabling independent Lambda deployment.
+The embedder Lambda uses `PGVectorStoreManager.add_document()` to write to
+`langchain_pg_embedding` - the SINGLE SOURCE OF TRUTH for all search operations.
 
 ## Monitoring
 
@@ -221,8 +227,8 @@ All Lambda implementations meet the requirements:
 
 - Image Processor: S3 → Thumbnail → EventBridge
 - Analyzer: EventBridge → LLM → PostgreSQL → EventBridge
-- Embedder: EventBridge → Fetch Analysis → Generate Embedding → pgvector
+- Embedder: EventBridge → Fetch Analysis → Generate Embedding → `langchain_pg_embedding`
 - All unit tests passing (31 total tests)
-- Code reuse: llm.py and embeddings.py copied without changes
 - PostgreSQL integration with SQLAlchemy
 - EventBridge-driven workflow
+- Single source of truth: `langchain_pg_embedding` for all search operations

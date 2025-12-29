@@ -1,17 +1,26 @@
 # Database Package
 
-PostgreSQL database layer for the Collections application with SQLAlchemy ORM, pgvector support, and Alembic migrations.
+PostgreSQL database layer for the Collections application with SQLAlchemy ORM and Alembic migrations.
 
 ## Overview
 
-This package provides a complete PostgreSQL database layer to replace the original SQLite implementation. It includes:
+This package provides a complete PostgreSQL database layer. It includes:
 
-- **SQLAlchemy ORM Models**: Type-safe models with relationships
+- **SQLAlchemy ORM Models**: Type-safe models for Items and Analyses
 - **Multi-tenancy Support**: All tables include `user_id` for data isolation
-- **Vector Search**: pgvector integration for semantic search (1024-dimensional embeddings)
-- **Full-Text Search**: PostgreSQL tsvector with automatic triggers
 - **Connection Management**: Parameter Store integration for secure credential storage
 - **Database Migrations**: Alembic-based schema versioning
+
+## Embedding Architecture
+
+**IMPORTANT**: Embeddings are NOT stored in an ORM model.
+
+- **Single Source of Truth**: `langchain_pg_embedding` table (managed by `langchain-postgres` library)
+- **Vector Search**: PGVector with cosine similarity via `retrieval/pgvector_store.py`
+- **BM25 Search**: PostgreSQL full-text search via `retrieval/postgres_bm25.py`
+- **Hybrid Search**: RRF fusion via `retrieval/hybrid_retriever.py`
+
+All search operations query `langchain_pg_embedding`, ensuring data consistency between vector and keyword search.
 
 ## Package Structure
 
@@ -50,7 +59,6 @@ Stores uploaded files with metadata.
 
 **Relationships:**
 - `analyses`: One-to-many with Analysis (cascade delete)
-- `embeddings`: One-to-many with Embedding (cascade delete)
 
 ### Analysis
 
@@ -72,7 +80,6 @@ Stores AI-generated analysis results with versioning.
 
 **Relationships:**
 - `item`: Many-to-one with Item
-- `embeddings`: One-to-many with Embedding (cascade delete)
 
 **Indexes:**
 - `ix_analyses_item_id`: Item lookup
@@ -84,30 +91,24 @@ Stores AI-generated analysis results with versioning.
 **Triggers:**
 - `analyses_search_vector_trigger`: Automatically populates `search_vector` from `raw_response` JSONB fields
 
-### Embedding
+### langchain_pg_embedding (External - Single Source of Truth)
 
-Stores vector embeddings for semantic search.
+**IMPORTANT**: This table is managed by `langchain-postgres`, NOT by SQLAlchemy ORM.
 
-**Fields:**
-- `id` (String, PK): Unique identifier
-- `item_id` (String, FK, indexed): Reference to Item
-- `analysis_id` (String, FK, indexed): Reference to Analysis
-- `user_id` (String, indexed): User owner
-- `vector` (Vector(1024), nullable): pgvector embedding
-- `embedding_model` (String): Model used for embedding
-- `embedding_dimensions` (Integer): Vector dimensions
-- `embedding_source` (JSONB, nullable): Source field metadata
-- `created_at` (DateTime TZ): Creation timestamp
+All search operations (BM25 and Vector) query this single table, ensuring data consistency.
 
-**Relationships:**
-- `item`: Many-to-one with Item
-- `analysis`: Many-to-one with Analysis
+**Columns** (managed by langchain-postgres):
+- `id` (UUID): Document identifier
+- `collection_id` (UUID, FK): Reference to langchain_pg_collection
+- `embedding` (Vector(1024)): VoyageAI embeddings
+- `document` (Text): Document content for BM25 search
+- `cmetadata` (JSONB): Metadata including user_id, item_id, category, headline
 
-**Indexes:**
-- `ix_embeddings_item_id`: Item lookup
-- `ix_embeddings_analysis_id`: Analysis lookup
-- `ix_embeddings_user_id`: User filtering
-- IVFFlat index for vector similarity search (created after data population)
+**Key Points:**
+- Written to by `retrieval/pgvector_store.py` (PGVectorStoreManager.add_document)
+- Queried by `retrieval/postgres_bm25.py` for BM25 search
+- Queried by `retrieval/hybrid_retriever.py` for vector/hybrid search
+- See `scripts/regenerate_embeddings_langchain.py` for bulk embedding regeneration
 
 ## Connection Management
 
@@ -216,7 +217,6 @@ from database_sqlalchemy import (
     get_item,
     create_analysis,
     search_items,
-    create_embedding,
 )
 
 # Initialize
@@ -257,15 +257,9 @@ results = search_items(
     top_k=10
 )
 
-# Create embedding
-embedding_id = create_embedding(
-    item_id="item-123",
-    analysis_id="analysis-789",
-    user_id="user-456",
-    embedding=[0.1] * 1024,  # 1024-dimensional vector
-    model="voyage-2",
-    source_fields={"summary": True, "tags": True}
-)
+# NOTE: Embeddings are NOT created via ORM
+# Use retrieval/pgvector_store.py (PGVectorStoreManager.add_document) instead
+# The langchain_pg_embedding table is the single source of truth for search
 ```
 
 ## Testing
@@ -287,19 +281,21 @@ pytest database/tests/test_connection.py -v
 
 ### Test Coverage
 
-- **Models (test_models.py)**: 12 tests
+- **Models (test_models.py)**: Tests for Item and Analysis ORM models
   - Item creation, timestamps, required fields, relationships
   - Analysis creation, JSONB fields, versioning, cascade delete
-  - Embedding creation, vector dimensions, cascade delete, relationships
 
-- **Connection (test_connection.py)**: 19 tests
+- **Connection (test_connection.py)**: Database connection tests
   - Database URL retrieval (env, Parameter Store, fallback)
   - Connection initialization and pooling
   - Session management (commit, rollback)
   - Health checks
   - Connection cleanup
 
-All tests use SQLite for speed and portability. The models use custom type decorators that adapt PostgreSQL-specific types (JSONB, Vector) to work with SQLite during testing.
+**NOTE**: Embedding tests are in `retrieval/tests/test_postgres_bm25.py` and `retrieval/tests/test_hybrid_retriever.py`
+since embeddings use the `langchain_pg_embedding` table (not an ORM model).
+
+All tests use SQLite for speed and portability. The models use custom type decorators that adapt PostgreSQL-specific types (JSONB) to work with SQLite during testing.
 
 ## Migration from SQLite to PostgreSQL
 
@@ -317,7 +313,9 @@ To migrate from the original SQLite database to PostgreSQL:
 - All database functions now require `user_id` parameter
 - `search_items()` uses PostgreSQL full-text search (different scoring than BM25)
 - `raw_response` field is now JSONB (no need for JSON serialization)
-- Embedding vectors stored directly in pgvector format
+- **Embeddings**: NOT stored in ORM model; use `langchain_pg_embedding` table
+  - Written by: `retrieval/pgvector_store.py` (PGVectorStoreManager)
+  - Searched by: `retrieval/postgres_bm25.py` and `retrieval/hybrid_retriever.py`
 
 ## Performance Considerations
 
@@ -332,22 +330,27 @@ PostgreSQL connections use:
 ### Indexes
 
 The schema includes indexes for:
-- User filtering (`user_id` on all tables)
-- Item lookup (`item_id` on analyses, embeddings)
+- User filtering (`user_id` on items, analyses)
+- Item lookup (`item_id` on analyses)
 - Category filtering (`category` on analyses)
 - Version queries (composite `item_id`, `version DESC`)
 - Full-text search (GIN index on `search_vector`)
-- Vector search (IVFFlat with cosine similarity - create after data population)
+
+**Vector Search Indexes** (on `langchain_pg_embedding` table, managed by langchain-postgres):
+- IVFFlat index on `embedding` column for cosine similarity search
+- Collection ID index for collection filtering
 
 ### Vector Index Creation
 
-The IVFFlat index for vector similarity search should be created AFTER populating embeddings:
+**NOTE**: The `langchain_pg_embedding` table vector indexes are managed by `langchain-postgres`.
+
+If manual index creation is needed:
 
 ```sql
--- Create IVFFlat index (adjust lists parameter based on data size)
-CREATE INDEX idx_embeddings_vector_cosine
-ON embeddings
-USING ivfflat (vector vector_cosine_ops)
+-- Create IVFFlat index on langchain_pg_embedding (adjust lists based on data size)
+CREATE INDEX idx_langchain_embedding_ivfflat
+ON langchain_pg_embedding
+USING ivfflat (embedding vector_cosine_ops)
 WITH (lists = 100);
 ```
 
@@ -370,8 +373,10 @@ Recommended `lists` values:
 - `sqlalchemy>=2.0.0`: ORM and query builder
 - `alembic>=1.13.0`: Database migrations
 - `psycopg2-binary>=2.9.0`: PostgreSQL driver
-- `pgvector>=0.3.0`: Vector similarity search
 - `boto3>=1.34.0`: AWS SDK (Parameter Store)
+
+**Note**: Vector/embedding dependencies (`pgvector`, `langchain-postgres`, `voyageai`)
+are in `retrieval/` package since embeddings use `langchain_pg_embedding` table.
 
 ## Environment Variables
 
@@ -416,10 +421,10 @@ aws configure
 
 ## Future Enhancements
 
-- [ ] Vector search query functions with similarity scoring
 - [ ] Migration script for SQLite → PostgreSQL data transfer
 - [ ] Read replicas support for scaling
 - [ ] Connection string encryption at rest
 - [ ] Async SQLAlchemy support for FastAPI
-- [ ] Automatic vector index maintenance
 - [ ] Multi-region replication support
+
+**Note**: Vector/embedding enhancements are tracked in `retrieval/` package.

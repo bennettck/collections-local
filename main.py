@@ -135,8 +135,10 @@ async def lifespan(app: FastAPI):
 
         try:
             golden_vector_config = get_vector_store_config("golden")
+            # NOTE: get_vector_store_config("golden") already returns "collections_vectors_golden"
+            # Do NOT add another "_golden" suffix (was causing double suffix bug)
             golden_vector_store = PGVectorStoreManager(
-                collection_name=golden_vector_config["collection_name"] + "_golden",
+                collection_name=golden_vector_config["collection_name"],
                 embedding_model=LANGCHAIN_EMBEDDING_MODEL,
                 use_parameter_store=False,
                 parameter_name=None
@@ -212,8 +214,10 @@ def get_current_vector_store(request: Request) -> PGVectorStoreManager:
 
             try:
                 golden_vector_config = get_vector_store_config("golden")
+                # NOTE: get_vector_store_config("golden") already returns "collections_vectors_golden"
+                # Do NOT add another "_golden" suffix (was causing double suffix bug)
                 golden_vector_store = PGVectorStoreManager(
-                    collection_name=golden_vector_config["collection_name"] + "_golden",
+                    collection_name=golden_vector_config["collection_name"],
                     embedding_model=LANGCHAIN_EMBEDDING_MODEL,
                     use_parameter_store=False,
                     parameter_name=None

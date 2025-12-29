@@ -77,30 +77,33 @@ See [QUICKSTART.md](./QUICKSTART.md) for detailed setup guide.
 API Gateway + Cognito Auth
          ↓
    API Lambda (FastAPI)
-   ┌─────────────────────────┐
-   │ • PostgresHybridRetriever│
-   │ • PostgresBM25Retriever  │
-   │ • VectorOnlyRetriever    │
-   └─────────────────────────┘
+   ┌─────────────────────────────────────┐
+   │ • PostgresHybridRetriever           │
+   │ • PostgresBM25Retriever             │
+   │ • VectorOnlyRetriever               │
+   │ All query: langchain_pg_embedding   │
+   │            (SINGLE SOURCE OF TRUTH) │
+   └─────────────────────────────────────┘
          ↓
-    ┌────┴────┐
-    ↓         ↓
-PostgreSQL  DynamoDB
-(pgvector)  (sessions)
-(tsvector)
-(BM25 docs)
-    ↑
-    │
+    PostgreSQL
+    ┌────────────────────────────────┐
+    │ • items, analyses (ORM)        │
+    │ • langchain_pg_embedding       │
+    │   - Vector search (pgvector)   │
+    │   - BM25 search (tsvector)     │
+    │ • checkpoints (LangGraph)      │
+    └────────────────────────────────┘
+         ↑
 S3 → Image Processor → Analyzer → Embedder
     (Event-Driven Processing)
 ```
 
 **Technology Stack**:
 - **Compute**: AWS Lambda, FastAPI, Mangum
-- **Data**: PostgreSQL (pgvector + tsvector), DynamoDB, S3
+- **Data**: PostgreSQL (all data including vectors, checkpoints), S3
 - **AI**: Anthropic Claude, Voyage AI, LangChain, LangGraph
 - **Auth**: Cognito User Pools (JWT)
-- **Search**: Custom PostgreSQL retrievers with RRF fusion
+- **Search**: Custom PostgreSQL retrievers with RRF fusion (single source of truth)
 
 See [ARCHITECTURE.md](./documentation/ARCHITECTURE.md) for details.
 
@@ -129,7 +132,7 @@ Deployed using AWS CDK:
 - API Gateway HTTP API
 - 5 Lambda functions (API, Image Processor, Analyzer, Embedder, Cleanup)
 - RDS PostgreSQL (db.t4g.micro) with pgvector
-- DynamoDB for conversation state
+  - Items, analyses, embeddings (langchain_pg_embedding), checkpoints
 - S3 for image storage
 - Cognito for authentication
 - EventBridge for event routing
@@ -204,11 +207,10 @@ curl -H "Authorization: Bearer $TOKEN" \
 
 ## Cost
 
-**Dev Environment**: ~$20-30/month
-- RDS PostgreSQL: $15-20
+**Dev Environment**: ~$18-27/month
+- RDS PostgreSQL: $15-20 (includes embeddings + checkpoints)
 - Lambda: $2-5
 - API Gateway: $0.50
-- DynamoDB: $1-2
 - S3: $0.50
 - Other: $1
 
@@ -243,6 +245,6 @@ Private project - All rights reserved
 ---
 
 **Status**: Production Ready ✅
-**Last Updated**: 2025-12-28
+**Last Updated**: 2025-12-29
 **Environment**: AWS (us-east-1)
-**Architecture**: PostgreSQL + PGVector (v2.0)
+**Architecture**: PostgreSQL + PGVector (v2.2 - Single Source of Truth)

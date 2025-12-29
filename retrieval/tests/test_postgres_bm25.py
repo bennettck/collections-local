@@ -1,7 +1,14 @@
 """
 Unit tests for PostgreSQL BM25 retriever.
 
-Tests the PostgresBM25Retriever with mocked PostgreSQL connections.
+Tests the PostgresBM25Retriever which queries the langchain_pg_embedding table
+for full-text search using PostgreSQL tsvector/tsquery.
+
+ARCHITECTURE NOTE:
+- BM25 now queries langchain_pg_embedding (same table as vector search)
+- This ensures data consistency between keyword and semantic search
+- The 'document' column contains text for BM25 search
+- The 'cmetadata' column contains user_id, category, etc.
 """
 
 import pytest
@@ -35,30 +42,24 @@ def mock_psycopg2():
 
 
 @pytest.fixture
-def mock_ssm():
-    """Mock AWS SSM client."""
-    with patch("retrieval.postgres_bm25.boto3.client") as mock_client:
-        mock_ssm = Mock()
-        mock_ssm.get_parameter = Mock(
-            return_value={
-                "Parameter": {
-                    "Value": "postgresql://user:pass@localhost:5432/db"
-                }
-            }
-        )
-        mock_client.return_value = mock_ssm
-        yield mock_ssm
+def mock_connection():
+    """Mock database connection module."""
+    with patch("retrieval.postgres_bm25.get_connection_string") as mock_get_conn:
+        mock_get_conn.return_value = "postgresql://user:pass@localhost:5432/db"
+        yield mock_get_conn
 
 
 @pytest.fixture
-def bm25_retriever(mock_psycopg2, mock_ssm):
+def bm25_retriever(mock_psycopg2, mock_connection):
     """Create PostgresBM25Retriever with mocked dependencies."""
-    retriever = PostgresBM25Retriever(
-        connection_string="postgresql://user:pass@localhost:5432/db",
-        use_parameter_store=False,
-        top_k=10
-    )
-    return retriever
+    with patch("retrieval.postgres_bm25.get_vector_store_config") as mock_config:
+        mock_config.return_value = {"collection_name": "collections_vectors_prod"}
+        retriever = PostgresBM25Retriever(
+            connection_string="postgresql://user:pass@localhost:5432/db",
+            use_parameter_store=False,
+            top_k=10
+        )
+        return retriever
 
 
 class TestPostgresBM25Retriever:
@@ -67,58 +68,56 @@ class TestPostgresBM25Retriever:
     def test_initialization(self, bm25_retriever):
         """Test initialization of PostgresBM25Retriever."""
         assert bm25_retriever.top_k == 10
-        assert bm25_retriever.table_name == "collections_documents"
+        assert bm25_retriever.collection_name == "collections_vectors_prod"
         assert bm25_retriever.connection_string == "postgresql://user:pass@localhost:5432/db"
         assert bm25_retriever.user_id is None
         assert bm25_retriever.category_filter is None
 
-    def test_initialization_with_parameter_store(self, mock_psycopg2, mock_ssm):
-        """Test initialization with AWS Parameter Store."""
-        retriever = PostgresBM25Retriever(
-            use_parameter_store=True,
-            parameter_name="/test/connection"
-        )
-        assert retriever.connection_string == "postgresql://user:pass@localhost:5432/db"
-        mock_ssm.get_parameter.assert_called_once()
-
     def test_format_query_for_tsquery(self, bm25_retriever):
-        """Test query formatting for tsquery."""
-        # Single word
+        """Test query formatting for tsquery (now uses OR operator)."""
+        # Single word (skip single-char words)
         assert bm25_retriever._format_query_for_tsquery("food") == "food"
 
-        # Multiple words
-        assert bm25_retriever._format_query_for_tsquery("delicious food") == "delicious & food"
+        # Multiple words - now joined with OR (|) for inclusive matching
+        assert bm25_retriever._format_query_for_tsquery("delicious food") == "delicious | food"
 
-        # With special characters
-        assert bm25_retriever._format_query_for_tsquery("food & drink!") == "food & drink"
+        # With special characters (stripped)
+        result = bm25_retriever._format_query_for_tsquery("food & drink!")
+        assert "food" in result
+        assert "drink" in result
 
         # With hyphens (should be preserved)
         assert bm25_retriever._format_query_for_tsquery("farm-to-table") == "farm-to-table"
 
+        # Empty query
+        assert bm25_retriever._format_query_for_tsquery("") == ""
+
     def test_get_relevant_documents(self, bm25_retriever, mock_psycopg2):
-        """Test retrieving relevant documents."""
+        """Test retrieving relevant documents from langchain_pg_embedding."""
         _, mock_conn, mock_cursor = mock_psycopg2
 
-        # Mock search results
+        # Mock search results (matching langchain_pg_embedding schema)
         mock_cursor.fetchall.return_value = [
             {
-                "item_id": "1",
-                "content": "Delicious food photo",
-                "metadata": json.dumps({
-                    "item_id": "1",
+                "id": "uuid-1",
+                "document": "Delicious food photo analysis",
+                "cmetadata": {
+                    "item_id": "item-1",
+                    "user_id": "user123",
                     "category": "Food",
                     "headline": "Tasty Meal"
-                }),
+                },
                 "score": 2.5
             },
             {
-                "item_id": "2",
-                "content": "Another food item",
-                "metadata": json.dumps({
-                    "item_id": "2",
+                "id": "uuid-2",
+                "document": "Another food item analysis",
+                "cmetadata": {
+                    "item_id": "item-2",
+                    "user_id": "user123",
                     "category": "Food",
                     "headline": "Snack Time"
-                }),
+                },
                 "score": 1.8
             }
         ]
@@ -126,21 +125,24 @@ class TestPostgresBM25Retriever:
         results = bm25_retriever._get_relevant_documents("food")
 
         assert len(results) == 2
-        assert results[0].metadata["item_id"] == "1"
+        assert results[0].metadata["item_id"] == "item-1"
         assert results[0].metadata["score"] == 2.5
         assert results[0].metadata["score_type"] == "bm25"
-        assert results[1].metadata["item_id"] == "2"
+        assert results[1].metadata["item_id"] == "item-2"
+        assert results[0].page_content == "Delicious food photo analysis"
 
-    def test_get_relevant_documents_with_user_filter(self, mock_psycopg2, mock_ssm):
+    def test_get_relevant_documents_with_user_filter(self, mock_psycopg2, mock_connection):
         """Test retrieval with user_id filter."""
         _, mock_conn, mock_cursor = mock_psycopg2
 
-        retriever = PostgresBM25Retriever(
-            connection_string="postgresql://user:pass@localhost:5432/db",
-            use_parameter_store=False,
-            user_id="user123",
-            top_k=5
-        )
+        with patch("retrieval.postgres_bm25.get_vector_store_config") as mock_config:
+            mock_config.return_value = {"collection_name": "collections_vectors_prod"}
+            retriever = PostgresBM25Retriever(
+                connection_string="postgresql://user:pass@localhost:5432/db",
+                use_parameter_store=False,
+                user_id="user123",
+                top_k=5
+            )
 
         mock_cursor.fetchall.return_value = []
 
@@ -151,19 +153,21 @@ class TestPostgresBM25Retriever:
         sql = call_args[0][0]
         params = call_args[0][1]
 
-        assert "metadata->>'user_id' = %s" in sql
+        assert "cmetadata->>'user_id' = %s" in sql
         assert "user123" in params
 
-    def test_get_relevant_documents_with_category_filter(self, mock_psycopg2, mock_ssm):
+    def test_get_relevant_documents_with_category_filter(self, mock_psycopg2, mock_connection):
         """Test retrieval with category filter."""
         _, mock_conn, mock_cursor = mock_psycopg2
 
-        retriever = PostgresBM25Retriever(
-            connection_string="postgresql://user:pass@localhost:5432/db",
-            use_parameter_store=False,
-            category_filter="Food",
-            top_k=5
-        )
+        with patch("retrieval.postgres_bm25.get_vector_store_config") as mock_config:
+            mock_config.return_value = {"collection_name": "collections_vectors_prod"}
+            retriever = PostgresBM25Retriever(
+                connection_string="postgresql://user:pass@localhost:5432/db",
+                use_parameter_store=False,
+                category_filter="Food",
+                top_k=5
+            )
 
         mock_cursor.fetchall.return_value = []
 
@@ -174,7 +178,7 @@ class TestPostgresBM25Retriever:
         sql = call_args[0][0]
         params = call_args[0][1]
 
-        assert "metadata->>'category' = %s" in sql
+        assert "cmetadata->>'category' = %s" in sql
         assert "Food" in params
 
     def test_get_relevant_documents_with_min_score(self, bm25_retriever, mock_psycopg2):
@@ -186,15 +190,15 @@ class TestPostgresBM25Retriever:
         # Mock results with varying scores
         mock_cursor.fetchall.return_value = [
             {
-                "item_id": "1",
-                "content": "High score",
-                "metadata": json.dumps({"item_id": "1"}),
+                "id": "uuid-1",
+                "document": "High score content",
+                "cmetadata": {"item_id": "item-1"},
                 "score": 2.5
             },
             {
-                "item_id": "2",
-                "content": "Low score",
-                "metadata": json.dumps({"item_id": "2"}),
+                "id": "uuid-2",
+                "document": "Low score content",
+                "cmetadata": {"item_id": "item-2"},
                 "score": 1.5
             }
         ]
@@ -203,89 +207,24 @@ class TestPostgresBM25Retriever:
 
         # Should only return document with score >= 2.0
         assert len(results) == 1
-        assert results[0].metadata["item_id"] == "1"
+        assert results[0].metadata["item_id"] == "item-1"
 
-    def test_add_document(self, bm25_retriever, mock_psycopg2):
-        """Test adding a document to the BM25 index."""
+    def test_collection_name_in_query(self, bm25_retriever, mock_psycopg2):
+        """Test that collection name is included in the query."""
         _, mock_conn, mock_cursor = mock_psycopg2
+        mock_cursor.fetchall.return_value = []
 
-        metadata = {
-            "item_id": "test-123",
-            "category": "Food",
-            "headline": "Test"
-        }
+        bm25_retriever._get_relevant_documents("test")
 
-        success = bm25_retriever.add_document(
-            item_id="test-123",
-            content="Test content",
-            metadata=metadata
-        )
-
-        assert success is True
-        mock_cursor.execute.assert_called_once()
-
-        # Check SQL contains UPSERT logic
+        # Check that SQL joins with collection table
         call_args = mock_cursor.execute.call_args
         sql = call_args[0][0]
-        assert "INSERT INTO" in sql
-        assert "ON CONFLICT" in sql
-        assert "DO UPDATE SET" in sql
-
-    def test_add_document_with_user_id(self, mock_psycopg2, mock_ssm):
-        """Test adding document with user_id set."""
-        _, mock_conn, mock_cursor = mock_psycopg2
-
-        retriever = PostgresBM25Retriever(
-            connection_string="postgresql://user:pass@localhost:5432/db",
-            use_parameter_store=False,
-            user_id="user123"
-        )
-
-        metadata = {"item_id": "test-123", "category": "Food"}
-
-        retriever.add_document(
-            item_id="test-123",
-            content="Test content",
-            metadata=metadata
-        )
-
-        # Verify user_id was added to metadata
-        call_args = mock_cursor.execute.call_args
         params = call_args[0][1]
-        metadata_json = params[2]
-        parsed_metadata = json.loads(metadata_json)
-        assert parsed_metadata["user_id"] == "user123"
 
-    def test_add_document_error_handling(self, bm25_retriever, mock_psycopg2):
-        """Test error handling when adding document fails."""
-        _, mock_conn, mock_cursor = mock_psycopg2
-
-        # Mock to raise an exception
-        mock_cursor.execute.side_effect = Exception("Database error")
-
-        success = bm25_retriever.add_document(
-            item_id="test-123",
-            content="Test content",
-            metadata={"item_id": "test-123"}
-        )
-
-        assert success is False
-
-    def test_create_table_if_not_exists(self, bm25_retriever, mock_psycopg2):
-        """Test creating the BM25 table."""
-        _, mock_conn, mock_cursor = mock_psycopg2
-
-        success = bm25_retriever.create_table_if_not_exists()
-
-        assert success is True
-        mock_cursor.execute.assert_called_once()
-
-        # Check SQL contains table creation
-        call_args = mock_cursor.execute.call_args
-        sql = call_args[0][0]
-        assert "CREATE TABLE IF NOT EXISTS" in sql
-        assert "tsvector" in sql
-        assert "CREATE INDEX" in sql
+        assert "langchain_pg_embedding" in sql
+        assert "langchain_pg_collection" in sql
+        assert "c.name = %s" in sql
+        assert "collections_vectors_prod" in params
 
     def test_get_table_stats(self, bm25_retriever, mock_psycopg2):
         """Test getting table statistics."""
@@ -295,8 +234,9 @@ class TestPostgresBM25Retriever:
 
         stats = bm25_retriever.get_table_stats()
 
-        assert stats["table_name"] == "collections_documents"
+        assert stats["collection_name"] == "collections_vectors_prod"
         assert stats["document_count"] == 42
+        assert stats["source_table"] == "langchain_pg_embedding"
 
     def test_get_table_stats_error_handling(self, bm25_retriever, mock_psycopg2):
         """Test error handling in get_table_stats."""
@@ -308,29 +248,31 @@ class TestPostgresBM25Retriever:
         stats = bm25_retriever.get_table_stats()
 
         assert "error" in stats
-        assert stats["table_name"] == "collections_documents"
+        assert stats["collection_name"] == "collections_vectors_prod"
 
-    def test_retrieval_error_handling(self, bm25_retriever, mock_psycopg2):
-        """Test error handling during retrieval."""
+    def test_retrieval_error_propagation(self, bm25_retriever, mock_psycopg2):
+        """Test that errors are propagated (not silently swallowed)."""
         _, mock_conn, mock_cursor = mock_psycopg2
 
         # Mock to raise an exception
         mock_cursor.execute.side_effect = Exception("Search error")
 
-        results = bm25_retriever._get_relevant_documents("test query")
+        # Should raise the exception (not return empty list silently)
+        with pytest.raises(Exception) as exc_info:
+            bm25_retriever._get_relevant_documents("test query")
 
-        assert results == []
+        assert "Search error" in str(exc_info.value)
 
     def test_metadata_as_dict_not_string(self, bm25_retriever, mock_psycopg2):
-        """Test handling metadata that's already a dict."""
+        """Test handling metadata that's already a dict (cmetadata is JSONB)."""
         _, mock_conn, mock_cursor = mock_psycopg2
 
-        # Mock result with metadata as dict (not JSON string)
+        # Mock result with cmetadata as dict (normal for PostgreSQL JSONB)
         mock_cursor.fetchall.return_value = [
             {
-                "item_id": "1",
-                "content": "Test",
-                "metadata": {"item_id": "1", "category": "Food"},  # Already a dict
+                "id": "uuid-1",
+                "document": "Test content",
+                "cmetadata": {"item_id": "item-1", "category": "Food"},  # Already a dict
                 "score": 2.0
             }
         ]
@@ -339,3 +281,39 @@ class TestPostgresBM25Retriever:
 
         assert len(results) == 1
         assert results[0].metadata["category"] == "Food"
+
+    def test_null_score_handling(self, bm25_retriever, mock_psycopg2):
+        """Test handling of null scores from database."""
+        _, mock_conn, mock_cursor = mock_psycopg2
+
+        mock_cursor.fetchall.return_value = [
+            {
+                "id": "uuid-1",
+                "document": "Content with null score",
+                "cmetadata": {"item_id": "item-1"},
+                "score": None  # NULL from database
+            }
+        ]
+
+        results = bm25_retriever._get_relevant_documents("test")
+
+        assert len(results) == 1
+        assert results[0].metadata["score"] == 0.0  # Should default to 0.0
+
+    def test_empty_document_handling(self, bm25_retriever, mock_psycopg2):
+        """Test handling of empty/null document content."""
+        _, mock_conn, mock_cursor = mock_psycopg2
+
+        mock_cursor.fetchall.return_value = [
+            {
+                "id": "uuid-1",
+                "document": None,  # NULL document
+                "cmetadata": {"item_id": "item-1"},
+                "score": 1.0
+            }
+        ]
+
+        results = bm25_retriever._get_relevant_documents("test")
+
+        assert len(results) == 1
+        assert results[0].page_content == ""  # Should default to empty string
