@@ -71,9 +71,6 @@ The bastion host is a minimal EC2 instance that acts as a secure jump point:
 # Navigate to infrastructure directory
 cd infrastructure
 
-# Install CDK dependencies (first time only)
-pip install -r requirements.txt
-
 # Bootstrap CDK (first time only, per account/region)
 cdk bootstrap
 
