@@ -78,7 +78,7 @@ cdk bootstrap
 cdk deploy --all
 
 # Or deploy just the database stack
-cdk deploy collections-dev-database
+cdk deploy CollectionsDB-dev
 ```
 
 ### Verify Deployment
@@ -88,7 +88,7 @@ After deployment, verify the bastion host is running:
 ```bash
 # Check CloudFormation outputs
 aws cloudformation describe-stacks \
-  --stack-name collections-dev-database \
+  --stack-name CollectionsDB-dev \
   --query "Stacks[0].Outputs" \
   --output table
 
@@ -176,7 +176,7 @@ Retrieve the auto-generated password from Secrets Manager:
 ```bash
 # Get the secret ARN
 SECRET_ARN=$(aws cloudformation describe-stacks \
-  --stack-name collections-dev-database \
+  --stack-name CollectionsDB-dev \
   --query "Stacks[0].Outputs[?OutputKey=='DatabaseSecretArn'].OutputValue" \
   --output text)
 
@@ -220,12 +220,12 @@ If you prefer to connect manually:
 ```bash
 # Get the bastion instance ID and RDS endpoint from CloudFormation outputs
 BASTION_ID=$(aws cloudformation describe-stacks \
-  --stack-name collections-dev-database \
+  --stack-name CollectionsDB-dev \
   --query "Stacks[0].Outputs[?OutputKey=='BastionInstanceId'].OutputValue" \
   --output text)
 
 RDS_ENDPOINT=$(aws cloudformation describe-stacks \
-  --stack-name collections-dev-database \
+  --stack-name CollectionsDB-dev \
   --query "Stacks[0].Outputs[?OutputKey=='RDSEndpoint'].OutputValue" \
   --output text)
 
