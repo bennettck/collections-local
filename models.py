@@ -23,11 +23,15 @@ class ItemCreate(BaseModel):
 class AnalysisResponse(BaseModel):
     """Response model for an analysis."""
     id: str
-    item_id: str
     version: int
+    # Fields extracted from raw_response for convenience
+    headline: Optional[str] = None
     category: Optional[str] = None
+    subcategories: Optional[List[str]] = None
     summary: Optional[str] = None
+    # Full raw LLM response for additional details
     raw_response: dict = {}
+    # Tracking metadata
     provider_used: Optional[str] = None
     model_used: Optional[str] = None
     trace_id: Optional[str] = None
@@ -41,6 +45,7 @@ class ItemResponse(BaseModel):
     original_filename: Optional[str] = None
     file_size: Optional[int] = None
     mime_type: Optional[str] = None
+    image_url: Optional[str] = None
     created_at: datetime
     updated_at: datetime
     latest_analysis: Optional[AnalysisResponse] = None

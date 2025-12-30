@@ -4,6 +4,8 @@ import uuid
 import json
 import logging
 import aiofiles
+import boto3
+from botocore.exceptions import ClientError
 from datetime import datetime
 from pathlib import Path
 from typing import Optional
@@ -85,6 +87,56 @@ def get_user_id_from_request(request: Request) -> str:
 
 # Image storage path
 IMAGES_PATH = os.getenv("IMAGES_PATH", "./data/images")
+
+# S3 configuration for image storage
+S3_BUCKET = os.getenv("S3_BUCKET_NAME")
+S3_REGION = os.getenv("AWS_REGION", "us-east-1")
+S3_PRESIGNED_URL_EXPIRY = int(os.getenv("S3_PRESIGNED_URL_EXPIRY", "3600"))  # 1 hour default
+
+# S3 client (lazy initialization)
+_s3_client = None
+
+
+def get_s3_client():
+    """Get or create S3 client (lazy initialization)."""
+    global _s3_client
+    if _s3_client is None and S3_BUCKET:
+        _s3_client = boto3.client('s3', region_name=S3_REGION)
+    return _s3_client
+
+
+def generate_image_url(item: dict) -> Optional[str]:
+    """
+    Generate image URL for an item.
+
+    Returns presigned S3 URL if running in AWS with S3 bucket configured,
+    otherwise returns local file path.
+    """
+    filename = item.get("filename")
+    if not filename:
+        return None
+
+    s3_client = get_s3_client()
+    if s3_client and S3_BUCKET:
+        # Generate presigned S3 URL
+        try:
+            # Construct S3 key from user_id and filename
+            user_id = item.get("user_id", "default")
+            s3_key = f"images/{user_id}/{filename}"
+
+            url = s3_client.generate_presigned_url(
+                'get_object',
+                Params={'Bucket': S3_BUCKET, 'Key': s3_key},
+                ExpiresIn=S3_PRESIGNED_URL_EXPIRY
+            )
+            return url
+        except ClientError as e:
+            logger.warning(f"Failed to generate presigned URL: {e}")
+            return None
+    else:
+        # Local file path
+        return f"/images/{filename}"
+
 
 # Allowed image MIME types
 ALLOWED_MIME_TYPES = {
@@ -250,13 +302,16 @@ def _item_to_response(item: dict, include_analysis: bool = True, user_id: Option
 
         analysis_data = get_latest_analysis(item["id"], user_id=user_id)
         if analysis_data:
+            # Extract fields from raw_response for convenience
+            raw_response = analysis_data.get("raw_response", {})
             latest_analysis = AnalysisResponse(
                 id=analysis_data["id"],
-                item_id=analysis_data["item_id"],
                 version=analysis_data["version"],
-                category=analysis_data.get("category"),
-                summary=analysis_data.get("summary"),
-                raw_response=analysis_data.get("raw_response", {}),
+                headline=raw_response.get("headline"),
+                category=analysis_data.get("category") or raw_response.get("category"),
+                subcategories=raw_response.get("subcategories"),
+                summary=analysis_data.get("summary") or raw_response.get("summary"),
+                raw_response=raw_response,
                 provider_used=analysis_data.get("provider_used"),
                 model_used=analysis_data.get("model_used"),
                 trace_id=analysis_data.get("trace_id"),
@@ -269,6 +324,7 @@ def _item_to_response(item: dict, include_analysis: bool = True, user_id: Option
         original_filename=item.get("original_filename"),
         file_size=item.get("file_size"),
         mime_type=item.get("mime_type"),
+        image_url=generate_image_url(item),
         created_at=_parse_datetime(item["created_at"]),
         updated_at=_parse_datetime(item["updated_at"]),
         latest_analysis=latest_analysis,
@@ -277,13 +333,16 @@ def _item_to_response(item: dict, include_analysis: bool = True, user_id: Option
 
 def _analysis_to_response(analysis: dict) -> AnalysisResponse:
     """Convert database analysis dict to AnalysisResponse."""
+    # Extract fields from raw_response for convenience
+    raw_response = analysis.get("raw_response", {})
     return AnalysisResponse(
         id=analysis["id"],
-        item_id=analysis["item_id"],
         version=analysis["version"],
-        category=analysis.get("category"),
-        summary=analysis.get("summary"),
-        raw_response=analysis.get("raw_response", {}),
+        headline=raw_response.get("headline"),
+        category=analysis.get("category") or raw_response.get("category"),
+        subcategories=raw_response.get("subcategories"),
+        summary=analysis.get("summary") or raw_response.get("summary"),
+        raw_response=raw_response,
         provider_used=analysis.get("provider_used"),
         model_used=analysis.get("model_used"),
         trace_id=analysis.get("trace_id"),
